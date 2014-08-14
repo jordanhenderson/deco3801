@@ -1,0 +1,16 @@
+body {
+	padding-top: 50px;
+}
+
+.bootstrap-select > .btn {
+	height: 25px;
+	padding-top: 2px;
+}
+
+.bootstrap-select.btn-group {
+	margin-bottom: 0px !important;
+}
+
+#sidebar {
+	padding-top: 135px;
+}
