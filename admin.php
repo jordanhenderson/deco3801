@@ -59,7 +59,7 @@
 						<th>Open Date</th>
 						<th>Due Date</th>
 						<th>Weight</th>
-						<th><a class="btn btn-xs btn-primary" href="#" role="button">Create New</a></th>
+						<th><a class="btn btn-xs btn-primary" href="create.php" role="button">Create New</a></th>
 					</tr>
 				</thead>
 				<tbody>
@@ -70,7 +70,7 @@
 						<td>5/9/14</td>
 						<td>10%</td>
 						<td>
-							<a class="btn btn-xs btn-default" href="#" role="button">Edit</a>
+							<a class="btn btn-xs btn-default" href="create.php" role="button">Edit</a>
 							<a class="btn btn-xs btn-danger" href="#" role="button">Delete</a>
 						</td>
 					</tr>
@@ -81,7 +81,7 @@
 						<td>12/9/14</td>
 						<td>15%</td>
 						<td>
-							<a class="btn btn-xs btn-default" href="#" role="button">Edit</a>
+							<a class="btn btn-xs btn-default" href="create.php" role="button">Edit</a>
 							<a class="btn btn-xs btn-danger" href="#" role="button">Delete</a>
 						</td>
 					</tr>
@@ -92,7 +92,7 @@
 						<td>19/9/14</td>
 						<td>15%</td>
 						<td>
-							<a class="btn btn-xs btn-default" href="#" role="button">Edit</a>
+							<a class="btn btn-xs btn-default" href="create.php" role="button">Edit</a>
 							<a class="btn btn-xs btn-danger" href="#" role="button">Delete</a>
 						</td>
 					</tr>

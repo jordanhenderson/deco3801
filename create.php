@@ -10,14 +10,15 @@
 
 	<!-- Bootstrap Core CSS -->
 	<link href="css/bootstrap.min.css" rel="stylesheet">
-
+	
+	<!-- Bootstrap Select CSS -->
+	<link href="css/bootstrap-select.min.css" rel="stylesheet">
+	
 	<!-- Bootstrap datetimepicker CSS -->
 	<link href="css/bootstrap-datetimepicker.min.css" rel="stylesheet">
 
 	<!-- Custom CSS -->
 	<link href="css/main.css" rel="stylesheet">
-	
-	<link href="http://netdna.bootstrapcdn.com/twitter-bootstrap/2.2.2/css/bootstrap-combined.min.css" rel="stylesheet">
 
 	<!-- HTML5 Shim and Respond.js IE8 support of HTML5 elements and media queries -->
 	<!-- WARNING: Respond.js doesn't work if you view the page via file:// -->
@@ -51,32 +52,104 @@
 	
 	<div class="container">
 		<h1>Setup New Assignment</h1>
-		<div class="col-lg-12">
-			<h2>Assignments</h2>
-		</div>
-		<div class="col-md-6">
-			<form role="form" >
-				<div class="form-group">
-					<input placeholder="Assessment Name" class="form-control" type="text">
-					<input placeholder="Assessment Name" class="form-control" type="text">
+		<form role="form" >
+			<div class="row">
+				<div class="col-md-6">
+					<label for="name">Assignment Name</label>
+					<input class="form-control" type="text" id="name">
 				</div>
-			</form>
-		</div>
-		<div class="col-md-6">
-			<form role="form" >
-				<div class="form-group">
-					<div class="well">
-						<div id="datetimepicker2" class="input-append">
-							<input data-format="MM/dd/yyyy HH:mm:ss PP" type="text"></input>
-								<span class="add-on">
-									<i data-time-icon="icon-time" data-date-icon="icon-calendar"></i>
-								</span>
-							</div>
-						</div>
+				<div class="col-md-6">
+					<label for="course">Course</label>
+					<br>
+					<select class="selectpicker" data-width="120px" id="course">
+						<option>CSSE1001</option>
+						<option>CSSE2002</option>
+						<option>CSSE2310</option>
+					</select>
+				</div>
+			</div>
+			<br>
+			<div class="row">
+				<div class="col-md-6">
+					<label for="open">Open Date</label>
+					<input size="24" type="text" value="17 Sep 2014 - 14:30" class="form-control form_datetime" id="open">
+				</div>
+				<div class="col-md-6">
+					<label for="due">Due Date</label>
+					<input size="24" type="text" value="18 Sep 2014 - 14:30" class="form-control form_datetime" id="due">
+				</div>
+			</div>
+			<br>
+			<div class="row">
+				<div class="col-md-6">
+					<div class="form-group">
+						<label for="specfiles">Assignment Files</label>
+						<input type="file" id="specfiles">
+						<p class="help-block">Please zip files.</p>
 					</div>
 				</div>
-			</form>
-		</div>
+				<div class="col-md-6">
+					<div class="form-group">
+						<label for="testfiles">Unit Testing Files</label>
+						<input type="file" id="testfiles">
+						<p class="help-block">Please zip files.</p>
+					</div>
+				</div>
+			</div>
+			<br>
+			<div class="row">
+				<div class="col-md-3">
+					<label for="weight">Weight</label>
+					<input value="10%" class="form-control" type="text" id="weight">
+				</div>
+			</div>
+			<br>
+			<div class="row">
+				<div class="col-md-3">
+					<label for="peer">Choose when students can peer review</label>
+					<br>
+					<select class="selectpicker" data-width="120px" id="peer">
+						<option>Any time</option>
+						<option>After at least 1 submission</option>
+						<option>After due date</option>
+					</select>
+				</div>
+				<div class="col-md-3">
+					<label for="feedback">Choose when students can view feedback</label>
+					<br>
+					<select class="selectpicker" data-width="120px" id="feedback">
+						<option>Any time</option>
+						<option>After at least 1 submission</option>
+						<option>After due date</option>
+					</select>
+				</div>
+				<div class="col-md-3">
+					<label for="multiple">Allow Multiple Submissions</label>
+					<select class="selectpicker" data-width="120px" id="multiple">
+						<option>Yes</option>
+						<option>No</option>
+					</select>
+				</div>
+			</div>
+			<br>
+			<div class="row">
+				<div class="col-md-3">
+					<label for="reviewnum">Reviews Per Student</label>
+					<select class="selectpicker" data-width="120px" id="reviewnum">
+						<option>1</option>
+						<option>2</option>
+						<option>3</option>
+						<option>4</option>
+						<option>5</option>
+						<option>6</option>
+						<option>7</option>
+						<option>8</option>
+						<option>9</option>
+						<option>10</option>
+					</select>
+				</div>
+			</div>
+		</form>
 	</div>
 
 	<!-- jQuery Version 1.11.0 -->
@@ -88,13 +161,19 @@
 	<!-- Bootstrap datetimepicker JavaScript -->
 	<script src="js/bootstrap-datetimepicker.min.js"></script>
 	
+	<!-- Bootstrap Select JavaScript -->
+	<script src="js/bootstrap-select.min.js"></script>
+	
 	<script type="text/javascript">
-		$(function() {
-			$('#datetimepicker2').datetimepicker({
-				language: 'en',
-				pick12HourFormat: true
-			});
-		});
+		window.onload = function () {
+			$('.selectpicker').selectpicker();
+		}
 	</script>
+	
+	<script type="text/javascript">
+		$(".form_datetime").datetimepicker({
+			format: 'dd M yyyy - hh:ii'
+		});
+	</script> 
 </body>
 </html>
