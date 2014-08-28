@@ -33,10 +33,11 @@ abstract class PCRObject implements JsonSerializable {
 		$this->id_field = $id_field;
 
 		$field_count = sizeof($row);
-		if($field_count > 0) {
-			$this->id = $row[0];
+
+		if($field_count == 1) {
+			$this->id = $row["id"];
 			$uptodate = 0;
-		} else {
+		} else if($field_count == 0) {
 			//Insert a new element.
 			$sth = $db->prepare("INSERT INTO $table VALUES (" . rtrim(str_repeat("?,", $field_count)) . ");");
 			$sth->execute($row);
@@ -46,14 +47,21 @@ abstract class PCRObject implements JsonSerializable {
 		
 		$this->row = $row;
 	}
-	function delete() {
+	
+	protected function getID() {
+		return $id;
+	}
+	
+	protected function delete() {
 		$db->query("DELETE FROM $table WHERE $id_field = $id;");
-	}	
+	}
 }
 
 
 class Assignment extends PCRObject {
-
+	public function jsonSerialize() {
+		return array($row["id"]);
+	}
 }
 
 class File extends PCRObject  {
@@ -61,14 +69,6 @@ class File extends PCRObject  {
 		parent::__construct($db, "FileID", "Files", $row);
 	}
 
-	static function getArray($rows) {
-		$arr = array();
-		foreach($rows as $row) {
-			push_back($arr, new File($db, $row));
-		}
-		return $arr;
-	}
-	
 	public function jsonSerialize() {
 		return array($row["id"], $row["name"]);
 	}
@@ -80,9 +80,13 @@ class Submission extends PCRObject {
 	* @return an array of File objects.
 	*/
 	public function getFiles() {
+		$arr = array();
 		$sth = $db->prepare("SELECT * FROM Files WHERE SubmissionID = ?;");
-		$sth->execute(array($id));
-		return File.getArray();
+		$sth->execute(array($row["id"]));
+		while($file_row = $sth->fetch(PDO::FETCH_ASSOC)) {
+			push_back($arr, new File($db, $file_row));
+		}
+		return $arr;
 	}
 }
 
