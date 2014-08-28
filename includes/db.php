@@ -3,17 +3,19 @@
 class Database {
 	private $db;
 	public function query(string $stmt) {
-		return $db->query($stmt);
+		return $this->db->query($stmt);
 	}
 	public function prepare(string $stmt) {
-		return $db->prepare($stmt);
+		return $this->db->prepare($stmt);
 	}
 
 	public function __construct() {
-		$db = new PDO('mysql:host=localhost;dbname=deco3801;charset=utf8', 'deco3801', 'hh2z2WG2q');
-		$db->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);	
+		$this->db = new PDO('mysql:host=localhost;dbname=deco3801;charset=utf8', 'deco3801', 'hh2z2WG2q');
+		$this->db->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);	
 	}
 }
+
+$db = new Database();
 
 abstract class PCRObject implements JsonSerializable {
 	protected $db;
@@ -27,8 +29,8 @@ abstract class PCRObject implements JsonSerializable {
 	protected $row;
 	protected $table;
 
-	protected function __construct($db, $id_field, $table, array $row = array()) {
-		$this->db = $db;
+	protected function __construct($id_field, $table, array $row = array()) {
+		$this->db = $GLOBALS["db"];
 		$this->table = $table;
 		$this->id_field = $id_field;
 
@@ -49,40 +51,48 @@ abstract class PCRObject implements JsonSerializable {
 	}
 	
 	protected function getID() {
-		return $id;
+		return $this->id;
 	}
 	
 	protected function delete() {
-		$db->query("DELETE FROM $table WHERE $id_field = $id;");
+		$this->db->query("DELETE FROM $this->table WHERE $this->id_field = $id;");
 	}
 }
 
 
 class Assignment extends PCRObject {
+	public function __construct($row) {
+		parent::__construct("AssignmentID", "Assignments", $row);
+	}
+	
 	public function jsonSerialize() {
-		return array($row["id"]);
+		return array($this->row["id"]);
 	}
 }
 
 class File extends PCRObject  {
-	protected function __construct($db, $row) {
-		parent::__construct($db, "FileID", "Files", $row);
+	public function __construct($row) {
+		parent::__construct("FileID", "Files", $row);
 	}
 
 	public function jsonSerialize() {
-		return array($row["id"], $row["name"]);
+		return array($this->row["id"], $this->row["name"]);
 	}
 }
 
 class Submission extends PCRObject {
+	public function __construct($row) {
+		parent::__construct("SubmissionID", "Submission", $this->row);
+	}
+	
 	/**
 	* getFiles returns an array of file objects which may be further manipulated.
 	* @return an array of File objects.
 	*/
 	public function getFiles() {
 		$arr = array();
-		$sth = $db->prepare("SELECT * FROM Files WHERE SubmissionID = ?;");
-		$sth->execute(array($row["id"]));
+		$sth = $this->db->prepare("SELECT * FROM Files WHERE SubmissionID = ?;");
+		$sth->execute(array($this->row["id"]));
 		while($file_row = $sth->fetch(PDO::FETCH_ASSOC)) {
 			push_back($arr, new File($db, $file_row));
 		}
@@ -90,7 +100,7 @@ class Submission extends PCRObject {
 	}
 	
 	public function jsonSerialize() {
-		return array($row["id"]);
+		return array($this->row["id"]);
 	}
 }
 
