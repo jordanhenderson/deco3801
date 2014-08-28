@@ -23,7 +23,7 @@ class PCRBackend {
 		try {
 			return json_encode(call_user_func_array(array($this->handler, $this->request["f"]), $this->request["params"]));
 		} catch(Exception $e) {
-			
+			return "{}";
 		}
 	}
 }

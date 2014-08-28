@@ -2,10 +2,10 @@
 
 class Database {
 	private $db;
-	public function query(string $stmt) {
+	public function query($stmt) {
 		return $this->db->query($stmt);
 	}
-	public function prepare(string $stmt) {
+	public function prepare($stmt) {
 		return $this->db->prepare($stmt);
 	}
 
@@ -82,7 +82,7 @@ class File extends PCRObject  {
 
 class Submission extends PCRObject {
 	public function __construct($row) {
-		parent::__construct("SubmissionID", "Submission", $this->row);
+		parent::__construct("SubmissionID", "Submission", $row);
 	}
 	
 	/**
