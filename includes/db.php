@@ -88,6 +88,10 @@ class Submission extends PCRObject {
 		}
 		return $arr;
 	}
+	
+	public function jsonSerialize() {
+		return array($row["id"]);
+	}
 }
 
 
