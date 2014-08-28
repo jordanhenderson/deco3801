@@ -26,13 +26,6 @@ abstract class PCRObject implements JsonSerializable {
 	protected $uptodate;
 	protected $row;
 	protected $table;
-	protected function __construct($db, $id, $id_field, $table) {
-		$this->db = $db;
-		$this->id = $id;
-		$this->id_field = $id_field;
-		$this->table = $table;
-		$uptodate = 0;
-	}
 
 	protected function __construct($db, $id_field, $table, array $row = array()) {
 		$this->db = $db;
@@ -42,13 +35,15 @@ abstract class PCRObject implements JsonSerializable {
 		$field_count = sizeof($row);
 		if($field_count > 0) {
 			$this->id = $row[0];
+			$uptodate = 0;
 		} else {
 			//Insert a new element.
 			$sth = $db->prepare("INSERT INTO $table VALUES (" . rtrim(str_repeat("?,", $field_count)) . ");");
 			$sth->execute($row);
-			$id = $db->lastInsertId();
+			$this->id = $db->lastInsertId();
+			$uptodate = 1;
 		}
-		$uptodate = 1;
+		
 		$this->row = $row;
 	}
 	function delete() {
