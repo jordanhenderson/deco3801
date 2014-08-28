@@ -2,13 +2,13 @@
 
 class Database {
 	private $db;
-	public PDOStatement function query(string $stmt) {
+	public function query(string $stmt) {
 		return $db->query($stmt);
 	}
-	public PDOStatement function query(string $stmt, int $col, int $colno) {
+	public function query(string $stmt, int $col, int $colno) {
 		return $db->query($stmt, $col, $colno);
 	}
-	public PDOStatement prepare(string $stmt) {
+	public function prepare(string $stmt) {
 		return $db->prepare($stmt);
 	}
 
