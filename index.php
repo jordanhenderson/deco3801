@@ -1,3 +1,11 @@
+<?php
+// Load up the Basic LTI Support code
+require_once 'blti/blti.php';
+
+// Initialize: set secret, do not set session, and do not redirect
+$context = new BLTI("oF0jxF1IGjzxYUl9w8B", false, false);
+?>
+
 <!DOCTYPE html>
 <html lang="en">
 
@@ -46,6 +54,25 @@
 	
 	<div class="container">
 		<h1>Peer Code Review Home Page</h1>
+<?php
+
+if ($context->valid) {
+	print "<pre>\n";
+	print "Context Information:\n\n";
+	print $context->dump();
+	print "</pre>\n";
+} else {
+	print "<p style=\"color:red\">Bad context. ".$context->message."<p>\n";
+}
+
+print "<pre>\n";
+print "POST Parameters (&#9825; Addison):\n\n";
+foreach ($_POST as $key => $value) {
+	print "$key = $value\n";
+}
+print "</pre>\n";
+
+?>
 		<div class="col-lg-12">
 			<h2>Assignments</h2>
 			<table class="table">
