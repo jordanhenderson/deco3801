@@ -10,15 +10,15 @@ class Database {
 	}
 	public PDOStatement prepare(string $stmt) {
 		return $db->prepare($stmt);
-	}	
+	}
 
 	public function __construct() {
-		$db = new PDO('mysql:host=localhost;dbname=deco3801;charset=utf8', 'deco3801', hh2z2WG2q');
+		$db = new PDO('mysql:host=localhost;dbname=deco3801;charset=utf8', 'deco3801', 'hh2z2WG2q');
 		$db->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);	
 	}
 }
 
-abstract class PCRObject {
+abstract class PCRObject implements JsonSerializable {
 	protected $db;
 	protected $id;
 	protected $id_field;
@@ -46,11 +46,10 @@ abstract class PCRObject {
 		if($field_count > 0) {
 			$this->id = $row[0];
 		} else {
-			//Insert a new element.			
-			$sth = $db->prepare("INSERT INTO $table VALUES (" . rtrim(str_repeat("?,", $field_count)," . 
-");");
+			//Insert a new element.
+			$sth = $db->prepare("INSERT INTO $table VALUES (" . rtrim(str_repeat("?,", $field_count)) . ");");
 			$sth->execute($row);
-			$id = $db->lastInsertId(); 			
+			$id = $db->lastInsertId();
 		}
 		$uptodate = 1;
 		$this->row = $row;
@@ -65,7 +64,7 @@ class Assignment extends PCRObject {
 
 }
 
-class File extends PCRObject {
+class File extends PCRObject  {
 	protected function __construct($db, $row) {
 		parent::__construct($db, "FileID", "Files", $row);
 	}
@@ -73,8 +72,13 @@ class File extends PCRObject {
 	static function getArray($rows) {
 		$arr = array();
 		foreach($rows as $row) {
-			push_back($arr, new File($row));
+			push_back($arr, new File($db, $row));
 		}
+		return $arr;
+	}
+	
+	public function jsonSerialize() {
+		return array($row["id"], $row["name"]);
 	}
 }
 
@@ -86,9 +90,8 @@ class Submission extends PCRObject {
 	public function getFiles() {
 		$sth = $db->prepare("SELECT * FROM Files WHERE SubmissionID = ?;");
 		$sth->execute(array($id));
-		
+		return File.getArray();
 	}
-
 }
 
 
