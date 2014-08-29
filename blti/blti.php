@@ -56,8 +56,7 @@ class TrivialOAuthDataStore extends OAuthDataStore {
 }
 
 
-// Basic LTI Class that does the setup and provides utility
-// functions
+// Basic LTI Class that does the setup and provides utility functions
 class BLTI {
 
 	public $valid = false;
@@ -284,5 +283,4 @@ class BLTI {
 	}
 
 }
-
 ?>

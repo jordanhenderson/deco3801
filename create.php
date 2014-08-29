@@ -33,7 +33,6 @@
 		require 'header.php'; 
 	?>
 	
-	
 	<div class="container">
 		<h1>Setup New Assignment</h1>
 		<form role="form" >

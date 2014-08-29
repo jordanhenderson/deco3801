@@ -1,9 +1,24 @@
 <?php
+session_start();
+
 // Load up the Basic LTI Support code
 require_once 'blti/blti.php';
 
 // Initialize: set secret, do not set session, and do not redirect
-$context = new BLTI("oF0jxF1IGjzxYUl9w8B", false, false);
+$context = new BLTI('oF0jxF1IGjzxYUl9w8B', false, false);
+
+if ($context->valid) { // New redirect from Moodle. Probably different course.
+	$_SESSION['user_id'] = $_POST['user_id'];
+	$_SESSION['course_id'] = $_POST['context_id'];
+	$_SESSION['course_code'] = $_POST['context_label'];
+	$_SESSION['course_title'] = $_POST['context_title'];
+} else if (isset($_SESSION['user_id'])) {
+	; // No action, since user is already authenticated.
+} else {
+	header('Location: invalid.php');
+	exit(); // User didn't come from Moodle, and isn't authenticated.
+}
+
 ?>
 
 <!DOCTYPE html>
@@ -35,27 +50,17 @@ $context = new BLTI("oF0jxF1IGjzxYUl9w8B", false, false);
 		require 'header.php'; 
 	?>
 	
-	
 	<div class="container">
 		<h1>Peer Code Review Home Page</h1>
 <?php
 
-if ($context->valid) {
-	print "<pre>\n";
-	print "Context Information:\n\n";
-	print $context->dump();
-	print "</pre>\n";
-} else {
-	print "<p style=\"color:red\">Bad context. ".$context->message."<p>\n";
-}
-
-print "<pre>\n";
+print "<pre>\nContext Information:\n\n";
+print $context->dump();
 print "POST Parameters (&#9825; Addison):\n\n";
 foreach ($_POST as $key => $value) {
 	print "$key = $value\n";
 }
 print "</pre>\n";
-
 ?>
 		<div class="col-lg-12">
 			<h2>Assignments</h2>
