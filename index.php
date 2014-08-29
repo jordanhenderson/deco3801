@@ -60,20 +60,39 @@ print "</pre>\n";
 		<div class="col-lg-12">
 			<h2>Assignments</h2>
 			<table class="table">
+				<thead>
+					<tr>
+						<th>Title</th>
+						<th>Course</th>
+						<th>Open Date</th>
+						<th>Due Date</th>
+						<th>Weight</th>
+						<th>Status</th>
+					</tr>
+				</thead>
 				<tbody>
 					<tr class="submitted">
 						<td>Assignment 1<br><span>Submitted</span></td>
-						<td>Due 5/9/14</td>
+						<td>CSSE1001</td>
+						<td>5/9/14</td>
+						<td>5/9/14</td>
+						<td>10%</td>
 						<td>Closed for submission</td>
 					</tr>
 					<tr class="unsubmitted">
 						<td>Assignment 2<br><span>Not Submitted</span></td>
-						<td>Due 12/9/14</td>
+						<td>CSSE1001</td>
+						<td>5/9/14</td>
+						<td>5/9/14</td>
+						<td>10%</td>
 						<td>Open for submission</td>
 					</tr>
 					<tr class="unsubmitted">
 						<td>Assignment 3<br><span>Not Submitted</span></td>
-						<td>Due 19/9/14</td>
+						<td>CSSE1001</td>
+						<td>5/9/14</td>
+						<td>5/9/14</td>
+						<td>10%</td>
 						<td>Closed for submission</td>
 					</tr>
 				</tbody>

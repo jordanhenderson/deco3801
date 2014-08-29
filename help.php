@@ -6,7 +6,7 @@
 	<meta http-equiv="X-UA-Compatible" content="IE=edge">
 	<meta name="viewport" content="width=device-width, initial-scale=1">
 	
-	<title>Review Hub - PCR</title>
+	<title>Help Center</title>
 	
 	<!-- Bootstrap Core CSS -->
 	<link href="css/bootstrap.min.css" rel="stylesheet">
@@ -31,56 +31,11 @@
 	?>
 	
 	<div class="container">
-		<h1>Review Hub</h1>
+		<h1>Admin Panel</h1>
 		<div class="col-lg-12">
-			<h2>Assignments to Review</h2>
-			<table class="table">
-				<thead>
-					<tr>
-						<th>Assignment Name</th>
-						<th>Course</th>
-						<th>Open Date</th>
-						<th>Due Date</th>
-						<th>Weight</th>
-					</tr>
-				</thead>
-				<tbody>
-					<tr class="submitted">
-						<td>Assignment 1</td>
-						<td>CSSE1001</td>
-						<td>29/8/14</td>
-						<td>5/9/14</td>
-						<td>10%</td>
-						<td>
-							<a class="btn btn-xs btn-default" href="#" role="button">Mark</a>
-							<a class="btn btn-xs btn-danger" href="#" role="button">View</a>
-						</td>
-					</tr>
-					<tr class="unsubmitted">
-						<td>Assignment 2</td>
-						<td>CSSE1001</td>
-						<td>5/9/14</td>
-						<td>12/9/14</td>
-						<td>15%</td>
-						<td>
-							<a class="btn btn-xs btn-default" href="#" role="button">Mark</a>
-							<a class="btn btn-xs btn-danger" href="#" role="button">View</a>
-						</td>
-					</tr>
-					<tr class="unsubmitted">
-						<td>Assignment 3</td>
-						<td>CSSE1001</td>
-						<td>12/9/14</td>
-						<td>19/9/14</td>
-						<td>15%</td>
-						<td>
-							<a class="btn btn-xs btn-default" href="#" role="button">Mark</a>
-							<a class="btn btn-xs btn-danger" href="#" role="button">View</a>
-						</td>
-					</tr>
-				</tbody>
-			</table>
+			<h2>Courses</h2>
 		</div>
+	</div>
 
 	<!-- jQuery Version 1.11.0 -->
 	<script src="js/jquery-1.11.0.js"></script>
