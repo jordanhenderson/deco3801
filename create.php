@@ -29,26 +29,10 @@
 </head>
 
 <body>
-	<nav class="navbar navbar-inverse navbar-fixed-top" role="navigation">
-		<div class="container">
-			<div class="navbar-header">
-				<button type="button" class="navbar-toggle" data-toggle="collapse" data-target="#bs-example-navbar-collapse-1">
-					<span class="sr-only">Toggle navigation</span>
-					<span class="icon-bar"></span>
-					<span class="icon-bar"></span>
-					<span class="icon-bar"></span>
-				</button>
-				<a class="navbar-brand" href="#">Peer Code Review</a>
-			</div>
-			<div class="collapse navbar-collapse" id="bs-example-navbar-collapse-1">
-				<ul class="nav navbar-nav">
-					<li><a href="index.php">Dashboard</a></li>
-					<li><a href="help.php">Help Centre</a></li>
-					<li><a href="admin.php">Admin</a></li>
-				</ul>
-			</div>
-		</div>
-	</nav>
+	<?php 
+		require 'header.php'; 
+	?>
+	
 	
 	<div class="container">
 		<h1>Setup New Assignment</h1>
@@ -150,6 +134,11 @@
 				</div>
 			</div>
 		</form>
+		<div align="center">
+				<a class="btn btn-primary" href="#" role="button">Submit</a>
+				<a class="btn btn-info" href="#" role="button">Save</a>
+				<a class="btn btn-warning" href="#" role="button">Reset</a>
+		</div>
 	</div>
 
 	<!-- jQuery Version 1.11.0 -->

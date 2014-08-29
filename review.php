@@ -53,26 +53,10 @@
 </head>
 
 <body>
-	<nav class="navbar navbar-inverse navbar-fixed-top" role="navigation">
-		<div class="container">
-			<div class="navbar-header">
-				<button type="button" class="navbar-toggle" data-toggle="collapse" data-target="#bs-example-navbar-collapse-1">
-					<span class="sr-only">Toggle navigation</span>
-					<span class="icon-bar"></span>
-					<span class="icon-bar"></span>
-					<span class="icon-bar"></span>
-				</button>
-				<a class="navbar-brand" href="#">Peer Code Review</a>
-			</div>
-			<div class="collapse navbar-collapse" id="bs-example-navbar-collapse-1">
-				<ul class="nav navbar-nav">
-					<li><a href="index.php">Dashboard</a></li>
-					<li><a href="#">Help Centre</a></li>
-					<li><a href="admin.php">Admin</a></li>
-				</ul>
-			</div>
-		</div>
-	</nav>
+	<?php 
+		require 'header.php'; 
+	?>
+	
 	
 	<div class="container">
 		<div class="col-xs-6 col-sm-3 sidebar-offcanvas" id="sidebar">
@@ -105,80 +89,7 @@
 			<h1>Assignment 99 Submission</h1>
 			<div class="col-md-12">
 				<h2>main.c</h2>
-			
-				<?php  
-$str = "#include <stdio.h>
-#include <sys/types.h> 
-#include <sys/socket.h>
-#include <netinet/in.h>
-
-int main( int argc, char *argv[] )
-{
-    int sockfd, newsockfd, portno, clilen;
-    char buffer[256];
-    struct sockaddr_in serv_addr, cli_addr;
-    int  n;
-
-    /* First call to socket() function */
-    sockfd = socket(AF_INET, SOCK_STREAM, 0);
-    if (sockfd < 0) 
-    {
-        perror(\"ERROR opening socket\");
-        exit(1);
-    }
-    /* Initialize socket structure */
-    bzero((char *) &serv_addr, sizeof(serv_addr));
-    portno = 5001;
-    serv_addr.sin_family = AF_INET;
-    serv_addr.sin_addr.s_addr = INADDR_ANY;
-    serv_addr.sin_port = htons(portno);
- 
-    /* Now bind the host address using bind() call.*/
-    if (bind(sockfd, (struct sockaddr *) &serv_addr,
-                          sizeof(serv_addr)) < 0)
-    {
-         perror(\"ERROR on binding\");
-         exit(1);
-    }
-
-    /* Now start listening for the clients, here process will
-    * go in sleep mode and will wait for the incoming connection
-    */
-    listen(sockfd,5);
-    clilen = sizeof(cli_addr);
-
-    /* Accept actual connection from the client */
-    newsockfd = accept(sockfd, (struct sockaddr *)&cli_addr, 
-                                &clilen);
-    if (newsockfd < 0) 
-    {
-        perror(\"ERROR on accept\");
-        exit(1);
-    }
-    /* If connection is established then start communicating */
-    bzero(buffer,256);
-    n = read( newsockfd,buffer,255 );
-    if (n < 0)
-    {
-        perror(\"ERROR reading from socket\");
-        exit(1);
-    }
-    printf(\"Here is the message: %s\\n\",buffer);
-
-    /* Write a response to the client */
-    n = write(newsockfd,\"I got your message\",18);
-    if (n < 0)
-    {
-        perror(\"ERROR writing to socket\");
-        exit(1);
-    }
-    return 0; 
-}";
-			//	$str = str_replace('<', '&lt;', $str);
-				//$str = str_replace('>', '&gt;', $str);?>
-				
-				<?php //echo("<pre id='assignment_code'><code>".$str."</code></pre>") ?>
-	<div id="innercontainer">
+				<div id="innercontainer">
 	<?php
 		if (count($filesArray) > 0) {
 			$assignment = "/var/www/upload/course_00001/assign_00001/submissions_00001/s1234567/" . $filesArray[0];
@@ -190,9 +101,10 @@ int main( int argc, char *argv[] )
 	?>			
 </div>	
 				<p>
-					<a class="btn btn-primary" href="#" role="button">Submit</a>
+					<a class="btn btn-primary" href="reviewhub.php" role="button">Submit</a>
 					<a class="btn btn-info" href="#" role="button">Save</a>
 					<a class="btn btn-warning" href="#" role="button">Reset</a>
+					<a class="btn btn-warning" href="reviewhub.php" role="button">Close</a>
 				</p>
 			</div>
 		</div>

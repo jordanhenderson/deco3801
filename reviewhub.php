@@ -31,18 +31,17 @@
 	?>
 	
 	<div class="container">
-		<h1>Admin Panel</h1>
+		<h1>Review Hub</h1>
 		<div class="col-lg-12">
-			<h2>Assignments</h2>
+			<h2>Assignments to Review</h2>
 			<table class="table">
 				<thead>
 					<tr>
-						<th>Title</th>
+						<th>Assignment Name</th>
 						<th>Course</th>
 						<th>Open Date</th>
 						<th>Due Date</th>
 						<th>Weight</th>
-						<th><a class="btn btn-xs btn-primary" href="create.php" role="button">Create New</a></th>
 					</tr>
 				</thead>
 				<tbody>
@@ -53,8 +52,8 @@
 						<td>5/9/14</td>
 						<td>10%</td>
 						<td>
-							<a class="btn btn-xs btn-default" href="create.php" role="button">Edit</a>
-							<a class="btn btn-xs btn-danger" href="#" role="button">Delete</a>
+							<a class="btn btn-xs btn-default" href="#" role="button">Mark</a>
+							<a class="btn btn-xs btn-danger" href="#" role="button">View</a>
 						</td>
 					</tr>
 					<tr class="unsubmitted">
@@ -64,8 +63,8 @@
 						<td>12/9/14</td>
 						<td>15%</td>
 						<td>
-							<a class="btn btn-xs btn-default" href="create.php" role="button">Edit</a>
-							<a class="btn btn-xs btn-danger" href="#" role="button">Delete</a>
+							<a class="btn btn-xs btn-default" href="#" role="button">Mark</a>
+							<a class="btn btn-xs btn-danger" href="#" role="button">View</a>
 						</td>
 					</tr>
 					<tr class="unsubmitted">
@@ -75,54 +74,13 @@
 						<td>19/9/14</td>
 						<td>15%</td>
 						<td>
-							<a class="btn btn-xs btn-default" href="create.php" role="button">Edit</a>
-							<a class="btn btn-xs btn-danger" href="#" role="button">Delete</a>
+							<a class="btn btn-xs btn-default" href="#" role="button">Mark</a>
+							<a class="btn btn-xs btn-danger" href="#" role="button">View</a>
 						</td>
 					</tr>
 				</tbody>
 			</table>
 		</div>
-		<div class="col-lg-12">
-			<h2>Course Settings</h2>
-			<table class="table">
-				<thead>
-					<tr>
-						<th>Course</th>
-						<th>Enable Help Centre</th>
-					</tr>
-				</thead>
-				<tbody>
-					<tr class="submitted">
-						<td>CSSE1001</td>
-						<td>
-							<select class="selectpicker" data-width="110px">
-								<option>Enabled</option>
-								<option>Disabled</option>
-							</select>
-						</td>
-					</tr>
-					<tr class="unsubmitted">
-						<td>CSSE2002</td>
-						<td>
-							<select class="selectpicker" data-width="110px">
-								<option>Enabled</option>
-								<option>Disabled</option>
-							</select>
-						</td>
-					</tr>
-					<tr class="unsubmitted">
-						<td>CSSE2310</td>
-						<td>
-							<select class="selectpicker" data-width="110px">
-								<option>Enabled</option>
-								<option>Disabled</option>
-							</select>
-						</td>
-					</tr>
-				</tbody>
-			</table>
-		</div>
-	</div>
 
 	<!-- jQuery Version 1.11.0 -->
 	<script src="js/jquery-1.11.0.js"></script>
