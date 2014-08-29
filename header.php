@@ -14,7 +14,7 @@ echo '
 			<div class="collapse navbar-collapse" id="bs-example-navbar-collapse-1">
 				<ul class="nav navbar-nav">
 					<li><a href="index.php">Home Page</a></li>
-					<li><a href="#">Help Centre</a></li>
+					<li><a href="help.php">Help Centre</a></li>
 					<li><a href="reviewhub.php">Review Hub</a></li>
 					<li><a href="#">Feedback</a></li>
 				</ul>
