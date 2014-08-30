@@ -190,7 +190,8 @@ class Submission extends PCRObject {
 	public function __construct($data) {
 		parent::__construct("SubmissionID", "Submission", $data);
 		$id = $this->getID();
-		$this->storage_dir = "storage/$id";
+		$courseid = $_SESSION["course_id"];
+		$this->storage_dir = "/var/www/upload/course_$courseid/assign_$id/submissions/$id/";
 		if(!file_exists($this->storage_dir)) {
 			mkdir($this->storage_dir, 0700, true);
 		}
@@ -230,7 +231,7 @@ class Submission extends PCRObject {
 		print("Uploading file");
 		if ($_FILES["file"]["error"] == 0) {
 			$id = $this->getID();
-			$file = "storage/$id/" . $_FILES["file"]["name"];
+			$file = $this->storage_dir . $_FILES["file"]["name"];
 			move_uploaded_file($_FILES["file"]["tmp_name"], $file);
 			$zip = new ZipArchive;
 
@@ -248,8 +249,7 @@ class Submission extends PCRObject {
 	
 	public function uploadRepo($repo_url, $username, $password) {
 		$id = $this->getID();
-		print("cd storage/$id/ && git clone https://$username:$password@$repo_url");
-		exec("cd storage/$id/ && git clone https://$username:$password@$repo_url");
+		exec("cd $this->storage_dir && git clone https://$username:$password@$repo_url .");
 	}
 	
 	public function jsonSerialize() {
