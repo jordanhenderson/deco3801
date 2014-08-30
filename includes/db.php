@@ -233,7 +233,6 @@ class Submission extends PCRObject {
 	}
 	
 	public function uploadArchive() {
-		print("Uploading file");
 		if ($_FILES["file"]["error"] == 0) {
 			$id = $this->getID();
 			$file = $this->storage_dir . $_FILES["file"]["name"];
