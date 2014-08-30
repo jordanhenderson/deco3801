@@ -1,3 +1,0 @@
-[submodule "modules/php-git"]
-	path = modules/php-git
-	url = https://github.com/libgit2/php-git
