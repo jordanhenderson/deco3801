@@ -1,3 +1,7 @@
+<?php 
+		
+		require_once 'blti/blti.php';
+?>
 <!DOCTYPE html>
 <html lang="en">
 
@@ -28,12 +32,42 @@
 <body>
 	<?php 
 		require 'header.php'; 
+		function helpEnabled($courseID){
+		$con=mysqli_connect("localhost","root",null,"deco3801");
+		$sql = "SELECT HelpEnabled FROM `course` WHERE CourseID=$courseID";
+		$query = mysqli_query($con, $sql);
+		while($row = mysqli_fetch_array($query)){	
+			$help = $row['HelpEnabled'];
+		}
+	}
+		helpEnabled(00001);
 	?>
 	
 	<div class="container">
-		<h1>Admin Panel</h1>
+		<h1>Help Centre</h1>
 		<div class="col-lg-12">
-			<h2>Courses</h2>
+			<table class="table">
+				<thead>
+					<td>
+					<h2>Questions<h2>
+						<a class="btn btn-xl btn-default" href="addQuestion.php" role="button">Ask a Question</a>
+						<a class="btn btn-xl btn-danger" href="#" role="button">My Questions</a>
+					<td>
+					<tr>
+						<th>Title</th>
+						<th>Assessment</th>
+						<th>Requested on</th>
+					</tr>
+				</thead>
+				<tbody>
+					<tr class="submitted">
+					</tr>
+					<tr class="unsubmitted">
+					</tr>
+					<tr class="unsubmitted">
+					</tr>
+				</tbody>
+			</table>
 		</div>
 	</div>
 
