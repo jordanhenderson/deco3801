@@ -1,5 +1,6 @@
 <?php
-session_start();
+
+require_once 'includes/handlers.php';
 
 // Load up the Basic LTI Support code
 require_once 'blti/blti.php';

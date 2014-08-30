@@ -1,12 +1,12 @@
 <?php
 
-session_start();/*
+session_start();
 if(!isset($_SESSION['user_id'])) {
 	header('Location: invalid.php');
 	exit();
-}*/
+}
 
-include("db.php");
+require_once("db.php");
 
 class PCRHandler {
 	/* Add additional API functions here. */
@@ -23,9 +23,34 @@ class PCRHandler {
 	public function getSubmission($id, $submission_output) {
 		$assignment = new Assignment(array("AssignmentID"=>$id));
 		if($assignment->isValid()) {
-			$submission = new Submission(array("AssignmentID"=>$id, "StudentID"=>$_SESSION['user_id']));
+			$submission = new Submission(array("AssignmentID"=>$id, "StudentID"=>"1"));
 			return $submission;
 		}
+	}
+	
+	public function uploadFile() {
+		$submission_id = $_POST["submission_id"];
+		if(!isset($submission_id)) {
+			return;
+		}
+
+		if ($_FILES["file"]["error"] == 0) {
+			
+			$file = "storage/$submission_id/" . $_FILES["file"]["name"];
+			move_uploaded_file($_FILES["file"]["tmp_name"], $file);
+			$zip = new ZipArchive;
+
+			$path = pathinfo(realpath($file), PATHINFO_DIRNAME);
+
+			$r = $zip->open($file);
+
+			if($r === TRUE) {
+				$zip->extractTo($path);
+				$zip->close();
+				unlink($file);
+			}
+		}
+		
 	}
 }
 
