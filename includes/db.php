@@ -216,9 +216,12 @@ class Submission extends PCRObject {
 						RecursiveIteratorIterator::SELF_FIRST );
 		foreach($iterator as $fileinfo) {
 			if(!$fileinfo->isDir()) {
-				$f = new File(array("SubmissionID"=>$this->getID(), 
-									"FileName"=>$iterator->getSubPathName()));
-				$f->Update();
+				$path = $iterator->getSubPathName();
+				if(strpos($path, ".git") === false) {
+					$f = new File(array("SubmissionID"=>$this->getID(), 
+										"FileName"=>$iterator->getSubPathName()));
+					$f->Update();
+				}
 			}
 		}
 	}
@@ -245,7 +248,8 @@ class Submission extends PCRObject {
 	
 	public function uploadRepo($repo_url, $username, $password) {
 		$id = $this->getID();
-		
+		print("cd storage/$id/ && git clone https://$username:$password@$repo_url");
+		exec("cd storage/$id/ && git clone https://$username:$password@$repo_url");
 	}
 	
 	public function jsonSerialize() {
