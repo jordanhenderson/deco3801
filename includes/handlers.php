@@ -22,10 +22,10 @@ class PCRHandler {
 			return $course;
 	}
 	
-	public function getSubmission($id, $submission_output) {
+	public function getSubmission($id) {
 		$assignment = new Assignment(array("AssignmentID"=>$id));
 		if($assignment->isValid()) {
-			$submission = new Submission(array("AssignmentID"=>$id, "StudentID"=>"1"));
+			$submission = new Submission(array("AssignmentID"=>$id, "StudentID"=>$_SESSION['user_id']));
 			return $submission;
 		}
 	}
