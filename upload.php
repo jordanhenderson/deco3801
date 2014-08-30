@@ -3,6 +3,6 @@
 require_once('includes/handlers.php');
 
 $handler = new PCRHandler();
-$handler->uploadFile();
+$handler->uploadArchive();
 
 ?>

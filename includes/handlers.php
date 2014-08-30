@@ -1,10 +1,11 @@
 <?php
 
 session_start();
+/*
 if(!isset($_SESSION['user_id'])) {
 	header('Location: invalid.php');
 	exit();
-}
+}*/
 
 require_once("db.php");
 
@@ -17,7 +18,8 @@ class PCRHandler {
 	
 	public function getCourse() {
 		$course = new Course(array("CourseID"=>$_SESSION['course_id']));
-		return $course;
+		if($course->isValid())
+			return $course;
 	}
 	
 	public function getSubmission($id, $submission_output) {
@@ -28,29 +30,42 @@ class PCRHandler {
 		}
 	}
 	
-	public function uploadFile() {
-		$submission_id = $_POST["submission_id"];
-		if(!isset($submission_id)) {
-			return;
-		}
-
-		if ($_FILES["file"]["error"] == 0) {
-			
-			$file = "storage/$submission_id/" . $_FILES["file"]["name"];
-			move_uploaded_file($_FILES["file"]["tmp_name"], $file);
-			$zip = new ZipArchive;
-
-			$path = pathinfo(realpath($file), PATHINFO_DIRNAME);
-
-			$r = $zip->open($file);
-
-			if($r === TRUE) {
-				$zip->extractTo($path);
-				$zip->close();
-				unlink($file);
-			}
+	public function uploadArchive() {
+		$submission_id = isset($_POST["submission_id"]) ? $_POST["submission_id"] : null;
+		$submission = new Submission(array("SubmissionID"=>$submission_id));
+		if($submission->isValid()) {
+			$submission->uploadArchive();
+			$submission->addFiles();
 		}
 		
+	}
+	
+	public function uploadRepo($submission_id, $repo_url, $username, $password) {
+		$submission = new Submission(array("SubmissionID"=>$submission_id));
+		if($submission->isValid()) {
+			$submission->uploadRepo($repo_url, $username, $password);
+			$submission->addFiles();
+		}
+	}
+	
+	/*
+	 * Create or update assignments.
+	*/
+	public function updateAssignment($assignment_id, $course_id, $assignment_name, 
+									$reviews_needed, $review_opentime, $weight, 
+									$opentime, $review_visibletime) {
+		
+		$assignment = new Assignment(array("AssignmentID"=>$assignment_id,
+										   "CourseID"=>$course_id,
+										   "AssignmentName"=>$assignment_name,
+										   "ReviewsNeeded"=>$reviews_needed,
+										   "ReviewOpenTime"=>$review_opentime,
+										   "Weight"=>$weight,
+										   "OpenTime"=>$opentime,
+										   "ReviewsVisibleTime"=>$review_visibletime));
+		if($assignment->isValid()) {
+			return $assignment;
+		}					   
 	}
 }
 

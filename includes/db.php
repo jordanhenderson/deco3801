@@ -1,5 +1,4 @@
 <?php
-
 class Database {
 	private $db;
 	public function query($stmt) {
@@ -49,12 +48,57 @@ abstract class PCRObject implements JsonSerializable {
 		
 		if(is_array($data)) {
 			$this->row = $data;
-			if(isset($data[$id_field])) {
+			if(isset($data[$id_field]) && $data[$id_field] != null) {
 				$this->id = $data[$id_field];
 			}
 		}
 	}
 	
+	
+	private function updateRow($row) {
+		$this->id = $row[$this->id_field];
+		/* Update the row to match the latest set of data. */
+		$update = "UPDATE $this->table SET ";
+		foreach($this->row as $key=>$value) {
+			if($key != $this->id_field)
+				$update = $update . "$key = :$key,";
+		}
+		$update = rtrim($update, ",");
+		$update = " WHERE $this->id_field = :$this->id_field;";
+		
+		try {
+			$sth = $this->db->prepare($update);
+			$sth->execute($this->row);
+		} catch(PDOException $e) {
+			return;
+		}
+	}
+	
+	private function insertRow() {
+		//Insert a new row.
+		$field_count = sizeof($this->row);
+		
+		//Generate a prepared insert statement.
+		$cols = "";
+		$vals = "";		
+		foreach($this->row as $key => $value) {
+			$cols = $cols . "$key,";
+			$vals = $vals . ":$key,";
+		}
+		
+		$cols = rtrim($cols, ",");
+		$vals = rtrim($vals, ",");
+		
+		try {
+			$sth = $this->db->prepare("INSERT INTO $this->table ($cols) VALUES ($vals);");
+			$sth->execute($this->row);
+
+			$this->id = $this->row[$this->id_field] = $this->db->lastInsertId();
+		} catch (PDOException $e) {
+			//An error occured while inserting.
+			return;
+		}
+	}
 	/* 
 	 * Update()
 	 * Populates the database object if out of date. Must be called before
@@ -66,7 +110,7 @@ abstract class PCRObject implements JsonSerializable {
 	 * Note: This function may fail if a new row is being inserted without
 	 * valid constraints.
 	 */
-	protected function Update($recursed=0) {
+	public function Update($recursed=0) {
 		if(!$this->uptodate) {
 			
 			//Populate the PCRObject.
@@ -90,37 +134,13 @@ abstract class PCRObject implements JsonSerializable {
 			
 			//The provided ID did not return a row.
 			if(!$row) {
-				
-				//Insert a new row.
-				$field_count = sizeof($this->row);
-				
-				//Generate a prepared insert statement.
-				$cols = "";
-				$vals = "";		
-				foreach($this->row as $key => $value) {
-					$cols = $cols . "$key,";
-					$vals = $vals . ":$key,";
-				}
-				
-				$cols = rtrim($cols, ",");
-				$vals = rtrim($vals, ",");
-				
-				try {
-					$sth = $this->db->prepare("INSERT INTO $this->table ($cols) VALUES ($vals);");
-					$sth->execute($this->row);
-
-					$this->id = $this->row[$this->id_field] = $this->db->lastInsertId();
-					
-					//Populate the freshly inserted row by calling Update again.
-					//Only recurse once to prevent a loop - this might not be necessary.
-					if(!$recursed) $this->Update(1);
-				} catch (PDOException $e) {
-					//An error occured while inserting.
-					return;
-				}
+				$this->insertRow();
+				//Populate the freshly inserted row by calling Update again.
+				//Only recurse once to prevent a loop - this might not be necessary.
+				if(!$recursed) $this->Update(1);
 				return;
 			} else {
-				$this->id = $row[$this->id_field];
+				$this->updateRow($row);
 			}
 			
 			$this->row = $row;
@@ -169,7 +189,8 @@ class Submission extends PCRObject {
 	private $storage_dir;
 	public function __construct($data) {
 		parent::__construct("SubmissionID", "Submission", $data);
-		$this->storage_dir = "storage/$this->id";
+		$id = $this->getID();
+		$this->storage_dir = "storage/$id";
 		if(!file_exists($this->storage_dir)) {
 			mkdir($this->storage_dir, 0700, true);
 		}
@@ -190,14 +211,41 @@ class Submission extends PCRObject {
 	}
 	
 	public function addFiles() {
-		$dir = new DirectoryIterator($this->storage_dir);
-		foreach($dir as $fileinfo) {
-			if(!$fileinfo->isDot()) {
+		$iterator = new RecursiveIteratorIterator(
+					new RecursiveDirectoryIterator($this->storage_dir), 
+						RecursiveIteratorIterator::SELF_FIRST );
+		foreach($iterator as $fileinfo) {
+			if(!$fileinfo->isDir()) {
 				$f = new File(array("SubmissionID"=>$this->getID(), 
-									"FileName"=>$f->fileName()));
-				
+									"FileName"=>$iterator->getSubPathName()));
+				$f->Update();
 			}
 		}
+	}
+	
+	public function uploadArchive() {
+		print("Uploading file");
+		if ($_FILES["file"]["error"] == 0) {
+			$id = $this->getID();
+			$file = "storage/$id/" . $_FILES["file"]["name"];
+			move_uploaded_file($_FILES["file"]["tmp_name"], $file);
+			$zip = new ZipArchive;
+
+			$path = pathinfo(realpath($file), PATHINFO_DIRNAME);
+
+			$r = $zip->open($file);
+
+			if($r === TRUE) {
+				$zip->extractTo($path);
+				$zip->close();
+				unlink($file);
+			}
+		}
+	}
+	
+	public function uploadRepo($repo_url, $username, $password) {
+		$id = $this->getID();
+		
 	}
 	
 	public function jsonSerialize() {
