@@ -120,14 +120,14 @@ abstract class PCRObject implements JsonSerializable {
 			
 			//Guarantee the id field has been provided.
 			$row = null;
-			if(!isset($this->id) || $this->forceCreate) {
+			if(!isset($this->id)) {
 				//Insert a new row.
 				$this->row[$this->id_field] = "NULL";
 			} else {
 				//Select an existing row - this may succeed or fail.
 				$sth->execute(array($this->id));
 				$row = $sth->fetch(PDO::FETCH_ASSOC);
-				if(!$row) {
+				if(!$row && !$this->forceCreate) {
 					//Failed to select row. Set ID to null.
 					$this->id = null;
 					return;
