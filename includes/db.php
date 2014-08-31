@@ -31,6 +31,7 @@ abstract class PCRObject implements JsonSerializable {
 	protected $uptodate;
 	protected $row;
 	protected $table;
+	protected $forceCreate;
 
 	/* 
 	 * PCRObject($id_field, $table, $data, $is_new)
@@ -40,11 +41,12 @@ abstract class PCRObject implements JsonSerializable {
 	 * param createnew: Should a new row be auto-created if an ID is 
 	 * provided and a matching row is not found.
 	 */
-	protected function __construct($id_field, $table, $data) {
+	protected function __construct($id_field, $table, $data, $forceCreate = 0) {
 		$this->db = $GLOBALS["db"];
 		$this->table = $table;
 		$this->id_field = $id_field;
 		$this->uptodate = 0;
+		$this->forceCreate = $forceCreate;
 		
 		if(is_array($data)) {
 			$this->row = $data;
@@ -118,7 +120,7 @@ abstract class PCRObject implements JsonSerializable {
 			
 			//Guarantee the id field has been provided.
 			$row = null;
-			if(!isset($this->id)) {
+			if(!isset($this->id) || $this->forceCreate) {
 				//Insert a new row.
 				$this->row[$this->id_field] = "NULL";
 			} else {
@@ -264,7 +266,7 @@ class Submission extends PCRObject {
 
 class Course extends PCRObject {
 	public function __construct($data) {
-		parent::__construct("CourseID", "Course", $data);
+		parent::__construct("CourseID", "Course", $data, 1);
 	}
 	public function jsonSerialize() {
 		parent::Update();
