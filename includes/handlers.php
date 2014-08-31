@@ -1,6 +1,9 @@
 <?php
 
-session_start();
+if (session_id() == "") {
+	session_start(); // start session if not already started
+}
+
 if(!isset($_SESSION['user_id'])) {
 	header('Location: invalid.php');
 	exit();

@@ -1,27 +1,15 @@
 <?php
 
-require_once 'includes/handlers.php';
-require_once 'includes/db.php';
+session_start();
 
 // Load up the Basic LTI Support code
 require_once 'blti/blti.php';
 
 // Initialize: set secret, do not set session, and do not redirect
 $context = new BLTI('oF0jxF1IGjzxYUl9w8B', false, false);
-//IM leaving this here for now but i'll relocate it to the db.php when i stop being bad
-function helpEnabled($courseID){
-		$con=mysqli_connect("localhost","deco3801","hh2z2WG2q","deco3801") or die("Error: ".mysqli_error($con));
-		$sql = "SELECT HelpEnabled FROM `Course` WHERE CourseID=$courseID";
-		$query = mysqli_query($con, $sql);
-	
-		while($row = mysqli_fetch_array($query)){	
-			$help = $row['HelpEnabled'];
-		}
-		$_SESSION['helpenabled'] = $help;
-		mysqli_close($con);
-		return $help;
-	}
+
 if ($context->valid) { // New redirect from Moodle. Probably different course.
+	session_unset(); // clear old data, ready for reload from POST
 	$_SESSION['user_id'] = $_POST['user_id'];
 	$_SESSION['course_id'] = $_POST['context_id'];
 	$_SESSION['course_code'] = $_POST['context_label'];
@@ -37,6 +25,22 @@ if ($context->valid) { // New redirect from Moodle. Probably different course.
 	echo "<!-- Totally logged out -->";
 }
 
+require_once 'includes/handlers.php';
+require_once 'includes/db.php';
+
+//IM leaving this here for now but i'll relocate it to the db.php when i stop being bad
+function helpEnabled($courseID) {
+	$con = mysqli_connect("localhost","deco3801","hh2z2WG2q","deco3801") or die("Error: ".mysqli_error($con));
+	$sql = "SELECT HelpEnabled FROM `Course` WHERE CourseID=$courseID";
+	$query = mysqli_query($con, $sql);
+
+	while($row = mysqli_fetch_array($query)){	
+		$help = $row['HelpEnabled'];
+	}
+	$_SESSION['helpenabled'] = $help;
+	mysqli_close($con);
+	return $help;
+}
 ?>
 
 <!DOCTYPE html>

@@ -2,7 +2,7 @@
 <html lang="en">
 
 <head>
-	<title>Admin - PCR</title>
+	<title>Invalid</title>
 </head>
 
 <body>
