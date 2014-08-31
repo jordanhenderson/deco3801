@@ -11,7 +11,7 @@ $context = new BLTI('oF0jxF1IGjzxYUl9w8B', false, false);
 //IM leaving this here for now but i'll relocate it to the db.php when i stop being bad
 function helpEnabled($courseID){
 		$con=mysqli_connect("localhost","deco3801","hh2z2WG2q","deco3801") or die("Error: ".mysqli_error($con));
-		$sql = "SELECT HelpEnabled FROM `course` WHERE CourseID=$courseID";
+		$sql = "SELECT HelpEnabled FROM `Course` WHERE CourseID=$courseID";
 		$query = mysqli_query($con, $sql);
 	
 		while($row = mysqli_fetch_array($query)){	
@@ -78,6 +78,7 @@ foreach ($_POST as $key => $value) {
 	print "$key = $value\n";
 }
 print "</pre>\n";
+echo $_SESSION['helpenabled'];
 ?>
 		<div class="col-lg-12">
 			<h2>Assignments</h2>
