@@ -15,6 +15,9 @@ function helpEnabled($courseID){
 	    	printf("Connect failed: %s\n", $mysqli->connect_error);
 	    	exit();
 		}
+else {
+	echo "connected successfully";
+}
 		$sql = "SELECT HelpEnabled FROM `course` WHERE CourseID=$courseID";
 		$query = mysqli_query($con, $sql);
 	
