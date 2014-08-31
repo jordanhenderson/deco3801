@@ -10,14 +10,7 @@ require_once 'blti/blti.php';
 $context = new BLTI('oF0jxF1IGjzxYUl9w8B', false, false);
 //IM leaving this here for now but i'll relocate it to the db.php when i stop being bad
 function helpEnabled($courseID){
-		$con=mysqli_connect("localhost","deco3801","hh2z2WG2q","deco3801");
-		if ($con->connect_errno) {
-	    	printf("Connect failed: %s\n", $con->connect_error);
-	    	exit();
-		}
-else {
-	echo "connected successfully";
-}
+		$con=mysqli_connect("localhost","",,"1") or die("Error: ".mysqli_error($con));
 		$sql = "SELECT HelpEnabled FROM `course` WHERE CourseID=$courseID";
 		$query = mysqli_query($con, $sql);
 	
@@ -25,7 +18,7 @@ else {
 			$help = $row['HelpEnabled'];
 		}
 		$_SESSION['helpenabled'] = $help;
-echo $help;
+		echo $help;
 		return $help;
 	}
 if ($context->valid) { // New redirect from Moodle. Probably different course.
