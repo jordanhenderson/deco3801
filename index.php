@@ -18,7 +18,7 @@ function helpEnabled($courseID){
 			$help = $row['HelpEnabled'];
 		}
 		$_SESSION['helpenabled'] = $help;
-		echo $help;
+		mysqli_close($con);
 		return $help;
 	}
 if ($context->valid) { // New redirect from Moodle. Probably different course.
@@ -78,7 +78,6 @@ foreach ($_POST as $key => $value) {
 	print "$key = $value\n";
 }
 print "</pre>\n";
-echo $_SESSION['helpenabled'];
 ?>
 		<div class="col-lg-12">
 			<h2>Assignments</h2>
