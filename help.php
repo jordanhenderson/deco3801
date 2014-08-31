@@ -1,6 +1,8 @@
 <?php 
 		
 		require_once 'blti/blti.php';
+		require_once 'includes/handlers.php';
+		require_once 'includes/db.php';
 ?>
 <!DOCTYPE html>
 <html lang="en">
@@ -32,15 +34,26 @@
 <body>
 	<?php 
 		require 'header.php'; 
+
+		//This is here for now, will move this to DB at some point and make it less bad
 		function helpEnabled($courseID){
 		$con=mysqli_connect("localhost","root",null,"deco3801");
 		$sql = "SELECT HelpEnabled FROM `course` WHERE CourseID=$courseID";
 		$query = mysqli_query($con, $sql);
+	
 		while($row = mysqli_fetch_array($query)){	
 			$help = $row['HelpEnabled'];
 		}
+		$_SESSION['helpenabled'] = $help;
+		return $help;
 	}
-		helpEnabled(00001);
+		$helpEnabled = helpEnabled($_SESSION['course_id']);
+		if($helpEnabled!=1){
+			header('Location: index.php');
+		}else
+		{ 
+			echo "enabled";
+		}
 	?>
 	
 	<div class="container">

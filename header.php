@@ -13,7 +13,11 @@ echo '
 			</div>
 			<div class="collapse navbar-collapse" id="bs-example-navbar-collapse-1">
 				<ul class="nav navbar-nav">
-					<li><a href="index.php">Home Page</a></li>
+					<li><a href="index.php">Home Page</a></li>'; 
+
+
+					if(isset($_SESSION['helpenabled']) && $_SESSION['helpenabled'] == 1) {
+					echo '
 					<li><a href="help.php">Help Centre</a></li>
 					<li><a href="reviewhub.php">Review Hub</a></li>
 					<li><a href="#">Feedback</a></li>
@@ -21,4 +25,16 @@ echo '
 			</div>
 		</div>
 	</nav>';
+}
+else
+{
+	echo '
+					
+					<li><a href="reviewhub.php">Review Hub</a></li>
+					<li><a href="#">Feedback</a></li>
+				</ul>
+			</div>
+		</div>
+	</nav>';
+}
 ?>

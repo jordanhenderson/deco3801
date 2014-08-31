@@ -1,21 +1,33 @@
 <?php
 
 require_once 'includes/handlers.php';
+require_once 'includes/db.php';
 
 // Load up the Basic LTI Support code
 require_once 'blti/blti.php';
 
 // Initialize: set secret, do not set session, and do not redirect
 $context = new BLTI('oF0jxF1IGjzxYUl9w8B', false, false);
-
+//IM leaving this here for now but i'll relocate it to the db.php when i stop being bad
+function helpEnabled($courseID){
+		$con=mysqli_connect("localhost","root",null,"deco3801");
+		$sql = "SELECT HelpEnabled FROM `course` WHERE CourseID=$courseID";
+		$query = mysqli_query($con, $sql);
+	
+		while($row = mysqli_fetch_array($query)){	
+			$help = $row['HelpEnabled'];
+		}
+		$_SESSION['helpenabled'] = $help;
+		return $help;
+	}
 if ($context->valid) { // New redirect from Moodle. Probably different course.
 	$_SESSION['user_id'] = $_POST['user_id'];
 	$_SESSION['course_id'] = $_POST['context_id'];
 	$_SESSION['course_code'] = $_POST['context_label'];
 	$_SESSION['course_title'] = $_POST['context_title'];
-	//If context is valid then add the course the DB right?
 	$crs = new PCRHandler();
-	$crs->getCourse();
+    $crs->getCourse();
+    helpEnabled($_SESSION['course_id']);
 } else if (isset($_SESSION['user_id'])) {
 	; // No action, since user is already authenticated.
 } else {
