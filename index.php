@@ -32,8 +32,9 @@ if ($context->valid) { // New redirect from Moodle. Probably different course.
 } else if (isset($_SESSION['user_id'])) {
 	; // No action, since user is already authenticated.
 } else {
-	header('Location: invalid.php');
-	exit(); // User didn't come from Moodle, and isn't authenticated.
+	//header('Location: invalid.php');
+	//exit(); // User didn't come from Moodle, and isn't authenticated.
+	echo "<!-- Totally logged out -->";
 }
 
 ?>
