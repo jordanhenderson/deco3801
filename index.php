@@ -10,7 +10,11 @@ require_once 'blti/blti.php';
 $context = new BLTI('oF0jxF1IGjzxYUl9w8B', false, false);
 //IM leaving this here for now but i'll relocate it to the db.php when i stop being bad
 function helpEnabled($courseID){
-		$con=mysqli_connect("localhost","deco3801","hh2z2WG2q","deco3801");
+		$con=mysqli_connect("localhost","root","hh2z2WG2q","deco3801");
+		if ($mysqli->connect_errno) {
+	    	printf("Connect failed: %s\n", $mysqli->connect_error);
+	    	exit();
+		}
 		$sql = "SELECT HelpEnabled FROM `course` WHERE CourseID=$courseID";
 		$query = mysqli_query($con, $sql);
 	
