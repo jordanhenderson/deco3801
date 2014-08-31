@@ -13,6 +13,9 @@ if ($context->valid) { // New redirect from Moodle. Probably different course.
 	$_SESSION['course_id'] = $_POST['context_id'];
 	$_SESSION['course_code'] = $_POST['context_label'];
 	$_SESSION['course_title'] = $_POST['context_title'];
+	//If context is valid then add the course the DB right?
+	$crs = new PCRHandler();
+	$crs->getCourse();
 } else if (isset($_SESSION['user_id'])) {
 	; // No action, since user is already authenticated.
 } else {
