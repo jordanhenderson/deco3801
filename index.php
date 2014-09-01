@@ -80,7 +80,7 @@ echo "\n\n<b>POST Parameters:</b>\n\n";
 foreach ($_POST as $key => $value) {
 	echo "$key = $value\n";
 }
-echo "\n\n<b>Assignments</b>\n"
+echo "\n\n<b>Assignments</b>\n";
 print_r(array_values($crs->getCourse()->getAssignments()));
 echo "</pre>\n";
 ?>
