@@ -276,7 +276,7 @@ class Course extends PCRObject {
 	*/
 	public function getAssignments() {
 		$arr = array();
-		$sth = $this->db->prepare("SELECT * FROM Assignments WHERE CourseID = ".$this->getID().";");
+		$sth = $this->db->prepare("SELECT * FROM Assignments WHERE CourseID = $this->getID();");
 		$sth->execute(array($this->getID()));
 		while($file_row = $sth->fetch(PDO::FETCH_ASSOC)) {
 			array_push($arr, new Assignment($file_row));

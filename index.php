@@ -107,7 +107,7 @@ print "</pre>\n";
 					foreach ($assignments as $asg) {
 						$asg = $asg['row'];
 						//$sub = $crs->getSubmission($asg['AssignmentID']);
-						
+						/*
 						echo "
 					<tr>
 						<td>$asg[AssignmentName]<br><span>Submitted</span></td>
@@ -115,7 +115,7 @@ print "</pre>\n";
 						<td>$asg[DueTime]</td>
 						<td>$asg[Weight]%</td>
 						<td>";
-						/*if ($sub) {
+						if ($sub) {
 							echo "Submitted";
 						} else {
 							echo "Not Submitted";
