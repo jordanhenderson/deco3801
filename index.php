@@ -102,12 +102,12 @@ print "</pre>\n";
 						<th>Status</th>
 					</tr>
 				</thead>
-				<tbody>';
+				<tbody>';/*
 					// print table contents
 					foreach ($assignments as $asg) {
 						$asg = $asg['row'];
 						//$sub = $crs->getSubmission($asg['AssignmentID']);
-						/*
+						
 						echo "
 					<tr>
 						<td>$asg[AssignmentName]<br><span>Submitted</span></td>
@@ -119,10 +119,10 @@ print "</pre>\n";
 							echo "Submitted";
 						} else {
 							echo "Not Submitted";
-						}*/
+						}
 						echo "</td>
 					</tr>";
-					}
+					}*/
 					echo "
 				</tbody>
 			</table>
