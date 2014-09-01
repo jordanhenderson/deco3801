@@ -94,9 +94,8 @@ print "</pre>\n";
 					echo $crs->getCourse()->getAssignments();
 					
 					$assignments = $crs->getCourse()->getAssignments();
-					foreach ($assignments as $value) {
-						echo "$value\n";
-					}
+					print_r(array_values($assignments));
+					echo implode(',',$assignments);
 				}
 				echo "</p>";
 			?>
