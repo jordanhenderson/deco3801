@@ -88,12 +88,12 @@ print "</pre>\n";
 			<?php
 				//$assignment = $crs->getAssignment();
 				echo "<p>";
-				if (is_null($crs->getAssignments($_SESSION['course_id']))) {
+				if (is_null($crs->getAssignments())) {
 					echo "is null";
 				} else {
-					echo $crs->getAssignments($_SESSION['course_id']);
+					echo $crs->getAssignments();
 					
-					$assignments = $crs->getAssignments($_SESSION['course_id']);
+					$assignments = $crs->getAssignments();
 					foreach ($assignments as $asg => $value) {
 						echo "$asg = $value\n";
 					}
