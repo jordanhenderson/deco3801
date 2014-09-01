@@ -128,7 +128,7 @@ echo "</pre>\n";
 			<h2>Code Review</h2>
 			<?php
 			if (mt_rand(0, 1)) { //TODO Actually decide this at some point
-				echo '<p>There are '.3.' submissions ready for reviewing. Please take the time to assist your peers by offering suggestions and improvements.</p>
+				echo '<p>There are '.'3'.' submissions ready for reviewing. Please take the time to assist your peers by offering suggestions and improvements.</p>
 			<p><a class="btn btn-warning" href="reviewhub.php" role="button">Start Now &raquo;</a></p>';
 			} else {
 				echo '<p>All your assigned submissions to date have already been reviewed. However, if you would like to further assist your peers, consider stopping by the Help Center to answer some questions.</p>
