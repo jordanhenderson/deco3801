@@ -86,48 +86,53 @@ print "</pre>\n";
 		<div class="col-lg-12">
 			<h2>Assignments</h2>
 			<?php
-				//$assignment = $crs->getAssignment();
-				echo "<pre>";
-				if (is_null($crs->getCourse()->getAssignments())) {
+				$assignments = $crs->getCourse()->getAssignments()
+				if (is_null($assignments) {
 					echo "is null";
 				} else {
-					echo $crs->getCourse()->getAssignments();
-					
-					$assignments = $crs->getCourse()->getAssignments();
-					print_r(array_values($assignments));
-				}
-				echo "</pre>";
-			?>
+					// print table head
+					echo '
 			<table class="table">
 				<thead>
 					<tr>
 						<th>Title</th>
-						<th>Course</th>
 						<th>Open Date</th>
 						<th>Due Date</th>
 						<th>Weight</th>
 						<th>Status</th>
 					</tr>
 				</thead>
-				<tbody>
+				<tbody>';
+					// print table contents
+					foreach ($assignments as $asg) {
+						$asg = $asg['row'];
+						$sub = $crs->getSubmission($asg['AssignmentID']);
+						
+						echo "
+					<tr>
+						<td>$asg[AssignmentName]<br><span>Submitted</span></td>
+						<td>$asg[OpenTime]</td>
+						<td>$asg[DueTime]</td>
+						<td>$asg[Weight]%</td>
+						<td>"
+						if ($sub) {
+							echo "Submitted";
+						} else {
+							echo "Not Submitted";
+						}
+						echo "</td>
+					</tr>"
+					}
+					echo "
+				</tbody>
+			</table>
+			<pre>";
+					print_r(array_values($assignments));
+					echo "</pre>";
+				}
+			?>
 					<tr class="submitted">
 						<td>Assignment 1<br><span>Submitted</span></td>
-						<td>CSSE1001</td>
-						<td>5/9/14</td>
-						<td>5/9/14</td>
-						<td>10%</td>
-						<td>Closed for submission</td>
-					</tr>
-					<tr class="unsubmitted">
-						<td>Assignment 2<br><span>Not Submitted</span></td>
-						<td>CSSE1001</td>
-						<td>5/9/14</td>
-						<td>5/9/14</td>
-						<td>10%</td>
-						<td>Open for submission</td>
-					</tr>
-					<tr class="unsubmitted">
-						<td>Assignment 3<br><span>Not Submitted</span></td>
 						<td>CSSE1001</td>
 						<td>5/9/14</td>
 						<td>5/9/14</td>
