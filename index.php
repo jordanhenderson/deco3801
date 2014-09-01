@@ -94,8 +94,8 @@ print "</pre>\n";
 					echo $crs->getCourse()->getAssignments();
 					
 					$assignments = $crs->getCourse()->getAssignments();
-					foreach ($assignments as $asg => $value) {
-						echo "$asg = $value\n";
+					foreach ($assignments as $value) {
+						echo "$value\n";
 					}
 				}
 				echo "</p>";
