@@ -112,8 +112,6 @@ print "</pre>\n";
 						$asg = $asg->jsonSerialize();
 						echo $asg['AssignmentName'];
 						//$sub = $crs->getSubmission($asg['AssignmentID']);
-						echo "\n!".$asg['row'];
-						//$asg = $asg['row'];
 						echo "
 					<tr>
 						<td>$asg[AssignmentName]<br><span>Submitted</span></td>
