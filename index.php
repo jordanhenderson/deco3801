@@ -3,10 +3,7 @@
 session_start();
 
 require_once 'includes/handlers.php';
-//require_once 'includes/db.php'; // Don't think we need this, since already included in handlers.php
-
-// Load up the Basic LTI Support code
-require_once 'blti/blti.php';
+require_once 'blti/blti.php'; // Load up the Basic LTI Support code
 
 // Initialize: set secret, do not set session, and do not redirect
 $context = new BLTI('oF0jxF1IGjzxYUl9w8B', false, false);
@@ -52,7 +49,6 @@ function helpEnabled($courseID) {
 
 <head>
 	<meta charset="utf-8">
-	<meta http-equiv="X-UA-Compatible" content="IE=edge">
 	<meta name="viewport" content="width=device-width, initial-scale=1">
 
 	<title>Dashboard - PCR</title>
@@ -72,19 +68,21 @@ function helpEnabled($courseID) {
 </head>
 
 <body>
-	<?php require 'header.php'; ?>
+	<?php include 'header.php'; ?>
 	
 	<div class="container">
 		<h1>Peer Code Review Home Page</h1>
 <?php
-
-print "<pre>\n<b>Context Information:</b>\n";
-print $context->dump();
-print "\n\n<b>POST Parameters:</b>\n\n";
+// DEBUG & INFO
+echo '<pre style="height: 12pc; overflow-y: scroll;">\n<b>Context Information:</b>\n';
+echo $context->dump();
+echo "\n\n<b>POST Parameters:</b>\n\n";
 foreach ($_POST as $key => $value) {
-	print "$key = $value\n";
+	echo "$key = $value\n";
 }
-print "</pre>\n";
+echo "\n\n<b>Assignments</b>\n"
+print_r(array_values($crs->getCourse()->getAssignments()));
+echo "</pre>\n";
 ?>
 		<div class="col-lg-12">
 			<h2>Assignments</h2>
@@ -107,9 +105,6 @@ print "</pre>\n";
 				</thead>
 				<tbody>';
 					// print table contents
-					echo "<pre>";
-					print_r(array_values($assignments));
-					echo "</pre>";
 					foreach ($assignments as $asg) {
 						$asg = $asg->jsonSerialize();
 						$sub = $crs->getSubmission($asg['AssignmentID']);
@@ -120,13 +115,7 @@ print "</pre>\n";
 						<td>$asg[OpenTime]</td>
 						<td>$asg[DueTime]</td>
 						<td>$asg[Weight]%</td>
-						<td>";
-						if ($sub) {
-							echo "Submitted";
-						} else {
-							echo "Not Submitted";
-						}
-						echo "</td>
+						<td>Submitted".$sub->jsonSerialize()['SubmitTime']."</td>
 					</tr>";
 					}
 					echo "

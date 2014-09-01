@@ -1,9 +1,16 @@
+<?php
+
+session_start();
+
+$timezone = date_default_timezone_set('Australia/Brisbane');
+$date = date('m/d/Y h:i:s a', time());
+
+?>
 <!DOCTYPE html>
 <html lang="en">
 
 <head>
 	<meta charset="utf-8">
-	<meta http-equiv="X-UA-Compatible" content="IE=edge">
 	<meta name="viewport" content="width=device-width, initial-scale=1">
 
 	<title>Create - PCR</title>
@@ -29,12 +36,7 @@
 </head>
 
 <body>
-	<?php 
-		require 'header.php'; 
-		$timezone = date_default_timezone_set('Australia/Melbourne');
-		$date = date('m/d/Y h:i:s a', time());
-	?>
-	
+	<?php include 'header.php'; ?>
 	
 	<div class="container">
 		<h1>Ask a New Question</h1>

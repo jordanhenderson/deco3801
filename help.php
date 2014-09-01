@@ -1,23 +1,22 @@
-<?php 
-		
-		require_once 'blti/blti.php';
-		require_once 'includes/handlers.php';
+<?php
+
+session_start();
+
+require_once 'blti/blti.php';
+require_once 'includes/handlers.php';
+
 ?>
 <!DOCTYPE html>
 <html lang="en">
 
 <head>
 	<meta charset="utf-8">
-	<meta http-equiv="X-UA-Compatible" content="IE=edge">
 	<meta name="viewport" content="width=device-width, initial-scale=1">
 	
 	<title>Help Center</title>
 	
 	<!-- Bootstrap Core CSS -->
 	<link href="css/bootstrap.min.css" rel="stylesheet">
-	
-	<!-- Bootstrap Select CSS -->
-	<link href="css/bootstrap-select.min.css" rel="stylesheet">
 	
 	<!-- Custom CSS -->
 	<link href="css/main.css" rel="stylesheet">
@@ -31,11 +30,7 @@
 </head>
 
 <body>
-	<?php 
-		require 'header.php'; 
-
-		
-	?>
+	<?php include 'header.php'; ?>
 	
 	<div class="container">
 		<h1>Help Centre</h1>
@@ -68,16 +63,7 @@
 	<!-- jQuery Version 1.11.0 -->
 	<script src="js/jquery-1.11.0.js"></script>
 	
-	<script type="text/javascript">
-		window.onload = function () {
-			$('.selectpicker').selectpicker();
-		}
-	</script>
-	
 	<!-- Bootstrap Core JavaScript -->
 	<script src="js/bootstrap.min.js"></script>
-	
-	<!-- Bootstrap Select JavaScript -->
-	<script src="js/bootstrap-select.min.js"></script>
 </body>
 </html>
