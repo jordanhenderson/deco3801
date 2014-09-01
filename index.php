@@ -88,7 +88,7 @@ print "</pre>\n";
 			<?php
 				//$assignment = $crs->getAssignment();
 				echo "<p>";
-				if (is_null($crs->getAssignments($_SESSION['course_id'])) {
+				if (is_null($crs->getAssignments($_SESSION['course_id']))) {
 					echo "is null";
 				} else {
 					echo $crs->getAssignments($_SESSION['course_id']);
