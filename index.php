@@ -85,7 +85,27 @@ print "</pre>\n";
 ?>
 		<div class="col-lg-12">
 			<h2>Assignments</h2>
-			
+			<?php
+				$assignments = $crs->getCourse()->getAssignments();
+				if (is_null($assignments) {
+					echo "is null";
+				} else {
+					// print table head
+					echo "<pre>";
+					print_r(array_values($assignments));
+					echo "</pre>";
+				}
+			?>
+					<!--
+					<tr class="submitted">
+						<td>Assignment 1<br><span>Submitted</span></td>
+						<td>CSSE1001</td>
+						<td>5/9/14</td>
+						<td>5/9/14</td>
+						<td>10%</td>
+						<td>Closed for submission</td>
+					</tr>
+					-->
 		</div>
 		<div class="col-md-6">
 			<h2>Code Review</h2>
