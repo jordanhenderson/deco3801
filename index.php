@@ -87,7 +87,7 @@ print "</pre>\n";
 			<h2>Assignments</h2>
 			<?php
 				//$assignment = $crs->getAssignment();
-				echo "<p>";
+				echo "<pre>";
 				if (is_null($crs->getCourse()->getAssignments())) {
 					echo "is null";
 				} else {
@@ -95,9 +95,8 @@ print "</pre>\n";
 					
 					$assignments = $crs->getCourse()->getAssignments();
 					print_r(array_values($assignments));
-					echo implode(',',$assignments);
 				}
-				echo "</p>";
+				echo "</pre>";
 			?>
 			<table class="table">
 				<thead>
