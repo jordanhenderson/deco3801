@@ -87,11 +87,50 @@ print "</pre>\n";
 			<h2>Assignments</h2>
 			<?php
 				$assignments = $crs->getCourse()->getAssignments();
-				echo "<pre>";
-				print_r(array_values($assignments));
-				echo "</pre>";
+				if (is_null($assignments)) {
+					echo "is null";
+				} else {
+					// print table head
+					echo '
+			<table class="table">
+				<thead>
+					<tr>
+						<th>Title</th>
+						<th>Open Date</th>
+						<th>Due Date</th>
+						<th>Weight</th>
+						<th>Status</th>
+					</tr>
+				</thead>
+				<tbody>';
+					// print table contents
+					foreach ($assignments as $asg) {
+						$asg = $asg['row'];
+						$sub = $crs->getSubmission($asg['AssignmentID']);
+						
+						echo "
+					<tr>
+						<td>$asg[AssignmentName]<br><span>Submitted</span></td>
+						<td>$asg[OpenTime]</td>
+						<td>$asg[DueTime]</td>
+						<td>$asg[Weight]%</td>
+						<td>";
+						if ($sub) {
+							echo "Submitted";
+						} else {
+							echo "Not Submitted";
+						}
+						echo "</td>
+					</tr>";
+					}
+					echo "
+				</tbody>
+			</table>
+			<pre>";
+					print_r(array_values($assignments));
+					echo "</pre>";
+				}
 			?>
-					<!--
 					<tr class="submitted">
 						<td>Assignment 1<br><span>Submitted</span></td>
 						<td>CSSE1001</td>
@@ -100,7 +139,8 @@ print "</pre>\n";
 						<td>10%</td>
 						<td>Closed for submission</td>
 					</tr>
-					-->
+				</tbody>
+			</table>
 		</div>
 		<div class="col-md-6">
 			<h2>Code Review</h2>
