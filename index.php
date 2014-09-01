@@ -86,10 +86,10 @@ print "</pre>\n";
 		<div class="col-lg-12">
 			<h2>Assignments</h2>
 			<?php
-			$assignment = $crs->getAssignment();
-			echo "<p>"
-			echo $assignment->jsonSerialize();
-			echo "</p>"
+				//$assignment = $crs->getAssignment();
+				echo "<p>"
+				echo $crs->getAssignment();
+				echo "</p>"
 			?>
 			<table class="table">
 				<thead>
