@@ -88,7 +88,16 @@ print "</pre>\n";
 			<?php
 				//$assignment = $crs->getAssignment();
 				echo "<p>";
-				echo $crs->getAssignments($_SESSION['course_id']);
+				if (is_null($crs->getAssignments($_SESSION['course_id'])) {
+					echo "is null";
+				} else {
+					echo $crs->getAssignments($_SESSION['course_id']);
+					
+					$assignments = $crs->getAssignments($_SESSION['course_id'])
+					foreach ($assignments as $asg => $value) {
+						echo "$asg = $value\n";
+					}
+				}
 				echo "</p>";
 			?>
 			<table class="table">
