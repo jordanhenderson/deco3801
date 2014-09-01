@@ -34,7 +34,7 @@ abstract class PCRObject implements JsonSerializable {
 	protected $forceCreate;
 
 	/* 
-	 * PCRObject($id_field, $table, $data, $is_new)
+	 * PCRObject($id_field, $table, $data, $forceCreate)
 	 * param id_field: The ID field of the database table.
 	 * param table: The name of the database table.
 	 * param data: A row containing the data. 
@@ -48,9 +48,9 @@ abstract class PCRObject implements JsonSerializable {
 		$this->uptodate = 0;
 		$this->forceCreate = $forceCreate;
 		
-		if(is_array($data)) {
+		if (is_array($data)) {
 			$this->row = $data;
-			if(isset($data[$id_field]) && $data[$id_field] != null) {
+			if (isset($data[$id_field]) && $data[$id_field] != null) {
 				$this->id = $data[$id_field];
 			}
 		}
@@ -61,8 +61,8 @@ abstract class PCRObject implements JsonSerializable {
 		$this->id = $row[$this->id_field];
 		/* Update the row to match the latest set of data. */
 		$update = "UPDATE $this->table SET ";
-		foreach($this->row as $key=>$value) {
-			if($key != $this->id_field)
+		foreach ($this->row as $key=>$value) {
+			if ($key != $this->id_field)
 				$update = $update . "$key = :$key,";
 		}
 		$update = rtrim($update, ",");
@@ -83,7 +83,7 @@ abstract class PCRObject implements JsonSerializable {
 		//Generate a prepared insert statement.
 		$cols = "";
 		$vals = "";		
-		foreach($this->row as $key => $value) {
+		foreach ($this->row as $key => $value) {
 			$cols = $cols . "$key,";
 			$vals = $vals . ":$key,";
 		}
@@ -113,21 +113,21 @@ abstract class PCRObject implements JsonSerializable {
 	 * valid constraints.
 	 */
 	public function Update($recursed=0) {
-		if(!$this->uptodate) {
+		if (!$this->uptodate) {
 			
 			//Populate the PCRObject.
 			$sth = $this->db->prepare("SELECT * FROM $this->table WHERE $this->id_field = ?;");
 			
 			//Guarantee the id field has been provided.
 			$row = null;
-			if(!isset($this->id)) {
+			if (!isset($this->id)) {
 				//Insert a new row.
 				$this->row[$this->id_field] = "NULL";
 			} else {
 				//Select an existing row - this may succeed or fail.
 				$sth->execute(array($this->id));
 				$row = $sth->fetch(PDO::FETCH_ASSOC);
-				if(!$row && !$this->forceCreate) {
+				if (!$row && !$this->forceCreate) {
 					//Failed to select row. Set ID to null.
 					$this->id = null;
 					return;
@@ -135,11 +135,11 @@ abstract class PCRObject implements JsonSerializable {
 			}
 			
 			//The provided ID did not return a row.
-			if(!$row) {
+			if (!$row) {
 				$this->insertRow();
 				//Populate the freshly inserted row by calling Update again.
 				//Only recurse once to prevent a loop - this might not be necessary.
-				if(!$recursed) $this->Update(1);
+				if (!$recursed) $this->Update(1);
 				return;
 			} else {
 				$this->updateRow($row);
@@ -164,10 +164,27 @@ abstract class PCRObject implements JsonSerializable {
 	}
 }
 
-
+/**
+ * Assignment Object
+ * 
+ * After population, contains the following rows:
+ * 
+ * (uint_16)		AssignmentID
+ * (uint_16)		CourseID
+ * (tinytext)		AssignmentName
+ * (uint_8)			Weight
+ * (uint_8)			SubmissionMethod
+ * (uint_8)			ReviewsNeeded
+ * (text)			AssignmentFiles
+ * (text)			TestFiles
+ * (timestamp)		OpenTime
+ * (timestamp)		DueTime
+ * (timestamp)		ReviewOpenTime
+ * (timestamp)		ReviewsVisibleTime
+ */
 class Assignment extends PCRObject {
 	public function __construct($data) {
-		parent::__construct("AssignmentID", "Assignments", $data);
+		parent::__construct("AssignmentID", "Assignment", $data);
 	}
 	
 	public function jsonSerialize() {
@@ -176,6 +193,15 @@ class Assignment extends PCRObject {
 	}
 }
 
+/**
+ * File Object
+ * 
+ * After population, contains the following rows:
+ * 
+ * (uint_16)		FileID
+ * (uint_16)		SubmissionID
+ * (text)			FileName
+ */
 class File extends PCRObject  {
 	public function __construct($data) {
 		parent::__construct("FileID", "Files", $data);
@@ -187,18 +213,29 @@ class File extends PCRObject  {
 	}
 }
 
+/**
+ * Submission Object
+ * 
+ * After population, contains the following rows:
+ * 
+ * (uint_16)		SubmissionID
+ * (uint_16)		AssignmentID
+ * (varchar(32))	StudentID
+ * (text)			Results
+ * (timestamp)		SubmitTime
+ */
 class Submission extends PCRObject {
 	private $storage_dir;
 	public function __construct($data) {
 		parent::__construct("SubmissionID", "Submission", $data);
 		$id = $this->getID();
 		
-		if($this->isValid()) {
+		if ($this->isValid()) {
 			$courseid = $_SESSION["course_id"];
 			
 			$assignmentid = $this->row["AssignmentID"];
 			$this->storage_dir = "/var/www/upload/course_$courseid/assign_$assignmentid/submissions/$id/";
-			if(!file_exists($this->storage_dir)) {
+			if (!file_exists($this->storage_dir)) {
 				mkdir($this->storage_dir, 0700, true);
 			}
 		}
@@ -212,7 +249,7 @@ class Submission extends PCRObject {
 		$arr = array();
 		$sth = $this->db->prepare("SELECT * FROM Files WHERE SubmissionID = ?;");
 		$sth->execute(array($this->getID()));
-		while($file_row = $sth->fetch(PDO::FETCH_ASSOC)) {
+		while ($file_row = $sth->fetch(PDO::FETCH_ASSOC)) {
 			array_push($arr, new File($file_row));
 		}
 		return $arr;
@@ -222,10 +259,10 @@ class Submission extends PCRObject {
 		$iterator = new RecursiveIteratorIterator(
 					new RecursiveDirectoryIterator($this->storage_dir), 
 						RecursiveIteratorIterator::SELF_FIRST );
-		foreach($iterator as $fileinfo) {
-			if(!$fileinfo->isDir()) {
+		foreach ($iterator as $fileinfo) {
+			if (!$fileinfo->isDir()) {
 				$path = $iterator->getSubPathName();
-				if(strpos($path, ".git") === false) {
+				if (strpos($path, ".git") === false) {
 					$f = new File(array("SubmissionID"=>$this->getID(), 
 										"FileName"=>$iterator->getSubPathName()));
 					$f->Update();
@@ -245,7 +282,7 @@ class Submission extends PCRObject {
 
 			$r = $zip->open($file);
 
-			if($r === TRUE) {
+			if ($r === TRUE) {
 				$zip->extractTo($path);
 				$zip->close();
 				unlink($file);
@@ -264,6 +301,14 @@ class Submission extends PCRObject {
 	}
 }
 
+/**
+ * Course Object
+ * 
+ * After population, contains the following rows:
+ * 
+ * (varchar(32))	CourseID
+ * (int_8)			HelpEnabled
+ */
 class Course extends PCRObject {
 	public function __construct($data) {
 		parent::__construct("CourseID", "Course", $data, 1);
@@ -284,7 +329,7 @@ class Course extends PCRObject {
 		$arr = array();
 		$sth = $this->db->prepare("SELECT * FROM Assignments WHERE CourseID = ".$this->getID().";");
 		$sth->execute(array($this->getID()));
-		while($file_row = $sth->fetch(PDO::FETCH_ASSOC)) {
+		while ($file_row = $sth->fetch(PDO::FETCH_ASSOC)) {
 			array_push($arr, new Assignment($file_row));
 		}
 		return $arr;
@@ -297,4 +342,41 @@ class Course extends PCRObject {
 
 }
 
+/**
+ * Question Object
+ * 
+ * After population, contains the following rows:
+ * 
+ * (uint_16)		QuestionID
+ * (varchar(32))	StudentID
+ * (varchar(32))	CourseID
+ * (text)			Title
+ * (text)			Content
+ * (int_8)			Status
+ */
+class Question extends PCRObject {
+	public function __construct($data) {
+		parent::__construct("QuestionID", "Question", $data);
+	}
+	
+	/**
+	* getComments returns an array of Comment objects for the given question,
+	* which may be further manipulated.
+	* @return an array of Question objects.
+	*/
+	public function getComments() {
+		$arr = array();
+		$sth = $this->db->prepare("SELECT * FROM Comment WHERE QuestionID = ".$this->getID().";");
+		$sth->execute(array($this->getID()));
+		while ($file_row = $sth->fetch(PDO::FETCH_ASSOC)) {
+			array_push($arr, new Comment($file_row));
+		}
+		return $arr;
+	}
+	
+	public function jsonSerialize() {
+		parent::Update();
+		return $this->row;
+	}
 
+}

@@ -1,4 +1,4 @@
-	<nav class="navbar navbar-inverse navbar-fixed-top" role="navigation">
+<nav class="navbar navbar-inverse navbar-fixed-top" role="navigation">
 		<div class="container">
 			<div class="navbar-header">
 				<button type="button" class="navbar-toggle" data-toggle="collapse" data-target="#bs-example-navbar-collapse-1">
@@ -14,7 +14,7 @@
 					<li><a href="index.php">Home Page</a></li>
 					<?php 
 						if (isset($_SESSION['helpenabled']) && $_SESSION['helpenabled']) {
-						echo '<li><a href="help.php">Help Centre</a></li>';
+							echo '<li><a href="help.php">Help Center</a></li>';
 						}
 					?>
 					<li><a href="reviewhub.php">Review Hub</a></li>

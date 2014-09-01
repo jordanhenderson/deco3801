@@ -2,6 +2,11 @@
 
 session_start();
 
+if (!isset($_SESSION['helpenabled']) || !$_SESSION['helpenabled']) {
+	header('Location: invalid.php'); //
+	exit();
+}
+
 ?>
 <!DOCTYPE html>
 <html lang="en">

@@ -45,15 +45,22 @@ require_once 'includes/handlers.php';
 					<tr>
 						<th>Title</th>
 						<th>Assessment</th>
-						<th>Requested on</th>
+						<th>Last Post</th>
 					</tr>
 				</thead>
 				<tbody>
-					<tr class="submitted">
+					<?php
+						// TODO: add actual code here, after sleep.
+					?>
+					<tr class="unresolved">
+						<td>Help with Pointers</td>
+						<td>Assignment 1</td>
+						<td>"Have you looked at Binky?" - 10:30am, 10 Sep 2014</td>
 					</tr>
-					<tr class="unsubmitted">
-					</tr>
-					<tr class="unsubmitted">
+					<tr class="resolved">
+						<td>Methods vs Functions</td>
+						<td>Assignment 1</td>
+						<td>"Thanks, I think I get it now." - 11:30am, 7 Sep 2014</td>
 					</tr>
 				</tbody>
 			</table>

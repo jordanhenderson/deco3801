@@ -74,9 +74,9 @@ function helpEnabled($courseID) {
 		<h1>Peer Code Review Home Page</h1>
 <?php
 // DEBUG & INFO
-echo '<pre style="height: 12pc; overflow-y: scroll;">\n<b>Context Information:</b>\n';
+echo '<pre style="height: 16pc; overflow-y: scroll;"><b>Context Information:</b>';
 echo $context->dump();
-echo "\n\n<b>POST Parameters:</b>\n\n";
+echo "\n\n<b>POST Parameters:</b>\n";
 foreach ($_POST as $key => $value) {
 	echo "$key = $value\n";
 }
@@ -115,7 +115,7 @@ echo "</pre>\n";
 						<td>$asg[OpenTime]</td>
 						<td>$asg[DueTime]</td>
 						<td>$asg[Weight]%</td>
-						<td>Submitted".$sub->jsonSerialize()['SubmitTime']."</td>
+						<td>Submitted: ".$sub->jsonSerialize()['SubmitTime']."</td>
 					</tr>";
 					}
 					echo "
@@ -126,13 +126,29 @@ echo "</pre>\n";
 		</div>
 		<div class="col-md-6">
 			<h2>Code Review</h2>
-			<p>There are submissions ready for reviewing. Please take the time to assist your peers by offering suggestions and improvements.</p>
-			<p><a class="btn btn-default" href="review.php" role="button">Start Now &raquo;</a></p>
+			<?php
+			if (mt_rand(0, 1)) { //TODO Actually decide this at some point
+				echo '<p>There are '.3.' submissions ready for reviewing. Please take the time to assist your peers by offering suggestions and improvements.</p>
+			<p><a class="btn btn-warning" href="reviewhub.php" role="button">Start Now &raquo;</a></p>';
+			} else {
+				echo '<p>All your assigned submissions to date have already been reviewed. However, if you would like to further assist your peers, consider stopping by the Help Center to answer some questions.</p>
+			<p><a class="btn btn-info" href="help.php" role="button">Help Center &raquo;</a></p>';
+			}
+			
+			?>
 		</div>
 		<div class="col-md-6">
 			<h2>Feedback</h2>
-			<p>You have recieved feedback from your Assignment 1 submission. Please take the time to check over the advice offered by your peers.</p>
-			<p><a class="btn btn-default" href="#" role="button">Check it out &raquo;</a></p>
+			<?php
+			if (mt_rand(0, 1)) { //TODO Actually decide this at some point
+				echo '<p>You have recieved feedback from your assignment submission. Please take the time to check over the advice offered by your peers.</p>
+			<p><a class="btn btn-success" href="reviewhub.php" role="button">Check it out &raquo;</a></p>';
+			} else {
+				echo '<p>You have already viewed the feedback from all of your assignment submissions. Consider checking it over again to make the most of the advice.</p>
+			<p><a class="btn btn-info" href="reviewhub.php" role="button">Check it out &raquo;</a></p>';
+			}
+			
+			?>
 		</div>
 	</div>
 

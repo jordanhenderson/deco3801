@@ -35,6 +35,13 @@ class PCRHandler {
 		}
 	}
 	
+	public function getQuestion($id) {
+		$question = new Question(array("QuestionID"=>$id));
+		if($question->isValid()) {
+			return $question;
+		}
+	}
+	
 	public function uploadArchive() {
 		$submission_id = isset($_POST["submission_id"]) ? $_POST["submission_id"] : null;
 		$submission = new Submission(array("SubmissionID"=>$submission_id));
