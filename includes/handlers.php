@@ -20,7 +20,7 @@ class PCRHandler {
 		}
 	}
 	
-	public function getAssignments($id) {
+	public function getAssignment($id) {
 		$assignment = new Assignment(array("AssignmentID"=>$id));
 		if($assignment->isValid()) {
 			return $assignment;

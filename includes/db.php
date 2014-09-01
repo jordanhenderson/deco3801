@@ -234,21 +234,6 @@ class Submission extends PCRObject {
 		}
 	}
 	
-	/**
-	* getAssignments returns an array of Assignment objects for the given
-	* course, which may be further manipulated.
-	* @return an array of Assignment objects.
-	*/
-	public function getAssignments($courseID) {
-		$arr = array();
-		$sth = $this->db->prepare("SELECT * FROM Assignments WHERE CourseID = $courseID;");
-		$sth->execute(array($this->getID()));
-		while($file_row = $sth->fetch(PDO::FETCH_ASSOC)) {
-			array_push($arr, new Assignment($file_row));
-		}
-		return $arr;
-	}
-	
 	public function uploadArchive() {
 		if ($_FILES["file"]["error"] == 0) {
 			$id = $this->getID();
@@ -283,6 +268,22 @@ class Course extends PCRObject {
 	public function __construct($data) {
 		parent::__construct("CourseID", "Course", $data, 1);
 	}
+	
+	/**
+	* getAssignments returns an array of Assignment objects for the given
+	* course, which may be further manipulated.
+	* @return an array of Assignment objects.
+	*/
+	public function getAssignments() {
+		$arr = array();
+		$sth = $this->db->prepare("SELECT * FROM Assignments WHERE CourseID = ".$this->getID().";");
+		$sth->execute(array($this->getID()));
+		while($file_row = $sth->fetch(PDO::FETCH_ASSOC)) {
+			array_push($arr, new Assignment($file_row));
+		}
+		return $arr;
+	}
+	
 	public function jsonSerialize() {
 		parent::Update();
 		return $this->row;
