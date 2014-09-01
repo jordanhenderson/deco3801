@@ -86,7 +86,7 @@ print "</pre>\n";
 		<div class="col-lg-12">
 			<h2>Assignments</h2>
 			<?php
-				$assignments = $crs->getCourse()->getAssignments()
+				$assignments = $crs->getCourse()->getAssignments();
 				if (is_null($assignments) {
 					echo "is null";
 				} else {
@@ -114,14 +114,14 @@ print "</pre>\n";
 						<td>$asg[OpenTime]</td>
 						<td>$asg[DueTime]</td>
 						<td>$asg[Weight]%</td>
-						<td>"
+						<td>";
 						if ($sub) {
 							echo "Submitted";
 						} else {
 							echo "Not Submitted";
 						}
 						echo "</td>
-					</tr>"
+					</tr>";
 					}
 					echo "
 				</tbody>
