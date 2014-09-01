@@ -88,7 +88,7 @@ print "</pre>\n";
 			<?php
 				//$assignment = $crs->getAssignment();
 				echo "<p>";
-				echo $crs->getAssignment();
+				echo $crs->getAssignments($_SESSION['course_id']);
 				echo "</p>";
 			?>
 			<table class="table">
