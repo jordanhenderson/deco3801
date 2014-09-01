@@ -18,8 +18,6 @@ if ($context->valid) { // New redirect from Moodle. Probably different course.
 	$_SESSION['course_code'] = $_POST['context_label'];
 	$_SESSION['course_title'] = $_POST['context_title'];
 	helpEnabled($_SESSION['course_id']);
-	$crs = new PCRHandler();
-	$crs->getCourse();
 	echo "<!-- New login -->\n";
 } else if (isset($_SESSION['user_id'])) {
 	; // No action, since user is already authenticated.
@@ -29,6 +27,9 @@ if ($context->valid) { // New redirect from Moodle. Probably different course.
 	//exit(); // User didn't come from Moodle, and isn't authenticated.
 	echo "<!-- Not logged in -->\n";
 }
+
+$crs = new PCRHandler();
+$crs->getCourse();
 
 //IM leaving this here for now but i'll relocate it to the db.php when i stop being bad
 function helpEnabled($courseID) {
@@ -106,8 +107,8 @@ print "</pre>\n";
 					// print table contents
 					foreach ($assignments as $asg) {
 						$asg = $asg['row'];
-						$sub = $crs->getSubmission($asg['AssignmentID']);
-						
+						//$sub = $crs->getSubmission($asg['AssignmentID']);
+						echo $asg['AssignmentName'];
 						echo "
 					<tr>
 						<td>$asg[AssignmentName]<br><span>Submitted</span></td>
