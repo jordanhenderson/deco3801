@@ -93,7 +93,7 @@ print "</pre>\n";
 				} else {
 					echo $crs->getAssignments($_SESSION['course_id']);
 					
-					$assignments = $crs->getAssignments($_SESSION['course_id'])
+					$assignments = $crs->getAssignments($_SESSION['course_id']);
 					foreach ($assignments as $asg => $value) {
 						echo "$asg = $value\n";
 					}
