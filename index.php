@@ -105,7 +105,11 @@ print "</pre>\n";
 				</thead>
 				<tbody>';
 					// print table contents
+					echo "<pre>";
+					print_r(array_values($assignments));
+					echo "</pre>";
 					foreach ($assignments as $asg) {
+						print_r(array_values($asg));
 						$asg = $asg['row'];
 						//$sub = $crs->getSubmission($asg['AssignmentID']);
 						echo $asg['AssignmentName'];
@@ -126,10 +130,7 @@ print "</pre>\n";
 					}
 					echo "
 				</tbody>
-			</table>
-			<pre>";
-					print_r(array_values($assignments));
-					echo "</pre>";
+			</table>";
 				}
 			?>
 					<tr class="submitted">
