@@ -56,7 +56,7 @@
 <body>
 	<?php 
 		require 'header.php'; 
-		require_once('includes/handlers.php');
+		//require_once('includes/handlers.php');
 	?>
 	
 	
