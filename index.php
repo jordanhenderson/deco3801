@@ -106,7 +106,7 @@ print "</pre>\n";
 					// print table contents
 					foreach ($assignments as $asg) {
 						$asg = $asg['row'];
-						$sub = $crs->getSubmission($asg['AssignmentID']);
+						//$sub = $crs->getSubmission($asg['AssignmentID']);
 						
 						echo "
 					<tr>
@@ -115,11 +115,11 @@ print "</pre>\n";
 						<td>$asg[DueTime]</td>
 						<td>$asg[Weight]%</td>
 						<td>";
-						if ($sub) {
+						/*if ($sub) {
 							echo "Submitted";
 						} else {
 							echo "Not Submitted";
-						}
+						}*/
 						echo "</td>
 					</tr>";
 					}
@@ -131,6 +131,7 @@ print "</pre>\n";
 					echo "</pre>";
 				}
 			?>
+					<!--
 					<tr class="submitted">
 						<td>Assignment 1<br><span>Submitted</span></td>
 						<td>CSSE1001</td>
@@ -139,8 +140,7 @@ print "</pre>\n";
 						<td>10%</td>
 						<td>Closed for submission</td>
 					</tr>
-				</tbody>
-			</table>
+					-->
 		</div>
 		<div class="col-md-6">
 			<h2>Code Review</h2>
