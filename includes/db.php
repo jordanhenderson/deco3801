@@ -184,7 +184,7 @@ abstract class PCRObject implements JsonSerializable {
  */
 class Assignment extends PCRObject {
 	public function __construct($data) {
-		parent::__construct("AssignmentID", "Assignment", $data);
+		parent::__construct("AssignmentID", "Assignments", $data);
 	}
 	
 	public function jsonSerialize() {
