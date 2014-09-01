@@ -38,7 +38,7 @@ abstract class PCRObject implements JsonSerializable {
 	 * param id_field: The ID field of the database table.
 	 * param table: The name of the database table.
 	 * param data: A row containing the data. 
-	 * param createnew: Should a new row be auto-created if an ID is 
+	 * param forceCreate: Should a new row be auto-created if an ID is 
 	 * provided and a matching row is not found.
 	 */
 	protected function __construct($id_field, $table, $data, $forceCreate = 0) {

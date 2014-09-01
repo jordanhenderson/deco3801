@@ -20,14 +20,14 @@ if ($context->valid) { // New redirect from Moodle. Probably different course.
 	helpEnabled($_SESSION['course_id']);
 	$crs = new PCRHandler();
 	$crs->getCourse();
-	echo "<!-- Top cmd -->";
+	echo "<!-- New login -->\n";
 } else if (isset($_SESSION['user_id'])) {
 	; // No action, since user is already authenticated.
-	echo "<!-- Middle cmd -->";
+	echo "<!-- Already logged in -->\n";
 } else {
 	//header('Location: invalid.php');
 	//exit(); // User didn't come from Moodle, and isn't authenticated.
-	echo "<!-- Totally logged out -->";
+	echo "<!-- Not logged in -->\n";
 }
 
 //IM leaving this here for now but i'll relocate it to the db.php when i stop being bad
@@ -69,9 +69,7 @@ function helpEnabled($courseID) {
 </head>
 
 <body>
-	<?php 
-		require 'header.php'; 
-	?>
+	<?php require 'header.php'; ?>
 	
 	<div class="container">
 		<h1>Peer Code Review Home Page</h1>
@@ -87,6 +85,12 @@ print "</pre>\n";
 ?>
 		<div class="col-lg-12">
 			<h2>Assignments</h2>
+			<?php
+			$assignment = $crs->getAssignment();
+			echo "<p>"
+			echo $assignment->jsonSerialize();
+			echo "</p>"
+			?>
 			<table class="table">
 				<thead>
 					<tr>

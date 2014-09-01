@@ -15,8 +15,16 @@ class PCRHandler {
 	
 	public function getCourse() {
 		$course = new Course(array("CourseID"=>$_SESSION['course_id']));
-		if($course->isValid())
+		if($course->isValid()) {
 			return $course;
+		}
+	}
+	
+	public function getAssignment($id) {
+		$assignment = new Assignment(array("AssignmentID"=>$id));
+		if($assignment->isValid()) {
+			return $assignment;
+		}
 	}
 	
 	public function getSubmission($id) {
