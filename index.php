@@ -87,9 +87,9 @@ print "</pre>\n";
 			<h2>Assignments</h2>
 			<?php
 				//$assignment = $crs->getAssignment();
-				echo "<p>"
-				//echo $crs->getAssignment();
-				echo "</p>"
+				echo "<p>";
+				echo $crs->getAssignment();
+				echo "</p>";
 			?>
 			<table class="table">
 				<thead>
