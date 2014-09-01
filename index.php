@@ -20,8 +20,10 @@ if ($context->valid) { // New redirect from Moodle. Probably different course.
 	helpEnabled($_SESSION['course_id']);
 	$crs = new PCRHandler();
 	$crs->getCourse();
+	echo "<!-- Top cmd -->";
 } else if (isset($_SESSION['user_id'])) {
 	; // No action, since user is already authenticated.
+	echo "<!-- Middle cmd -->";
 } else {
 	//header('Location: invalid.php');
 	//exit(); // User didn't come from Moodle, and isn't authenticated.
@@ -42,7 +44,6 @@ function helpEnabled($courseID) {
 	return $help;
 }
 ?>
-
 <!DOCTYPE html>
 <html lang="en">
 
@@ -76,9 +77,9 @@ function helpEnabled($courseID) {
 		<h1>Peer Code Review Home Page</h1>
 <?php
 
-print "<pre>\nContext Information:\n\n";
+print "<pre>\n<b>Context Information:</b>\n";
 print $context->dump();
-print "POST Parameters (&#9825; Addison):\n\n";
+print "\n\n<b>POST Parameters:</b>\n\n";
 foreach ($_POST as $key => $value) {
 	print "$key = $value\n";
 }
