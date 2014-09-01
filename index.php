@@ -87,14 +87,9 @@ print "</pre>\n";
 			<h2>Assignments</h2>
 			<?php
 				$assignments = $crs->getCourse()->getAssignments();
-				if (is_null($assignments) {
-					echo "is null";
-				} else {
-					// print table head
-					echo "<pre>";
-					print_r(array_values($assignments));
-					echo "</pre>";
-				}
+				echo "<pre>";
+				print_r(array_values($assignments));
+				echo "</pre>";
 			?>
 					<!--
 					<tr class="submitted">
