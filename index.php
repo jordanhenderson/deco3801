@@ -109,7 +109,8 @@ print "</pre>\n";
 					print_r(array_values($assignments));
 					echo "</pre>";
 					foreach ($assignments as $asg) {
-						print_r(array_values($asg));
+						echo $asg;
+						echo $asg->jsonSerialize();
 						$asg = $asg['row'];
 						//$sub = $crs->getSubmission($asg['AssignmentID']);
 						echo $asg['AssignmentName'];
