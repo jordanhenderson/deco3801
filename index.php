@@ -2,6 +2,9 @@
 
 session_start();
 
+require_once 'includes/handlers.php';
+//require_once 'includes/db.php'; // Don't think we need this, since already included in handlers.php
+
 // Load up the Basic LTI Support code
 require_once 'blti/blti.php';
 
@@ -14,9 +17,9 @@ if ($context->valid) { // New redirect from Moodle. Probably different course.
 	$_SESSION['course_id'] = $_POST['context_id'];
 	$_SESSION['course_code'] = $_POST['context_label'];
 	$_SESSION['course_title'] = $_POST['context_title'];
+	helpEnabled($_SESSION['course_id']);
 	$crs = new PCRHandler();
-    $crs->getCourse();
-    helpEnabled($_SESSION['course_id']);
+	$crs->getCourse();
 } else if (isset($_SESSION['user_id'])) {
 	; // No action, since user is already authenticated.
 } else {
@@ -24,9 +27,6 @@ if ($context->valid) { // New redirect from Moodle. Probably different course.
 	//exit(); // User didn't come from Moodle, and isn't authenticated.
 	echo "<!-- Totally logged out -->";
 }
-
-require_once 'includes/handlers.php';
-require_once 'includes/db.php';
 
 //IM leaving this here for now but i'll relocate it to the db.php when i stop being bad
 function helpEnabled($courseID) {

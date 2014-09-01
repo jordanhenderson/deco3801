@@ -4,11 +4,6 @@ if (session_id() == "") {
 	session_start(); // start session if not already started
 }
 
-if(!isset($_SESSION['user_id'])) {
-	header('Location: invalid.php');
-	exit();
-}
-
 require_once("db.php");
 
 class PCRHandler {
