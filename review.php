@@ -62,7 +62,7 @@
 		<div class="col-xs-6 col-sm-3 sidebar-offcanvas" id="sidebar">
 			<div class="list-group">
 			<?php
-		$dir = "/var/www/upload/course_00001/assign_00001/submissions_00001/s1234567/";
+		$dir = "/var/www/upload/course_00001/assign_00001/submissions/s1234567/";
 		$filesArray = array();
 		// Open a directory, and read its contents
 		if (is_dir($dir)){
@@ -92,7 +92,7 @@
 				<div id="innercontainer">
 	<?php
 		if (count($filesArray) > 0) {
-			$assignment = "/var/www/upload/course_00001/assign_00001/submissions_00001/s1234567/" . $filesArray[0];
+			$assignment = "/var/www/upload/course_00001/assign_00001/submissions/s1234567/" . $filesArray[0];
 			$handle = fopen($assignment, "r");
 			$contents = fread($handle, filesize($assignment));
 			echo "<pre id='assignment_code'><code>" . $contents . "</code></pre>";
