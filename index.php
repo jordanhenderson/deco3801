@@ -11,7 +11,7 @@ require_once 'blti/blti.php';
 // Initialize: set secret, do not set session, and do not redirect
 $context = new BLTI('oF0jxF1IGjzxYUl9w8B', false, false);
 
-if ($context->valid) { // New redirect from Moodle. Probably different course.
+if ($context->valid) { // Redirect from Moodle, reload data, in case different course.
 	session_unset(); // clear old data, ready for reload from POST
 	$_SESSION['user_id'] = $_POST['user_id'];
 	$_SESSION['course_id'] = $_POST['context_id'];
@@ -20,18 +20,19 @@ if ($context->valid) { // New redirect from Moodle. Probably different course.
 	helpEnabled($_SESSION['course_id']);
 	echo "<!-- New login -->\n";
 } else if (isset($_SESSION['user_id'])) {
-	; // No action, since user is already authenticated.
+	// No action, since user is already authenticated, and data stored
 	echo "<!-- Already logged in -->\n";
 } else {
-	//header('Location: invalid.php');
-	//exit(); // User didn't come from Moodle, and isn't authenticated.
-	echo "<!-- Not logged in -->\n";
+	header('Location: invalid.php');
+	exit(); // User didn't come from Moodle, and isn't authenticated.
 }
 
 $crs = new PCRHandler();
 $crs->getCourse();
 
-//IM leaving this here for now but i'll relocate it to the db.php when i stop being bad
+// @Kieran - I made another one of these in db.php for you.
+// Should work, but if it doesn't, at least I tried
+
 function helpEnabled($courseID) {
 	$con = mysqli_connect("localhost","deco3801","hh2z2WG2q","deco3801") or die("Error: ".mysqli_error($con));
 	$sql = "SELECT HelpEnabled FROM `Course` WHERE CourseID=$courseID";
@@ -44,6 +45,7 @@ function helpEnabled($courseID) {
 	mysqli_close($con);
 	return $help;
 }
+
 ?>
 <!DOCTYPE html>
 <html lang="en">
@@ -110,8 +112,8 @@ print "</pre>\n";
 					echo "</pre>";
 					foreach ($assignments as $asg) {
 						$asg = $asg->jsonSerialize();
-						echo $asg['AssignmentName'];
-						//$sub = $crs->getSubmission($asg['AssignmentID']);
+						$sub = $crs->getSubmission($asg['AssignmentID']);
+						// Not sure if this^ works, since no submissions yet.
 						echo "
 					<tr>
 						<td>$asg[AssignmentName]<br><span>Submitted</span></td>
@@ -132,16 +134,6 @@ print "</pre>\n";
 			</table>";
 				}
 			?>
-					<tr class="submitted">
-						<td>Assignment 1<br><span>Submitted</span></td>
-						<td>CSSE1001</td>
-						<td>5/9/14</td>
-						<td>5/9/14</td>
-						<td>10%</td>
-						<td>Closed for submission</td>
-					</tr>
-				</tbody>
-			</table>
 		</div>
 		<div class="col-md-6">
 			<h2>Code Review</h2>

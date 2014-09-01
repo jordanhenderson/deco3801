@@ -269,6 +269,12 @@ class Course extends PCRObject {
 		parent::__construct("CourseID", "Course", $data, 1);
 	}
 	
+	public function helpEnabled() {
+		$sth = $this->db->prepare("SELECT HelpEnabled FROM Course WHERE CourseID = ".$this->getID().";");
+		$sth->execute(array($this->getID()));
+		return $sth->fetchColumn();
+	}
+	
 	/**
 	* getAssignments returns an array of Assignment objects for the given
 	* course, which may be further manipulated.
