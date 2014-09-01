@@ -339,7 +339,6 @@ class Course extends PCRObject {
 		parent::Update();
 		return $this->row;
 	}
-
 }
 
 /**
@@ -378,5 +377,26 @@ class Question extends PCRObject {
 		parent::Update();
 		return $this->row;
 	}
+}
 
+/**
+ * Comment Object
+ * 
+ * After population, contains the following rows:
+ * 
+ * (uint_16)		CommentID
+ * (uint_16)		QuestionID
+ * (varchar(32))	StudentID
+ * (text)			Content
+ * (timestamp)		Time
+ */
+class Comment extends PCRObject {
+	public function __construct($data) {
+		parent::__construct("CommentID", "Comment", $data);
+	}
+	
+	public function jsonSerialize() {
+		parent::Update();
+		return $this->row;
+	}
 }
