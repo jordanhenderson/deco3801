@@ -46,7 +46,7 @@ $crs = new PCRHandler();
 					echo 'no questions';
 				} else {
 			?>
-			<h2>Questions<h2>
+			<h2>Questions</h2>
 			<a class="btn btn-xl btn-default" href="addQuestion.php" role="button">Ask a Question</a>
 			<a class="btn btn-xl btn-danger" href="#" role="button">My Questions</a>
 			<table class="table">
@@ -69,13 +69,10 @@ $crs = new PCRHandler();
 						<td>$question[Title]</td>
 						<td>$question[StudentID]</td>
 					</tr>";
-					}
-					echo '
+					} ?>
 				</tbody>
-			</table>';
-				}
-			?>
-
+			</table>
+				<?php } ?>
 		</div>
 	</div>
 
