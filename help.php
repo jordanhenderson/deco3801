@@ -2,8 +2,13 @@
 
 session_start();
 
-require_once 'blti/blti.php';
 require_once 'includes/handlers.php';
+
+if (!isset($_SESSION['helpenabled']) || !$_SESSION['helpenabled']) {
+	exit();
+}
+
+$crs = $_SESSION['crs'];
 
 ?>
 <!DOCTYPE html>
@@ -35,45 +40,43 @@ require_once 'includes/handlers.php';
 	<div class="container">
 		<h1>Help Centre</h1>
 		<div class="col-lg-12">
-			
-					<?php
-
-						$crs = new PCRHandler();
-						$questions = $crs->getCourse()->getHelpCentreQuestions();
-						if(is_null($questions)){
-							echo ' no questions';
-						}
-						else {
-							echo '
-							<table class="table">
-								<thead>
-									<td>
-									<h2>Questions<h2>
-										<a class="btn btn-xl btn-default" href="addQuestion.php" role="button">Ask a Question</a>
-										<a class="btn btn-xl btn-danger" href="#" role="button">My Questions</a>
-									<td>
-										</thead>
-										<tbody>
-									<tr>
-									<th>Title</th>
-									<th>Assessment</th>
-									<th>Last Post</th>
-									<th>Student</th>
-								</tr>';
-						}
-						foreach ($questions as $question){
-							$question = $question->jsonSerialize();
-							echo "
-								<tr class='unresolved'>
-									<td><a href='placeholderlink'>$question[Title]</a></td>
-									<td>$question[Title]</td>
-									<td>$question[Title]</td>
-									<td>$question[StudentID]</td>
-								</tr>";
-						}
-					?>
-			</tbody>
-		</table>	
+			<?php
+				$questions = $crs->getCourse()->getHelpCentreQuestions();
+				if (is_null($questions)) {
+					echo 'no questions';
+				} else {
+			?>
+			<table class="table">
+				<thead>
+					<td>
+						<h2>Questions<h2>
+						<a class="btn btn-xl btn-default" href="addQuestion.php" role="button">Ask a Question</a>
+						<a class="btn btn-xl btn-danger" href="#" role="button">My Questions</a>
+					</td>
+				</thead>
+				<tbody>
+					<tr>
+						<th>Title</th>
+						<th>Assessment</th>
+						<th>Last Post</th>
+						<th>Student</th>
+					</tr>
+				<?php
+					foreach ($questions as $question){
+						$question = $question->jsonSerialize();
+						echo "
+						<tr class='unresolved'>
+							<td><a href='placeholderlink'>$question[Title]</a></td>
+							<td>$question[Title]</td>
+							<td>$question[Title]</td>
+							<td>$question[StudentID]</td>
+						</tr>";
+					}
+					echo '
+				</tbody>
+			</table>';
+				}
+			?>
 		</div>
 	</div>
 

@@ -321,7 +321,7 @@ class Course extends PCRObject {
 		return $sth->fetchColumn();
 	}
 
-	public function getHelpCentreQuestions(){
+	public function getHelpCentreQuestions() {
 		$arr = array();
 		$sth = $this->db->prepare("SELECT * FROM Question WHERE CourseID = ".$this->getID().";");
 		$sth->execute(array($this->getID()));

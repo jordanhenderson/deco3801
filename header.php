@@ -13,6 +13,9 @@
 				<ul class="nav navbar-nav">
 					<li><a href="index.php">Home Page</a></li>
 					<?php 
+						if (isset($_SESSION['admin'])) {
+							echo '<li><a href="admin.php">Admin Panel</a></li>';
+						}
 						if (isset($_SESSION['helpenabled']) && $_SESSION['helpenabled']) {
 							echo '<li><a href="help.php">Help Center</a></li>';
 						}

@@ -9,25 +9,23 @@ $context = new BLTI('oF0jxF1IGjzxYUl9w8B', false, false);
 
 if ($context->valid) { // Redirect from Moodle, reload data, in case different course.
 	session_unset(); // clear old data, ready for reload from POST
+	$crs = $_SESSION['crs'] = new PCRHandler(); // new PCRHandler for session
+	
 	$_SESSION['user_id'] = $_POST['user_id'];
 	$_SESSION['course_id'] = $_POST['context_id'];
 	$_SESSION['course_code'] = $_POST['context_label'];
 	$_SESSION['course_title'] = $_POST['context_title'];
-	$crs = new PCRHandler();
-	$var = $crs->getCourse()->helpEnabled();
-	$_SESSION['helpenabled'] = $var;
-	echo "<!-- New login -->\n";
+	$_SESSION['helpenabled'] = $crs->getCourse()->helpEnabled();
+	if ($context->isInstructor()) {
+		$_SESSION['admin'] = true;
+	}
+	
 } else if (isset($_SESSION['user_id'])) {
 	// No action, since user is already authenticated, and data stored
-	echo "<!-- Already logged in -->\n";
 } else {
 	header('Location: invalid.php');
 	exit(); // User didn't come from Moodle, and isn't authenticated.
 }
-
-
-// @Kieran - I made another one of these in db.php for you.
-// Should work, but if it doesn't, at least I tried
 
 ?>
 <!DOCTYPE html>
@@ -93,16 +91,26 @@ echo "</pre>\n";
 					// print table contents
 					foreach ($assignments as $asg) {
 						$asg = $asg->jsonSerialize();
-						$sub = $crs->getSubmission($asg['AssignmentID']);
-						// Not sure if this^ works, since no submissions yet.
-						echo "
-					<tr>
+						$sub = $crs->getSubmission($asg['AssignmentID'])->jsonSerialize();
+						if ($sub['SubmitTime'] && mt_rand(0, 1)) { // TODO
+							echo "
+					<tr class=\"bg-success\">
 						<td>$asg[AssignmentName]<br><span>Submitted</span></td>
 						<td>$asg[OpenTime]</td>
 						<td>$asg[DueTime]</td>
 						<td>$asg[Weight]%</td>
-						<td>Submitted: ".$sub->jsonSerialize()['SubmitTime']."</td>
+						<td>Submitted: $sub[SubmitTime]</td>
 					</tr>";
+						} else {
+							echo "
+					<tr class=\"bg-danger\">
+						<td>$asg[AssignmentName]<br><span>Not Submitted</span></td>
+						<td>$asg[OpenTime]</td>
+						<td>$asg[DueTime]</td>
+						<td>$asg[Weight]%</td>
+						<td>Not Submitted. Due: $asg[DueTime]</td>
+					</tr>";
+						}
 					}
 					echo "
 				</tbody>
