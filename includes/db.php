@@ -312,7 +312,6 @@ class Submission extends PCRObject {
 class Course extends PCRObject {
 	public function __construct($data) {
 		parent::__construct("CourseID", "Course", $data, 1);
-		$this->helpEnabled();
 	}
 	
 	public function helpEnabled() {
