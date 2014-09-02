@@ -2,7 +2,7 @@
 
 session_start();
 
-if (!isset($_SESSION['admin']) || !$_SESSION['admin'])) {
+if (!isset($_SESSION['admin']) || !$_SESSION['admin']) {
 	exit();
 }
 

@@ -46,37 +46,36 @@ $crs = new PCRHandler();
 					echo 'no questions';
 				} else {
 			?>
+			<h2>Questions<h2>
+			<a class="btn btn-xl btn-default" href="addQuestion.php" role="button">Ask a Question</a>
+			<a class="btn btn-xl btn-danger" href="#" role="button">My Questions</a>
 			<table class="table">
 				<thead>
-					<td>
-						<h2>Questions<h2>
-						<a class="btn btn-xl btn-default" href="addQuestion.php" role="button">Ask a Question</a>
-						<a class="btn btn-xl btn-danger" href="#" role="button">My Questions</a>
-					</td>
-				</thead>
-				<tbody>
 					<tr>
 						<th>Title</th>
 						<th>Assessment</th>
 						<th>Last Post</th>
 						<th>Student</th>
 					</tr>
-				<?php
+				</thead>
+				<tbody>
+					<?php
 					foreach ($questions as $question){
 						$question = $question->jsonSerialize();
 						echo "
-						<tr class='unresolved'>
-							<td><a href='placeholderlink'>$question[Title]</a></td>
-							<td>$question[Title]</td>
-							<td>$question[Title]</td>
-							<td>$question[StudentID]</td>
-						</tr>";
+					<tr class='unresolved'>
+						<td><a href='placeholderlink'>$question[Title]</a></td>
+						<td>$question[Title]</td>
+						<td>$question[Title]</td>
+						<td>$question[StudentID]</td>
+					</tr>";
 					}
 					echo '
 				</tbody>
 			</table>';
 				}
 			?>
+
 		</div>
 	</div>
 

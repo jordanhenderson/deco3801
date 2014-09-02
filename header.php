@@ -22,6 +22,7 @@
 					?>
 					<li><a href="reviewhub.php">Review Hub</a></li>
 					<li><a href="#">Feedback</a></li>
+					<li style="color: white !important;"><?php echo $_SESSION['course_code'].': '.$_SESSION['course_title']; ?></li>
 				</ul>
 			</div>
 		</div>

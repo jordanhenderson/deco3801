@@ -58,13 +58,13 @@ if ($context->valid) { // Redirect from Moodle, reload data, in case different c
 		<h1>Peer Code Review Home Page</h1>
 <?php
 // DEBUG & INFO
-echo '<pre style="height: 16pc; overflow-y: scroll;"><b>Context Information:</b>';
+echo '<pre style="height: 18pc; overflow-y: scroll;"><b>Context Information:</b>';
 echo $context->dump();
-echo "\n\n<b>POST Parameters:</b>\n";
+echo "\n<b>POST Parameters:</b>\n";
 foreach ($_POST as $key => $value) {
 	echo "$key = $value\n";
 }
-echo "\n\n<b>Assignments</b>\n";
+echo "\n<b>Assignments</b>\n";
 print_r(array_values($crs->getCourse()->getAssignments()));
 echo "</pre>\n";
 ?>
@@ -95,7 +95,7 @@ echo "</pre>\n";
 						if ($sub['SubmitTime'] && mt_rand(0, 1)) { // TODO
 							echo "
 					<tr class=\"bg-success\">
-						<td>$asg[AssignmentName]<br><span>Submitted</span></td>
+						<td>$asg[AssignmentName]<br><i>Submitted</i></td>
 						<td>$asg[OpenTime]</td>
 						<td>$asg[DueTime]</td>
 						<td>$asg[Weight]%</td>
@@ -104,7 +104,7 @@ echo "</pre>\n";
 						} else {
 							echo "
 					<tr class=\"bg-danger\">
-						<td>$asg[AssignmentName]<br><span>Not Submitted</span></td>
+						<td>$asg[AssignmentName]<br><i>Not Submitted</i></td>
 						<td>$asg[OpenTime]</td>
 						<td>$asg[DueTime]</td>
 						<td>$asg[Weight]%</td>
