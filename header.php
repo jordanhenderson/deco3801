@@ -8,6 +8,7 @@
 					<span class="icon-bar"></span>
 				</button>
 				<a class="navbar-brand" href="index.php">Peer Code Review</a>
+				<span style="color: white !important;"><?php echo $_SESSION['course_code'].': '.$_SESSION['course_title']; ?></span>
 			</div>
 			<div class="collapse navbar-collapse" id="bs-example-navbar-collapse-1">
 				<ul class="nav navbar-nav">
@@ -22,7 +23,6 @@
 					?>
 					<li><a href="reviewhub.php">Review Hub</a></li>
 					<li><a href="#">Feedback</a></li>
-					<li style="color: white !important;"><?php echo $_SESSION['course_code'].': '.$_SESSION['course_title']; ?></li>
 				</ul>
 			</div>
 		</div>
