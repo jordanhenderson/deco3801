@@ -312,12 +312,23 @@ class Submission extends PCRObject {
 class Course extends PCRObject {
 	public function __construct($data) {
 		parent::__construct("CourseID", "Course", $data, 1);
+		$this->helpEnabled();
 	}
 	
 	public function helpEnabled() {
 		$sth = $this->db->prepare("SELECT HelpEnabled FROM Course WHERE CourseID = ".$this->getID().";");
 		$sth->execute(array($this->getID()));
 		return $sth->fetchColumn();
+	}
+
+	public function getHelpCentreQuestions(){
+		$arr = array();
+		$sth = $this->db->prepare("SELECT * FROM Question WHERE CourseID = ".$this->getID().";");
+		$sth->execute(array($this->getID()));
+		while ($file_row = $sth->fetch(PDO::FETCH_ASSOC)) {
+			array_push($arr, new Question($file_row));
+		}
+		return $arr;
 	}
 	
 	/**

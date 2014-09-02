@@ -7,7 +7,7 @@ require_once 'includes/handlers.php';
 
 ?>
 <!DOCTYPE html>
-<html lang="en">
+<html lang="en">	
 
 <head>
 	<meta charset="utf-8">
@@ -35,35 +35,45 @@ require_once 'includes/handlers.php';
 	<div class="container">
 		<h1>Help Centre</h1>
 		<div class="col-lg-12">
-			<table class="table">
-				<thead>
-					<td>
-					<h2>Questions<h2>
-						<a class="btn btn-xl btn-default" href="addQuestion.php" role="button">Ask a Question</a>
-						<a class="btn btn-xl btn-danger" href="#" role="button">My Questions</a>
-					<td>
-					<tr>
-						<th>Title</th>
-						<th>Assessment</th>
-						<th>Last Post</th>
-					</tr>
-				</thead>
-				<tbody>
+			
 					<?php
-						// TODO: add actual code here, after sleep.
+
+						$crs = new PCRHandler();
+						$questions = $crs->getCourse()->getHelpCentreQuestions();
+						if(is_null($questions)){
+							echo ' no questions';
+						}
+						else {
+							echo '
+							<table class="table">
+								<thead>
+									<td>
+									<h2>Questions<h2>
+										<a class="btn btn-xl btn-default" href="addQuestion.php" role="button">Ask a Question</a>
+										<a class="btn btn-xl btn-danger" href="#" role="button">My Questions</a>
+									<td>
+										</thead>
+										<tbody>
+									<tr>
+									<th>Title</th>
+									<th>Assessment</th>
+									<th>Last Post</th>
+									<th>Student</th>
+								</tr>';
+						}
+						foreach ($questions as $question){
+							$question = $question->jsonSerialize();
+							echo "
+								<tr class='unresolved'>
+									<td><a href='placeholderlink'>$question[Title]</a></td>
+									<td>$question[Title]</td>
+									<td>$question[Title]</td>
+									<td>$question[StudentID]</td>
+								</tr>";
+						}
 					?>
-					<tr class="unresolved">
-						<td>Help with Pointers</td>
-						<td>Assignment 1</td>
-						<td>"Have you looked at Binky?" - 10:30am, 10 Sep 2014</td>
-					</tr>
-					<tr class="resolved">
-						<td>Methods vs Functions</td>
-						<td>Assignment 1</td>
-						<td>"Thanks, I think I get it now." - 11:30am, 7 Sep 2014</td>
-					</tr>
-				</tbody>
-			</table>
+			</tbody>
+		</table>	
 		</div>
 	</div>
 
