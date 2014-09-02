@@ -4,7 +4,6 @@ session_start();
 
 require_once 'includes/handlers.php';
 require_once 'blti/blti.php'; // Load up the Basic LTI Support code
-
 // Initialize: set secret, do not set session, and do not redirect
 $context = new BLTI('oF0jxF1IGjzxYUl9w8B', false, false);
 
@@ -14,7 +13,11 @@ if ($context->valid) { // Redirect from Moodle, reload data, in case different c
 	$_SESSION['course_id'] = $_POST['context_id'];
 	$_SESSION['course_code'] = $_POST['context_label'];
 	$_SESSION['course_title'] = $_POST['context_title'];
-	helpEnabled($_SESSION['course_id']);
+	$crs = new PCRHandler();
+	$var = $crs->getCourse()->helpEnabled();
+	$_SESSION['helpenabled'] = $var;
+	//echo 'session helpenabled'.$_SESSION['helpenabled'];
+	//helpEnabled($_SESSION['course_id']);
 	echo "<!-- New login -->\n";
 } else if (isset($_SESSION['user_id'])) {
 	// No action, since user is already authenticated, and data stored
@@ -24,24 +27,9 @@ if ($context->valid) { // Redirect from Moodle, reload data, in case different c
 	exit(); // User didn't come from Moodle, and isn't authenticated.
 }
 
-$crs = new PCRHandler();
-$crs->getCourse();
 
 // @Kieran - I made another one of these in db.php for you.
 // Should work, but if it doesn't, at least I tried
-
-function helpEnabled($courseID) {
-	$con = mysqli_connect("localhost","deco3801","hh2z2WG2q","deco3801") or die("Error: ".mysqli_error($con));
-	$sql = "SELECT HelpEnabled FROM `Course` WHERE CourseID=$courseID";
-	$query = mysqli_query($con, $sql);
-
-	while($row = mysqli_fetch_array($query)){	
-		$help = $row['HelpEnabled'];
-	}
-	$_SESSION['helpenabled'] = $help;
-	mysqli_close($con);
-	return $help;
-}
 
 ?>
 <!DOCTYPE html>
