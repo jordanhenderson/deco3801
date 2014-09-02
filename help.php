@@ -8,7 +8,7 @@ if (!isset($_SESSION['helpenabled']) || !$_SESSION['helpenabled']) {
 	exit();
 }
 
-$crs = $_SESSION['crs'];
+$crs = new PCRHandler();
 
 ?>
 <!DOCTYPE html>
