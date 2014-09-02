@@ -17,7 +17,7 @@
 							echo '<li><a href="admin.php">Admin Panel</a></li>';
 						}
 						if (isset($_SESSION['helpenabled']) && $_SESSION['helpenabled']) {
-							echo '<li><a href="help.php">Help Center</a></li>';
+							echo '<li><a href="help.php">Help Centre</a></li>';
 						}
 					?>
 
