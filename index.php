@@ -9,8 +9,7 @@ $context = new BLTI('oF0jxF1IGjzxYUl9w8B', false, false);
 
 if ($context->valid) { // Redirect from Moodle, reload data, in case different course.
 	session_unset(); // clear old data, ready for reload from POST
-	$crs = $_SESSION['crs'] = new PCRHandler(); // new PCRHandler for session
-	
+	$_SESSION['crs'] = new PCRHandler(); // new PCRHandler for session
 	$_SESSION['user_id'] = $_POST['user_id'];
 	$_SESSION['course_id'] = $_POST['context_id'];
 	$_SESSION['course_code'] = $_POST['context_label'];
@@ -26,6 +25,8 @@ if ($context->valid) { // Redirect from Moodle, reload data, in case different c
 	header('Location: invalid.php');
 	exit(); // User didn't come from Moodle, and isn't authenticated.
 }
+
+$crs = $_SESSION['crs']; // Stop moving this dammit, we need it for the first 2 conditions.
 
 ?>
 <!DOCTYPE html>
