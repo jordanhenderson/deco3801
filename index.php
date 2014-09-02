@@ -16,8 +16,6 @@ if ($context->valid) { // Redirect from Moodle, reload data, in case different c
 	$crs = new PCRHandler();
 	$var = $crs->getCourse()->helpEnabled();
 	$_SESSION['helpenabled'] = $var;
-	//echo 'session helpenabled'.$_SESSION['helpenabled'];
-	//helpEnabled($_SESSION['course_id']);
 	echo "<!-- New login -->\n";
 } else if (isset($_SESSION['user_id'])) {
 	// No action, since user is already authenticated, and data stored
