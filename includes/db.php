@@ -370,12 +370,21 @@ class Question extends PCRObject {
 	}
 	
 	public function addNewQuestion($title, $content, $stnid, $fullname){
-		$sth = $this->db->prepare("INSERT INTO `deco3801`.`Question` (`QuestionID`, `StudentID`, `CourseID`, `StudentName`, `Title`, `Content`, `Status`) 
+		$sth = $this->db->prepare("INSERT INTO `deco3801`.`question` (`QuestionID`, `StudentID`, `CourseID`, `StudentName`, `Title`, `Content`, `Status`) 
 			VALUES (NULL, '".$stnid."', ".$this->getID().", '".$fullname."', '".$title."', '".$content."', '0');");
 		$sth->execute(array($this->getID()));
 		
 	}
 
+	public function getQuestionContents($id){
+		$arr = array();
+		$sth = $this->db->prepare("SELECT * FROM Question WHERE QuestionID = ".$id.";");
+		$sth->execute(array($this->getID()));
+		while ($file_row = $sth->fetch(PDO::FETCH_ASSOC)) {
+			array_push($arr, new Question($file_row));
+		}
+		return $arr;
+	}
 	/**
 	* getComments returns an array of Comment objects for the given question,
 	* which may be further manipulated.

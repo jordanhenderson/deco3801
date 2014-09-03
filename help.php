@@ -1,7 +1,7 @@
 <?php
 session_start();
 
-require_once 'includes/db.php';
+
 require_once 'includes/handlers.php';
 if (!isset($_SESSION['helpenabled']) || !$_SESSION['helpenabled']) {
 	exit();
@@ -64,7 +64,7 @@ $crs = new PCRHandler();
 						$question = $question->jsonSerialize();
 						echo "
 					<tr class='unresolved'>
-						<td><a href='placeholderlink'>$question[Title]</a></td>
+						<td><a href='displayQuestion.php?id=$question[QuestionID]'>$question[Title]</a></td>
 						<td>$question[Title]</td>
 						<td>$question[Title]</td>
 						<td>$question[StudentName]</td>
