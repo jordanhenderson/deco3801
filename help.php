@@ -1,9 +1,8 @@
 <?php
-
 session_start();
+
 require_once 'includes/db.php';
 require_once 'includes/handlers.php';
-
 if (!isset($_SESSION['helpenabled']) || !$_SESSION['helpenabled']) {
 	exit();
 }
@@ -61,13 +60,14 @@ $crs = new PCRHandler();
 				<tbody>
 					<?php
 					foreach ($questions as $question){
+
 						$question = $question->jsonSerialize();
 						echo "
 					<tr class='unresolved'>
 						<td><a href='placeholderlink'>$question[Title]</a></td>
 						<td>$question[Title]</td>
 						<td>$question[Title]</td>
-						<td>$question[StudentID]</td>
+						<td>$question[StudentName]</td>
 					</tr>";
 					} ?>
 				</tbody>
