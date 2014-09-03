@@ -1,13 +1,10 @@
 <?php
-//not sure if i need DB.php here i shouldn't - but locally i do otherwise it doesn't like me
-require_once 'includes/db.php';
 require_once 'includes/handlers.php';
-
 $title = $_POST['title'];
 $content = $_POST['content'];
 $opendate = $_POST['open'];
 $question = new PCRHandler();
-//This may have issues somewhere down the track
 $question->getQuestion($_SESSION['course_id'])->addNewQuestion($title, $content);
+//Question added, go back to help.php where you can see it (will add confirmation on other page somewhere down the track + edit)
 header('Location: help.php');
 ?>
