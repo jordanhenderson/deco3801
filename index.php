@@ -12,6 +12,7 @@ $crs = new PCRHandler(); // new PCRHandler for session
 if ($context->valid) { // Redirect from Moodle, reload data, in case different course.
 	session_unset(); // clear old data, ready for reload from POST
 	$_SESSION['user_id'] = $_POST['user_id'];
+	$_SESSION['userfullname'] = $_POST['lis_person_name_full'];
 	$_SESSION['course_id'] = $_POST['context_id'];
 	$_SESSION['course_code'] = $_POST['context_label'];
 	$_SESSION['course_title'] = $_POST['context_title'];
