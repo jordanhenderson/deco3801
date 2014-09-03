@@ -10,7 +10,6 @@ $question = new PCRHandler();
 //This may have issues somewhere down the track
 $question->getQuestion($_SESSION['course_id'])->addNewQuestion($title, $content);
 if($question!=null){
-	echo 'Not null';
+	header('Location: help.php');
 }
-header("Location : help.php");
 ?>
