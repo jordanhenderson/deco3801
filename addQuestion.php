@@ -40,11 +40,11 @@ $date = date('m/d/Y h:i:s a', time());
 	
 	<div class="container">
 		<h1>Ask a New Question</h1>
-		<form role="form" >
+		<form action="storeQuestion.php" method="post">
 			<div class="row">
 				<div class="col-md-6">
 					<label for="name">Question Title</label>
-					<input class="form-control" type="text" id="name">
+					<input class="form-control" type="text" id="title" name="title">
 				</div>
 				<div class="col-md-6">
 				</div>
@@ -53,7 +53,7 @@ $date = date('m/d/Y h:i:s a', time());
 			<div class="row">
 				<div class="col-md-6">
 					<label for="open">Open Date</label>
-					<input size="24" type="text" value= "<?php echo $date ?>" class="form-control form_datetime" id="open">
+					<input size="24" type="text" value= "<?php echo $date ?>" class="form-control form_datetime" id="open" name="open">
 				</div>
 				<div class="col-md-6">
 					<label for="assess">Assessment Piece</label><br>
@@ -99,10 +99,11 @@ $date = date('m/d/Y h:i:s a', time());
 					
 				</div>
 			</div>
-		</form>
-		<div align="center">
-				<a class="btn btn-primary" href="#" role="button">Submit</a>
+			<div align="center">
+				<input class="btn btn-primary" type="submit" value="Submit"></a>
 				<a class="btn btn-warning" href="#" role="button">Reset</a>
+		</form>
+		
 		</div>
 	</div>
 

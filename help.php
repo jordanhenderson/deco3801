@@ -1,7 +1,7 @@
 <?php
 
 session_start();
-
+require_once 'includes/db.php';
 require_once 'includes/handlers.php';
 
 if (!isset($_SESSION['helpenabled']) || !$_SESSION['helpenabled']) {

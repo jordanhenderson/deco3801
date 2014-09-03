@@ -329,6 +329,7 @@ class Course extends PCRObject {
 		}
 		return $arr;
 	}
+
 	
 	/**
 	* getAssignments returns an array of Assignment objects for the given
@@ -368,6 +369,12 @@ class Question extends PCRObject {
 		parent::__construct("QuestionID", "Question", $data);
 	}
 	
+	public function addNewQuestion($title, $content){
+		$sth = $this->db->prepare("INSERT INTO `deco3801`.`question` (`QuestionID`, `StudentID`, `CourseID`, `Title`, `Content`, `Status`) 
+			VALUES (NULL, 'placeholder', ".$this->getID().", '".$title."', '".$content."', '0');");
+		$sth->execute(array($this->getID()));
+		
+	}
 	/**
 	* getComments returns an array of Comment objects for the given question,
 	* which may be further manipulated.
