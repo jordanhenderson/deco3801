@@ -51,7 +51,7 @@ $crs = new PCRHandler();
 
 	<div class="container">
 		<h1><?php echo $title; ?></h1>
-		<form action="" method="post">
+		<form action="storeQuestion.php" method="post">
 			<div class="row">
 				<div class="col-md-6">
 					<!-- placeholders for something perhaps -->
