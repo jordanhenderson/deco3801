@@ -6,13 +6,14 @@ $title = $_POST['title'];
 $content = $_POST['content'];
 $stnid = $_SESSION['user_id'];
 $fullname = $_SESSION['userfullname'];
+$crsid = $_SESSION['course_id'];
 echo $_SESSION['course_id'];
 echo $title;
 echo $content;
 echo $fullname;
 echo $stnid;
 $question = new PCRHandler();
-$question->getQuestion($_SESSION['course_id'])->addNewQuestion($title, $content, $stnid, $fullname);
+$question->getQuestion($_SESSION['course_id'])->addNewQuestion($crsid, $title, $content, $stnid, $fullname);
 if($question!=null){
 header('Location: help.php');
 }
