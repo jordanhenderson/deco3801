@@ -2,7 +2,7 @@
 
 exec("tester.sh", $out, $result);
 
-echo "Result: " . $result . PHP_EOL;
+echo "1Result: " . $result . PHP_EOL;
 
 $out = array();
 echo "Result: " . $result
