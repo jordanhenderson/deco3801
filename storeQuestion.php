@@ -6,8 +6,9 @@ $title = $_POST['title'];
 $content = $_POST['content'];
 $fullname = $_SESSION['userfullname'];
 $stnid = $_SESSION['user_id'];
+echo $_SESSION['course_id'];
 $question = new PCRHandler();
-$question->getQuestion(2)->addNewQuestion($title, $content, $stnid, $fullname);
+$question->getQuestion($_SESSION['course_id'])->addNewQuestion($title, $content, $stnid, $fullname);
 if($question!=null){
 header('Location: help.php');
 }
