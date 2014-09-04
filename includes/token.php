@@ -9,10 +9,11 @@ $CONSUMER_TTL = 86400;
 
 $payload = array(
 	'consumerKey' => $CONSUMER_KEY,
-	'userId' => 'admin',
+	
 	'issuedAt' => time(),
 	'ttl' => $CONSUMER_TTL
 );
+//'userId' => 'admin',
 
 $jwt = new JWT();
 echo $jwt->encode($payload, $CONSUMER_SECRET);
