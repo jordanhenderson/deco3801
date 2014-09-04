@@ -15,7 +15,6 @@ $payload = array(
 );
 
 $jwt = new JWT();
-echo "okay";
-//echo $jwt->encode($payload, $CONSUMER_SECRET);
+echo $jwt->encode($payload, $CONSUMER_SECRET);
 
 ?>
