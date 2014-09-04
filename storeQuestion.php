@@ -4,9 +4,13 @@ require_once 'includes/db.php';
 require_once 'includes/handlers.php';
 $title = $_POST['title'];
 $content = $_POST['content'];
-$fullname = $_SESSION['userfullname'];
 $stnid = $_SESSION['user_id'];
+$fullname = $_SESSION['userfullname'];
 echo $_SESSION['course_id'];
+echo $title;
+echo $content;
+echo $fullname;
+echo $stnid;
 $question = new PCRHandler();
 $question->getQuestion($_SESSION['course_id'])->addNewQuestion($title, $content, $stnid, $fullname);
 if($question!=null){
