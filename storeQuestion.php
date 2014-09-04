@@ -8,8 +8,8 @@ $fullname = $_SESSION['userfullname'];
 $stnid = $_SESSION['user_id'];
 $question = new PCRHandler();
 $question->getQuestion($_SESSION['course_id'])->addNewQuestion($title, $content, $stnid, $fullname);
-if($question!=null){
+//if($question!=null){
 header('Location: help.php');
-}
+//}
 
 ?>
