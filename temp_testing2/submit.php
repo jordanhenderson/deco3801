@@ -1,6 +1,6 @@
 <?php
 
-exec("tester.sh", $out, $result);
+exec("./tester.sh", $out, $result);
 
 $out = array();
 
