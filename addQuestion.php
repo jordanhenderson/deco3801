@@ -23,7 +23,6 @@ $date = date('m/d/Y h:i:s a', time());
 			return false;
 		}
 		else{
-			window.alert(title + content);
 			return true;
 		}	
 	}
