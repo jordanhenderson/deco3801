@@ -14,6 +14,7 @@ $payload = array(
 	'ttl' => $CONSUMER_TTL
 );
 
-$jwt = JWT::encode($payload, $CONSUMER_SECRET);
-echo $jwt;
+$jwt = new JWT();
+echo $jwt->encode($payload, $CONSUMER_SECRET);
+
 ?>
