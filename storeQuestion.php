@@ -13,7 +13,7 @@ $stnid = $_SESSION['user_id'];
 //local test
 $con = mysqli_connect("localhost","deco3801","hh2z2WG2q","deco3801") or
     die("Error:".mysqli_error($con));
--	$sql = "INSERT INTO `deco3801`.`Question` (`StudentID`, `CourseID`, `StudentName`, `Title`, `Content`, `Status`) VALUES ('2', '2', 'aname', 'atitle', 'aconten', '0');";
+-	$sql = "INSERT INTO `deco3801`.`Question` (`StudentID`, `CourseID`, `StudentName`, `Title`, `Content`, `Status`) VALUES ('".$stnid."', '2', '".$fullname."', '".$title."', '".$content."', '0');";
 
 -	$query = mysqli_query($con, $sql);
 -	mysqli_close($con);
