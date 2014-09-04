@@ -11,7 +11,7 @@ $stnid = $_SESSION['user_id'];
 //
 //}
 //local test
-$con = mysqli_connect("localhost","root","","deco3801") or
+$con = mysqli_connect("localhost","deco3801","hh2z2WG2q","deco3801") or
     die("Error:".mysqli_error($con));
 -	$sql = "INSERT INTO `deco3801`.`question` (`QuestionID`, `StudentID`, `CourseID`, `StudentName`, `Opendate`, `Title`, `Content`, `Status`) VALUES (NULL, \'2\', \'2\', \'aname\', CURRENT_TIMESTAMP, \'atitle\', \'acontent\', \'0\');";
 
