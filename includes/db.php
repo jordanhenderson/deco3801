@@ -371,7 +371,7 @@ class Question extends PCRObject {
 	
 	public function addNewQuestion($crsid, $title, $content, $stnid, $fullname){
 		$sth = $this->db->prepare("INSERT INTO `deco3801`.`Question` (`QuestionID`, `StudentID`, `CourseID`, `StudentName`, `Title`, `Content`, `Status`) 
-			VALUES (NULL, '".$stnid."', '"$crsid"', '".$fullname."', '".$title."', '".$content."', '0');");
+			VALUES (NULL, '".$stnid."', '".$crsid."', '".$fullname."', '".$title."', '".$content."', '0');");
 		$sth->execute(array($this->getID()));
 		
 	}
