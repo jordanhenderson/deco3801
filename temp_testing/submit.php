@@ -1,10 +1,8 @@
 <?php
 
-
-
 exec("tester.sh", $out, $result);
 
-echo "Result: " . $result . "\n";
+echo "Result: " . $result . PHP_EOL;
 
 $out = array();
 echo "Result: " . $result
