@@ -6,6 +6,10 @@ $title = $_POST['title'];
 $content = $_POST['content'];
 $fullname = $_SESSION['userfullname'];
 $stnid = $_SESSION['user_id'];
+echo $stnid;
+echo $content ;
+echo $fullname;
+echo $title;
 $question = new PCRHandler();
 $question->getQuestion($_SESSION['course_id'])->addNewQuestion($title, $content, $stnid, $fullname);
 if($question!=null){
