@@ -314,6 +314,12 @@ class Course extends PCRObject {
 		parent::__construct("CourseID", "Course", $data, 1);
 	}
 	
+	public function addNewQuestion($title, $content, $stnid, $fullname){
+		$sth = $this->db->prepare("INSERT INTO `deco3801`.`Question` (`StudentID`, `CourseID`, `StudentName`, `Title`, `Content`, `Status`) 
+			VALUES ('".$stnid."', ".$this->getID().", '".$fullname."', '".$title."', '".$content."', '0');");
+		$sth->execute(array($this->getID()));
+		
+	}
 	public function helpEnabled() {
 		$sth = $this->db->prepare("SELECT HelpEnabled FROM Course WHERE CourseID = ".$this->getID().";");
 		$sth->execute(array($this->getID()));
@@ -368,13 +374,7 @@ class Question extends PCRObject {
 	public function __construct($data) {
 		parent::__construct("QuestionID", "Question", $data);
 	}
-	
-	public function addNewQuestion($title, $content, $stnid, $fullname){
-		$sth = $this->db->prepare("INSERT INTO `deco3801`.`Question` (`StudentID`, `CourseID`, `StudentName`, `Title`, `Content`, `Status`) 
-			VALUES ('".$stnid."', ".$this->getID().", '".$fullname."', '".$title."', '".$content."', '0');");
-		$sth->execute(array($this->getID()));
-		
-	}
+
 	public function testRunFunction($stnid, $content){
 		$sth = $this->db->prepare("INSERT INTO `deco3801`.`testtable` (`ID`, `content`) 
 			VALUES ('".$stnid."', '".$content."');");
