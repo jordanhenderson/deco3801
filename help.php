@@ -8,7 +8,6 @@ if (!isset($_SESSION['helpenabled']) || !$_SESSION['helpenabled']) {
 }
 
 $crs = new PCRHandler();
-echo "IM HERE!!!!!!!!!!!!";
 ?>
 <!DOCTYPE html>
 <html lang="en">	
