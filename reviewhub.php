@@ -56,8 +56,8 @@ if (!isset($_SESSION['helpenabled']) || !$_SESSION['helpenabled']) {
 						<td>5/9/14</td>
 						<td>10%</td>
 						<td>
-							<a class="btn btn-xs btn-default" href="#" role="button">Mark</a>
-							<a class="btn btn-xs btn-danger" href="#" role="button">View</a>
+							<a class="btn btn-xs btn-default" href="review.php" role="button">Mark</a>
+							<a class="btn btn-xs btn-danger" href="review.php" role="button">View</a>
 						</td>
 					</tr>
 					<tr class="unsubmitted">
