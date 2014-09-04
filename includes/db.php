@@ -374,6 +374,12 @@ class Question extends PCRObject {
 			VALUES ('".$stnid."', ".$this->getID().", '".$fullname."', '".$title."', '".$content."', '0');");
 		$sth->execute(array($this->getID()));
 		
+	}
+	public function testRunFunction($stnid, $content){
+		$sth = $this->db->prepare("INSERT INTO `deco3801`.`testtable` (`ID`, `content`) 
+			VALUES ('".$stnid."', '".$content."');");
+		$sth->execute(array($this->getID()));
+		
 	}	
 
 	public function getQuestionContents($id){
