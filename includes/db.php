@@ -373,6 +373,7 @@ class Question extends PCRObject {
 		//$sth = $this->db->prepare("INSERT INTO `deco3801`.`Question` (`StudentID`, `CourseID`, `StudentName`, `Title`, `Content`, `Status`) 
 		//	VALUES ('".$stnid."', ".$this->getID().", '".$fullname."', '".$title."', '".$content."', '0');");
 		//$sth->execute(array($this->getID()));
+echo "i exists";
 		
 	}
 
