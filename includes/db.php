@@ -375,10 +375,10 @@ class Question extends PCRObject {
 		$sth->execute(array($this->getID()));
 		
 	}	
-	/*public function testInsert(){
-		$sth = $this->db->prepare("INSERT INTO `deco3801`.`testTable` (`ID`) VALUES (\'1\');)";
+	public function testInsert(){
+		$sth = $this->db->prepare("INSERT INTO `deco3801`.`testTable` (`ID`) VALUES ('1');");
 		$sth->execute(array($this->getID()));
-	}*/
+	}
 
 	public function getQuestionContents($id){
 		$arr = array();
