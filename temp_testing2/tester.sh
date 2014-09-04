@@ -1,4 +1,4 @@
-!#/bin/bash
+#!/bin/bash
 
 #gcc fake_submission.c -o fake_submission
 
