@@ -369,9 +369,9 @@ class Question extends PCRObject {
 		parent::__construct("QuestionID", "Question", $data);
 	}
 	
-	public function addNewQuestion($crsid, $title, $content, $stnid, $fullname){
-		$sth = $this->db->prepare("INSERT INTO `deco3801`.`Question` (`QuestionID`, `StudentID`, `CourseID`, `StudentName`, `Title`, `Content`, `Status`) 
-			VALUES (NULL, '2', '2', 'Admin User', 'Testing title', 'Testing content', '0');");
+	public function addNewQuestion($title, $content, $stnid, $fullname){
+		$sth = $this->db->prepare("INSERT INTO `deco3801`.`Question` (`QuestionID`, `StudentID`, `CourseID`, `StudentName`, `Opendate`, `Title`, `Content`, `Status`) 
+			VALUES (NULL, '".$stnid."', ".$this->getID().", '".$fullname."', '".$title."', '".$content."', '0');");
 		$sth->execute(array($this->getID()));
 		
 	}
