@@ -10,7 +10,7 @@ $CONSUMER_TTL = 86400;
 $payload = array(
 	'consumerKey' => $CONSUMER_KEY,
 	'userId' => 'Admin',
-	'issuedAt' =>
+	'issuedAt' => time(),
 	'ttl' => $CONSUMER_TTL
 );
 
