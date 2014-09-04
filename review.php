@@ -31,7 +31,7 @@ session_start();
 	<script>
 		
 		jQuery(function ann($) {
-			$('#innercontainer').annotator();
+			$('#innercontainer').annotator().annotator('setupPlugins', {tokenUrl: 'http://deco3801-14.uqcloud.net/includes/token.php'});
 		});
 		/*Handles when someone clicks on the file tree*/
 		function handleSwap(id) {
