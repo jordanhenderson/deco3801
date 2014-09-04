@@ -1,6 +1,6 @@
 <?php
 
-//require_once JWT.php;
+include JWT.php;
 
 $CONSUMER_KEY = "30d9cf1909d34daabff333acea9412c0";
 $CONSUMER_SECRET = "bd9f20ea-d0da-4252-900e-9cc262b11be2";
