@@ -1,7 +1,7 @@
 <?php
 session_start();
 
-
+require_once 'includes/db.php';
 require_once 'includes/handlers.php';
 if (!isset($_SESSION['helpenabled']) || !$_SESSION['helpenabled']) {
 	exit();
@@ -32,7 +32,7 @@ $crs = new PCRHandler();
 	<![endif]-->
 </head>
 
-<body>
+<body>	
 	<?php include 'header.php'; ?>
 	
 	<div class="container">
@@ -54,6 +54,7 @@ $crs = new PCRHandler();
 						<th>Assessment</th>
 						<th>Last Post</th>
 						<th>Student</th>
+						<th>Status</th>
 					</tr>
 				</thead>
 				<tbody>
@@ -67,7 +68,13 @@ $crs = new PCRHandler();
 						<td>$question[Title]</td>
 						<td>$question[Title]</td>
 						<td>$question[StudentName]</td>
-					</tr>";
+						<td>";
+						if($question['Status'] == 1){
+							echo '<img src="/css/img/greentick.jpg"></td></tr>';
+						}
+						else {
+							echo '<img src="/css/img/redcross.jpg"></td></tr>';
+						}	
 					} ?>
 				</tbody>
 			</table>

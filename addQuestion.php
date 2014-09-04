@@ -10,6 +10,24 @@ $date = date('m/d/Y h:i:s a', time());
 <html lang="en">
 
 <head>
+	<script>
+	//Basic validation, will make this better later
+	function checkForm(){
+
+		if(document.qF.title.value == null || document.qF.title.value == ""){
+			window.alert("Please add a title proceed");
+			return false;
+		}
+		else if (document.qF.content.value == null || document.qF.content.value == ""){
+			window.alert("Please add some content to your question to proceed");
+			return false;
+		}
+		else{
+			window.alert(title + content);
+			return true;
+		}	
+	}
+	</script>
 	<meta charset="utf-8">
 	<meta name="viewport" content="width=device-width, initial-scale=1">
 
@@ -40,20 +58,21 @@ $date = date('m/d/Y h:i:s a', time());
 	
 	<div class="container">
 		<h1>Ask a New Question</h1>
-		<form action="storeQuestion.php" method="post">
+		<form onsubmit="return checkForm()" name="qF"  action="storeQuestion.php" method="post">
 			<div class="row">
 				<div class="col-md-6">
 					<label for="name">Question Title</label>
 					<input class="form-control" type="text" id="title" name="title">
 				</div>
 				<div class="col-md-6">
+
 				</div>
 			</div>
 			<br>
 			<div class="row">
 				<div class="col-md-6">
-					<label for="open">Open Date</label>
-					<input size="24" type="text" value= "<?php echo $date ?>" class="form-control form_datetime" id="open" name="open">
+					<label for="specfiles">Question Content</label>
+						<textarea class="form-control" name="content" rows="15" cols="89" id="content"></textarea>
 				</div>
 				<div class="col-md-6">
 					<label for="assess">Assessment Piece</label><br>
@@ -69,8 +88,7 @@ $date = date('m/d/Y h:i:s a', time());
 			<div class="row">
 				<div class="col-md-6">
 					<div class="form-group">
-						<label for="specfiles">Question Content</label>
-						<textarea name="content" rows="5" cols="80" id="content"></textarea>
+						
 
 					</div>
 				</div>
