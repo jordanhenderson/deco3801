@@ -31,7 +31,7 @@ session_start();
 	<script>
 		
 		jQuery(function ann($) {
-			$('#innercontainer').annotator().annotator('setupPlugins', {
+			$('#innercontainer').annotator().annotator('setupPlugins');/*, {
 				tokenUrl: 'includes/token.php',
 				Permissions: false,
 				AnnotateItPermissions: {}
