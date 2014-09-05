@@ -31,7 +31,8 @@ session_start();
 	<script>
 		
 		jQuery(function ann($) {
-			$('#innercontainer').annotator().annotator('setupPlugins', {tokenUrl: 'includes/token.php'});
+			//$('#innercontainer').annotator().annotator('setupPlugins', {tokenUrl: 'includes/token.php'});
+			$('#innercontainer').annotator('setupPlugins', {tokenUrl: 'includes/token.php'});
 		});
 		/*Handles when someone clicks on the file tree*/
 		function handleSwap(id) {
