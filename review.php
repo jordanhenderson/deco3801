@@ -32,7 +32,17 @@ session_start();
 		
 		jQuery(function ann($) {
 			//$('#innercontainer').annotator().annotator('setupPlugins', {tokenUrl: 'includes/token.php'});
-			$('#innercontainer').annotator('setupPlugins', {tokenUrl: 'includes/token.php'});
+			var innercontainer = $('#innercontainer').annotator()
+			innercontainer.annotator('addPlugin', 'Store', {
+				prefix: 'storage/annotations',
+				annotationData: {
+					'uri': 'review.php'
+				},
+				loadFromSearch: {
+					'limit':10,
+					'uri':'review.php'
+				}
+			});
 		});
 		/*Handles when someone clicks on the file tree*/
 		function handleSwap(id) {
