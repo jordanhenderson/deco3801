@@ -31,8 +31,14 @@ session_start();
 	<script>
 		
 		jQuery(function ann($) {
-			//$('#innercontainer').annotator().annotator('setupPlugins', {tokenUrl: 'includes/token.php'});
-			var innercontainer = $('#innercontainer').annotator()
+			$('#innercontainer').annotator().annotator('setupPlugins', null, {
+				Auth: {
+					token: 'includes/token.php'
+				},
+				Permissions: false,
+				AnnotateItPermissions: {}
+			});
+			/*var innercontainer = $('#innercontainer').annotator()
 			innercontainer.annotator('addPlugin', 'Store', {
 				tokenUrl: 'includes/token.php',
 				annotationData: {
@@ -42,7 +48,7 @@ session_start();
 					'limit':10,
 					'uri':'review.php'
 				}
-			});
+			});*/
 		});
 		/*Handles when someone clicks on the file tree*/
 		function handleSwap(id) {
