@@ -34,7 +34,7 @@ session_start();
 			//$('#innercontainer').annotator().annotator('setupPlugins', {tokenUrl: 'includes/token.php'});
 			var innercontainer = $('#innercontainer').annotator()
 			innercontainer.annotator('addPlugin', 'Store', {
-				prefix: 'storage/annotations',
+				tokenUrl: 'includes/token.php',
 				annotationData: {
 					'uri': 'review.php'
 				},
