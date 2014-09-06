@@ -59,6 +59,7 @@ $comments = $crs->getQuestion($question['QuestionID'])->getCommentsForQuestion($
 		<h1><?php echo $title; ?></h1>
 		<form action="storeQuestion.php" method="post">
 			<div class="row">
+	<p>I AM WORKING THIS IS AN ECHO<p>
 				<div class="col-md-6">
 					<div class="form-group">
 						<label for="specfiles">Question Content</label>
