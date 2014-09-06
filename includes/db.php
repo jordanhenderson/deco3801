@@ -398,12 +398,6 @@ class Question extends PCRObject {
 		return $arr;
 	}
 
-	public function testRunFunction($stnid, $content){
-		$sth = $this->db->prepare("INSERT INTO `deco3801`.`testtable` (`ID`, `content`) 
-			VALUES ('".$stnid."', '".$content."');");
-		$sth->execute(array($this->getID()));
-		
-	}
 	/**
 	* getComments returns an array of Comment objects for the given question,
 	* which may be further manipulated.
