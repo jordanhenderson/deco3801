@@ -41,6 +41,12 @@ class PCRHandler {
 			return $question;
 		}
 	}
+	public function getComment($id, $content, $stnid, $fullname) {
+		$comment = new Comment(array("StudentID"=>$stnid, "StudentName"=>$fullname, "QuestionID"=>$id, "Content"=>$content));
+		if($comment->isValid()) {
+			return $comment;
+		}
+	}
 	
 	public function uploadArchive() {
 		$submission_id = isset($_POST["submission_id"]) ? $_POST["submission_id"] : null;
@@ -49,7 +55,7 @@ class PCRHandler {
 			$submission->uploadArchive();
 			$submission->addFiles();
 		}
-		
+			
 	}
 	
 	public function uploadRepo($submission_id, $repo_url, $username, $password) {

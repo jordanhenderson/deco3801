@@ -1,17 +1,28 @@
 <?php
-//Formatting here is not done and code needs added parts.
+
 session_start();
-require_once 'includes/db.php';
-require_once 'includes/handlers.php';
+
 $timezone = date_default_timezone_set('Australia/Brisbane');
 $date = date('m/d/Y h:i:s a', time());
-$id = $_GET['id'];	
-$crs = new PCRHandler();
+$id = $_GET['id'];
+$_SESSION['id'] = $id;
 ?>
 <!DOCTYPE html>
 <html lang="en">
 
 <head>
+	<script>
+	//Basic validation, will make this better later
+	function checkForm(){
+		if (document.qF.content.value == null || document.qF.content.value == ""){
+			window.alert("Please add some content to your question to proceed");
+			return false;
+		}
+		else{
+			return true;
+		}	
+	}
+	</script>
 	<meta charset="utf-8">
 	<meta name="viewport" content="width=device-width, initial-scale=1">
 
@@ -38,63 +49,63 @@ $crs = new PCRHandler();
 </head>
 
 <body>
-	<?php include 'header.php'; 
-	$questions = $crs->getQuestion($id)->getQuestionContents($id);
-	//
+	<?php include 'header.php'; ?>
 	
-				if (is_null($questions)) {
-					echo 'no questions';
-				} else {
-					foreach ($questions as $question){
-						$question = $question->jsonSerialize();
-						$title = $question['Title'];
-					}
-					
-				}
-$comments = $crs->getQuestion($question['QuestionID'])->getCommentsForQuestion($question['QuestionID']);
-				?>
-
-
 	<div class="container">
-		<h1><?php echo $title; ?></h1>
-		<form action="storeQuestion.php" method="post">
+		<h1>Ask a New Question</h1>
+		<form onsubmit="return checkForm()" name="qF"  action="storeComment.php" method="post">
+			<div class="row">
+				<div class="col-md-6">
+				</div>
+				<div class="col-md-6">
+
+				</div>
+			</div>
+			<br>
+			<div class="row">
+				<div class="col-md-6">
+					<label for="specfiles">Question Content</label>
+						<textarea class="form-control" name="content" rows="15" cols="89" id="content"></textarea>
+				</div>
+				<div class="col-md-6">
+				</div>
+			</div>
+			<br>
 			<div class="row">
 				<div class="col-md-6">
 					<div class="form-group">
-						<label for="specfiles">Question Content</label>
-						<textarea name="content" readonly="readonly" rows="5" cols="80" id="content"><?php echo $question['Content']; ?></textarea>
+						
 
 					</div>
 				</div>
-				<div class="row">
 				<div class="col-md-6">
-					<label for="open">Open Date</label>
-					<input size="24" type="text" readonly="readonly" value= "<?php echo $date ?>" class="form-control form_datetime" id="open" name="open">
+					<div class="form-group">
+					</div>
 				</div>
 			</div>
-			</div>
-			<br>
 			<br>
 			<div class="row">
-				<div class="col-md-6">
-					<label for="open">Replies</label>
-					<?php
-					foreach ($comments as $comment){
-						$comment = $comment->jsonSerialize();
-						echo "
-						<p>$comment[StudentName] Says: <p>
-						<textarea name='comment' readonly='readonly' rows='5' cols='80' id='comment'>$comment[Content]</textarea>
-						";
-					} ?>
+				<div class="col-md-3">
 				</div>
-			<div align="center">
-				<?php
-				echo "
-				<a class='btn btn-xl btn-danger' href='addComment.php?id=$question[QuestionID]' role='button'>Reply</a>
-				";
-				?>
-				<a class="btn btn-warning" href="#" role="button">Reset</a>
 			</div>
+			<br>
+			<div class="row">
+				<div class="col-md-3">
+				</div>
+				<div class="col-md-3">
+				</div>
+				<div class="col-md-3">
+				</div>
+			</div>
+			<br>
+			<div class="row">
+				<div class="col-md-3">
+					
+				</div>
+			</div>
+			<div align="center">
+				<input class="btn btn-primary" type="submit" value="Submit"></a>
+				<a class="btn btn-warning" href="#" role="button">Reset</a>
 		</form>
 		
 		</div>
@@ -102,11 +113,26 @@ $comments = $crs->getQuestion($question['QuestionID'])->getCommentsForQuestion($
 
 	<!-- jQuery Version 1.11.0 -->
 	<script src="js/jquery-1.11.0.js"></script>
+
 	<!-- Bootstrap Core JavaScript -->
 	<script src="js/bootstrap.min.js"></script>
+
 	<!-- Bootstrap datetimepicker JavaScript -->
 	<script src="js/bootstrap-datetimepicker.min.js"></script>
+	
 	<!-- Bootstrap Select JavaScript -->
 	<script src="js/bootstrap-select.min.js"></script>
+	
+	<script type="text/javascript">
+		window.onload = function () {
+			$('.selectpicker').selectpicker();
+		}
+	</script>
+	
+	<script type="text/javascript">
+		$(".form_datetime").datetimepicker({
+			format: 'dd M yyyy - hh:ii'
+		});
+	</script> 
 </body>
 </html>

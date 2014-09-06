@@ -313,13 +313,14 @@ class Course extends PCRObject {
 	public function __construct($data) {
 		parent::__construct("CourseID", "Course", $data, 1);
 	}
-	
+
 	public function addNewQuestion($title, $content, $stnid, $fullname){
 		$sth = $this->db->prepare("INSERT INTO `deco3801`.`Question` (`StudentID`, `CourseID`, `StudentName`, `Title`, `Content`, `Status`) 
 			VALUES ('".$stnid."', ".$this->getID().", '".$fullname."', '".$title."', '".$content."', '0');");
 		$sth->execute(array($this->getID()));
 		
 	}
+	
 	public function helpEnabled() {
 		$sth = $this->db->prepare("SELECT HelpEnabled FROM Course WHERE CourseID = ".$this->getID().";");
 		$sth->execute(array($this->getID()));
@@ -374,13 +375,18 @@ class Question extends PCRObject {
 	public function __construct($data) {
 		parent::__construct("QuestionID", "Question", $data);
 	}
-
-	public function testRunFunction($stnid, $content){
-		$sth = $this->db->prepare("INSERT INTO `deco3801`.`testtable` (`ID`, `content`) 
-			VALUES ('".$stnid."', '".$content."');");
+	
+	public function getCommentsForQuestion($id){
+		$arr = array();
+		$sth = $this->db->prepare("SELECT * FROM Comment WHERE QuestionID = ".$id.";");
 		$sth->execute(array($this->getID()));
-		
-	}	
+		while ($file_row = $sth->fetch(PDO::FETCH_ASSOC)) {
+			array_push($arr, new Comment($file_row));
+		}
+		return $arr;
+	}
+
+
 
 	public function getQuestionContents($id){
 		$arr = array();
@@ -390,6 +396,13 @@ class Question extends PCRObject {
 			array_push($arr, new Question($file_row));
 		}
 		return $arr;
+	}
+
+	public function testRunFunction($stnid, $content){
+		$sth = $this->db->prepare("INSERT INTO `deco3801`.`testtable` (`ID`, `content`) 
+			VALUES ('".$stnid."', '".$content."');");
+		$sth->execute(array($this->getID()));
+		
 	}
 	/**
 	* getComments returns an array of Comment objects for the given question,
@@ -422,11 +435,13 @@ class Question extends PCRObject {
  * (varchar(32))	StudentID
  * (text)			Content
  * (timestamp)		Time
- */
+ */	
 class Comment extends PCRObject {
 	public function __construct($data) {
 		parent::__construct("CommentID", "Comment", $data);
 	}
+	
+
 	
 	public function jsonSerialize() {
 		parent::Update();

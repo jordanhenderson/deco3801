@@ -40,6 +40,7 @@ $crs = new PCRHandler();
 		<div class="col-lg-12">
 			<?php
 				$questions = $crs->getCourse()->getHelpCentreQuestions();
+
 				if (is_null($questions)) {
 					echo 'no questions';
 				} else {
