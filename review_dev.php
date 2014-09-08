@@ -33,6 +33,10 @@ session_start();
 		jQuery(function ($) {
 			$('#innercontainer').annotator();
 		});
+        $('.annotator-save').onclick() = function(){  
+            var annotationText = $('.annotator-listing').html();
+            alert(annotationText);
+        }
 		/*Handles when someone clicks on the file tree*/
 		function handleSwap(id) {
 			$('a.active').removeClass('active');
