@@ -25,16 +25,16 @@ session_start();
 	<script>hljs.initHighlightingOnLoad();</script>
 	
 	<!-- Annotator -->
-	<script src="temp/annotator-full.min.js"></script> 
-	<link rel="stylesheet" type="text/css" href="temp/annotator.min.css">
+	<script src="js/annotator-full.min.js"></script> 
+	<link rel="stylesheet" type="text/css" href="css/annotator.min.css">
 
 	<script>
 		
 		jQuery(function ($) {
 			$('#innercontainer').annotator();
 		});
-        $('.annotator-save').onclick() = function(){  
-            var annotationText = $('.annotator-listing').html();
+        function getContents() {
+            var annotationText = $('#annotator-field-0').val();
             alert(annotationText);
         }
 		/*Handles when someone clicks on the file tree*/
