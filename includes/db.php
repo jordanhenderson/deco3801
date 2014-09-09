@@ -352,6 +352,8 @@ class Course extends PCRObject {
 		return $arr;
 	}
 	
+   
+    
 	public function jsonSerialize() {
 		parent::Update();
 		return $this->row;
@@ -433,6 +435,32 @@ class Question extends PCRObject {
 	}
 }
 
+class Review extends PCRObject {
+    public function __construct($data) {
+		parent::__construct("ReviewID", "Review", $data);
+	}
+
+     public function storeReview($comments, $stnid, $startoffset, $endoffset) {
+        $sth = $this->db->prepare("INSERT INTO `deco3801`.`Review` (`SubmissionID`, `Comments`, `StudentID`, `StartOffset`, `EndOffset`) 
+			VALUES ('".$this->getID()."', ".$comments.", '".$stnid."', '".$startoffset."', '".$endoffset."', '0');");
+		$sth->execute(array($this->getID()));
+    }
+    
+    public function getReviews() {
+        $arr = array();
+        $sth = $this->db->prepare("SELECT * FROM Review WHERE SubmissionID = ".$this->getID().";");
+		$sth->execute(array($this->getID()));
+		while ($file_row = $sth->fetch(PDO::FETCH_ASSOC)) {
+			array_push($arr, new Review($file_row));
+		}
+		return $arr;
+    }    
+    
+    public function jsonSerialize() {
+		parent::Update();
+		return $this->row;
+	}
+}
 /**
  * Comment Object
  * 

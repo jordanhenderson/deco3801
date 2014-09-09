@@ -47,6 +47,13 @@ class PCRHandler {
 			return $comment;
 		}
 	}
+    
+    public function getReview($comments, $stnid, $startoffset, $endoffset) {
+        $review = new Review(array("StudentID"=>$stnid, "Comments"=>$comments, "StartOffset"=>$startoffset, "EndOffset"=>$endoffset));
+        if($review->isValid()) {
+            return $review;
+        }
+    }
 	
 	public function uploadArchive() {
 		$submission_id = isset($_POST["submission_id"]) ? $_POST["submission_id"] : null;

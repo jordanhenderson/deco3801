@@ -2,6 +2,10 @@
 
 session_start();
 
+require_once 'includes/db.php';
+require_once 'includes/handlers.php';
+
+$crs = new PCRHandler();
 ?>
 <!DOCTYPE html>
 <html lang="en">
@@ -29,13 +33,46 @@ session_start();
 	<link rel="stylesheet" type="text/css" href="css/annotator.min.css">
 
 	<script>
-		
+		//157.7 172.5
 		jQuery(function ($) {
 			$('#innercontainer').annotator();
 		});
+        
+        function getPosition() {
+        var selection = window.getSelection();        
+        anchor = selection.anchorOffset;
+        focus = selection.focusOffset;
+        alert(anchor + ", " + focus);   
+        var startNode = document.getElementById("innercontainer");
+        alert(startNode.firstChild);
+        var startOffset = 0;
+        var endOffset = 260;
+        if (selection) {
+            selection.removeAllRanges();
+            var rangeTest = document.createRange();
+            rangeTest.setStart(startNode.firstChild, startOffset);
+            rangeTest.setEnd(startNode.firstChild, endOffset);
+            selection.addRange(rangeTest);
+    }
+        
+           /* var range = window.getSelection().getRangeAt(0);
+            var area = range.getBoundingClientRect();
+            
+            alert(area.top);
+            alert(area.bottom);
+            alert();*/
+            //var range = window.getSelection();
+            //alert(window.getSelection().getRangeAt(0));
+            //var anchor = range.anchorOffset;
+            //var focus = range.focusOffset;
+            //alert(range.anchorNode.nodeValue);
+            //alert(range.focusNode.nodeValue);
+            //alert(focus);
+        }
         function getContents() {
             var annotationText = $('#annotator-field-0').val();
             alert(annotationText);
+            
         }
 		/*Handles when someone clicks on the file tree*/
 		function handleSwap(id) {
@@ -50,6 +87,7 @@ session_start();
 				$( "#assignment_code" ).html( filecode );
 				$( "#file_heading" ).html( id );
 			});	  
+            
 		}
 	</script>
 
@@ -103,7 +141,9 @@ session_start();
 			$assignment = "/var/www/upload/course_00001/assign_00001/submissions/s1234567/" . $filesArray[0];
 			$handle = fopen($assignment, "r");
 			$contents = fread($handle, filesize($assignment));
-			echo "<pre id='assignment_code'><code>" . $contents . "</code></pre>";
+            $contents = str_replace('<', '&lt;', $contents);
+            $contents = str_replace('>', '&gt;', $contents);
+			echo "<pre id='assignment_code'>" . $contents . "</pre>";
 			fclose($handle);
 		}
 	?>			
