@@ -40,8 +40,6 @@ $crs = new PCRHandler();
 <body>
 	<?php include 'header.php'; 
 	$questions = $crs->getQuestion($id)->getQuestionContents($id);
-	//
-	
 				if (is_null($questions)) {
 					echo 'no questions';
 				} else {
@@ -49,22 +47,19 @@ $crs = new PCRHandler();
 						$question = $question->jsonSerialize();
 						$title = $question['Title'];
 					}
-					
 				}
-$comments = $crs->getQuestion($question['QuestionID'])->getCommentsForQuestion($question['QuestionID']);
-				?>
+	$comments = $crs->getQuestion($question['QuestionID'])->getCommentsForQuestion($question['QuestionID']);
+	?>
 
 
 	<div class="container">
 		<h1><?php echo $title; ?></h1>
 		<form action="storeQuestion.php" method="post">
 			<div class="row">
-	<p>I AM WORKING THIS IS AN ECHO<p>
 				<div class="col-md-6">
 					<div class="form-group">
 						<label for="specfiles">Question Content</label>
 						<textarea name="content" readonly="readonly" rows="5" cols="80" id="content"><?php echo $question['Content']; ?></textarea>
-
 					</div>
 				</div>
 				<div class="row">
@@ -83,9 +78,13 @@ $comments = $crs->getQuestion($question['QuestionID'])->getCommentsForQuestion($
 					foreach ($comments as $comment){
 						$comment = $comment->jsonSerialize();
 						echo "
-						<p>$comment[StudentName] Says: <p>
-						<textarea name='comment' readonly='readonly' rows='5' cols='80' id='comment'>$comment[Content]</textarea>
-						";
+						<tr class='unresolved'>
+						<td>$comment[StudentName] Says:</td>
+						<td><textarea name='comment' readonly='readonly' rows='5' cols='80' id='comment'>$comment[Content]</textarea></td>
+						<td></td>
+						<td></td>
+						<td></td>
+						<td>";
 					} ?>
 				</div>
 			<div align="center">

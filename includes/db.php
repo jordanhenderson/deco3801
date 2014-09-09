@@ -337,7 +337,6 @@ class Course extends PCRObject {
 		return $arr;
 	}
 
-	
 	/**
 	* getAssignments returns an array of Assignment objects for the given
 	* course, which may be further manipulated.
@@ -386,7 +385,16 @@ class Question extends PCRObject {
 		return $arr;
 	}
 
-
+	public function getLastComment($id) {
+		$arr = array();
+		$sth = $this->db->prepare("SELECT * FROM Comment WHERE QuestionID = ".$id." ORDER BY postdate DESC limit 1;");
+		$sth->execute(array($this->getID()));
+		while ($file_row = $sth->fetch(PDO::FETCH_ASSOC)) {
+			array_push($arr, new Comment($file_row));
+		}
+		return $arr;
+	}
+	
 
 	public function getQuestionContents($id){
 		$arr = array();
@@ -398,6 +406,12 @@ class Question extends PCRObject {
 		return $arr;
 	}
 
+	public function testRunFunction($stnid, $content){
+		$sth = $this->db->prepare("INSERT INTO `deco3801`.`testtable` (`ID`, `content`) 
+			VALUES ('".$stnid."', '".$content."');");
+		$sth->execute(array($this->getID()));
+		
+	}
 	/**
 	* getComments returns an array of Comment objects for the given question,
 	* which may be further manipulated.
@@ -412,7 +426,7 @@ class Question extends PCRObject {
 		}
 		return $arr;
 	}
-	
+
 	public function jsonSerialize() {
 		parent::Update();
 		return $this->row;

@@ -40,7 +40,8 @@ $crs = new PCRHandler();
 		<div class="col-lg-12">
 			<?php
 				$questions = $crs->getCourse()->getHelpCentreQuestions();
-
+				
+				//$lastpost = $lastpost->jsonSerialize();
 				if (is_null($questions)) {
 					echo 'no questions';
 				} else {
@@ -48,11 +49,11 @@ $crs = new PCRHandler();
 			<h2>Questions</h2>
 			<a class="btn btn-xl btn-default" href="addQuestion.php" role="button">Ask a Question</a>
 			<a class="btn btn-xl btn-danger" href="#" role="button">My Questions</a>
+
 			<table class="table">
 				<thead>
 					<tr>
 						<th>Title</th>
-						<th>Assessment</th>
 						<th>Last Post</th>
 						<th>Student</th>
 						<th>Status</th>
@@ -60,24 +61,41 @@ $crs = new PCRHandler();
 				</thead>
 				<tbody>
 					<?php
+						
 					foreach ($questions as $question){
-
+						
 						$question = $question->jsonSerialize();
+						$lastpost = $crs->getQuestion($question['QuestionID'])->getLastComment($question['QuestionID']);
+						//$lastpost = $crs->getQuestion('00087')->getLastComment('00087');
+						
+
 						echo "
 					<tr class='unresolved'>
 						<td><a href='displayQuestion.php?id=$question[QuestionID]'>$question[Title]</a></td>
-						<td>$question[Title]</td>
-						<td>$question[Title]</td>
-						<td>$question[StudentName]</td>
+						<td>";
+						foreach($lastpost as $last) {
+							$last = $last->jsonSerialize();	
+							if(!isset($last['postdate'])){
+								echo "rnar";
+							}
+							else {
+								echo $last['postdate']." by ".$last['StudentName'];
+							}
+						}
+
+						echo "</td>";
+
+
+						echo "<td>$question[StudentName]</td>
 						<td>";
 						if($question['Status'] == 1){
-							echo '<img src="/css/img/greentick.jpg"></td></tr>';
+							echo '<a class="btn btn-xl btn-success btn-block" role="button" disabled="disabled" >   Resolved</a></td></tr>';
 						}
 						else {
-							echo '<img src="/css/img/redcross.jpg"></td></tr>';
+							echo '<a class="btn btn-xl btn-danger btn-block" role="button" disabled="disabled" >Unresolved</a></td></tr>';
 						}	
 					} ?>
-				</tbody>
+				</tbody>	
 			</table>
 				<?php } ?>
 		</div>
