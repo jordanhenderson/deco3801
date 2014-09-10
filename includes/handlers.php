@@ -48,8 +48,8 @@ class PCRHandler {
 		}
 	}
     
-    public function getReview($comments, $stnid, $startoffset, $endoffset) {
-        $review = new Review(array("StudentID"=>$stnid, "Comments"=>$comments, "StartOffset"=>$startoffset, "EndOffset"=>$endoffset));
+    public function getReview($stnid, $id, $comments, $startoffset, $endoffset) {
+        $review = new Review(array("StudentID"=>$stnid, "ReviewId"=>$id, "Comments"=>$comments, "StartOffset"=>$startoffset, "EndOffset"=>$endoffset));
         if($review->isValid()) {
             return $review;
         }

@@ -37,24 +37,27 @@ $crs = new PCRHandler();
 		jQuery(function ($) {
 			$('#innercontainer').annotator();
 		});
-        
+        var anchor;
+        var focus;
         function getPosition() {
-        var selection = window.getSelection();        
-        anchor = selection.anchorOffset;
-        focus = selection.focusOffset;
-        alert(anchor + ", " + focus);   
-        var startNode = document.getElementById("innercontainer");
-        alert(startNode.firstChild);
-        var startOffset = 0;
-        var endOffset = 260;
-        if (selection) {
-            selection.removeAllRanges();
-            var rangeTest = document.createRange();
-            rangeTest.setStart(startNode.firstChild, startOffset);
-            rangeTest.setEnd(startNode.firstChild, endOffset);
-            selection.addRange(rangeTest);
-    }
-        
+             var selection = window.getSelection();        
+            anchor = selection.anchorOffset;
+            focus = selection.focusOffset;
+            alert(anchor + ", " + focus);
+            /* This will be used when getting the reviews (in a loop probably) */
+           /* FOR THE PRINTING OF COMMENTS DUDE!!!
+            var startNode = document.getElementById("innercontainer");
+            var startOffset = 0;
+            var endOffset = 260;
+            if (selection) {
+                
+                selection.removeAllRanges();
+                var rangeTest = document.createRange();
+                rangeTest.setStart(startNode.firstChild, startOffset);
+                rangeTest.setEnd(startNode.firstChild, endOffset);
+                selection.addRange(rangeTest);
+                
+            }*/
            /* var range = window.getSelection().getRangeAt(0);
             var area = range.getBoundingClientRect();
             
@@ -70,8 +73,16 @@ $crs = new PCRHandler();
             //alert(focus);
         }
         function getContents() {
+        /* Now we do an AJAX call to store comement and the offset stuff */
             var annotationText = $('#annotator-field-0').val();
             alert(annotationText);
+             $.ajax({
+			  url: "storeData_dev.php?anchor="+anchor+"&focus="+focus+"&annotation="+annotationText,
+			  type: "POST"
+			})
+			  .done(function( retval ) {
+                alert("Your comments have been saved! Woohoo!");
+            });
             
         }
 		/*Handles when someone clicks on the file tree*/
