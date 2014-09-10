@@ -28,6 +28,12 @@ if ($context->valid) { // Redirect from Moodle, reload data, in case different c
 	exit(); // User didn't come from Moodle, and isn't authenticated.
 }
 
+if (isset($_SESSION['admin']) && $_SESSION['admin']) {
+	$admin = true;
+} else {
+	$admin = false;
+}
+
 ?>
 <!DOCTYPE html>
 <html lang="en">
@@ -57,7 +63,7 @@ if ($context->valid) { // Redirect from Moodle, reload data, in case different c
 	
 	<div class="container">
 		<h1>Peer Code Review Home Page</h1>
-<?php
+<?php /*
 // DEBUG & INFO
 echo '<pre style="height: 18pc; overflow-y: scroll;"><b>Context Information:</b>';
 echo $context->dump();
@@ -68,13 +74,13 @@ foreach ($_POST as $key => $value) {
 echo "\n<b>Assignments</b>\n";
 print_r(array_values($crs->getCourse()->getAssignments()));
 echo "</pre>\n";
-?>
+*/?>
 		<div class="col-lg-12">
 			<h2>Assignments</h2>
 			<?php
 				$assignments = $crs->getCourse()->getAssignments();
 				if (is_null($assignments)) {
-					echo "is null";
+					echo "Currently no assignments have been released.";
 				} else {
 					// print table head
 					echo '
@@ -117,12 +123,19 @@ echo "</pre>\n";
 				</tbody>
 			</table>";
 				}
+				if ($admin) {
+					echo '<a class="btn btn-primary" href="create.php" role="button">Create New Assignment</a>';
+				}
 			?>
 		</div>
 		<div class="col-md-6">
 			<h2>Code Review</h2>
 			<?php
-			if (mt_rand(0, 1)) { //TODO Actually decide this at some point
+			if ($admin) {
+				// teacher still has the option to review submissions. Count ALL submissions.
+				echo '<p>There are currently '.'3'.' student submitted assignments that have not recieved a teacher review. If no teacher input is required, then these can be dismissed at any time, either individually or per assignment.</p>
+			<p><a class="btn btn-info" href="reviewhub.php" role="button">Review Assignments &raquo;</a></p>';
+			} else if (mt_rand(0, 1)) { //TODO Actually decide this at some point
 				echo '<p>There are '.'3'.' submissions ready for reviewing. Please take the time to assist your peers by offering suggestions and improvements.</p>
 			<p><a class="btn btn-warning" href="reviewhub.php" role="button">Start Now &raquo;</a></p>';
 			} else {
@@ -135,7 +148,11 @@ echo "</pre>\n";
 		<div class="col-md-6">
 			<h2>Feedback</h2>
 			<?php
-			if (mt_rand(0, 1)) { //TODO Actually decide this at some point
+			if ($admin) {
+				// teacher still gets to see feedback. Count ALL feedback.
+				echo '<p>There are currently '.'3'.' pieces of student submitted feedback that have not recieved a teacher review. If no teacher input is required, then these can be dismissed at any time, either individually or per assignment.</p>
+			<p><a class="btn btn-info" href="reviewhub.php" role="button">Review Feedback &raquo;</a></p>';
+			} else if (mt_rand(0, 1)) { //TODO Actually decide this at some point
 				echo '<p>You have recieved feedback from your assignment submission. Please take the time to check over the advice offered by your peers.</p>
 			<p><a class="btn btn-success" href="reviewhub.php" role="button">Check it out &raquo;</a></p>';
 			} else {
