@@ -435,14 +435,25 @@ class Question extends PCRObject {
 	}
 }
 
+/**
+ * Review Object
+ * 
+ * After population, contains the following rows:
+ * 
+ * (uint_16)		ReviewID
+ * (text)   		Comments
+ * (varchar(32))	StudentID
+ * (int(11))		StartOffset
+ * (int(11))        EndOffset
+ */	
 class Review extends PCRObject {
     public function __construct($data) {
-		parent::__construct("ReviewID", "Review", $data);
+		parent::__construct("ReviewID", "Review", $data, 1);
 	}
 
-     public function storeReview($comments, $stnid, $startoffset, $endoffset) {
-        $sth = $this->db->prepare("INSERT INTO `deco3801`.`Review` (`SubmissionID`, `Comments`, `StudentID`, `StartOffset`, `EndOffset`) 
-			VALUES ('".$this->getID()."', ".$comments.", '".$stnid."', '".$startoffset."', '".$endoffset."', '0');");
+     public function storeReview($id, $comments, $stnid, $startoffset, $endoffset) {
+        $sth = $this->db->prepare("INSERT INTO `deco3801`.`Review` (`SubmissionID`, `Comments`, `StudentID`, `StartOffset`, `EndOffset`, `ReviewID`) 
+			VALUES ('".$this->getID()."', '".$comments."', '".$stnid."', '".$startoffset."', '".$endoffset."', '".$id."');");
 		$sth->execute(array($this->getID()));
     }
     

@@ -49,10 +49,11 @@ class PCRHandler {
 	}
     
     public function getReview($stnid, $id, $comments, $startoffset, $endoffset) {
-        $review = new Review(array("StudentID"=>$stnid, "ReviewId"=>$id, "Comments"=>$comments, "StartOffset"=>$startoffset, "EndOffset"=>$endoffset));
+        $review = new Review(array("StudentID"=>$stnid, "ReviewID"=>$id, "Comments"=>$comments, "StartOffset"=>$startoffset, "EndOffset"=>$endoffset, "SubmissionID"=>'0'));
         if($review->isValid()) {
-            return $review;
+            return " :) ";
         }
+        return " :( ";
     }
 	
 	public function uploadArchive() {

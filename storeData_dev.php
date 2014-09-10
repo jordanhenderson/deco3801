@@ -6,9 +6,8 @@ $focus = $_GET['focus'];
 $annotationText = $_GET['annotation'];
 $stnid = $_SESSION['user_id'];
 $id = $_SESSION['id'];
+//$id = 1;
 echo "here: " . $anchor . ", " . $focus . ", " . $annotationText . ", " . $stnid . ", " . $id;
 $review = new PCRHandler();
-echo "\nWe be here matey";
-$review->getReview($stnid, $id, $annotationText, $anchor, $focus);
-echo "\nWe be here matey";
+echo "retval= " . $review->getReview($stnid, $id, $annotationText, $anchor, $focus);
 ?>

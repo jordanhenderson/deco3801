@@ -39,8 +39,9 @@ $crs = new PCRHandler();
 		});
         var anchor;
         var focus;
+        
         function getPosition() {
-             var selection = window.getSelection();        
+            var selection = window.getSelection();        
             anchor = selection.anchorOffset;
             focus = selection.focusOffset;
             alert(anchor + ", " + focus);
@@ -64,13 +65,6 @@ $crs = new PCRHandler();
             alert(area.top);
             alert(area.bottom);
             alert();*/
-            //var range = window.getSelection();
-            //alert(window.getSelection().getRangeAt(0));
-            //var anchor = range.anchorOffset;
-            //var focus = range.focusOffset;
-            //alert(range.anchorNode.nodeValue);
-            //alert(range.focusNode.nodeValue);
-            //alert(focus);
         }
         function getContents() {
         /* Now we do an AJAX call to store comement and the offset stuff */
