@@ -34,3 +34,17 @@ body {
 	cursor: inherit;
 	display: block;
 }
+textarea#content, textarea#comment{
+
+	float:left;
+   margin-left:12px;
+   width:520px;
+   padding:0px 20px 0px 30px;
+   border-radius:10px;
+	border-top:10px solid transparent;
+	border-left:10px solid transparent;
+   border-bottom:10px solid transparent;
+      border-right: 12px solid #FFF;
+	box-shadow:1px 1px 5px rgba(0,0,0,.2);
+	 margin-top:20px;
+}
