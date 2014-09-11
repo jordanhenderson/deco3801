@@ -103,20 +103,21 @@ echo "</pre>\n";
 						$asg = $asg->jsonSerialize();
 						$sub = $crs->getSubmission($asg['AssignmentID'])->jsonSerialize();
 						
-						$currentTime = time();
+						$CurrentTime = time();
 						$date = date_create_from_format('Y-m-d H:i:s', $sub['OpenTime']);
 						$OpenTime = date_format($date, 'Y-m-d H:i:s : U');
 						
 						$date = date_create_from_format('Y-m-d H:i:s', $sub['DueTime']);
-						$dueTime = date_format($date, 'Y-m-d H:i:s : U');
+						$DueTime = date_format($date, 'Y-m-d H:i:s : U');
 						
 						$date = date_create_from_format('Y-m-d H:i:s', $sub['SubmitTime']);
-						$submitTime = date_format($date, 'Y-m-d H:i:s : U');
+						$SubmitTime = date_format($date, 'Y-m-d H:i:s : U');
 						
-						echo "submitTime: '".$submitTime."'\n";
-						echo "dueTime: '".$dueTime."'\n";
-						echo "currentTime: '".$currentTime."'\n\n";
-						if ($submitTime == 0 && $dueTime < $currentTime) { // Overdue
+						echo "OpenTime ($asg[OpenTime]): '".$OpenTime."'<br>";
+						echo "DueTime ($asg[DueTime]): '".$DueTime."'<br>";
+						echo "SubmitTime ($asg[SubmitTime]): '".$SubmitTime."'<br>";
+						echo "CurrentTime: '".$CurrentTime."'<br><br>";
+						if ($SubmitTime == 0 && $DueTime < $CurrentTime) { // Overdue
 							echo "
 					<tr class=\"bg-danger\">
 						<td>$asg[AssignmentName]<br><i>Overdue</i></td>
@@ -125,7 +126,7 @@ echo "</pre>\n";
 						<td>$asg[Weight]%</td>
 						<td>Not Submitted. Due: $asg[DueTime]<br>Overdue: X days, X hours, X mins</td>
 					</tr>";
-						} else if ($submitTime == 0) { // Not submitted
+						} else if ($SubmitTime == 0) { // Not submitted
 							echo "
 					<tr class=\"bg-warning\">
 						<td>$asg[AssignmentName]<br><i>Not Submitted</i></td>
@@ -134,7 +135,7 @@ echo "</pre>\n";
 						<td>$asg[Weight]%</td>
 						<td>Not Submitted. Due: $asg[DueTime]<br>Remaining: X days, X hours, X mins</td>
 					</tr>";
-						} else if ($submitTime > $dueTime) { // Submitted overdue
+						} else if ($SubmitTime > $DueTime) { // Submitted overdue
 							echo "
 					<tr class=\"bg-success\">
 						<td>$asg[AssignmentName]<br><i>Submitted Overdue</i></td>
