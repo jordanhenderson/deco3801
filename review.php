@@ -27,8 +27,8 @@ session_start();
 	<script>hljs.initHighlightingOnLoad();</script>
 	
 	<!-- Annotator -->
-	<script src="temp/annotator-full.min.js"></script> 
-	<link rel="stylesheet" type="text/css" href="temp/annotator.min.css">
+	<script src="js/annotator-full.min.js"></script> 
+	<link rel="stylesheet" type="text/css" href="css/annotator.min.css">
 
 	<script>
 		//Initialises Annotator for writing reviews on the page
