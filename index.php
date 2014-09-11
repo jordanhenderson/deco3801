@@ -113,14 +113,23 @@ echo "</pre>\n";
 						$date = date_create_from_format('Y-m-d G:i:s', $sub['SubmitTime']);
 						$SubmitTime = (int) date_format($date, 'U');
 						
-						if ($SubmitTime == 0 && $DueTime < $CurrentTime) { // Overdue
+						if ($OpenTime > $CurrentTime) { // Not open
+							echo "
+					<tr>
+						<td>$asg[AssignmentName]<br><i>Not Open For Submission</i></td>
+						<td>$asg[OpenTime]</td>
+						<td>$asg[DueTime]</td>
+						<td>$asg[Weight]%</td>
+						<td>Not Open. Due: $asg[DueTime]<br><i>Opens in: X days, X hours, X mins</i></td>
+					</tr>";
+						} else if ($SubmitTime == 0 && $DueTime < $CurrentTime) { // Overdue
 							echo "
 					<tr class=\"bg-danger\">
 						<td>$asg[AssignmentName]<br><i>Overdue</i></td>
 						<td>$asg[OpenTime]</td>
 						<td>$asg[DueTime]</td>
 						<td>$asg[Weight]%</td>
-						<td>Not Submitted. Due: $asg[DueTime]<br>Overdue: X days, X hours, X mins</td>
+						<td>Not Submitted. Due: $asg[DueTime]<br><i>Overdue: X days, X hours, X mins</i></td>
 					</tr>";
 						} else if ($SubmitTime == 0) { // Not submitted
 							echo "
@@ -129,7 +138,7 @@ echo "</pre>\n";
 						<td>$asg[OpenTime]</td>
 						<td>$asg[DueTime]</td>
 						<td>$asg[Weight]%</td>
-						<td>Not Submitted. Due: $asg[DueTime]<br>Remaining: X days, X hours, X mins</td>
+						<td>Not Submitted. Due: $asg[DueTime]<br><i>Remaining: X days, X hours, X mins</i></td>
 					</tr>";
 						} else if ($SubmitTime > $DueTime) { // Submitted overdue
 							echo "
@@ -138,7 +147,7 @@ echo "</pre>\n";
 						<td>$asg[OpenTime]</td>
 						<td>$asg[DueTime]</td>
 						<td>$asg[Weight]%</td>
-						<td>Submitted: $sub[SubmitTime]<br>Overdue: X days, X hours, X mins</td>
+						<td>Submitted: $sub[SubmitTime]<br><i>Overdue: X days, X hours, X mins</i></td>
 					</tr>"; // TODO ^
 						} else { // Submitted
 							echo "
