@@ -40,7 +40,7 @@ if (!isset($_SESSION['helpenabled']) || !$_SESSION['helpenabled']) {
 			<h2>Assignments to Review</h2>
 			<?php
 				if () {
-					echo "All of the assignments designated to you have been reviewed. Consider stopping by the <a href=\"help.php\">Help Center</a> to answer some of your peers' questions."
+					echo "All of the assignments designated to you have been reviewed. Consider stopping by the <a href=\"help.php\">Help Center</a> to answer some of your peers' questions.";
 				} else {
 			?>
 			<table class="table">
@@ -71,6 +71,7 @@ if (!isset($_SESSION['helpenabled']) || !$_SESSION['helpenabled']) {
 					</tr>
 				</tbody>
 			</table>
+			<?php } ?>
 		</div>
 
 	<!-- jQuery Version 1.11.0 -->

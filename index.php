@@ -103,12 +103,19 @@ echo "</pre>\n";
 						$asg = $asg->jsonSerialize();
 						$sub = $crs->getSubmission($asg['AssignmentID'])->jsonSerialize();
 						$currentTime = time();
-						$OpenTime = strtotime($sub['OpenTime']);
-						$dueTime = strtotime($sub['DueTime']);
-						$submitTime = strtotime($sub['SubmitTime']);
-						echo "submitTime: '".$submitTime."'";
-						echo "dueTime: '".$dueTime."'";
-						echo "currentTime: '".$currentTime."'";
+						
+						$date = date_create_from_format('Y-M-d H:i:s', $sub['OpenTime']);
+						$OpenTime = $date->getTimestamp();
+						
+						$date = date_create_from_format('Y-M-d H:i:s', $sub['DueTime']);
+						$dueTime = $date->getTimestamp();
+						
+						$date = date_create_from_format('Y-M-d H:i:s', $sub['SubmitTime']);
+						$submitTime = $date->getTimestamp();
+						
+						echo "submitTime: '".$submitTime."'\n";
+						echo "dueTime: '".$dueTime."'\n";
+						echo "currentTime: '".$currentTime."'\n\n";
 						if ($submitTime == 0 && $dueTime < $currentTime) { // Overdue
 							echo "
 					<tr class=\"bg-danger\">
