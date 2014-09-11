@@ -105,13 +105,13 @@ echo "</pre>\n";
 						
 						$currentTime = time();
 						$date = date_create_from_format('Y-m-d H:i:s', $sub['OpenTime']);
-						$OpenTime = $date->format('Y/m/d H:i:s');
+						$OpenTime = date_format($date, 'Y-m-d H:i:s : U');
 						
 						$date = date_create_from_format('Y-m-d H:i:s', $sub['DueTime']);
-						$dueTime = $date->format('Y-m-d H:i:s');
+						$dueTime = date_format($date, 'Y-m-d H:i:s : U');
 						
 						$date = date_create_from_format('Y-m-d H:i:s', $sub['SubmitTime']);
-						$submitTime = $date->format('Y-m-d H:i:s');
+						$submitTime = date_format($date, 'Y-m-d H:i:s : U');
 						
 						echo "submitTime: '".$submitTime."'\n";
 						echo "dueTime: '".$dueTime."'\n";
