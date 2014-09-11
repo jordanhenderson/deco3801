@@ -39,7 +39,7 @@ if (!isset($_SESSION['helpenabled']) || !$_SESSION['helpenabled']) {
 		<div class="col-lg-12">
 			<h2>Assignments to Review</h2>
 			<?php
-				if () {
+				if (isset($_SESSION['admin'])) { // TODO, this is just temp
 					echo "All of the assignments designated to you have been reviewed. Consider stopping by the <a href=\"help.php\">Help Center</a> to answer some of your peers' questions.";
 				} else {
 			?>
