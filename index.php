@@ -105,18 +105,14 @@ echo "</pre>\n";
 						
 						$CurrentTime = time();
 						$date = date_create_from_format('Y-m-d G:i:s', $asg['OpenTime']);
-						$OpenTime = date_format($date, 'Y-m-d G:i:s : U');
+						$OpenTime = (int) date_format($date, 'U');
 						
 						$date = date_create_from_format('Y-m-d G:i:s', $asg['DueTime']);
-						$DueTime = date_format($date, 'Y-m-d G:i:s : U');
+						$DueTime = (int) date_format($date, 'U');
 						
 						$date = date_create_from_format('Y-m-d G:i:s', $sub['SubmitTime']);
-						$SubmitTime = date_format($date, 'Y-m-d G:i:s : U');
+						$SubmitTime = (int) date_format($date, 'U');
 						
-						echo "OpenTime ($asg[OpenTime]): '".$OpenTime."'<br>";
-						echo "DueTime ($asg[DueTime]): '".$DueTime."'<br>";
-						echo "SubmitTime ($sub[SubmitTime]): '".$SubmitTime."'<br>";
-						echo "CurrentTime: '".$CurrentTime."'<br><br>";
 						if ($SubmitTime == 0 && $DueTime < $CurrentTime) { // Overdue
 							echo "
 					<tr class=\"bg-danger\">
