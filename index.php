@@ -102,11 +102,13 @@ echo "</pre>\n";
 					foreach ($assignments as $asg) {
 						$asg = $asg->jsonSerialize();
 						$sub = $crs->getSubmission($asg['AssignmentID'])->jsonSerialize();
+						
 						$currentTime = time();
-						
+						echo '1';
 						$date = date_create_from_format('Y-M-d H:i:s', $sub['OpenTime']);
+						echo '2';
 						$OpenTime = $date->getTimestamp();
-						
+						echo '3';
 						$date = date_create_from_format('Y-M-d H:i:s', $sub['DueTime']);
 						$dueTime = $date->getTimestamp();
 						
