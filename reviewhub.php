@@ -38,48 +38,35 @@ if (!isset($_SESSION['helpenabled']) || !$_SESSION['helpenabled']) {
 		<h1>Review Hub</h1>
 		<div class="col-lg-12">
 			<h2>Assignments to Review</h2>
+			<?php
+				if () {
+					echo "All of the assignments designated to you have been reviewed. Consider stopping by the <a href=\"help.php\">Help Center</a> to answer some of your peers' questions."
+				} else {
+			?>
 			<table class="table">
 				<thead>
 					<tr>
 						<th>Assignment Name</th>
-						<th>Course</th>
-						<th>Open Date</th>
+						<th>Student Name</th>
 						<th>Due Date</th>
-						<th>Weight</th>
+						<th></th>
 					</tr>
 				</thead>
 				<tbody>
-					<tr class="submitted">
+					<tr>
 						<td>Assignment 1</td>
-						<td>CSSE1001</td>
-						<td>29/8/14</td>
-						<td>5/9/14</td>
-						<td>10%</td>
+						<td>Paul Firstius</td>
+						<td>23/9/14</td>
 						<td>
-							<a class="btn btn-xs btn-default" href="review.php" role="button">Mark</a>
-							<a class="btn btn-xs btn-danger" href="review.php" role="button">View</a>
+							<a class="btn btn-xs btn-info" href="review.php" role="button">Mark</a>
 						</td>
 					</tr>
-					<tr class="unsubmitted">
-						<td>Assignment 2</td>
-						<td>CSSE1001</td>
-						<td>5/9/14</td>
-						<td>12/9/14</td>
-						<td>15%</td>
-						<td>
-							<a class="btn btn-xs btn-default" href="#" role="button">Mark</a>
-							<a class="btn btn-xs btn-danger" href="#" role="button">View</a>
-						</td>
-					</tr>
-					<tr class="unsubmitted">
-						<td>Assignment 3</td>
-						<td>CSSE1001</td>
-						<td>12/9/14</td>
+					<tr>
+						<td>Assignment 1</td>
+						<td>Steven Secondarra</td>
 						<td>19/9/14</td>
-						<td>15%</td>
 						<td>
-							<a class="btn btn-xs btn-default" href="#" role="button">Mark</a>
-							<a class="btn btn-xs btn-danger" href="#" role="button">View</a>
+							<a class="btn btn-xs btn-info" href="review.php" role="button">Mark</a>
 						</td>
 					</tr>
 				</tbody>

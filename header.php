@@ -13,7 +13,7 @@
 				<ul class="nav navbar-nav">
 					<li><a href="index.php">Home Page</a></li>
 					<?php 
-						if (isset($_SESSION['admin'])) {
+						if (isset($_SESSION['admin']) && $_SESSION['admin']) {
 							echo '<li><a href="admin.php">Admin Panel</a></li>';
 						}
 						if (isset($_SESSION['helpenabled']) && $_SESSION['helpenabled']) {
@@ -22,7 +22,6 @@
 					?>
 
 					<li><a href="reviewhub.php">Review Hub</a></li>
-					<li><a href="#">Feedback</a></li>
 				</ul>
 			</div>
 		</div>

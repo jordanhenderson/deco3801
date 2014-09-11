@@ -99,7 +99,41 @@ echo "</pre>\n";
 					foreach ($assignments as $asg) {
 						$asg = $asg->jsonSerialize();
 						$sub = $crs->getSubmission($asg['AssignmentID'])->jsonSerialize();
-						if ($sub['SubmitTime'] && mt_rand(0, 1)) { // TODO
+						$currentTime = time();
+						$OpenTime = strtotime($sub['OpenTime']);
+						$dueTime = strtotime($sub['DueTime']);
+						$submitTime = strtotime($sub['SubmitTime']);
+						echo "submitTime: '".$submitTime."'";
+						echo "dueTime: '".$dueTime."'";
+						echo "currentTime: '".$currentTime."'";
+						if ($submitTime == 0 && $dueTime < $currentTime) { // Overdue
+							echo "
+					<tr class=\"bg-danger\">
+						<td>$asg[AssignmentName]<br><i>Overdue</i></td>
+						<td>$asg[OpenTime]</td>
+						<td>$asg[DueTime]</td>
+						<td>$asg[Weight]%</td>
+						<td>Not Submitted. Due: $asg[DueTime]<br>Overdue: X days, X hours, X mins</td>
+					</tr>";
+						} else if ($submitTime == 0) { // Not submitted
+							echo "
+					<tr class=\"bg-warning\">
+						<td>$asg[AssignmentName]<br><i>Not Submitted</i></td>
+						<td>$asg[OpenTime]</td>
+						<td>$asg[DueTime]</td>
+						<td>$asg[Weight]%</td>
+						<td>Not Submitted. Due: $asg[DueTime]<br>Remaining: X days, X hours, X mins</td>
+					</tr>";
+						} else if ($submitTime > $dueTime) { // Submitted overdue
+							echo "
+					<tr class=\"bg-success\">
+						<td>$asg[AssignmentName]<br><i>Submitted Overdue</i></td>
+						<td>$asg[OpenTime]</td>
+						<td>$asg[DueTime]</td>
+						<td>$asg[Weight]%</td>
+						<td>Submitted: $sub[SubmitTime]<br>Overdue: X days, X hours, X mins</td>
+					</tr>"; // TODO ^
+						} else { // Submitted
 							echo "
 					<tr class=\"bg-success\">
 						<td>$asg[AssignmentName]<br><i>Submitted</i></td>
@@ -107,15 +141,6 @@ echo "</pre>\n";
 						<td>$asg[DueTime]</td>
 						<td>$asg[Weight]%</td>
 						<td>Submitted: $sub[SubmitTime]</td>
-					</tr>";
-						} else {
-							echo "
-					<tr class=\"bg-danger\">
-						<td>$asg[AssignmentName]<br><i>Not Submitted</i></td>
-						<td>$asg[OpenTime]</td>
-						<td>$asg[DueTime]</td>
-						<td>$asg[Weight]%</td>
-						<td>Not Submitted. Due: $asg[DueTime]</td>
 					</tr>";
 						}
 					}
@@ -139,7 +164,7 @@ echo "</pre>\n";
 				echo '<p>There are '.'3'.' submissions ready for reviewing. Please take the time to assist your peers by offering suggestions and improvements.</p>
 			<p><a class="btn btn-warning" href="reviewhub.php" role="button">Start Now &raquo;</a></p>';
 			} else {
-				echo '<p>All your assigned submissions to date have already been reviewed. However, if you would like to further assist your peers, consider stopping by the Help Center to answer some questions.</p>
+				echo '<p>All your assigned submissions to date have already been reviewed. However, if you would like to further assist your peers, consider stopping by the Help Center to answer some of your peers\' questions.</p>
 			<p><a class="btn btn-info" href="help.php" role="button">Help Center &raquo;</a></p>';
 			}
 			

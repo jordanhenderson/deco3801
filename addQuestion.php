@@ -14,15 +14,13 @@ $date = date('m/d/Y h:i:s a', time());
 	//Basic validation, will make this better later
 	function checkForm(){
 
-		if(document.qF.title.value == null || document.qF.title.value == ""){
+		if (document.qF.title.value == null || document.qF.title.value == "") {
 			window.alert("Please add a title proceed");
 			return false;
-		}
-		else if (document.qF.content.value == null || document.qF.content.value == ""){
+		} else if (document.qF.content.value == null || document.qF.content.value == "") {
 			window.alert("Please add some content to your question to proceed");
 			return false;
-		}
-		else{
+		} else {
 			return true;
 		}	
 	}
@@ -57,71 +55,34 @@ $date = date('m/d/Y h:i:s a', time());
 	
 	<div class="container">
 		<h1>Ask a New Question</h1>
-		<form onsubmit="return checkForm()" name="qF"  action="storeQuestion.php" method="post">
+		<form onsubmit="return checkForm()" name="qF" action="storeQuestion.php" method="post">
 			<div class="row">
 				<div class="col-md-6">
-					<label for="name">Question Title</label>
-					<input class="form-control" type="text" id="title" name="title">
-				</div>
-				<div class="col-md-6">
-
+					<label for="title">Question Title</label>
+					<input class="form-control" name="title" type="text" id="title">
 				</div>
 			</div>
 			<br>
 			<div class="row">
 				<div class="col-md-6">
-					<label for="specfiles">Question Content</label>
-						<textarea class="form-control" name="content" rows="15" cols="89" id="content"></textarea>
+					<label for="content">Question Content</label>
+					<textarea class="form-control" name="content" rows="15" id="content"></textarea>
 				</div>
 				<div class="col-md-6">
-					<label for="assess">Assessment Piece</label><br>
-					<select class="selectpicker" data-width="130px" id="course">
+					<label for="course">Assessment Piece</label><br>
+					<select class="selectpicker" name="course" data-width="130px" id="course">
 						<option>Assignment 1</option>
 						<option>Assignment 2</option>
 						<option>Assignment 3</option>
-						<option>Assignment 4</option>
 					</select>
 				</div>
 			</div>
 			<br>
-			<div class="row">
-				<div class="col-md-6">
-					<div class="form-group">
-						
-
-					</div>
-				</div>
-				<div class="col-md-6">
-					<div class="form-group">
-					</div>
-				</div>
-			</div>
-			<br>
-			<div class="row">
-				<div class="col-md-3">
-				</div>
-			</div>
-			<br>
-			<div class="row">
-				<div class="col-md-3">
-				</div>
-				<div class="col-md-3">
-				</div>
-				<div class="col-md-3">
-				</div>
-			</div>
-			<br>
-			<div class="row">
-				<div class="col-md-3">
-					
-				</div>
-			</div>
 			<div align="center">
-				<input class="btn btn-primary" type="submit" value="Submit"></a>
-				<a class="btn btn-warning" href="#" role="button">Reset</a>
+				<input class="btn btn-primary" type="submit" value="Submit">
+				<a class="btn btn-warning" onclick="reset();" role="button">Reset</a>
+			</div>
 		</form>
-		
-		</div>
 	</div>
 
 	<!-- jQuery Version 1.11.0 -->
@@ -146,6 +107,13 @@ $date = date('m/d/Y h:i:s a', time());
 		$(".form_datetime").datetimepicker({
 			format: 'dd M yyyy - hh:ii'
 		});
-	</script> 
+	</script>
+	
+	<script type="text/javascript">
+		function reset() {
+			$("#title").html("");
+			$("#content").html("");
+		}
+	</script>
 </body>
 </html>
