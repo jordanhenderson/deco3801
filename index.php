@@ -104,10 +104,10 @@ echo "</pre>\n";
 						$sub = $crs->getSubmission($asg['AssignmentID'])->jsonSerialize();
 						
 						$CurrentTime = time();
-						$date = date_create_from_format('Y-m-d G:i:s', $sub['OpenTime']);
+						$date = date_create_from_format('Y-m-d G:i:s', $asg['OpenTime']);
 						$OpenTime = date_format($date, 'Y-m-d G:i:s : U');
 						
-						$date = date_create_from_format('Y-m-d G:i:s', $sub['DueTime']);
+						$date = date_create_from_format('Y-m-d G:i:s', $asg['DueTime']);
 						$DueTime = date_format($date, 'Y-m-d G:i:s : U');
 						
 						$date = date_create_from_format('Y-m-d G:i:s', $sub['SubmitTime']);
@@ -115,7 +115,7 @@ echo "</pre>\n";
 						
 						echo "OpenTime ($asg[OpenTime]): '".$OpenTime."'<br>";
 						echo "DueTime ($asg[DueTime]): '".$DueTime."'<br>";
-						echo "SubmitTime ($asg[SubmitTime]): '".$SubmitTime."'<br>";
+						echo "SubmitTime ($sub[SubmitTime]): '".$SubmitTime."'<br>";
 						echo "CurrentTime: '".$CurrentTime."'<br><br>";
 						if ($SubmitTime == 0 && $DueTime < $CurrentTime) { // Overdue
 							echo "
