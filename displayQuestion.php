@@ -15,7 +15,7 @@ $crs = new PCRHandler();
 	<meta charset="utf-8">
 	<meta name="viewport" content="width=device-width, initial-scale=1">
 
-	<title>Create - PCR</title>
+	<title>Question</title>
 
 	<!-- Bootstrap Core CSS -->
 	<link href="css/bootstrap.min.css" rel="stylesheet">
@@ -46,6 +46,7 @@ $crs = new PCRHandler();
 					foreach ($questions as $question){
 						$question = $question->jsonSerialize();
 						$title = $question['Title'];
+						$_SESSION['Status'] = $question['Status'];
 					}
 				}
 	$comments = $crs->getQuestion($question['QuestionID'])->getCommentsForQuestion($question['QuestionID']);
@@ -89,11 +90,26 @@ $crs = new PCRHandler();
 				</div>
 			<div align="center">
 				<?php
-				echo "
-				<a class='btn btn-xl btn-danger' href='addComment.php?id=$question[QuestionID]' role='button'>Reply</a>
-				";
+					echo "
+					<a class='btn btn-xl btn-warning' href='addComment.php?id=$question[QuestionID]' role='button'>Reply</a>
+					";
+				//These go over three lines cause it spaces nicely
+				if ($_SESSION['admin']) {
+					echo "
+					<a class='btn btn-xl btn-danger' href='deleteQuestion.php?id=$question[QuestionID]' role='button'>Remove Question</a>
+					";
+				}
+				if($_SESSION['Status'] == 1){
+					echo "
+					<a class='btn btn-xl btn-danger' href='statusUpdate.php?id=$question[QuestionID]' role='button'>Mark Unesolved</a>
+					";
+				}
+				else {
+					echo "
+					<a class='btn btn-xl btn-success' href='statusUpdate.php?id=$question[QuestionID]' role='button'>Mark Resolved</a>
+					";
+				}
 				?>
-				<a class="btn btn-warning" href="#" role="button">Reset</a>
 			</div>
 		</form>
 		
