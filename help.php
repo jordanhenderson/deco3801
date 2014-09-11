@@ -41,7 +41,6 @@ $crs = new PCRHandler();
 			<?php
 				$questions = $crs->getCourse()->getHelpCentreQuestions();
 				
-				//$lastpost = $lastpost->jsonSerialize();
 				if (is_null($questions)) {
 					echo 'no questions';
 				} else {
@@ -66,11 +65,10 @@ $crs = new PCRHandler();
 						
 						$question = $question->jsonSerialize();
 						$lastpost = $crs->getQuestion($question['QuestionID'])->getLastComment($question['QuestionID']);
-						//$lastpost = $crs->getQuestion('00087')->getLastComment('00087');
 						
 
 						echo "
-					<tr class='unresolved'>
+						<tr class='unresolved'>
 						<td><a href='displayQuestion.php?id=$question[QuestionID]'>$question[Title]</a></td>
 						<td>";
 						foreach($lastpost as $last) {
@@ -82,14 +80,13 @@ $crs = new PCRHandler();
 								echo $last['postdate']." by ".$last['StudentName'];
 							}
 						}
-
 						echo "</td>";
 
 
 						echo "<td>$question[StudentName]</td>
 						<td>";
 						if($question['Status'] == 1){
-							echo '<a class="btn btn-xl btn-success btn-block" role="button" disabled="disabled" >   Resolved</a></td></tr>';
+							echo '<a class="btn btn-xl btn-success btn-block" role="button" disabled="disabled">Resolved</a></td></tr>';
 						}
 						else {
 							echo '<a class="btn btn-xl btn-danger btn-block" role="button" disabled="disabled" >Unresolved</a></td></tr>';
