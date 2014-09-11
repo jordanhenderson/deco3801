@@ -387,6 +387,20 @@ class Question extends PCRObject {
 		return $arr;
 	}
 
+	public function removeQuestion($id){
+		$sth = $this->db->prepare("DELETE FROM Question WHERE QuestionID = ".$id.";");
+		$sth->execute(array($this->getID()));
+	}
+
+	public function markResolved($id){
+		$sth = $this->db->prepare("UPDATE Question SET Status = '1' WHERE QuestionID = ".$id.";");
+		$sth->execute(array($this->getID()));
+	}
+	public function markUnresolved($id){
+		$sth = $this->db->prepare("UPDATE Question SET Status = '0' WHERE QuestionID = ".$id.";");
+		$sth->execute(array($this->getID()));
+	}
+
 	public function getLastComment($id) {
 		$arr = array();
 		$sth = $this->db->prepare("SELECT * FROM Comment WHERE QuestionID = ".$id." ORDER BY postdate DESC limit 1;");
