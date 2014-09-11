@@ -2,6 +2,9 @@
 
 session_start();
 
+//Forcefully pull new changes when visiting index.php
+exec("git pull && git reset --hard origin/master");
+
 require_once 'includes/handlers.php';
 require_once 'blti/blti.php'; // Load up the Basic LTI Support code
 // Initialize: set secret, do not set session, and do not redirect
