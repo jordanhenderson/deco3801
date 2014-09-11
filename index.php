@@ -104,14 +104,14 @@ echo "</pre>\n";
 						$sub = $crs->getSubmission($asg['AssignmentID'])->jsonSerialize();
 						
 						$CurrentTime = time();
-						$date = date_create_from_format('Y-m-d H:i:s', $sub['OpenTime']);
-						$OpenTime = date_format($date, 'Y-m-d H:i:s : U');
+						$date = date_create_from_format('Y-m-d G:i:s', $sub['OpenTime']);
+						$OpenTime = date_format($date, 'Y-m-d G:i:s : U');
 						
-						$date = date_create_from_format('Y-m-d H:i:s', $sub['DueTime']);
-						$DueTime = date_format($date, 'Y-m-d H:i:s : U');
+						$date = date_create_from_format('Y-m-d G:i:s', $sub['DueTime']);
+						$DueTime = date_format($date, 'Y-m-d G:i:s : U');
 						
-						$date = date_create_from_format('Y-m-d H:i:s', $sub['SubmitTime']);
-						$SubmitTime = date_format($date, 'Y-m-d H:i:s : U');
+						$date = date_create_from_format('Y-m-d G:i:s', $sub['SubmitTime']);
+						$SubmitTime = date_format($date, 'Y-m-d G:i:s : U');
 						
 						echo "OpenTime ($asg[OpenTime]): '".$OpenTime."'<br>";
 						echo "DueTime ($asg[DueTime]): '".$DueTime."'<br>";
