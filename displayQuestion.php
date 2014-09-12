@@ -34,17 +34,17 @@ $crs = new PCRHandler();
 	<?php include 'header.php'; 
 	//Get contents and data of each question based on the ID
 	$questions = $crs->getQuestion($id)->getQuestionContents($id);
-				if (is_null($questions)) {
-					echo 'no questions';
-				} else {
-					//If there are questions stored, get the data from them to display
-					foreach ($questions as $question){
-						$question = $question->jsonSerialize();
-						$title = $question['Title'];
-						$_SESSION['Status'] = $question['Status'];
-						$timeasked = $question['Opendate'];
-					}
-				}
+	if (is_null($questions)) {
+		echo 'no questions';
+	} else {
+		//If there are questions stored, get the data from them to display
+		foreach ($questions as $question){
+			$question = $question->jsonSerialize();
+			$title = $question['Title'];
+			$_SESSION['Status'] = $question['Status'];
+			$timeasked = $question['Opendate'];
+		}
+	}
 	//Get the comments for the question displaying
 	$comments = $crs->getQuestion($question['QuestionID'])->getCommentsForQuestion($question['QuestionID']);
 	?>

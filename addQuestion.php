@@ -59,7 +59,7 @@ $date = date('m/d/Y h:i:s a', time());
 			<div class="row">
 				<div class="col-md-6">
 					<label for="content">Question Content</label>
-					<textarea class="form-control" name="content" rows="15" id="content"></textarea>
+					<textarea class="form-control" style="resize: vertical;" name="content" rows="15" id="content"></textarea>
 				</div>
 			</div>
 			<br>

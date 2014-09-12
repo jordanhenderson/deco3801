@@ -494,15 +494,14 @@ class Review extends PCRObject {
  * (uint_16)		CommentID
  * (uint_16)		QuestionID
  * (varchar(32))	StudentID
+ * (text)			StudentName
  * (text)			Content
- * (timestamp)		Time
+ * (timestamp)		postdate
  */	
 class Comment extends PCRObject {
 	public function __construct($data) {
 		parent::__construct("CommentID", "Comment", $data);
 	}
-	
-
 	
 	public function jsonSerialize() {
 		parent::Update();

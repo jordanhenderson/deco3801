@@ -50,13 +50,13 @@ $crs = new PCRHandler();
 					<tr>
 						<th>Title</th>
 						<th>Last Post</th>
-						<th>Student</th>
+						<th>Original Poster</th>
 						<th>Status</th>
 					</tr>
 				</thead>
 				<tbody>
 					<?php	
-					foreach ($questions as $question){
+					foreach ($questions as $question) {
 						//Get each question from array of questions to echo in the centre
 						$question = $question->jsonSerialize();
 						//Get the last comment to display in the help centre
@@ -67,24 +67,25 @@ $crs = new PCRHandler();
 						<tr class='unresolved'>
 						<td><a href='displayQuestion.php?id=$question[QuestionID]'>$question[Title]</a></td>
 						<td>";
-						foreach($lastpost as $last) {
+						foreach ($lastpost as $last) {
 							//Display last posts individually
 							$last = $last->jsonSerialize();	
-							if(!isset($last['postdate'])){
-								echo "No postdate specified";
+							if (!isset($last['postdate'])) {
+								echo 'No postdate specified';
 							}
 							else {
-								/*Show the last poste time + student who posted it
-								/Subject to change in regards to "hours ago" format
+								/*
+								Show the last post time + student who posted it
+								Subject to change in regards to "hours ago" format
 								*/
-								echo $last['postdate']." by ".$last['StudentName'];
+								echo substr($last['Content'], 0, 28).'<br>'.$last['postdate']." by ".$last['StudentName'];
 							}
 						}
 						echo "</td>";
 						echo "<td>$question[StudentName]</td>
 						<td>";
-						//If status is one -> question is resolved
-						if($question['Status'] == 1){
+						//If status == 1, question is resolved
+						if ($question['Status'] == 1) {
 							echo '<a class="btn btn-xl btn-success btn-block" role="button" disabled="disabled">Resolved</a></td></tr>';
 						}
 						else {
