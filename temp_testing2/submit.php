@@ -1,15 +1,15 @@
 <?php
 
+require_once 'includes/db.php';
+
 error_reporting(E_ALL);
 
-exec("./tester.sh", $out, $result);
+// Execute student assignment
+$out = shell_exec("../../upload/tester.sh");
 
-$out = array();
+echo "Result: " . $out . PHP_EOL;
 
-echo "Result: " . $result . PHP_EOL;
+// Handle results and insert into database
 
-foreach($out as $line) {
-    echo $line;
-}
 
 ?>
