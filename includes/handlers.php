@@ -8,11 +8,20 @@ require_once("db.php");
 
 class PCRHandler {
 	/* Add additional API functions here. */
+	/**
+	* getFiles retrieves all files within a submission
+	* @param id the submission ID
+	* @returns an array of files within a submission
+	*/
 	public function getFiles($id) {
 		$submission = new Submission(array("SubmissionID"=>$id));
 		return $submission->getFiles();
 	}
-	
+
+	/**
+	* getCourse returns the current JSON serialized course.
+	* @returns the course
+	*/
 	public function getCourse() {
 		$course = new Course(array("CourseID"=>$_SESSION['course_id']));
 		if($course->isValid()) {
@@ -20,6 +29,11 @@ class PCRHandler {
 		}
 	}
 	
+	/**
+	* getAssignment returns a JSON serialized assignment with the provided id.
+	* @param id the assignment ID
+	* @returns the assignment object
+	*/
 	public function getAssignment($id) {
 		$assignment = new Assignment(array("AssignmentID"=>$id));
 		if($assignment->isValid()) {
@@ -27,6 +41,13 @@ class PCRHandler {
 		}
 	}
 	
+	/**
+	* getSubmission returns a JSON serialized submission with the provided id.
+	* One submission per student per assignment.
+	* Only a submission for the current student can be returned 
+	* @param id the assignment id.
+	* @returns the submission object
+	*/
 	public function getSubmission($id) {
 		$assignment = new Assignment(array("AssignmentID"=>$id));
 		if($assignment->isValid()) {
@@ -35,19 +56,32 @@ class PCRHandler {
 		}
 	}
 	
+	/**
+	* getQuestion returns a JSON serialized question using the provided id.
+	* @param id the question ID
+	*/
 	public function getQuestion($id) {
 		$question = new Question(array("QuestionID"=>$id));
 		if($question->isValid()) {
 			return $question;
 		}
 	}
+	
+	/**
+	* getComment returns a JSON serialized comment using the provided parameters
+	* @param id the comment ID
+	*/
 	public function getComment($id, $content, $stnid, $fullname) {
 		$comment = new Comment(array("StudentID"=>$stnid, "StudentName"=>$fullname, "QuestionID"=>$id, "Content"=>$content));
 		if($comment->isValid()) {
 			return $comment;
 		}
 	}
-    
+
+	/**
+	* getComment returns a JSON serialized review using the provided parameters
+	* @param id the review ID
+	*/
     public function getReview($stnid, $id, $comments, $startoffset, $endoffset) {
         $review = new Review(array("StudentID"=>$stnid, "ReviewID"=>$id, "Comments"=>$comments, "StartOffset"=>$startoffset, "EndOffset"=>$endoffset, "SubmissionID"=>'0'));
         if($review->isValid()) {
@@ -56,6 +90,9 @@ class PCRHandler {
         return " :( ";
     }
 	
+	/**
+	* uploadArchive uploads an archive to a submission
+	*/
 	public function uploadArchive() {
 		$submission_id = isset($_POST["submission_id"]) ? $_POST["submission_id"] : null;
 		$submission = new Submission(array("SubmissionID"=>$submission_id));
@@ -66,6 +103,10 @@ class PCRHandler {
 			
 	}
 	
+		
+	/**
+	* uploadRepo uploads a repository to a submission
+	*/
 	public function uploadRepo($submission_id, $repo_url, $username, $password) {
 		$submission = new Submission(array("SubmissionID"=>$submission_id));
 		if($submission->isValid()) {
