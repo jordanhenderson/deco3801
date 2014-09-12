@@ -28,7 +28,7 @@ $date = date('m/d/Y h:i:s a', time());
 	<meta charset="utf-8">
 	<meta name="viewport" content="width=device-width, initial-scale=1">
 
-	<title>Create - PCR</title>
+	<title>New Question</title>
 
 	<!-- Bootstrap Core CSS -->
 	<link href="css/bootstrap.min.css" rel="stylesheet">
@@ -41,13 +41,6 @@ $date = date('m/d/Y h:i:s a', time());
 
 	<!-- Custom CSS -->
 	<link href="css/main.css" rel="stylesheet">
-
-	<!-- HTML5 Shim and Respond.js IE8 support of HTML5 elements and media queries -->
-	<!-- WARNING: Respond.js doesn't work if you view the page via file:// -->
-	<!--[if lt IE 9]>
-		<script src="https://oss.maxcdn.com/libs/html5shiv/3.7.0/html5shiv.js"></script>
-		<script src="https://oss.maxcdn.com/libs/respond.js/1.4.2/respond.min.js"></script>
-	<![endif]-->
 </head>
 
 <body>
@@ -68,19 +61,11 @@ $date = date('m/d/Y h:i:s a', time());
 					<label for="content">Question Content</label>
 					<textarea class="form-control" name="content" rows="15" id="content"></textarea>
 				</div>
-				<div class="col-md-6">
-					<label for="course">Assessment Piece</label><br>
-					<select class="selectpicker" name="course" data-width="130px" id="course">
-						<option>Assignment 1</option>
-						<option>Assignment 2</option>
-						<option>Assignment 3</option>
-					</select>
-				</div>
 			</div>
 			<br>
 			<div align="center">
 				<input class="btn btn-primary" type="submit" value="Submit">
-				<a class="btn btn-warning" onclick="reset();" role="button">Reset</a>
+				<a class="btn btn-warning" onclick="#" role="button">Reset</a>
 			</div>
 		</form>
 	</div>
