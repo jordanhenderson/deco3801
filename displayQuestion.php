@@ -28,28 +28,24 @@ $crs = new PCRHandler();
 
 	<!-- Custom CSS -->
 	<link href="css/main.css" rel="stylesheet">
-
-	<!-- HTML5 Shim and Respond.js IE8 support of HTML5 elements and media queries -->
-	<!-- WARNING: Respond.js doesn't work if you view the page via file:// -->
-	<!--[if lt IE 9]>
-		<script src="https://oss.maxcdn.com/libs/html5shiv/3.7.0/html5shiv.js"></script>
-		<script src="https://oss.maxcdn.com/libs/respond.js/1.4.2/respond.min.js"></script>
-	<![endif]-->
 </head>
 
 <body>
 	<?php include 'header.php'; 
+	//Get contents and data of each question based on the ID
 	$questions = $crs->getQuestion($id)->getQuestionContents($id);
-				if (is_null($questions)) {
-					echo 'no questions';
-				} else {
-					foreach ($questions as $question){
-						$question = $question->jsonSerialize();
-						$title = $question['Title'];
-						$_SESSION['Status'] = $question['Status'];
-						$timeasked = $question['Opendate'];
-					}
-				}
+	if (is_null($questions)) {
+		echo 'no questions';
+	} else {
+		//If there are questions stored, get the data from them to display
+		foreach ($questions as $question){
+			$question = $question->jsonSerialize();
+			$title = $question['Title'];
+			$_SESSION['Status'] = $question['Status'];
+			$timeasked = $question['Opendate'];
+		}
+	}
+	//Get the comments for the question displaying
 	$comments = $crs->getQuestion($question['QuestionID'])->getCommentsForQuestion($question['QuestionID']);
 	?>
 	<div class="container">
@@ -79,6 +75,7 @@ $crs = new PCRHandler();
 					
 					<?php
 					foreach ($comments as $comment){
+						//Display each comment as readonly for specific question
 						$comment = $comment->jsonSerialize();
 						echo "
 						<tr class='unresolved'>
@@ -92,12 +89,13 @@ $crs = new PCRHandler();
 					echo "
 					<a class='btn btn-xl btn-warning' href='addComment.php?id=$question[QuestionID]' role='button'>Reply</a>
 					";	
-				//These go over three lines cause it spaces nicely
+				//If an admin is viewing, gives ability to delete a question
 				if ($_SESSION['admin']) {
 					echo "
 					<a class='btn btn-xl btn-danger' href='deleteQuestion.php?id=$question[QuestionID]' role='button'>Remove Question</a>
 					";
 				}
+				//If status is resolved, then display mark unresolved vice-versa below
 				if($_SESSION['Status'] == 1){
 					echo "
 					<a class='btn btn-xl btn-danger' href='statusUpdate.php?id=$question[QuestionID]' role='button'>Mark Unesolved</a>

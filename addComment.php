@@ -1,9 +1,10 @@
 <?php
-
 session_start();
-
 $timezone = date_default_timezone_set('Australia/Brisbane');
 $date = date('m/d/Y h:i:s a', time());
+
+// I don't know what this is, but it seems like a bad idea storing
+// something as vague as this in the session. Consider using only GET. -Ad
 $id = $_GET['id'];
 $_SESSION['id'] = $id;
 ?>
@@ -12,7 +13,7 @@ $_SESSION['id'] = $id;
 
 <head>
 	<script>
-	//Basic validation, will make this better later
+	//Basic validation, with popup, will change to update error msg
 	function checkForm(){
 		if (document.qF.content.value == null || document.qF.content.value == ""){
 			window.alert("Please add some content to your question to proceed");
@@ -39,13 +40,6 @@ $_SESSION['id'] = $id;
 
 	<!-- Custom CSS -->
 	<link href="css/main.css" rel="stylesheet">
-
-	<!-- HTML5 Shim and Respond.js IE8 support of HTML5 elements and media queries -->
-	<!-- WARNING: Respond.js doesn't work if you view the page via file:// -->
-	<!--[if lt IE 9]>
-		<script src="https://oss.maxcdn.com/libs/html5shiv/3.7.0/html5shiv.js"></script>
-		<script src="https://oss.maxcdn.com/libs/respond.js/1.4.2/respond.min.js"></script>
-	<![endif]-->
 </head>
 
 <body>
@@ -55,11 +49,6 @@ $_SESSION['id'] = $id;
 		<h1>Ask a New Question</h1>
 		<form onsubmit="return checkForm()" name="qF"  action="storeComment.php" method="post">
 			<div class="row">
-				<div class="col-md-6">
-				</div>
-				<div class="col-md-6">
-
-				</div>
 			</div>
 			<br>
 			<div class="row">
@@ -67,47 +56,42 @@ $_SESSION['id'] = $id;
 					<label for="specfiles">Question Content</label>
 						<textarea class="form-control" name="content" rows="15" cols="89" id="content"></textarea>
 				</div>
-				<div class="col-md-6">
-				</div>
 			</div>
 			<br>
 			<div class="row">
 				<div class="col-md-6">
 					<div class="form-group">
-						
-
+					<!--placeholder for future content perhaps-->
 					</div>
 				</div>
 				<div class="col-md-6">
 					<div class="form-group">
+					<!--placeholder for future content perhaps-->
 					</div>
 				</div>
 			</div>
 			<br>
 			<div class="row">
 				<div class="col-md-3">
+				<!--placeholder for future content perhaps-->
 				</div>
 			</div>
 			<br>
 			<div class="row">
 				<div class="col-md-3">
-				</div>
-				<div class="col-md-3">
-				</div>
-				<div class="col-md-3">
+				<!--placeholder for future content perhaps-->
 				</div>
 			</div>
 			<br>
 			<div class="row">
 				<div class="col-md-3">
-					
+					<!--placeholder for future content perhaps-->
 				</div>
 			</div>
 			<div align="center">
 				<input class="btn btn-primary" type="submit" value="Submit"></a>
 				<a class="btn btn-warning" href="#" role="button">Reset</a>
 		</form>
-		
 		</div>
 	</div>
 

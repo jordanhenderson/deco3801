@@ -3,6 +3,7 @@ session_start();
 
 require_once 'includes/db.php';
 require_once 'includes/handlers.php';
+//Enable/Disable Help centre
 if (!isset($_SESSION['helpenabled']) || !$_SESSION['helpenabled']) {
 	exit();
 }
@@ -23,13 +24,6 @@ $crs = new PCRHandler();
 	
 	<!-- Custom CSS -->
 	<link href="css/main.css" rel="stylesheet">
-	
-	<!-- HTML5 Shim and Respond.js IE8 support of HTML5 elements and media queries -->
-	<!-- WARNING: Respond.js doesn't work if you view the page via file:// -->
-	<!--[if lt IE 9]>
-		<script src="https://oss.maxcdn.com/libs/html5shiv/3.7.0/html5shiv.js"></script>
-		<script src="https://oss.maxcdn.com/libs/respond.js/1.4.2/respond.min.js"></script>
-	<![endif]-->
 </head>
 
 <body>	
@@ -39,6 +33,7 @@ $crs = new PCRHandler();
 		<h1>Help Centre</h1>
 		<div class="col-lg-12">
 			<?php
+			//Get all the questions from teh DB to display in the centre
 				$questions = $crs->getCourse()->getHelpCentreQuestions();
 				
 				if (is_null($questions)) {
@@ -47,6 +42,7 @@ $crs = new PCRHandler();
 			?>
 			<h2>Questions</h2>
 			<a class="btn btn-xl btn-default" href="addQuestion.php" role="button">Ask a Question</a>
+			<!-- This will filter your own questions at some point -->
 			<a class="btn btn-xl btn-danger" href="#" role="button">My Questions</a>
 
 			<table class="table">
@@ -54,38 +50,42 @@ $crs = new PCRHandler();
 					<tr>
 						<th>Title</th>
 						<th>Last Post</th>
-						<th>Student</th>
+						<th>Original Poster</th>
 						<th>Status</th>
 					</tr>
 				</thead>
 				<tbody>
-					<?php
-						
-					foreach ($questions as $question){
-						
+					<?php	
+					foreach ($questions as $question) {
+						//Get each question from array of questions to echo in the centre
 						$question = $question->jsonSerialize();
+						//Get the last comment to display in the help centre
 						$lastpost = $crs->getQuestion($question['QuestionID'])->getLastComment($question['QuestionID']);
 						
-
+						//This sends the question ID in the URL to enable $_GET elsewhere
 						echo "
 						<tr class='unresolved'>
 						<td><a href='displayQuestion.php?id=$question[QuestionID]'>$question[Title]</a></td>
 						<td>";
-						foreach($lastpost as $last) {
+						foreach ($lastpost as $last) {
+							//Display last posts individually
 							$last = $last->jsonSerialize();	
-							if(!isset($last['postdate'])){
-								echo "rnar";
+							if (!isset($last['postdate'])) {
+								echo 'No postdate specified';
 							}
 							else {
-								echo $last['postdate']." by ".$last['StudentName'];
+								/*
+								Show the last post time + student who posted it
+								Subject to change in regards to "hours ago" format
+								*/
+								echo substr($last['Content'], 0, 28).'<br>'.$last['postdate']." by ".$last['StudentName'];
 							}
 						}
 						echo "</td>";
-
-
 						echo "<td>$question[StudentName]</td>
 						<td>";
-						if($question['Status'] == 1){
+						//If status == 1, question is resolved
+						if ($question['Status'] == 1) {
 							echo '<a class="btn btn-xl btn-success btn-block" role="button" disabled="disabled">Resolved</a></td></tr>';
 						}
 						else {
