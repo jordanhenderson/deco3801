@@ -2,6 +2,9 @@
 session_start();
 $timezone = date_default_timezone_set('Australia/Brisbane');
 $date = date('m/d/Y h:i:s a', time());
+
+// I don't know what this is, but it seems like a bad idea storing
+// something as vague as this in the session. Consider using only GET. -Ad
 $id = $_GET['id'];
 $_SESSION['id'] = $id;
 ?>
@@ -37,13 +40,6 @@ $_SESSION['id'] = $id;
 
 	<!-- Custom CSS -->
 	<link href="css/main.css" rel="stylesheet">
-
-	<!-- HTML5 Shim and Respond.js IE8 support of HTML5 elements and media queries -->
-	<!-- WARNING: Respond.js doesn't work if you view the page via file:// -->
-	<!--[if lt IE 9]>
-		<script src="https://oss.maxcdn.com/libs/html5shiv/3.7.0/html5shiv.js"></script>
-		<script src="https://oss.maxcdn.com/libs/respond.js/1.4.2/respond.min.js"></script>
-	<![endif]-->
 </head>
 
 <body>

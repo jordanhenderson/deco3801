@@ -65,7 +65,7 @@ $date = date('m/d/Y h:i:s a', time());
 			<br>
 			<div align="center">
 				<input class="btn btn-primary" type="submit" value="Submit">
-				<a class="btn btn-warning" onclick="#" role="button">Reset</a>
+				<input class="btn btn-warning" onclick="reset();" value="Reset">
 			</div>
 		</form>
 	</div>

@@ -31,6 +31,7 @@ if ($context->valid) { // Redirect from Moodle, reload data, in case different c
 	exit(); // User didn't come from Moodle, and isn't authenticated.
 }
 
+// Pull admin from session var to local var for easier/faster calling
 if (isset($_SESSION['admin']) && $_SESSION['admin']) {
 	$admin = true;
 } else {
@@ -52,13 +53,6 @@ if (isset($_SESSION['admin']) && $_SESSION['admin']) {
 
 	<!-- Custom CSS -->
 	<link href="css/main.css" rel="stylesheet">
-
-	<!-- HTML5 Shim and Respond.js IE8 support of HTML5 elements and media queries -->
-	<!-- WARNING: Respond.js doesn't work if you view the page via file:// -->
-	<!--[if lt IE 9]>
-		<script src="https://oss.maxcdn.com/libs/html5shiv/3.7.0/html5shiv.js"></script>
-		<script src="https://oss.maxcdn.com/libs/respond.js/1.4.2/respond.min.js"></script>
-	<![endif]-->
 </head>
 
 <body>
@@ -77,12 +71,12 @@ foreach ($_POST as $key => $value) {
 echo "\n<b>Assignments</b>\n";
 print_r(array_values($crs->getCourse()->getAssignments()));
 echo "</pre>\n";
-*/?>
+*/ ?>
 		<div class="col-lg-12">
 			<h2>Assignments</h2>
 			<?php
 				$assignments = $crs->getCourse()->getAssignments();
-				if (is_null($assignments)) {
+				if (is_null($assignments)) { // No assignments
 					echo "Currently no assignments have been released.";
 				} else {
 					// print table head
@@ -103,6 +97,7 @@ echo "</pre>\n";
 						$asg = $asg->jsonSerialize();
 						$sub = $crs->getSubmission($asg['AssignmentID'])->jsonSerialize();
 						
+						// Convert and store the dates from the DB as Unix timestamps.
 						$CurrentTime = time();
 						$date = date_create_from_format('Y-m-d G:i:s', $asg['OpenTime']);
 						$OpenTime = (int) date_format($date, 'U');
@@ -121,7 +116,7 @@ echo "</pre>\n";
 						<td>$asg[DueTime]</td>
 						<td>$asg[Weight]%</td>
 						<td>Not Open. Due: $asg[DueTime]<br><i>Opens in: X days, X hours, X mins</i></td>
-					</tr>";
+					</tr>"; // TODO ^ specify relative time
 						} else if ($SubmitTime == 0 && $DueTime < $CurrentTime) { // Overdue
 							echo "
 					<tr class=\"bg-danger\">
@@ -130,7 +125,7 @@ echo "</pre>\n";
 						<td>$asg[DueTime]</td>
 						<td>$asg[Weight]%</td>
 						<td>Not Submitted. Due: $asg[DueTime]<br><i>Overdue: X days, X hours, X mins</i></td>
-					</tr>";
+					</tr>"; // TODO ^ specify relative time
 						} else if ($SubmitTime == 0) { // Not submitted
 							echo "
 					<tr class=\"bg-warning\">
@@ -139,7 +134,7 @@ echo "</pre>\n";
 						<td>$asg[DueTime]</td>
 						<td>$asg[Weight]%</td>
 						<td>Not Submitted. Due: $asg[DueTime]<br><i>Remaining: X days, X hours, X mins</i></td>
-					</tr>";
+					</tr>"; // TODO ^ specify relative time
 						} else if ($SubmitTime > $DueTime) { // Submitted overdue
 							echo "
 					<tr class=\"bg-success\">
@@ -148,7 +143,7 @@ echo "</pre>\n";
 						<td>$asg[DueTime]</td>
 						<td>$asg[Weight]%</td>
 						<td>Submitted: $sub[SubmitTime]<br><i>Overdue: X days, X hours, X mins</i></td>
-					</tr>"; // TODO ^
+					</tr>"; // TODO ^ specify relative time
 						} else { // Submitted
 							echo "
 					<tr class=\"bg-success\">
@@ -160,10 +155,12 @@ echo "</pre>\n";
 					</tr>";
 						}
 					}
+					// print table end
 					echo "
 				</tbody>
 			</table>";
 				}
+				// admin's have a button to create new assignments
 				if ($admin) {
 					echo '<a class="btn btn-primary" href="create.php" role="button">Create New Assignment</a>';
 				}
@@ -176,10 +173,11 @@ echo "</pre>\n";
 				// teacher still has the option to review submissions. Count ALL submissions.
 				echo '<p>There are currently '.'3'.' student submitted assignments that have not recieved a teacher review. If no teacher input is required, then these can be dismissed at any time, either individually or per assignment.</p>
 			<p><a class="btn btn-info" href="reviewhub.php" role="button">Review Assignments &raquo;</a></p>';
-			} else if (mt_rand(0, 1)) { //TODO Actually decide this at some point
+			} else if (mt_rand(0, 1)) { // reviews need marking
+				//TODO ^ Actually decide this at some point
 				echo '<p>There are '.'3'.' submissions ready for reviewing. Please take the time to assist your peers by offering suggestions and improvements.</p>
 			<p><a class="btn btn-warning" href="reviewhub.php" role="button">Start Now &raquo;</a></p>';
-			} else {
+			} else { // no reviews to mark
 				echo '<p>All your assigned submissions to date have already been reviewed. However, if you would like to further assist your peers, consider stopping by the Help Center to answer some of your peers\' questions.</p>
 			<p><a class="btn btn-info" href="help.php" role="button">Help Center &raquo;</a></p>';
 			}
@@ -193,10 +191,11 @@ echo "</pre>\n";
 				// teacher still gets to see feedback. Count ALL feedback.
 				echo '<p>There are currently '.'3'.' pieces of student submitted feedback that have not recieved a teacher review. If no teacher input is required, then these can be dismissed at any time, either individually or per assignment.</p>
 			<p><a class="btn btn-info" href="reviewhub.php" role="button">Review Feedback &raquo;</a></p>';
-			} else if (mt_rand(0, 1)) { //TODO Actually decide this at some point
+			} else if (mt_rand(0, 1)) { // feedback received
+				// TODO ^ Actually decide this at some point
 				echo '<p>You have recieved feedback from your assignment submission. Please take the time to check over the advice offered by your peers.</p>
 			<p><a class="btn btn-success" href="reviewhub.php" role="button">Check it out &raquo;</a></p>';
-			} else {
+			} else { // no feedback
 				echo '<p>You have already viewed the feedback from all of your assignment submissions. Consider checking it over again to make the most of the advice.</p>
 			<p><a class="btn btn-info" href="reviewhub.php" role="button">Check it out &raquo;</a></p>';
 			}
