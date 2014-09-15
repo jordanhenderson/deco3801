@@ -39,6 +39,9 @@ $crs = new PCRHandler();
 		jQuery(function ($) {
 			$('#innercontainer').annotator();
 		});
+        $('#innercontainer').select(function() {
+            alert("Selected");
+        });
         //Initialise two global variables for position of review
         var anchor;
         var focus;
