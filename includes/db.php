@@ -6,32 +6,32 @@
 class Database {
 	private $db;
 	/**
-	query exeutes a single SQL query.
-	@param stmt the SQL string to execute
-	@return the SQL query object
+	*query exeutes a single SQL query.
+	*@param stmt the SQL string to execute
+	*@return the SQL query object
 	*/
 	public function query($stmt) {
 		return $this->db->query($stmt);
 	}
 	/**
-	prepare returns a prepared PDO statement object
-	@param stmt the SQL string to prepare
-	@returns the prepared statement object.
+	*prepare returns a prepared PDO statement object
+	*@param stmt the SQL string to prepare
+	*@returns the prepared statement object.
 	*/
 	public function prepare($stmt) {
 		return $this->db->prepare($stmt);
 	}
 	
 	/**
-	@lastInsertID returns the last inserted database row ID.
-	@returns the last inserted row ID.
+	*@lastInsertID returns the last inserted database row ID.
+	*@returns the last inserted row ID.
 	*/
 	public function lastInsertId() {
 		return $this->db->lastInsertId();
 	}
 
 	/**
-	Construct a Database object. 
+	*Construct a Database object. 
 	*/
 	public function __construct() {
 		$this->db = new PDO('mysql:host=localhost;dbname=deco3801;charset=utf8', 'deco3801', 'hh2z2WG2q');
@@ -407,8 +407,8 @@ class Course extends PCRObject {
 	}
 
 	/**
-	getHelpCentreQuestions returns an array of help centre questions for the course.
-	@return an array containing each help centre question added to the course.
+	*getHelpCentreQuestions returns an array of help centre questions for the course.
+	*@return an array containing each help centre question added to the course.
 	*/
 	public function getHelpCentreQuestions() {
 		$arr = array();
@@ -467,7 +467,7 @@ class Question extends PCRObject {
 	*/
 	public function getCommentsForQuestion($id){
 		$arr = array();
-		$sth = $this->db->prepare("SELECT * FROM Comment WHERE QuestionID = ".$id.";");
+		$sth = $this->db->prepare("SELECT * FROM Comment WHERE QuestionID = ?;");
 		$sth->execute(array($this->getID()));
 		while ($file_row = $sth->fetch(PDO::FETCH_ASSOC)) {
 			array_push($arr, new Comment($file_row));
@@ -479,7 +479,7 @@ class Question extends PCRObject {
 	* removeQuestion removes a question from the database.
 	*/ 
 	public function removeQuestion($id){
-		$sth = $this->db->prepare("DELETE FROM Question WHERE QuestionID = ".$id.";");
+		$sth = $this->db->prepare("DELETE FROM Question WHERE QuestionID = ?;");
 		$sth->execute(array($this->getID()));
 	}
 
@@ -487,7 +487,7 @@ class Question extends PCRObject {
 	* markResolved sets the question status to resolved.
 	*/
 	public function markResolved($id){
-		$sth = $this->db->prepare("UPDATE Question SET Status = '1' WHERE QuestionID = ".$id.";");
+		$sth = $this->db->prepare("UPDATE Question SET Status = '1' WHERE QuestionID = ?;");
 		$sth->execute(array($this->getID()));
 	}
 	
@@ -495,7 +495,7 @@ class Question extends PCRObject {
 	* markUnresolved sets the question status to resolved.
 	*/
 	public function markUnresolved($id){
-		$sth = $this->db->prepare("UPDATE Question SET Status = '0' WHERE QuestionID = ".$id.";");
+		$sth = $this->db->prepare("UPDATE Question SET Status = '0' WHERE QuestionID = ?;");
 		$sth->execute(array($this->getID()));
 	}
 
@@ -504,7 +504,7 @@ class Question extends PCRObject {
 	*/
 	public function getLastComment($id) {
 		$arr = array();
-		$sth = $this->db->prepare("SELECT * FROM Comment WHERE QuestionID = ".$id." ORDER BY postdate DESC limit 1;");
+		$sth = $this->db->prepare("SELECT * FROM Comment WHERE QuestionID = ? ORDER BY postdate DESC limit 1;");
 		$sth->execute(array($this->getID()));
 		while ($file_row = $sth->fetch(PDO::FETCH_ASSOC)) {
 			array_push($arr, new Comment($file_row));
@@ -517,7 +517,7 @@ class Question extends PCRObject {
 	*/
 	public function getQuestionContents($id){
 		$arr = array();
-		$sth = $this->db->prepare("SELECT * FROM Question WHERE QuestionID = ".$id.";");
+		$sth = $this->db->prepare("SELECT * FROM Question WHERE QuestionID = ?;");
 		$sth->execute(array($this->getID()));
 		while ($file_row = $sth->fetch(PDO::FETCH_ASSOC)) {
 			array_push($arr, new Question($file_row));
@@ -532,7 +532,7 @@ class Question extends PCRObject {
 	*/
 	public function getComments() {
 		$arr = array();
-		$sth = $this->db->prepare("SELECT * FROM Comment WHERE QuestionID = ".$this->getID().";");
+		$sth = $this->db->prepare("SELECT * FROM Comment WHERE QuestionID = ?;");
 		$sth->execute(array($this->getID()));
 		while ($file_row = $sth->fetch(PDO::FETCH_ASSOC)) {
 			array_push($arr, new Comment($file_row));
