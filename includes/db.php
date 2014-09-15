@@ -465,7 +465,7 @@ class Question extends PCRObject {
 	*
 	* @return an array containing Comment objects for a question.
 	*/
-	public function getCommentsForQuestion($id){
+	public function getCommentsForQuestion(){
 		$arr = array();
 		$sth = $this->db->prepare("SELECT * FROM Comment WHERE QuestionID = ?;");
 		$sth->execute(array($this->getID()));
@@ -478,7 +478,7 @@ class Question extends PCRObject {
 	/**
 	* removeQuestion removes a question from the database.
 	*/ 
-	public function removeQuestion($id){
+	public function removeQuestion(){
 		$sth = $this->db->prepare("DELETE FROM Question WHERE QuestionID = ?;");
 		$sth->execute(array($this->getID()));
 	}
@@ -486,7 +486,7 @@ class Question extends PCRObject {
 	/**
 	* markResolved sets the question status to resolved.
 	*/
-	public function markResolved($id){
+	public function markResolved(){
 		$sth = $this->db->prepare("UPDATE Question SET Status = '1' WHERE QuestionID = ?;");
 		$sth->execute(array($this->getID()));
 	}
@@ -494,7 +494,7 @@ class Question extends PCRObject {
 	/**
 	* markUnresolved sets the question status to resolved.
 	*/
-	public function markUnresolved($id){
+	public function markUnresolved(){
 		$sth = $this->db->prepare("UPDATE Question SET Status = '0' WHERE QuestionID = ?;");
 		$sth->execute(array($this->getID()));
 	}
@@ -502,7 +502,7 @@ class Question extends PCRObject {
 	/**
 	* getLastComment returns the last made comment object.
 	*/
-	public function getLastComment($id) {
+	public function getLastComment() {
 		$arr = array();
 		$sth = $this->db->prepare("SELECT * FROM Comment WHERE QuestionID = ? ORDER BY postdate DESC limit 1;");
 		$sth->execute(array($this->getID()));
@@ -515,7 +515,7 @@ class Question extends PCRObject {
 	/**
 	* getQuestionContents returns the contents of the question.
 	*/
-	public function getQuestionContents($id){
+	public function getQuestionContents(){
 		$arr = array();
 		$sth = $this->db->prepare("SELECT * FROM Question WHERE QuestionID = ?;");
 		$sth->execute(array($this->getID()));
