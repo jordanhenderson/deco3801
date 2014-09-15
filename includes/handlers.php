@@ -28,6 +28,21 @@ class PCRHandler {
 			return $course;
 		}
 	}
+
+	public function storeNewQuestion($title, $content, $stnid, $fullname){
+		self::getCourse()->addNewQuestion($title, $content, $stnid, $fullname);
+	}
+
+	public function removeQuestionn($id){
+		self::getQuestion($id)->removeQuestion($id);
+	}
+	
+	public function markResolved($id){
+		self::getQuestion($id)->markResolved($id);
+	}
+	public function markUnresolved($id){
+		self::getQuestion($id)->markUnresolved($id);
+	}
 	
 	/**
 	* getAssignment returns a JSON serialized assignment with the provided id.
@@ -114,7 +129,8 @@ class PCRHandler {
 			$submission->addFiles();
 		}
 	}
-	
+
+
 	/*
 	 * Create or update assignments.
 	*/
@@ -167,5 +183,7 @@ class PCRBackend {
 			return "{}";
 		}
 	}
+
 }
+
 

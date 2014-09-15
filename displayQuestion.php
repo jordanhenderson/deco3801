@@ -28,8 +28,8 @@ $crs = new PCRHandler();
 
 	<!-- Custom CSS -->
 	<link href="css/main.css" rel="stylesheet">
-</head>
 
+</head>
 <body>
 	<?php include 'header.php'; 
 	//Get contents and data of each question based on the ID
@@ -47,10 +47,20 @@ $crs = new PCRHandler();
 	}
 	//Get the comments for the question displaying
 	$comments = $crs->getQuestion($question['QuestionID'])->getCommentsForQuestion($question['QuestionID']);
+	//Set a session ID incase of removal for particular question
+	$_SESSION['QuestionID'] = $question['QuestionID'];
 	?>
 	<div class="container">
-		<h1><?php echo $title; ?></h1>
-		<form>
+		<h1><?php 
+		echo $title; 
+		if ($question['Status'] == 1) {
+			echo '<a class="btn btn-xl btn-success btn-block" role="button" disabled="disabled">Resolved</a></td></tr>';
+			}
+			else {
+				//Place holder not sure what for just yet
+			}
+
+		?></h1>
 			<div class="row">
 				<div class="col-md-6">
 					<div class="form-group">
@@ -72,7 +82,6 @@ $crs = new PCRHandler();
 			<div class="row">	
 
 				<div class="col-md-6">
-					
 					<?php
 					foreach ($comments as $comment){
 						//Display each comment as readonly for specific question
@@ -87,29 +96,27 @@ $crs = new PCRHandler();
 			<div align="center">
 				<?php
 					echo "
-					<a class='btn btn-xl btn-warning' href='addComment.php?id=$question[QuestionID]' role='button'>Reply</a>
+					<a class='btn btn-xl btn-warning' href='addComment.php?Questionid=$question[QuestionID]' role='button'>Reply</a>
 					";	
 				//If an admin is viewing, gives ability to delete a question
 				if ($_SESSION['admin']) {
 					echo "
-					<a class='btn btn-xl btn-danger' href='deleteQuestion.php?id=$question[QuestionID]' role='button'>Remove Question</a>
+					<input type='submit' class='btn btn-xl btn-danger' id='RemoveQuestion' name='RemoveQuestion' value='Remove Question'>
 					";
 				}
 				//If status is resolved, then display mark unresolved vice-versa below
 				if($_SESSION['Status'] == 1){
 					echo "
-					<a class='btn btn-xl btn-danger' href='statusUpdate.php?id=$question[QuestionID]' role='button'>Mark Unesolved</a>
+					<input type='submit' class='btn btn-xl btn-danger' id='MarkUnresolved' name='MarkUnresolved' value='Mark Unresolved'>
 					";
 				}
 				else {
 					echo "
-					<a class='btn btn-xl btn-success' href='statusUpdate.php?id=$question[QuestionID]' role='button'>Mark Resolved</a>
+						<input type='submit' class='btn btn-xl btn-danger' id='MarkResolved' name='MarkResolved' value='Mark Resolved'>
 					";
-				}
+				}	
 				?>
 			</div>
-		</form>
-		
 		</div>
 	</div>
 
@@ -122,4 +129,23 @@ $crs = new PCRHandler();
 	<!-- Bootstrap Select JavaScript -->
 	<script src="js/bootstrap-select.min.js"></script>
 </body>
+<script>
+$(document).ready(function(){
+    $('.btn.btn-xl.btn-danger').click(function(e){
+    	e.preventDefault();
+        var clickBtnValue = $(this).val();
+        var ajaxurl = 'api.php',
+        data =  {'action': clickBtnValue};
+        $.post(ajaxurl, data, function (response) {
+        	if(clickBtnValue == 'Mark Resolved' || clickBtnValue == 'Mark Unresolved'){
+        		 location.reload();
+        	}else {
+           window.location.replace("help.php");
+       }
+        });
+    });
+
+});
+
+	</script>
 </html>

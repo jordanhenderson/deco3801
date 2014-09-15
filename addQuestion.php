@@ -12,18 +12,15 @@ $date = date('m/d/Y h:i:s a', time());
 <head>
 	<script>
 	//Basic validation, will make this better later
-	function checkForm(){
-
-		if (document.qF.title.value == null || document.qF.title.value == "") {
-			window.alert("Please add a title proceed");
-			return false;
-		} else if (document.qF.content.value == null || document.qF.content.value == "") {
-			window.alert("Please add some content to your question to proceed");
-			return false;
-		} else {
-			return true;
+		$(document).ready(function() {
+			$('#qF').submit(function(msg)){
+			}
+		 var data = $('#qF').serializeArray();
+		 $.post("api.php", $(this).serialize(),function(data){
+		 	  alert(data); //post check to show that the mysql string is the same as submit           
 		}	
-	}
+        return false; // return false to stop the page submitting. You could have the form action set to the same PHP page so if people dont have JS on they can still use the form
+    });
 	</script>
 	<meta charset="utf-8">
 	<meta name="viewport" content="width=device-width, initial-scale=1">
@@ -44,27 +41,27 @@ $date = date('m/d/Y h:i:s a', time());
 </head>
 
 <body>
-	<?php include 'header.php'; ?>
+	<?php include 'header.php';?>
 	
 	<div class="container">
 		<h1>Ask a New Question</h1>
-		<form onsubmit="return checkForm()" name="qF" action="storeQuestion.php" method="post">
+		<form  name="qF" id="qF" method="post" action="api.php">
 			<div class="row">
 				<div class="col-md-6">
 					<label for="title">Question Title</label>
-					<input class="form-control" name="title" type="text" id="title">
+					<input class="form-control" name="question" type="text" id="QTitle">
 				</div>
 			</div>
 			<br>
 			<div class="row">
 				<div class="col-md-6">
 					<label for="content">Question Content</label>
-					<textarea class="form-control" style="resize: vertical;" name="content" rows="15" id="content"></textarea>
+					<textarea class="form-control" style="resize: vertical;" name="QContent" rows="15" id="QContent"></textarea>
 				</div>
 			</div>
 			<br>
 			<div align="center">
-				<input class="btn btn-primary" type="submit" value="Submit">
+				<input class="btn btn-primary" type="submit" value="Submit" name="submit">
 				<input class="btn btn-warning" onclick="reset();" value="Reset">
 			</div>
 		</form>

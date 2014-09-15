@@ -5,29 +5,32 @@ $date = date('m/d/Y h:i:s a', time());
 
 // I don't know what this is, but it seems like a bad idea storing
 // something as vague as this in the session. Consider using only GET. -Ad
-$id = $_GET['id'];
-$_SESSION['id'] = $id;
+$id = $_GET['Questionid'];
+$_SESSION['Questionid'] = $id;
 ?>
 <!DOCTYPE html>
 <html lang="en">
 
 <head>
 	<script>
-	//Basic validation, with popup, will change to update error msg
-	function checkForm(){
-		if (document.qF.content.value == null || document.qF.content.value == ""){
-			window.alert("Please add some content to your question to proceed");
-			return false;
-		}
-		else{
-			return true;
-		}	
-	}
+	//Basic validation, will make this better later
+		$(document).ready(function() {
+			$('#cF').submit(function(msg)){
+				//Placeholder
+			}
+			var data = $('#cF').serializeArray();
+			 $.post("api.php",$(this).serialize(),function(data){
+			 	  //Place holder to put stuff  
+			}	
+	        return false; 
+	    });
+
+	</script>
 	</script>
 	<meta charset="utf-8">
 	<meta name="viewport" content="width=device-width, initial-scale=1">
 
-	<title>Create - PCR</title>
+	<title>Add New Comment</title>
 
 	<!-- Bootstrap Core CSS -->
 	<link href="css/bootstrap.min.css" rel="stylesheet">
@@ -35,7 +38,7 @@ $_SESSION['id'] = $id;
 	<!-- Bootstrap Select CSS -->
 	<link href="css/bootstrap-select.min.css" rel="stylesheet">
 	
-	<!-- Bootstrap datetimepicker CSS -->
+	<!-- Bootstrap datetimepicker CSS -->	
 	<link href="css/bootstrap-datetimepicker.min.css" rel="stylesheet">
 
 	<!-- Custom CSS -->
@@ -47,14 +50,14 @@ $_SESSION['id'] = $id;
 	
 	<div class="container">
 		<h1>Ask a New Question</h1>
-		<form onsubmit="return checkForm()" name="qF"  action="storeComment.php" method="post">
+		<form name="cF" id="cF" action="api.php" method="post">
 			<div class="row">
 			</div>
 			<br>
 			<div class="row">
 				<div class="col-md-6">
 					<label for="specfiles">Question Content</label>
-						<textarea class="form-control" name="content" rows="15" cols="89" id="content"></textarea>
+						<textarea class="form-control" name="comment" rows="15" cols="89" id="content"></textarea>
 				</div>
 			</div>
 			<br>
