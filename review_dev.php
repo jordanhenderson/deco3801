@@ -153,11 +153,10 @@ $crs = new PCRHandler();
 			<div class="col-md-12">
 				<h2 id="file_heading"></h2>
 				<div id="innercontainer">
-                    <pre id='assignment_code'>
+                    <div id='assignment_code'>
                 <?php
                     /*
                     Loads the first file in the file tree if its not empty
-                    
                     TODO: remove hard coding
                     */
                     if (count($filesArray) > 0) {
@@ -169,8 +168,7 @@ $crs = new PCRHandler();
                         echo $contents;
                         fclose($handle);
                     }
-                ?>
-                    </pre>
+                ?></div>
                 </div>	
 				<p>
 					<a class="btn btn-primary" href="reviewhub.php" role="button">Submit</a>
