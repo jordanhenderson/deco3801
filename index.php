@@ -38,6 +38,14 @@ if (isset($_SESSION['admin']) && $_SESSION['admin']) {
 	$admin = false;
 }
 
+function seconds2human($s) {
+	$m = floor(($s%3600)/60);
+	//$m = round(($ss%3600)/60, 0.1);
+	$h = floor(($s%86400)/3600);
+	$d = floor($s/86400);
+	return "$d days, $h hours, $m mins";
+}
+
 ?>
 <!DOCTYPE html>
 <html lang="en">
@@ -109,41 +117,45 @@ echo "</pre>\n";
 						$SubmitTime = (int) date_format($date, 'U');
 						
 						if ($OpenTime > $CurrentTime) { // Not open
+							$total = $OpenTime - $CurrentTime;
 							echo "
 					<tr>
 						<td>$asg[AssignmentName]<br><i>Not Open For Submission</i></td>
 						<td>$asg[OpenTime]</td>
 						<td>$asg[DueTime]</td>
 						<td>$asg[Weight]%</td>
-						<td>Not Open. Due: $asg[DueTime]<br><i>Opens in: X days, X hours, X mins</i></td>
-					</tr>"; // TODO ^ specify relative time
+						<td>Not Open. Due: $asg[DueTime]<br><i>Opens in: ".seconds2human($total)."</i></td>
+					</tr>";
 						} else if ($SubmitTime == 0 && $DueTime < $CurrentTime) { // Overdue
+							$total = $CurrentTime - $DueTime;
 							echo "
 					<tr class=\"bg-danger\">
 						<td>$asg[AssignmentName]<br><i>Overdue</i></td>
 						<td>$asg[OpenTime]</td>
 						<td>$asg[DueTime]</td>
 						<td>$asg[Weight]%</td>
-						<td>Not Submitted. Due: $asg[DueTime]<br><i>Overdue: X days, X hours, X mins</i></td>
-					</tr>"; // TODO ^ specify relative time
+						<td>Not Submitted. Due: $asg[DueTime]<br><i>Overdue: ".seconds2human($total)."</i></td>
+					</tr>";
 						} else if ($SubmitTime == 0) { // Not submitted
+							$total = $DueTime - $CurrentTime;
 							echo "
 					<tr class=\"bg-warning\">
 						<td>$asg[AssignmentName]<br><i>Not Submitted</i></td>
 						<td>$asg[OpenTime]</td>
 						<td>$asg[DueTime]</td>
 						<td>$asg[Weight]%</td>
-						<td>Not Submitted. Due: $asg[DueTime]<br><i>Remaining: X days, X hours, X mins</i></td>
-					</tr>"; // TODO ^ specify relative time
+						<td>Not Submitted. Due: $asg[DueTime]<br><i>Remaining: ".seconds2human($total)."</i></td>
+					</tr>";
 						} else if ($SubmitTime > $DueTime) { // Submitted overdue
+							$total = $SubmitTime - $DueTime;
 							echo "
 					<tr class=\"bg-success\">
 						<td>$asg[AssignmentName]<br><i>Submitted Overdue</i></td>
 						<td>$asg[OpenTime]</td>
 						<td>$asg[DueTime]</td>
 						<td>$asg[Weight]%</td>
-						<td>Submitted: $sub[SubmitTime]<br><i>Overdue: X days, X hours, X mins</i></td>
-					</tr>"; // TODO ^ specify relative time
+						<td>Submitted: $sub[SubmitTime]<br><i>Overdue: ".seconds2human($total)."</i></td>
+					</tr>";
 						} else { // Submitted
 							echo "
 					<tr class=\"bg-success\">
