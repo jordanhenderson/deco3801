@@ -134,7 +134,7 @@ echo "</pre>\n";
 						<td>$asg[OpenTime]</td>
 						<td>$asg[DueTime]</td>
 						<td>$asg[Weight]%</td>
-						<td>Not Submitted. Due: $asg[DueTime]<br><i>Overdue: ".seconds2human($total)."</i></td>
+						<td>Not Submitted. Due: $asg[DueTime]<br><i>Late by: ".seconds2human($total)."</i></td>
 					</tr>";
 						} else if ($SubmitTime == 0) { // Not submitted
 							$total = $DueTime - $CurrentTime;

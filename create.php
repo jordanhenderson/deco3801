@@ -43,25 +43,39 @@ session_start();
 					<label for="name">Assignment Name</label>
 					<input class="form-control" type="text" id="name">
 				</div>
-				<div class="col-md-6">
-					<label for="course">Course</label>
-					<br>
-					<select class="selectpicker" data-width="120px" id="course">
-						<option>CSSE1001</option>
-						<option>CSSE2002</option>
-						<option>CSSE2310</option>
-					</select>
-				</div>
 			</div>
 			<br>
 			<div class="row">
 				<div class="col-md-6">
 					<label for="open">Open Date</label>
-					<input size="24" type="text" value="17 Sep 2014 - 14:30" class="form-control form_datetime" id="open">
+					<input size="24" type="text" value="26 Sep 2014 - 14:30" class="form-control form_datetime" id="open">
+					<p class="help-block">
+						Date and time that assignment files are available, and submissions are permitted.
+					</p>
 				</div>
 				<div class="col-md-6">
 					<label for="due">Due Date</label>
-					<input size="24" type="text" value="18 Sep 2014 - 14:30" class="form-control form_datetime" id="due">
+					<input size="24" type="text" value="27 Sep 2014 - 14:30" class="form-control form_datetime" id="due">
+					<p class="help-block">
+						Date and time that the assignment must be submitted before.<br>
+						A late submission will be declared to both the student and teacher.
+					</p>
+				</div>
+			</div>
+			<br>
+			<div class="row">
+				<div class="col-md-6">
+					<label for="review-open">Reviewing Open</label>
+					<input size="24" type="text" value="28 Sep 2014 - 14:30" class="form-control form_datetime" id="review-open">
+					<p class="help-block">
+						Date and time that may begin reviewing other students code.<br>
+						This may be set to before the due date, though it is not reccomended.
+					</p>
+				</div>
+				<div class="col-md-6">
+					<label for="review-due">Reviewing Closed</label>
+					<input size="24" type="text" value="29 Sep 2014 - 14:30" class="form-control form_datetime" id="review-due">
+					<p class="help-block">Date and time that students must finish their reviews by.</p>
 				</div>
 			</div>
 			<br>
@@ -70,14 +84,14 @@ session_start();
 					<div class="form-group">
 						<label for="specfiles">Assignment Files</label>
 						<input type="file" id="specfiles">
-						<p class="help-block">Please zip files.</p>
+						<p class="help-block">PDF or zip containing the assignment specifications.</p>
 					</div>
 				</div>
 				<div class="col-md-6">
 					<div class="form-group">
 						<label for="testfiles">Unit Testing Files</label>
 						<input type="file" id="testfiles">
-						<p class="help-block">Please zip files.</p>
+						<p class="help-block">Please zip test file(s). The file executed when testing must be named "runtest"</p>
 					</div>
 				</div>
 			</div>
@@ -85,35 +99,7 @@ session_start();
 			<div class="row">
 				<div class="col-md-3">
 					<label for="weight">Weight</label>
-					<input value="10%" class="form-control" type="text" id="weight">
-				</div>
-			</div>
-			<br>
-			<div class="row">
-				<div class="col-md-3">
-					<label for="peer">Choose when students can peer review</label>
-					<br>
-					<select class="selectpicker" data-width="120px" id="peer">
-						<option>Any time</option>
-						<option>After at least 1 submission</option>
-						<option>After due date</option>
-					</select>
-				</div>
-				<div class="col-md-3">
-					<label for="feedback">Choose when students can view feedback</label>
-					<br>
-					<select class="selectpicker" data-width="120px" id="feedback">
-						<option>Any time</option>
-						<option>After at least 1 submission</option>
-						<option>After due date</option>
-					</select>
-				</div>
-				<div class="col-md-3">
-					<label for="multiple">Allow Multiple Submissions</label>
-					<select class="selectpicker" data-width="120px" id="multiple">
-						<option>Yes</option>
-						<option>No</option>
-					</select>
+					<input value="10%" class="form-control" type="number" id="weight" min="1" max="100">
 				</div>
 			</div>
 			<br>
@@ -121,23 +107,14 @@ session_start();
 				<div class="col-md-3">
 					<label for="reviewnum">Reviews Per Student</label>
 					<select class="selectpicker" data-width="120px" id="reviewnum">
-						<option>1</option>
-						<option>2</option>
-						<option>3</option>
-						<option>4</option>
-						<option>5</option>
-						<option>6</option>
-						<option>7</option>
-						<option>8</option>
-						<option>9</option>
-						<option>10</option>
+						<option>1</option><option>2</option><option>3</option><option>4</option><option>5</option><option>6</option><option>7</option><option>8</option><option>9</option><option>10</option>
 					</select>
 				</div>
 			</div>
 		</form>
 		<div align="center">
-				<a class="btn btn-primary" href="#" role="button">Submit</a>
-				<a class="btn btn-info" href="#" role="button">Save</a>
+				<a class="btn btn-primary" href="#" role="button">Submit</a>&nbsp;
+				<a class="btn btn-info" href="#" role="button">Save</a>&nbsp;
 				<a class="btn btn-warning" href="#" role="button">Reset</a>
 		</div>
 	</div>
