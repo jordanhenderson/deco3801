@@ -5,6 +5,9 @@ require_once '../includes/testingAPI.php';
 
 $tester = new functionalTestAPI();
 
-$tester->executeBashScript("../../upload/tester.sh");
+$output = $tester->executeBashScript("../../upload/tester.sh");
+foreach ($output as $value) {
+	echo $value . PHP_EOL;
+}
 
 ?>

@@ -37,18 +37,19 @@ class functionalTestAPI {
 			return null;
 		}
 
-		$couter = 0;
+		$counter = 0;
 
 		foreach ($testResults as $individualResult) {
 			$endResult = explode(":", $individualResult);
 
-			echo "Test Number: " . $endResult[0] . " - " . $endResult[1] . PHP_EOL;
+			// TODO remove this after tests are created. For debugging purposes only
+			//echo "Test Number: " . $endResult[0] . " - " . $endResult[1] . PHP_EOL;
 
 			$counter++;
 			$testOutput[$counter] = $endResult[1];
 		}
 
-		return $testResults;
+		return $testOutput;
 	}
 
 	/**
