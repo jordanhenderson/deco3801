@@ -43,7 +43,14 @@ function seconds2human($s) {
 	//$m = round(($ss%3600)/60, 0.1);
 	$h = floor(($s%86400)/3600);
 	$d = floor($s/86400);
-	return "$d days, $h hours, $m mins";
+	$str = ""; //do i need this?
+	if ($d) {
+		$str .= "$d days, ";
+	}
+	if ($h) {
+		$str .= "$h hours, ";
+	}
+	return "$str$m mins";
 }
 
 ?>
@@ -103,7 +110,6 @@ echo "</pre>\n";
 					// print table contents
 					foreach ($assignments as $asg) {
 						$asg = $asg->jsonSerialize();
-						$sub = $crs->getSubmission($asg['AssignmentID'])->jsonSerialize();
 						
 						// Convert and store the dates from the DB as Unix timestamps.
 						$CurrentTime = time();
@@ -113,10 +119,13 @@ echo "</pre>\n";
 						$date = date_create_from_format('Y-m-d G:i:s', $asg['DueTime']);
 						$DueTime = (int) date_format($date, 'U');
 						
-						$date = date_create_from_format('Y-m-d G:i:s', $sub['SubmitTime']);
-						$SubmitTime = (int) date_format($date, 'U');
+						if (!$admin) { // student
+							$sub = $crs->getSubmission($asg['AssignmentID'])->jsonSerialize();
+							$date = date_create_from_format('Y-m-d G:i:s', $sub['SubmitTime']);
+							$SubmitTime = (int) date_format($date, 'U');
+						}
 						
-						if ($OpenTime > $CurrentTime) { // Not open
+						if ($CurrentTime < $OpenTime) { // Not open (Student only)
 							$total = $OpenTime - $CurrentTime;
 							echo "
 					<tr>
@@ -124,9 +133,39 @@ echo "</pre>\n";
 						<td>$asg[OpenTime]</td>
 						<td>$asg[DueTime]</td>
 						<td>$asg[Weight]%</td>
-						<td>Not Open. Due: $asg[DueTime]<br><i>Opens in: ".seconds2human($total)."</i></td>
+						<td>Not Open. Opens in: ".seconds2human($total)."</td>
 					</tr>";
-						} else if ($SubmitTime == 0 && $DueTime < $CurrentTime) { // Overdue
+						} else if ($admin && $CurrentTime < $OpenTime) { // Not open (Admin only)
+							$total = $OpenTime - $CurrentTime;
+							echo "
+					<tr><a href=\"create.php?a=$asg[AssignmentID]\">
+						<td>$asg[AssignmentName]<br><i>Not Open</i></td>
+						<td>$asg[OpenTime]</td>
+						<td>$asg[DueTime]</td>
+						<td>$asg[Weight]%</td>
+						<td>Opens in: ".seconds2human($total)."<br><i>Click to Edit</i></td>
+					</a></tr>";
+						} else if ($admin && $CurrentTime <= $DueTime) { // Currently open (Admin only)
+							$total = $DueTime - $CurrentTime;
+							echo "
+					<tr><a href=\"create.php?a=$asg[AssignmentID]\">
+						<td>$asg[AssignmentName]<br><i>Open</i></td>
+						<td>$asg[OpenTime]</td>
+						<td>$asg[DueTime]</td>
+						<td>$asg[Weight]%</td>
+						<td>Closes in: ".seconds2human($total)."<br><i>Click to Edit</i></td>
+					</a></tr>";
+						} else if ($admin && $CurrentTime > $DueTime) { // Currently closed (Admin only)
+							$total = $CurrentTime - $DueTime;
+							echo "
+					<tr><a href=\"create.php?a=$asg[AssignmentID]\">
+						<td>$asg[AssignmentName]<br><i>Closed</i></td>
+						<td>$asg[OpenTime]</td>
+						<td>$asg[DueTime]</td>
+						<td>$asg[Weight]%</td>
+						<td>Closed ".seconds2human($total)." ago<br><i>Click to Edit</i></td>
+					</a></tr>";
+						} else if ($SubmitTime == 0 && $CurrentTime > $DueTime) { // Currently overdue (Student only)
 							$total = $CurrentTime - $DueTime;
 							echo "
 					<tr class=\"bg-danger\">
@@ -136,7 +175,7 @@ echo "</pre>\n";
 						<td>$asg[Weight]%</td>
 						<td>Not Submitted. Due: $asg[DueTime]<br><i>Late by: ".seconds2human($total)."</i></td>
 					</tr>";
-						} else if ($SubmitTime == 0) { // Not submitted
+						} else if ($SubmitTime == 0) { // Not submitted, still open (Student only)
 							$total = $DueTime - $CurrentTime;
 							echo "
 					<tr class=\"bg-warning\">
@@ -146,7 +185,7 @@ echo "</pre>\n";
 						<td>$asg[Weight]%</td>
 						<td>Not Submitted. Due: $asg[DueTime]<br><i>Remaining: ".seconds2human($total)."</i></td>
 					</tr>";
-						} else if ($SubmitTime > $DueTime) { // Submitted overdue
+						} else if ($SubmitTime > $DueTime) { // Submitted overdue (Student only)
 							$total = $SubmitTime - $DueTime;
 							echo "
 					<tr class=\"bg-success\">
@@ -154,9 +193,9 @@ echo "</pre>\n";
 						<td>$asg[OpenTime]</td>
 						<td>$asg[DueTime]</td>
 						<td>$asg[Weight]%</td>
-						<td>Submitted: $sub[SubmitTime]<br><i>Overdue: ".seconds2human($total)."</i></td>
+						<td>Submitted: $sub[SubmitTime]<br><i>Late by: ".seconds2human($total)."</i></td>
 					</tr>";
-						} else { // Submitted
+						} else if ($SubmitTime <= $DueTime) { // Submitted on time (Student only)
 							echo "
 					<tr class=\"bg-success\">
 						<td>$asg[AssignmentName]<br><i>Submitted</i></td>
@@ -165,6 +204,8 @@ echo "</pre>\n";
 						<td>$asg[Weight]%</td>
 						<td>Submitted: $sub[SubmitTime]</td>
 					</tr>";
+						} else {
+							echo "error...<br>\n";
 						}
 					}
 					// print table end
@@ -174,9 +215,11 @@ echo "</pre>\n";
 				}
 				// admin's have a button to create new assignments
 				if ($admin) {
-					echo '<a class="btn btn-primary" href="create.php" role="button">Create New Assignment</a>';
+					echo '
+			<a class="btn btn-primary" href="create.php" role="button">Create New Assignment</a>';
 				}
 			?>
+
 		</div>
 		<div class="col-md-6">
 			<h2>Code Review</h2>
@@ -211,8 +254,8 @@ echo "</pre>\n";
 				echo '<p>You have already viewed the feedback from all of your assignment submissions. Consider checking it over again to make the most of the advice.</p>
 			<p><a class="btn btn-info" href="reviewhub.php" role="button">Check it out &raquo;</a></p>';
 			}
-			
 			?>
+
 		</div>
 	</div>
 
