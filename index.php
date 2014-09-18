@@ -236,8 +236,8 @@ echo "</pre>\n";
 				echo '<p>All your assigned submissions to date have already been reviewed. However, if you would like to further assist your peers, consider stopping by the Help Center to answer some of your peers\' questions.</p>
 			<p><a class="btn btn-info" href="help.php" role="button">Help Center &raquo;</a></p>';
 			}
-			
 			?>
+
 		</div>
 		<div class="col-md-6">
 			<h2>Feedback</h2>
