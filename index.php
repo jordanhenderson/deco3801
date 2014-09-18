@@ -125,7 +125,37 @@ echo "</pre>\n";
 							$SubmitTime = (int) date_format($date, 'U');
 						}
 						
-						if ($CurrentTime < $OpenTime) { // Not open (Student only)
+						if ($admin && $CurrentTime < $OpenTime) { // Not open (Admin only)
+							$total = $OpenTime - $CurrentTime;
+							echo "
+					<tr href=\"create.php?a=$asg[AssignmentID]\">
+						<td>$asg[AssignmentName]<br><i>Not Open</i></td>
+						<td>$asg[OpenTime]</td>
+						<td>$asg[DueTime]</td>
+						<td>$asg[Weight]%</td>
+						<td>Opens in: ".seconds2human($total)."<br><i>Click to Edit</i></td>
+					</tr>";
+						} else if ($admin && $CurrentTime <= $DueTime) { // Currently open (Admin only)
+							$total = $DueTime - $CurrentTime;
+							echo "
+					<tr href=\"create.php?a=$asg[AssignmentID]\">
+						<td>$asg[AssignmentName]<br><i>Open</i></td>
+						<td>$asg[OpenTime]</td>
+						<td>$asg[DueTime]</td>
+						<td>$asg[Weight]%</td>
+						<td>Closes in: ".seconds2human($total)."<br><i>Click to Edit</i></td>
+					</tr>";
+						} else if ($admin && $CurrentTime > $DueTime) { // Currently closed (Admin only)
+							$total = $CurrentTime - $DueTime;
+							echo "
+					<tr href=\"create.php?a=$asg[AssignmentID]\">
+						<td>$asg[AssignmentName]<br><i>Closed</i></td>
+						<td>$asg[OpenTime]</td>
+						<td>$asg[DueTime]</td>
+						<td>$asg[Weight]%</td>
+						<td>Closed ".seconds2human($total)." ago<br><i>Click to Edit</i></td>
+					</tr>";
+						} else if ($CurrentTime < $OpenTime) { // Not open (Student only)
 							$total = $OpenTime - $CurrentTime;
 							echo "
 					<tr>
@@ -135,36 +165,6 @@ echo "</pre>\n";
 						<td>$asg[Weight]%</td>
 						<td>Not Open. Opens in: ".seconds2human($total)."</td>
 					</tr>";
-						} else if ($admin && $CurrentTime < $OpenTime) { // Not open (Admin only)
-							$total = $OpenTime - $CurrentTime;
-							echo "
-					<tr><a href=\"create.php?a=$asg[AssignmentID]\">
-						<td>$asg[AssignmentName]<br><i>Not Open</i></td>
-						<td>$asg[OpenTime]</td>
-						<td>$asg[DueTime]</td>
-						<td>$asg[Weight]%</td>
-						<td>Opens in: ".seconds2human($total)."<br><i>Click to Edit</i></td>
-					</a></tr>";
-						} else if ($admin && $CurrentTime <= $DueTime) { // Currently open (Admin only)
-							$total = $DueTime - $CurrentTime;
-							echo "
-					<tr><a href=\"create.php?a=$asg[AssignmentID]\">
-						<td>$asg[AssignmentName]<br><i>Open</i></td>
-						<td>$asg[OpenTime]</td>
-						<td>$asg[DueTime]</td>
-						<td>$asg[Weight]%</td>
-						<td>Closes in: ".seconds2human($total)."<br><i>Click to Edit</i></td>
-					</a></tr>";
-						} else if ($admin && $CurrentTime > $DueTime) { // Currently closed (Admin only)
-							$total = $CurrentTime - $DueTime;
-							echo "
-					<tr><a href=\"create.php?a=$asg[AssignmentID]\">
-						<td>$asg[AssignmentName]<br><i>Closed</i></td>
-						<td>$asg[OpenTime]</td>
-						<td>$asg[DueTime]</td>
-						<td>$asg[Weight]%</td>
-						<td>Closed ".seconds2human($total)." ago<br><i>Click to Edit</i></td>
-					</a></tr>";
 						} else if ($SubmitTime == 0 && $CurrentTime > $DueTime) { // Currently overdue (Student only)
 							$total = $CurrentTime - $DueTime;
 							echo "
@@ -264,5 +264,13 @@ echo "</pre>\n";
 
 	<!-- Bootstrap Core JavaScript -->
 	<script src="js/bootstrap.min.js"></script>
+	
+	<script type="text/javascript">
+		$('tr').on("click", function() {
+			if ($(this).attr('href') !== undefined) {
+				document.location = $(this).attr('href');
+			}
+		});
+	</script>
 </body>
 </html>
