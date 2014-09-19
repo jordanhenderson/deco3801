@@ -43,8 +43,8 @@ $crs = new PCRHandler();
             alert("Selected");
         });
         //Initialise two global variables for position of review
-        var anchor;
-        var focus;
+        //var anchor;
+        //var focus;
         /*
         Retrieves the position of the review when the user clicks
         the add comment icon
@@ -52,10 +52,18 @@ $crs = new PCRHandler();
         TODO: remove alert once testing is complete
         */
         function getPosition() {
-            var selection = window.getSelection();        
+            var innerContents = $('#innercontainer').html();
+            var wordArray = innerContents.split('\s');
+            var index = 0;
+            for(var word in wordArray){
+                if (word.indexOf('annotator-h1') >= 0) {
+                    alert(word);
+                }
+            }
+            /*var selection = window.getSelection();        
             anchor = selection.anchorOffset;
             focus = selection.focusOffset;
-            alert(anchor + ", " + focus);
+            alert(anchor + ", " + focus);*/
             /* This will be used when getting the reviews (in a loop probably)
             var startNode = document.getElementById("innercontainer");
             var startOffset = 0;
