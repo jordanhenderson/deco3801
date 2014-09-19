@@ -11,7 +11,7 @@ if (!isset($_SESSION['admin']) || !$_SESSION['admin']) {
 $crs = new PCRHandler();
 
 if (isset($_REQUEST['assid'])) { // TODO - restrict access to other courses assignments
-	$asg = $crs->getAssignment($_REQUEST['assid']);
+	$asg = $crs->getAssignment($_REQUEST['assid'])->jsonSerialize();
 	$new = false;
 } else {
 	$new = true;
