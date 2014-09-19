@@ -271,6 +271,14 @@ echo "</pre>\n";
 				document.location = $(this).attr('href');
 			}
 		});
+		
+		$('tr').hover(
+			function() {
+				$(this).addClass("bg-info");
+			}, function() {
+				$(this).removeClass("bg-info");
+			}
+		);
 	</script>
 </body>
 </html>
