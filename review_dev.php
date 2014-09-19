@@ -56,13 +56,26 @@ $crs = new PCRHandler();
             alert(innerContents);
             var wordArray = innerContents.split('\n');
             alert(wordArray.length);
-            var index = 0;
+            var indexPairs = [];
+            var startIndex;
+            var startIndexSet;
+            var startLine;
+            var endIndex;
             for (var i=0; i < wordArray.length; i++) {
-                index = wordArray[i].indexOf('annotator-hl');
-                if (index >= 0) {
+                startIndex = wordArray[i].indexOf('<span class="annotator-hl">');
+                endIndex = wordArray[i].indexOf('</span>');
+                if (startIndex >= 0) {
+                    startIndexSet = startIndex;
+                    startLine = i;
+                    
                     alert(wordArray[i]);
                     alert(index);
                 }
+                if (endIndex >= 0) {
+                    indexPairs.push({
+                        startIndexSet, startLine, endIndex, i});
+                }  
+                alert(indexPairs);
             }
             /*var selection = window.getSelection();        
             anchor = selection.anchorOffset;
