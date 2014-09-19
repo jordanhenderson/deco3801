@@ -89,7 +89,7 @@ if (isset($_REQUEST['assid'])) { // TODO - restrict access to other courses assi
 			<div class="row">
 				<div class="col-md-6">
 					<label for="review-open">Reviewing Open</label>
-					<input size="24" type="text" value="28 Sep 2014 - 14:30" class="form-control form_datetime" id="review-open">
+					<input size="24" type="text" <?php echo 'value="'.$asg['ReviewOpenTime'].'"'; ?> class="form-control form_datetime" id="review-open">
 					<p class="help-block">
 						Date and time that may begin reviewing other students code.<br>
 						This may be set to before the due date, though it is not reccomended.
@@ -97,7 +97,7 @@ if (isset($_REQUEST['assid'])) { // TODO - restrict access to other courses assi
 				</div>
 				<div class="col-md-6">
 					<label for="review-due">Reviewing Closed</label>
-					<input size="24" type="text" value="29 Sep 2014 - 14:30" class="form-control form_datetime" id="review-due">
+					<input size="24" type="text" <?php echo 'value="'.$asg['ReviewsVisibleTime'].'"'; ?> class="form-control form_datetime" id="review-due">
 					<p class="help-block">Date and time that students must finish their reviews by.</p>
 				</div>
 			</div>
