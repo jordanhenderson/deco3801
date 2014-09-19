@@ -106,7 +106,7 @@ echo "</pre>\n";
 						<th>Status</th>
 					</tr>
 				</thead>
-				<tbody>';
+				<tbody style="cursor: pointer">';
 					// print table contents
 					foreach ($assignments as $asg) {
 						$asg = $asg->jsonSerialize();
@@ -271,8 +271,8 @@ echo "</pre>\n";
 				document.location = $(this).attr('href');
 			}
 		});
-		
-		$('tr').hover(
+
+		$('tbody.tr').hover(
 			function() {
 				$(this).addClass("bg-info");
 			}, function() {
