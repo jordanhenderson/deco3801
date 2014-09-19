@@ -272,7 +272,7 @@ echo "</pre>\n";
 			}
 		});
 
-		$('tbody.tr').hover(
+		$('tbody > tr').hover(
 			function() {
 				$(this).addClass("bg-info");
 			}, function() {
