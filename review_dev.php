@@ -52,13 +52,14 @@ $crs = new PCRHandler();
         TODO: remove alert once testing is complete
         */
         function getPosition() {
-            var innerContents = $('#innercontainer').html();
+            var innerContents = $('#assignment_code').html();
             alert(innerContents);
             var wordArray = innerContents.split('\s');
             alert(wordArray.length);
             var index = 0;
             for (var word in wordArray) {
-                if (word.indexOf('annotator-h1') >= 0) {
+                alert(word);
+                if (word.indexOf('annotator-hl') >= 0) {
                     alert(word);
                 }
             }
@@ -166,8 +167,7 @@ $crs = new PCRHandler();
 			<div class="col-md-12">
 				<h2 id="file_heading"></h2>
 				<div id="innercontainer">
-                    <pre id='assignment_code'>
-                <?php
+                    <pre id='assignment_code'><?php
                     /*
                     Loads the first file in the file tree if its not empty
                     TODO: remove hard coding
