@@ -17,6 +17,26 @@ class APITest extends PHPUnit_Framework_TestCase
 		$request = "{f:''}";
 		$this->assertEquals("{}", $backend->handleRequest());
 	}
-
+	
+	public function testBadFunction()
+	{
+		$backend = new PCRBackend();
+		$request = "{f:'badFunction'}";
+		$this->assertEquals("{}", $backend->handleRequest());
+	}
+	
+	public function testNoFunction()
+	{
+		$backend = new PCRBackend();
+		$request = "{params:[]}";
+		$this->assertEquals("{}", $backend->handleRequest());
+	}
+	
+	public function testInvalidRequest()
+	{
+		$backend = new PCRBackend();
+		$request = "{Very invalid JSON:= '\r\n\"";
+		$this->assertEquals("{}", $backend->handleRequest());
+	}
 
 } 
