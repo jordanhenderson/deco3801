@@ -1,0 +1,16 @@
+<?php
+require_once('includes/handlers.php');
+require_once('includes/db.php');
+
+
+class APITest extends PHPUnit_Framework_TestCase 
+{
+	public function testEmptyFunction()
+	{
+		$backend = new PCRBackend();
+		$request = "{f:''}";
+		$this->assertEquals("{}", $backend->handleRequest());
+	}
+
+
+} 
