@@ -2,6 +2,20 @@
 
 session_start();
 
+if (!isset($_SESSION['admin']) || !$_SESSION['admin']) {
+	exit("Not logged in as admin");
+}
+
+$crs = new PCRHandler();
+
+if (isset($_REQUEST['assid'])) {
+	$asg = $crs->getAssignment($_REQUEST['assid']);
+	
+	$new = false;
+} else {
+	$new = true;
+}
+
 ?>
 <!DOCTYPE html>
 <html lang="en">
@@ -36,26 +50,34 @@ session_start();
 	<?php include 'header.php'; ?>
 	
 	<div class="container">
-		<h1>Setup New Assignment</h1>
+		<?php
+		if ($new) { 
+			echo '
+		<h1>Create New Assignment</h1>';
+		} else {
+			echo '
+		<h1>Edit Existing Assignment</h1>';
+		}
+		?>
 		<form role="form" >
 			<div class="row">
 				<div class="col-md-6">
 					<label for="name">Assignment Name</label>
-					<input class="form-control" type="text" id="name">
+					<input class="form-control" type="text" id="name" value="<?php echo $asg['AssignmentName']; ?>"></input>
 				</div>
 			</div>
 			<br>
 			<div class="row">
 				<div class="col-md-6">
 					<label for="open">Open Date</label>
-					<input size="24" type="text" value="26 Sep 2014 - 14:30" class="form-control form_datetime" id="open">
+					<input size="24" type="text" value="<?php echo $asg['OpenTime']; ?>" class="form-control form_datetime" id="open">
 					<p class="help-block">
 						Date and time that assignment files are available, and submissions are permitted.
 					</p>
 				</div>
 				<div class="col-md-6">
 					<label for="due">Due Date</label>
-					<input size="24" type="text" value="27 Sep 2014 - 14:30" class="form-control form_datetime" id="due">
+					<input size="24" type="text" value="<?php echo $asg['DueTime']; ?>" class="form-control form_datetime" id="due">
 					<p class="help-block">
 						Date and time that the assignment must be submitted before.<br>
 						A late submission will be declared to both the student and teacher.
@@ -98,8 +120,8 @@ session_start();
 			<br>
 			<div class="row">
 				<div class="col-md-3">
-					<label for="weight">Weight</label>
-					<input value="10%" class="form-control" type="number" id="weight" min="1" max="100">
+					<label for="weight">Weight (%)</label>
+					<input value="<?php echo $asg['Weight']; ?>" class="form-control" type="number" id="weight" min="1" max="100">
 				</div>
 			</div>
 			<br>

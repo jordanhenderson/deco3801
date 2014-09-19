@@ -10,7 +10,7 @@ require_once 'blti/blti.php'; // Load up the Basic LTI Support code
 // Initialize: set secret, do not set session, and do not redirect
 $context = new BLTI('oF0jxF1IGjzxYUl9w8B', false, false);
 
-$crs = new PCRHandler(); // new PCRHandler for session
+$crs = new PCRHandler();
 
 if ($context->valid) { // Redirect from Moodle, reload data, in case different course.
 	session_unset(); // clear old data, ready for reload from POST
@@ -19,7 +19,7 @@ if ($context->valid) { // Redirect from Moodle, reload data, in case different c
 	$_SESSION['course_id'] = $_POST['context_id'];
 	$_SESSION['course_code'] = $_POST['context_label'];
 	$_SESSION['course_title'] = $_POST['context_title'];
-	$_SESSION['helpenabled'] = $crs->getCourse()->helpEnabled();
+	$_SESSION['helpenabled'] = $crs->getCourse()->helpEnabled(); // TODO - I don't think this actually works
 	if ($context->isInstructor()) {
 		$_SESSION['admin'] = true;
 	}
@@ -134,7 +134,7 @@ echo "</pre>\n";
 						if ($admin && $CurrentTime < $OpenTime) { // Not open (Admin only)
 							$total = $OpenTime - $CurrentTime;
 							echo "
-					<tr href=\"create.php?a=$asg[AssignmentID]\">
+					<tr href=\"create.php?assid=$asg[AssignmentID]\">
 						<td>$asg[AssignmentName]<br><i>Not Open</i></td>
 						<td>$asg[OpenTime]</td>
 						<td>$asg[DueTime]</td>
@@ -144,7 +144,7 @@ echo "</pre>\n";
 						} else if ($admin && $CurrentTime <= $DueTime) { // Currently open (Admin only)
 							$total = $DueTime - $CurrentTime;
 							echo "
-					<tr href=\"create.php?a=$asg[AssignmentID]\">
+					<tr href=\"create.php?assid=$asg[AssignmentID]\">
 						<td>$asg[AssignmentName]<br><i>Open</i></td>
 						<td>$asg[OpenTime]</td>
 						<td>$asg[DueTime]</td>
@@ -154,7 +154,7 @@ echo "</pre>\n";
 						} else if ($admin && $CurrentTime > $DueTime) { // Currently closed (Admin only)
 							$total = $CurrentTime - $DueTime;
 							echo "
-					<tr href=\"create.php?a=$asg[AssignmentID]\">
+					<tr href=\"create.php?assid=$asg[AssignmentID]\">
 						<td>$asg[AssignmentName]<br><i>Closed</i></td>
 						<td>$asg[OpenTime]</td>
 						<td>$asg[DueTime]</td>
