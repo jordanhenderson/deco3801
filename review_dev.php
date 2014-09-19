@@ -54,13 +54,13 @@ $crs = new PCRHandler();
         function getPosition() {
             var innerContents = $('#assignment_code').html();
             alert(innerContents);
-            var wordArray = innerContents.split('\s');
+            var wordArray = innerContents.split(' ');
             alert(wordArray.length);
             var index = 0;
-            for (var word in wordArray) {
-                alert(word);
-                if (word.indexOf('annotator-hl') >= 0) {
-                    alert(word);
+            for (var i=0; i < wordArray.length; i++) {
+                alert(wordArray[i]);
+                if (wordArray[i].indexOf('annotator-hl') >= 0) {
+                    alert(wordArray[i]);
                 }
             }
             /*var selection = window.getSelection();        
