@@ -72,8 +72,8 @@ $crs = new PCRHandler();
                     alert(index);
                 }
                 if (endIndex >= 0) {
-                    indexPairs.push({
-                        startIndexSet, startLine, endIndex, i});
+                    indexPairs.push([
+                        startIndexSet, startLine, endIndex, i]);
                 }  
                 alert(indexPairs);
             }
