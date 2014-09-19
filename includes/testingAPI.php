@@ -11,8 +11,8 @@ class functionalTestAPI {
 	* or not. 
 	* 
 	* i.e. if test 1 passes and test 2 fails,
-	* 		$testResults[0] == "pass"
-	*		$testResults[1] == "fail"
+	* 		$testOutput[0] == "pass"
+	*		$testOutput[1] == "fail"
 	* 
 	* Script output format should be "test_number:pass/fail" without quotes, 
 	* separated by semi-colons. e.g. "1:pass;2:fail;3:pass"
@@ -53,9 +53,49 @@ class functionalTestAPI {
 	}
 
 	/**
-	* This function will insert the given test results into the database
+	* This function will update the given test results for the database submission entry.
+	* 
+	* $testResults must be an array with each element containing the value 
+	* "pass" or "fail"
 	*/
-	public static function dbInsertTestResults($testResults) {
+	public static function dbUpdateTestResults($submissionID, $testResults) {
+		$dbString = "";
+
+		// Test resuts must be in string format to store in database
+		foreach ($testResults as $value) {
+			$dbString = $dbString . "," . $value;
+		}
+
+		$dbString = substr($dbString, 1);
+
+		echo "dbString:" . $dbString;
+
+		if ($db->query("UPDATE Submission SET Results=$testResults WHERE SubmissionID=$submissionID") != false) {
+			echo "Test data inserted successfully\n";
+		} else {
+			echo "Error entering test results into database\n";
+		}
+	}
+
+	/**
+	* This function will retrieve the test results for submission from the database.
+	* 
+	* This function will return an array with each element containing the value 
+	* "pass" or "fail"
+	*/
+	public static function dbRetrieveTestResults($submissionID) {
+		if ($db->query("SELECT Results FROM Submission WHERE SubmissionID = $submissionID") != false) {
+			echo "Test data retrieved successfully\n";
+		} else {
+			echo "Error retrieving test results from database\n";
+		}
+	}
+
+	/**
+	* This function will add the given script to the queue of files to be executed
+	* by the server
+	*/
+	public static function addToQueue($script_path) {
 
 	}
 }
