@@ -68,6 +68,12 @@ function seconds2human($s) {
 
 	<!-- Custom CSS -->
 	<link href="css/main.css" rel="stylesheet">
+
+	<style>
+		tbody > tr {
+			cursor: pointer;
+		}
+	</style>
 </head>
 
 <body>
@@ -128,7 +134,7 @@ echo "</pre>\n";
 						if ($admin && $CurrentTime < $OpenTime) { // Not open (Admin only)
 							$total = $OpenTime - $CurrentTime;
 							echo "
-					<tr style=\"cursor: pointer;\" href=\"create.php?a=$asg[AssignmentID]\">
+					<tr href=\"create.php?a=$asg[AssignmentID]\">
 						<td>$asg[AssignmentName]<br><i>Not Open</i></td>
 						<td>$asg[OpenTime]</td>
 						<td>$asg[DueTime]</td>
@@ -265,6 +271,7 @@ echo "</pre>\n";
 	<!-- Bootstrap Core JavaScript -->
 	<script src="js/bootstrap.min.js"></script>
 	
+	<!-- Assignments Table -->
 	<script type="text/javascript">
 		$('tr').on("click", function() {
 			if ($(this).attr('href') !== undefined) {
