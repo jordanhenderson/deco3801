@@ -2,13 +2,15 @@
 
 session_start();
 
+require_once 'includes/handlers.php';
+
 if (!isset($_SESSION['admin']) || !$_SESSION['admin']) {
 	exit("Not logged in as admin");
 }
 
 $crs = new PCRHandler();
 
-if (isset($_REQUEST['assid'])) {
+if (isset($_REQUEST['assid'])) { // TODO - restrict access to other courses assignments
 	$asg = $crs->getAssignment($_REQUEST['assid']);
 	$new = false;
 } else {
