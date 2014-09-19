@@ -69,13 +69,13 @@ $crs = new PCRHandler();
                     startLine = i;
                     
                     alert(wordArray[i]);
-                    alert(index);
+                    
                 }
                 if (endIndex >= 0) {
                     indexPairs.push([
                         startIndexSet, startLine, endIndex, i]);
+                    alert(indexPairs);
                 }  
-                alert(indexPairs);
             }
             /*var selection = window.getSelection();        
             anchor = selection.anchorOffset;
