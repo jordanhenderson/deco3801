@@ -10,7 +10,6 @@ $crs = new PCRHandler();
 
 if (isset($_REQUEST['assid'])) {
 	$asg = $crs->getAssignment($_REQUEST['assid']);
-	
 	$new = false;
 } else {
 	$new = true;
@@ -63,21 +62,21 @@ if (isset($_REQUEST['assid'])) {
 			<div class="row">
 				<div class="col-md-6">
 					<label for="name">Assignment Name</label>
-					<input class="form-control" type="text" id="name" value="<?php echo $asg['AssignmentName']; ?>"></input>
+					<input class="form-control" type="text" id="name" <?php echo 'value="'.$asg['AssignmentName'].'"'; ?>></input>
 				</div>
 			</div>
 			<br>
 			<div class="row">
 				<div class="col-md-6">
 					<label for="open">Open Date</label>
-					<input size="24" type="text" value="<?php echo $asg['OpenTime']; ?>" class="form-control form_datetime" id="open">
+					<input size="24" type="text" <?php echo 'value="'.$asg['OpenTime'].'"'; ?> class="form-control form_datetime" id="open">
 					<p class="help-block">
 						Date and time that assignment files are available, and submissions are permitted.
 					</p>
 				</div>
 				<div class="col-md-6">
 					<label for="due">Due Date</label>
-					<input size="24" type="text" value="<?php echo $asg['DueTime']; ?>" class="form-control form_datetime" id="due">
+					<input size="24" type="text" <?php echo 'value="'.$asg['DueTime'].'"'; ?> class="form-control form_datetime" id="due">
 					<p class="help-block">
 						Date and time that the assignment must be submitted before.<br>
 						A late submission will be declared to both the student and teacher.
@@ -121,7 +120,7 @@ if (isset($_REQUEST['assid'])) {
 			<div class="row">
 				<div class="col-md-3">
 					<label for="weight">Weight (%)</label>
-					<input value="<?php echo $asg['Weight']; ?>" class="form-control" type="number" id="weight" min="1" max="100">
+					<input <?php echo 'value="'.$asg['Weight'].'"'; ?> class="form-control" type="number" id="weight" min="1" max="100">
 				</div>
 			</div>
 			<br>
