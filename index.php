@@ -106,7 +106,7 @@ echo "</pre>\n";
 						<th>Status</th>
 					</tr>
 				</thead>
-				<tbody style="cursor: pointer">';
+				<tbody>';
 					// print table contents
 					foreach ($assignments as $asg) {
 						$asg = $asg->jsonSerialize();
@@ -128,7 +128,7 @@ echo "</pre>\n";
 						if ($admin && $CurrentTime < $OpenTime) { // Not open (Admin only)
 							$total = $OpenTime - $CurrentTime;
 							echo "
-					<tr href=\"create.php?a=$asg[AssignmentID]\">
+					<tr style=\"cursor: pointer;\" href=\"create.php?a=$asg[AssignmentID]\">
 						<td>$asg[AssignmentName]<br><i>Not Open</i></td>
 						<td>$asg[OpenTime]</td>
 						<td>$asg[DueTime]</td>
