@@ -75,7 +75,7 @@ $crs = new PCRHandler();
                     indexPairs.push([
                         startIndexSet, startLine, endIndex, i]);
                     alert(indexPairs);
-                    alert(endInndex - 27);
+                    alert(endIndex - 27);
                 }  
             }
             /*var selection = window.getSelection();        
