@@ -53,9 +53,11 @@ $crs = new PCRHandler();
         */
         function getPosition() {
             var innerContents = $('#innercontainer').html();
+            alert(innerContents);
             var wordArray = innerContents.split('\s');
+            alert(wordArray.length);
             var index = 0;
-            for(var word in wordArray){
+            for (var word in wordArray) {
                 if (word.indexOf('annotator-h1') >= 0) {
                     alert(word);
                 }
@@ -89,13 +91,13 @@ $crs = new PCRHandler();
             var annotationText = $('#annotator-field-0').val();
             alert(annotationText);
             //AJAX call to store the review in the database
-            $.ajax({
+            /*$.ajax({
 			  url: "storeData_dev.php?anchor="+anchor+"&focus="+focus+"&annotation="+annotationText,
 			  type: "POST"
 			})
 			  .done(function( retval ) {
                 alert("Your comments have been saved! Woohoo!");
-            });
+            });*/
             
         }
 		//Handles when someone clicks on the file tree
@@ -164,7 +166,7 @@ $crs = new PCRHandler();
 			<div class="col-md-12">
 				<h2 id="file_heading"></h2>
 				<div id="innercontainer">
-                    <div id='assignment_code'>
+                    <pre id='assignment_code'>
                 <?php
                     /*
                     Loads the first file in the file tree if its not empty
@@ -179,7 +181,7 @@ $crs = new PCRHandler();
                         echo $contents;
                         fclose($handle);
                     }
-                ?></div>
+                ?></pre>
                 </div>	
 				<p>
 					<a class="btn btn-primary" href="reviewhub.php" role="button">Submit</a>
