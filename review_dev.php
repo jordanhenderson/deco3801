@@ -40,35 +40,7 @@ $crs = new PCRHandler();
         $('#innercontainer').select(function() {
             alert("Selected");
         });
-        //Initialise two global variables for position of review
-        //var anchor;
-        //var focus;
-        /*
-        Retrieves the position of the review when the user clicks
-        the add comment icon
         
-        TODO: remove alert once testing is complete
-        */
-        function getPosition() {
-            
-            /*var selection = window.getSelection();        
-            anchor = selection.anchorOffset;
-            focus = selection.focusOffset;
-            alert(anchor + ", " + focus);*/
-            /* This will be used when getting the reviews (in a loop probably)
-            var startNode = document.getElementById("innercontainer");
-            var startOffset = 0;
-            var endOffset = 260;
-            if (selection) {
-                
-                selection.removeAllRanges();
-                var rangeTest = document.createRange();
-                rangeTest.setStart(startNode.firstChild, startOffset);
-                rangeTest.setEnd(startNode.firstChild, endOffset);
-                selection.addRange(rangeTest);
-                
-            }*/
-        }
         /*
         Get the users comment/review and store it and the position of the review in
         the database
@@ -121,6 +93,7 @@ $crs = new PCRHandler();
         
 		//Handles when someone clicks on the file tree
 		function handleSwap(id) {
+            annotationText = [];
 			$('a.active').removeClass('active');
 			$('#' + id.split('.')[0]).addClass('active');
 			//Loads the selected file into the main content area using AJAX
