@@ -33,7 +33,8 @@ $crs = new PCRHandler();
 
 	<script>
 		//Initialises Annotator for writing reviews on the page
-		jQuery(function ($) {
+		var annotationText = [];
+        jQuery(function ($) {
 			$('#innercontainer').annotator();
 		});
         $('#innercontainer').select(function() {
@@ -76,7 +77,8 @@ $crs = new PCRHandler();
         ID and permissions
         */
         function getContents() {
-            var annotationText = $('#annotator-field-0').val();
+            annotationText.push($('#annotator-field-0').val());
+            var commentNum = 0;
             alert(annotationText);
             var innerContents = $('#assignment_code').html();
             //alert(innerContents);
@@ -99,9 +101,10 @@ $crs = new PCRHandler();
                 }
                 if (endIndex >= 0) {
                     indexPairs.push([
-                        startIndexSet, startLine, endIndex, i, annotationText]);
+                        startIndexSet, startLine, endIndex, i, annotationText[commentNum]]);
                     alert(indexPairs);
                     alert(endIndex - 27);
+                    commentNum++;
                 }  
             }
             //AJAX call to store the review in the database
