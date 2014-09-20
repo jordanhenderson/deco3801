@@ -137,17 +137,17 @@ class PCRHandler {
 	 * Create or update assignments.
 	*/
 	public function updateAssignment($assignment_id, $course_id, $assignment_name, 
-									$reviews_needed, $review_opentime, $weight, 
-									$opentime, $review_visibletime) {
+									$reviews_needed, $review_due, $weight, 
+									$open_time, $due_time) {
 		
 		$assignment = new Assignment(array("AssignmentID"=>$assignment_id,
 										   "CourseID"=>$course_id,
 										   "AssignmentName"=>$assignment_name,
 										   "ReviewsNeeded"=>$reviews_needed,
-										   "ReviewOpenTime"=>$review_opentime,
+										   "ReviewsDue"=>$review_due,
 										   "Weight"=>$weight,
-										   "OpenTime"=>$opentime,
-										   "ReviewsVisibleTime"=>$review_visibletime));
+										   "OpenTime"=>$open_time,
+										   "DueTime"=>$due_time));
 		if ($assignment->isValid()) {
 			return $assignment;
 		}					   
