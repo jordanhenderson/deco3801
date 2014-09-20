@@ -77,13 +77,14 @@ $crs = new PCRHandler();
         ID and permissions
         */
         function getContents() {
+            alert($('#annotator-field-0').val());
             annotationText.push($('#annotator-field-0').val());
         }
         
         function saveReviews() {
             var commentNum = 0;
+            alert(annotationText);
             var innerContents = $('#assignment_code').html();
-            //alert(innerContents);
             var wordArray = innerContents.split('\n');
             //alert(wordArray.length);
             var indexPairs = [];
@@ -109,7 +110,7 @@ $crs = new PCRHandler();
             }
             //AJAX call to store the review in the database
             $.ajax({
-			  url: "storeData_dev.php?reviews="+indexPairs,
+			  url: "storeData_dev.php?reviews="+JSON.serializeArray(indexPairs),
 			  type: "POST"
 			})
 			  .done(function( retval ) {
