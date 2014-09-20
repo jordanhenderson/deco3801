@@ -101,8 +101,8 @@ class PCRHandler {
 	* getReview returns a review using the provided parameters
 	* @param id the review ID
 	*/
-	public function getReview($stnid, $id, $comments, $startoffset, $endoffset) {
-		$review = new Review(array("StudentID"=>$stnid, "ReviewID"=>$id, "Comments"=>$comments, "StartOffset"=>$startoffset, "EndOffset"=>$endoffset, "SubmissionID"=>'0'));
+	public function getReview($stnid, $id, $comments, $startIndex, $startLine, $endIndex, $endLine, $annotationText, $fileName) {
+		$review = new Review(array("ReviewerID"=>$stnid, "ReviewID"=>$id, "SubmissionID"=>'0', "startIndex"=>$startIndex, "startLine"=>$startLine, "endIndex"=>$endIndex, "endLine"=>$endLine, "Comments"=>$annotationText, "fileName"=>$fileName));
 		if ($review->isValid()) {
 			return $review;
 		}
