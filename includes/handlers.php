@@ -19,7 +19,7 @@ class PCRHandler {
 	}
 
 	/**
-	* getCourse returns the current JSON serialized course.
+	* getCourse returns the current course.
 	* @returns the course
 	*/
 	public function getCourse() {
@@ -29,23 +29,23 @@ class PCRHandler {
 		}
 	}
 
-	public function storeNewQuestion($title, $content, $stnid, $fullname) {
-		self::getCourse()->addNewQuestion($title, $content, $stnid, $fullname);
+	public function storeNewQuestion($title, $content) {
+		$this->getCourse()->addNewQuestion($title, $content, $_SESSION['user_id'], $_SESSION['userfullname']);
 	}
 
-	public function removeQuestionn($id) {
-		self::getQuestion($id)->removeQuestion($id);
+	public function removeQuestion($id) {
+		$this->getQuestion($id)->delete();
 	}
 	
 	public function markResolved($id) {
-		self::getQuestion($id)->markResolved($id);
+		$this->getQuestion($id)->markResolved($id);
 	}
 	public function markUnresolved($id) {
-		self::getQuestion($id)->markUnresolved($id);
+		$this->getQuestion($id)->markUnresolved($id);
 	}
 	
 	/**
-	* getAssignment returns a JSON serialized assignment with the provided id.
+	* getAssignment returns an assignment with the provided id.
 	* @param id the assignment ID
 	* @returns the assignment object
 	*/
@@ -57,7 +57,7 @@ class PCRHandler {
 	}
 	
 	/**
-	* getSubmission returns a JSON serialized submission with the provided id.
+	* getSubmission returns a submission with the provided id.
 	* One submission per student per assignment.
 	* Only a submission for the current student can be returned 
 	* @param id the assignment id.
@@ -72,7 +72,7 @@ class PCRHandler {
 	}
 	
 	/**
-	* getQuestion returns a JSON serialized question using the provided id.
+	* getQuestion returns a question using the provided id.
 	* @param id the question ID
 	*/
 	public function getQuestion($id) {
@@ -83,7 +83,7 @@ class PCRHandler {
 	}
 	
 	/**
-	* getComment returns a JSON serialized comment using the provided parameters
+	* getComment returns a comment using the provided parameters
 	* @param id the comment ID
 	*/
 	public function getComment($id, $content, $stnid, $fullname) {
@@ -94,16 +94,15 @@ class PCRHandler {
 	}
 
 	/**
-	* getComment returns a JSON serialized review using the provided parameters
+	* getReview returns a review using the provided parameters
 	* @param id the review ID
 	*/
-    public function getReview($stnid, $id, $comments, $startoffset, $endoffset) {
-        $review = new Review(array("StudentID"=>$stnid, "ReviewID"=>$id, "Comments"=>$comments, "StartOffset"=>$startoffset, "EndOffset"=>$endoffset, "SubmissionID"=>'0'));
-        if ($review->isValid()) {
-            return " :) ";
-        }
-        return " :( ";
-    }
+	public function getReview($stnid, $id, $comments, $startoffset, $endoffset) {
+		$review = new Review(array("StudentID"=>$stnid, "ReviewID"=>$id, "Comments"=>$comments, "StartOffset"=>$startoffset, "EndOffset"=>$endoffset, "SubmissionID"=>'0'));
+		if ($review->isValid()) {
+			return $review;
+		}
+	}
 	
 	/**
 	* uploadArchive uploads an archive to a submission
@@ -115,7 +114,6 @@ class PCRHandler {
 			$submission->uploadArchive();
 			$submission->addFiles();
 		}
-			
 	}
 	
 		

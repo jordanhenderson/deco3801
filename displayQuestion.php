@@ -5,7 +5,7 @@ require_once 'includes/db.php';
 require_once 'includes/handlers.php';
 $timezone = date_default_timezone_set('Australia/Brisbane');
 $date = date('m/d/Y h:i:s a', time());
-$id = $_GET['id'];	
+$id = $_GET['id'];
 $crs = new PCRHandler();
 ?>
 <!DOCTYPE html>
@@ -28,32 +28,26 @@ $crs = new PCRHandler();
 
 	<!-- Custom CSS -->
 	<link href="css/main.css" rel="stylesheet">
-
 </head>
 <body>
-	<?php include 'header.php'; 
+	<?php 
+	
+	include 'header.php'; 
 	//Get contents and data of each question based on the ID
-	$questions = $crs->getQuestion($id)->getQuestionContents($id);
-	if (is_null($questions)) {
-		echo 'no questions';
-	} else {
-		//If there are questions stored, get the data from them to display
-		foreach ($questions as $question){
-			$question = $question->jsonSerialize();
-			$title = $question['Title'];
-			$_SESSION['Status'] = $question['Status'];
-			$timeasked = $question['Opendate'];
-		}
+	$question = $crs->getQuestion($id);
+	if($question->isValid()) {
+		//Get the comments for the question displaying
+		$comments = $question->getComments();
+		$questionRow = $question->getRow();
+		$title = $questionRow["Title"];
+		$timeasked = $questionRow["Opendate"];
+		$status = $questionRow["Status"];
 	}
-	//Get the comments for the question displaying
-	$comments = $crs->getQuestion($question['QuestionID'])->getCommentsForQuestion($question['QuestionID']);
-	//Set a session ID incase of removal for particular question
-	$_SESSION['QuestionID'] = $question['QuestionID'];
 	?>
 	<div class="container">
 		<h1><?php 
 		echo $title; 
-		if ($question['Status'] == 1) {
+		if ($status == "1") {
 			echo '<a class="btn btn-xl btn-success btn-block" role="button" disabled="disabled">Resolved</a></td></tr>';
 			}
 			else {
@@ -65,13 +59,13 @@ $crs = new PCRHandler();
 				<div class="col-md-6">
 					<div class="form-group">
 						<label for="specfiles"></label>
-						<textarea name="content" readonly="readonly" rows="5" cols="110" id="content"><?php echo $question['Content']; ?></textarea>
+						<textarea name="content" readonly="readonly" rows="5" cols="110" id="content"><?php echo $questionRow['Content']; ?></textarea>
 					</div>
 				</div>
 				<div class="row">
 				<div class="col-md-6">
 					<label for="open">Asked On</label>
-					<input size="24" type="text" readonly="readonly" value= "<?php echo $timeasked; echo ' by '.$question['StudentName']; ?>" class="form-control form_datetime" id="open" name="open">
+					<input size="24" type="text" readonly="readonly" value= "<?php echo $timeasked; echo ' by '.$questionRow['StudentName']; ?>" class="form-control form_datetime" id="open" name="open">
 				</div>
 			</div>
 
@@ -84,35 +78,33 @@ $crs = new PCRHandler();
 				<div class="col-md-6">
 					<?php
 					foreach ($comments as $comment){
+						$commentRow = $comment->getRow();
 						//Display each comment as readonly for specific question
-						$comment = $comment->jsonSerialize();
 						echo "
 						<tr class='unresolved'>
 						<td></td>
-						<td><textarea name='comment' readonly='readonly' rows='5' cols='80' id='comment'>$comment[StudentName] Says: $comment[Content]</textarea></td>
+						<td><textarea name='comment' readonly='readonly' rows='5' cols='80' id='comment'>$commentRow[StudentName] Says: $commentRow[Content]</textarea></td>
 						<td></td>";
 					} ?>
 				</div>
 			<div align="center">
 				<?php
-					echo "
-					<a class='btn btn-xl btn-warning' href='addComment.php?Questionid=$question[QuestionID]' role='button'>Reply</a>
-					";	
+					echo "<a class='btn btn-xl btn-warning' href='addComment.php?Questionid=$questionRow[QuestionID]' role='button'>Reply</a>";
 				//If an admin is viewing, gives ability to delete a question
 				if ($_SESSION['admin']) {
 					echo "
-					<input type='submit' class='btn btn-xl btn-danger' id='RemoveQuestion' name='RemoveQuestion' value='Remove Question'>
+					<input type='submit' class='btn btn-xl btn-danger' id='RemoveQuestion' name='removeQuestion' value='Remove Question'>
 					";
 				}
 				//If status is resolved, then display mark unresolved vice-versa below
-				if($_SESSION['Status'] == 1){
+				if($status == "1"){
 					echo "
-					<input type='submit' class='btn btn-xl btn-danger' id='MarkUnresolved' name='MarkUnresolved' value='Mark Unresolved'>
+					<input type='submit' class='btn btn-xl btn-danger' id='MarkUnresolved' name='markUnresolved' value='Mark Unresolved'>
 					";
 				}
 				else {
 					echo "
-						<input type='submit' class='btn btn-xl btn-danger' id='MarkResolved' name='MarkResolved' value='Mark Resolved'>
+						<input type='submit' class='btn btn-xl btn-danger' id='MarkResolved' name='markResolved' value='Mark Resolved'>
 					";
 				}	
 				?>
@@ -128,24 +120,24 @@ $crs = new PCRHandler();
 	<script src="js/bootstrap-datetimepicker.min.js"></script>
 	<!-- Bootstrap Select JavaScript -->
 	<script src="js/bootstrap-select.min.js"></script>
-</body>
-<script>
-$(document).ready(function(){
-    $('.btn.btn-xl.btn-danger').click(function(e){
-    	e.preventDefault();
-        var clickBtnValue = $(this).val();
-        var ajaxurl = 'api.php',
-        data =  {'action': clickBtnValue};
-        $.post(ajaxurl, data, function (response) {
-        	if(clickBtnValue == 'Mark Resolved' || clickBtnValue == 'Mark Unresolved'){
-        		 location.reload();
-        	}else {
-           window.location.replace("help.php");
-       }
-        });
-    });
-
-});
-
+	<?php
+		if($question->isValid()) {
+	?>
+	<script type="text/javascript">
+		$(function() {
+			$(":submit").click(function() {
+				var func = $(this).attr("name");
+				var request = {f: func, params: [<?php echo $questionRow["QuestionID"]; ?>]};
+				$.post("api.php", request, function() {
+					if(func == "markResolved" || func = "markUnresolved") location.reload();
+					else window.location.replace("help.php");
+				});
+			});
+		});
 	</script>
+	<?php
+		}
+	?>
+</body>
+
 </html>

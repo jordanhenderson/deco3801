@@ -19,7 +19,7 @@ if ($context->valid) { // Redirect from Moodle, reload data, in case different c
 	$_SESSION['course_id'] = $_POST['context_id'];
 	$_SESSION['course_code'] = $_POST['context_label'];
 	$_SESSION['course_title'] = $_POST['context_title'];
-	$_SESSION['helpenabled'] = $crs->getCourse()->helpEnabled(); // TODO - I don't think this actually works
+	$_SESSION['helpenabled'] = $crs->getCourse()->helpEnabled();
 	if ($context->isInstructor()) {
 		$_SESSION['admin'] = true;
 	}
@@ -97,7 +97,7 @@ echo "</pre>\n";
 			<h2>Assignments</h2>
 			<?php
 				$assignments = $crs->getCourse()->getAssignments();
-				if (is_null($assignments)) { // No assignments
+				if (empty($assignments)) { // No assignments
 					echo "Currently no assignments have been released.";
 				} else {
 					// print table head
@@ -115,7 +115,9 @@ echo "</pre>\n";
 				<tbody>';
 					// print table contents
 					foreach ($assignments as $asg) {
-						$asg = $asg->jsonSerialize();
+						if(!$asg->isValid()) continue;
+						
+						$asg = $asg->getRow();
 						
 						// Convert and store the dates from the DB as Unix timestamps.
 						$CurrentTime = time();
@@ -126,9 +128,12 @@ echo "</pre>\n";
 						$DueTime = (int) date_format($date, 'U');
 						
 						if (!$admin) { // student
-							$sub = $crs->getSubmission($asg['AssignmentID'])->jsonSerialize();
-							$date = date_create_from_format('Y-m-d G:i:s', $sub['SubmitTime']);
-							$SubmitTime = (int) date_format($date, 'U');
+							$sub = $crs->getSubmission($asg['AssignmentID']);
+							if($sub->isValid()) {
+								$subRow = $sub->getRow();
+								$date = date_create_from_format('Y-m-d G:i:s', $subRow['SubmitTime']);
+								$SubmitTime = (int) date_format($date, 'U');
+							}
 						}
 						
 						if ($admin && $CurrentTime < $OpenTime) { // Not open (Admin only)

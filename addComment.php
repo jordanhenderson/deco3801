@@ -2,31 +2,12 @@
 session_start();
 $timezone = date_default_timezone_set('Australia/Brisbane');
 $date = date('m/d/Y h:i:s a', time());
-
-// I don't know what this is, but it seems like a bad idea storing
-// something as vague as this in the session. Consider using only GET. -Ad
-$id = $_GET['Questionid'];
-$_SESSION['Questionid'] = $id;
+$id = $_GET["QuestionID"];
 ?>
 <!DOCTYPE html>
 <html lang="en">
 
 <head>
-	<script>
-	//Basic validation, will make this better later
-		$(document).ready(function() {
-			$('#cF').submit(function(msg)){
-				//Placeholder
-			}
-			var data = $('#cF').serializeArray();
-			 $.post("api.php",$(this).serialize(),function(data){
-			 	  //Place holder to put stuff  
-			}	
-	        return false; 
-	    });
-
-	</script>
-	</script>
 	<meta charset="utf-8">
 	<meta name="viewport" content="width=device-width, initial-scale=1">
 
@@ -50,7 +31,8 @@ $_SESSION['Questionid'] = $id;
 	
 	<div class="container">
 		<h1>Ask a New Question</h1>
-		<form name="cF" id="cF" action="api.php" method="post">
+		<form name="cF" id="cF" action="api.php" method="post" data-function="getComment">
+			<input type="hidden" value="<?php echo $id; ?>" name="QuestionID">
 			<div class="row">
 			</div>
 			<br>
@@ -110,6 +92,26 @@ $_SESSION['Questionid'] = $id;
 	<!-- Bootstrap Select JavaScript -->
 	<script src="js/bootstrap-select.min.js"></script>
 	
+	<script type="text/javascript">
+		$(function() {
+			$('form').submit(function() {
+				var form = $(this);
+				//Use the action= property for ajax submission
+				var url = form.attr('action');
+				var params = form.serializeArray();
+				var func = form.data('function');
+				var request = {f: func, params: params};
+				//Post the serialized form.
+				$.post(url, request, function(data) {
+					//Handle submission.
+					document.location.href = "/displayQuestion.php?id=<?php echo $id; ?>";
+				});
+				
+				
+				return false;
+			});
+		});
+	</script>
 	<script type="text/javascript">
 		window.onload = function () {
 			$('.selectpicker').selectpicker();

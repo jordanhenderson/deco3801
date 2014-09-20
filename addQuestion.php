@@ -11,16 +11,24 @@ $date = date('m/d/Y h:i:s a', time());
 
 <head>
 	<script>
-	//Basic validation, will make this better later
-		$(document).ready(function() {
-			$('#qF').submit(function(msg)){
-			}
-		 var data = $('#qF').serializeArray();
-		 $.post("api.php", $(this).serialize(),function(data){
-		 	  alert(data); //post check to show that the mysql string is the same as submit           
-		}	
-        return false; // return false to stop the page submitting. You could have the form action set to the same PHP page so if people dont have JS on they can still use the form
-    });
+		$(function() {
+			$('form').submit(function() {
+				var form = $(this);
+				//Use the action= property for ajax submission
+				var url = form.attr('action');
+				var params = form.serializeArray();
+				var func = form.data('function');
+				var request = {f: func, params: params};
+				//Post the serialized form.
+				$.post(url, request, function(data) {
+					//Handle submission.
+					
+				});
+				
+				
+				return false;
+			});
+		});
 	</script>
 	<meta charset="utf-8">
 	<meta name="viewport" content="width=device-width, initial-scale=1">
@@ -45,7 +53,7 @@ $date = date('m/d/Y h:i:s a', time());
 	
 	<div class="container">
 		<h1>Ask a New Question</h1>
-		<form  name="qF" id="qF" method="post" action="api.php">
+		<form name="qF" id="qF" method="post" action="api.php" data-function="storeNewQuestion">
 			<div class="row">
 				<div class="col-md-6">
 					<label for="title">Question Title</label>

@@ -209,12 +209,24 @@ abstract class PCRObject implements JsonSerializable {
 		$this->Update();
 		return $this->id != null;
 	}
+	
+	public function getRow() {
+		$this->Update();
+		return $this->row;
+	}
 
 	/**
 	* Delete the object within the database.
 	*/
 	public function delete() {
-		$this->db->query("DELETE FROM $this->table WHERE $this->id_field = $id;");
+		if($this->isValid()) {
+			$this->db->query("DELETE FROM $this->table WHERE $this->id_field = $this->id;");
+			$this->id = null;
+		}
+	}
+	
+	public function commit() {
+		$this->updateRow($this->row);
 	}
 }
 
@@ -340,11 +352,12 @@ class Submission extends PCRObject {
 			$file = $this->storage_dir . $_FILES["file"]["name"];
 			move_uploaded_file($_FILES["file"]["tmp_name"], $file);
 			$zip = new ZipArchive;
-
+			
+			//Get the current path of the zip archive, open it.
 			$path = pathinfo(realpath($file), PATHINFO_DIRNAME);
-
 			$r = $zip->open($file);
-
+			
+			//Extract the zip archive to the assignment directory.
 			if ($r === TRUE) {
 				$zip->extractTo($path);
 				$zip->close();
@@ -352,7 +365,7 @@ class Submission extends PCRObject {
 			}
 		}
 	}
-	
+
 	/**
 	* Check out a git repository to the assignment submission directory.
 	* @param repo_url the repository repo_url
@@ -363,7 +376,21 @@ class Submission extends PCRObject {
 		$id = $this->getID();
 		exec("cd $this->storage_dir && git clone https://$username:$password@$repo_url .");
 	}
-	
+
+	/**
+	* getReviews returns an array of reviews for a submission.
+	* @return an array of reviews
+	*/
+	public function getReviews() {
+		$arr = array();
+		$sth = $this->db->prepare("SELECT * FROM Review WHERE SubmissionID = ?;");
+		$sth->execute(array($this->getID()));
+		while ($file_row = $sth->fetch(PDO::FETCH_ASSOC)) {
+			array_push($arr, new Review($file_row));
+		}
+		return $arr;
+	}
+
 	public function jsonSerialize() {
 		parent::Update();
 		return $this->row;
@@ -391,19 +418,26 @@ class Course extends PCRObject {
 	* @param $fullname full name of the student
 	*/
 	public function addNewQuestion($title, $content, $stnid, $fullname){
-		$sth = $this->db->prepare("INSERT INTO `deco3801`.`Question` (`StudentID`, `CourseID`, `StudentName`, `Title`, `Content`, `Status`) 
-			VALUES ('".$stnid."', ".$this->getID().", '".$fullname."', '".$title."', '".$content."', '0');");
-		$sth->execute(array($this->getID()));
-		
+		$question = new Question(array(
+										"StudentID"	=> $stnid, 
+										"CourseID"	=> $this->getID(),
+										"StudentName"=> $fullname,
+										"Title"	=> $title,
+										"Content"	=> $content,
+										"Status"	=> "0"
+									)
+								);
+								
+		return $question;
 	}
 	
 	/**
 	* helpEnabled returns if the help center is enabled for the current course.
 	*/
 	public function helpEnabled() {
-		$sth = $this->db->prepare("SELECT HelpEnabled FROM Course WHERE CourseID = ".$this->getID().";");
-		$sth->execute(array($this->getID()));
-		return $sth->fetchColumn();
+		if($this->isValid()) {
+			return $this->row["HelpEnabled"];
+		}
 	}
 
 	/**
@@ -412,7 +446,7 @@ class Course extends PCRObject {
 	*/
 	public function getHelpCentreQuestions() {
 		$arr = array();
-		$sth = $this->db->prepare("SELECT * FROM Question WHERE CourseID = ".$this->getID().";");
+		$sth = $this->db->prepare("SELECT * FROM Question WHERE CourseID = ?;");
 		$sth->execute(array($this->getID()));
 		while ($file_row = $sth->fetch(PDO::FETCH_ASSOC)) {
 			array_push($arr, new Question($file_row));
@@ -427,7 +461,7 @@ class Course extends PCRObject {
 	*/
 	public function getAssignments() {
 		$arr = array();
-		$sth = $this->db->prepare("SELECT * FROM Assignments WHERE CourseID = ".$this->getID().";");
+		$sth = $this->db->prepare("SELECT * FROM Assignments WHERE CourseID = ?;");
 		$sth->execute(array($this->getID()));
 		while ($file_row = $sth->fetch(PDO::FETCH_ASSOC)) {
 			array_push($arr, new Assignment($file_row));
@@ -436,7 +470,7 @@ class Course extends PCRObject {
 	}
 	
    
-    
+	
 	public function jsonSerialize() {
 		parent::Update();
 		return $this->row;
@@ -461,42 +495,19 @@ class Question extends PCRObject {
 	}
 	
 	/**
-	* getCommentsForQuestion returns comments made on a question.
-	*
-	* @return an array containing Comment objects for a question.
-	*/
-	public function getCommentsForQuestion(){
-		$arr = array();
-		$sth = $this->db->prepare("SELECT * FROM Comment WHERE QuestionID = ?;");
-		$sth->execute(array($this->getID()));
-		while ($file_row = $sth->fetch(PDO::FETCH_ASSOC)) {
-			array_push($arr, new Comment($file_row));
-		}
-		return $arr;
-	}
-
-	/**
-	* removeQuestion removes a question from the database.
-	*/ 
-	public function removeQuestion(){
-		$sth = $this->db->prepare("DELETE FROM Question WHERE QuestionID = ?;");
-		$sth->execute(array($this->getID()));
-	}
-
-	/**
 	* markResolved sets the question status to resolved.
 	*/
 	public function markResolved(){
-		$sth = $this->db->prepare("UPDATE Question SET Status = '1' WHERE QuestionID = ?;");
-		$sth->execute(array($this->getID()));
+		$this->row["Status"] = "1";
+		$this->commit();
 	}
 	
 	/**
 	* markUnresolved sets the question status to resolved.
 	*/
 	public function markUnresolved(){
-		$sth = $this->db->prepare("UPDATE Question SET Status = '0' WHERE QuestionID = ?;");
-		$sth->execute(array($this->getID()));
+		$this->row["Status"] = "0";
+		$this->commit();
 	}
 
 	/**
@@ -506,21 +517,8 @@ class Question extends PCRObject {
 		$arr = array();
 		$sth = $this->db->prepare("SELECT * FROM Comment WHERE QuestionID = ? ORDER BY postdate DESC limit 1;");
 		$sth->execute(array($this->getID()));
-		while ($file_row = $sth->fetch(PDO::FETCH_ASSOC)) {
-			array_push($arr, new Comment($file_row));
-		}
-		return $arr;
-	}
-	
-	/**
-	* getQuestionContents returns the contents of the question.
-	*/
-	public function getQuestionContents(){
-		$arr = array();
-		$sth = $this->db->prepare("SELECT * FROM Question WHERE QuestionID = ?;");
-		$sth->execute(array($this->getID()));
-		while ($file_row = $sth->fetch(PDO::FETCH_ASSOC)) {
-			array_push($arr, new Question($file_row));
+		while ($row = $sth->fetch(PDO::FETCH_ASSOC)) {
+			array_push($arr, new Comment($row));
 		}
 		return $arr;
 	}
@@ -539,7 +537,7 @@ class Question extends PCRObject {
 		}
 		return $arr;
 	}
-
+	
 	public function jsonSerialize() {
 		parent::Update();
 		return $this->row;
@@ -558,40 +556,11 @@ class Question extends PCRObject {
  * (int(11))        EndOffset
  */	
 class Review extends PCRObject {
-    public function __construct($data) {
+	public function __construct($data) {
 		parent::__construct("ReviewID", "Review", $data, 1);
 	}
-
-	/**
-	* storeReview stores a review. This will be changed to use the built in PCRObject functionality.
-	* @param id the review id
-	* @param comments the review comments
-	* @param stnid the student id
-	* @param startoffset the review start offset
-	* @param endoffset the review end offset
-	*/
-     public function storeReview($id, $comments, $stnid, $startoffset, $endoffset) {
-        $sth = $this->db->prepare("INSERT INTO `deco3801`.`Review` (`SubmissionID`, `Comments`, `StudentID`, `StartOffset`, `EndOffset`, `ReviewID`) 
-			VALUES ('".$this->getID()."', '".$comments."', '".$stnid."', '".$startoffset."', '".$endoffset."', '".$id."');");
-		$sth->execute(array($this->getID()));
-    }
-    
-    /**
-    * getReviews returns an array of reviews for a submission.
-    * This will be moved to Submission.
-    * @return an array of reviews
-    */
-    public function getReviews() {
-        $arr = array();
-        $sth = $this->db->prepare("SELECT * FROM Review WHERE SubmissionID = ".$this->getID().";");
-		$sth->execute(array($this->getID()));
-		while ($file_row = $sth->fetch(PDO::FETCH_ASSOC)) {
-			array_push($arr, new Review($file_row));
-		}
-		return $arr;
-    }    
-    
-    public function jsonSerialize() {
+	
+	public function jsonSerialize() {
 		parent::Update();
 		return $this->row;
 	}

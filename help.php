@@ -36,7 +36,7 @@ $crs = new PCRHandler();
 			//Get all the questions from teh DB to display in the centre
 				$questions = $crs->getCourse()->getHelpCentreQuestions();
 				
-				if (is_null($questions)) {
+				if (empty($questions)) {
 					echo 'no questions';
 				} else {
 			?>
@@ -57,19 +57,20 @@ $crs = new PCRHandler();
 				<tbody>
 					<?php	
 					foreach ($questions as $question) {
-						//Get each question from array of questions to echo in the centre
-						$question = $question->jsonSerialize();
+						if(!$question->isValid()) continue;
+						$questionRow = $question->getRow();
 						//Get the last comment to display in the help centre
-						$lastpost = $crs->getQuestion($question['QuestionID'])->getLastComment($question['QuestionID']);
+						$lastpost = $question->getLastComment();
 						
 						//This sends the question ID in the URL to enable $_GET elsewhere
 						echo "
 						<tr class='unresolved'>
-						<td><a href='displayQuestion.php?id=$question[QuestionID]'>$question[Title]</a></td>
+						<td><a href='displayQuestion.php?id=$questionRow[QuestionID]'>$questionRow[Title]</a></td>
 						<td>";
 						foreach ($lastpost as $last) {
+							if(!$last->isValid()) continue;
 							//Display last posts individually
-							$last = $last->jsonSerialize();	
+							$last = $last->getRow();
 							if (!isset($last['postdate'])) {
 								echo 'No postdate specified';
 							}
@@ -82,10 +83,10 @@ $crs = new PCRHandler();
 							}
 						}
 						echo "</td>";
-						echo "<td>$question[StudentName]</td>
+						echo "<td>$questionRow[StudentName]</td>
 						<td>";
 						//If status == 1, question is resolved
-						if ($question['Status'] == 1) {
+						if ($questionRow['Status'] == 1) {
 							echo '<a class="btn btn-xl btn-success btn-block" role="button" disabled="disabled">Resolved</a></td></tr>';
 						}
 						else {
