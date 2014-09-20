@@ -2,16 +2,28 @@
 
 session_start();
 
-//Forcefully pull new changes when visiting index.php
-exec("git pull && git reset --hard origin/master");
+require_once 'config.php';
+
+if(!$config['DEBUG']) {
+	//Forcefully pull new changes when visiting index.php
+	exec("git pull && git reset --hard origin/master");
+} else {
+	session_unset();
+	$_SESSION['user_id'] = "0";
+	$_SESSION['userfullname'] = "Debug User";
+	$_SESSION['course_id'] = "0";
+	$_SESSION['course_code'] = "Debug Course";
+	$_SESSION['course_title'] = "Debug Course";
+	$_SESSION['helpenabled'] = "1";
+	$_SESSION['admin'] = true;
+}
 
 require_once 'includes/handlers.php';
 require_once 'blti/blti.php'; // Load up the Basic LTI Support code
 // Initialize: set secret, do not set session, and do not redirect
-$context = new BLTI('oF0jxF1IGjzxYUl9w8B', false, false);
+$context = new BLTI($config['blti_psk'], false, false);
 
 $crs = new PCRHandler();
-
 if ($context->valid) { // Redirect from Moodle, reload data, in case different course.
 	session_unset(); // clear old data, ready for reload from POST
 	$_SESSION['user_id'] = $_POST['user_id'];

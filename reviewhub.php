@@ -1,7 +1,5 @@
 <?php
-
-session_start();
-
+require_once('includes/handlers.php');
 ?>
 <!DOCTYPE html>
 <html lang="en">

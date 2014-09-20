@@ -1,8 +1,5 @@
 <?php
-//Initiates a session
-session_start();
-//Include the class and database functions
-require_once 'includes/db.php';
+//Include the main handler backend
 require_once 'includes/handlers.php';
 //Initialise the PCRHandler
 $crs = new PCRHandler();

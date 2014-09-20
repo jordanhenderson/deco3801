@@ -1,6 +1,5 @@
 <?php
     //Include the class and database functions
-    require_once 'includes/db.php';
     require_once 'includes/handlers.php';
     /*
     Gets the variables passed through the AJAX call and stores them in the database

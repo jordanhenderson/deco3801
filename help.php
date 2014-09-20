@@ -1,7 +1,4 @@
 <?php
-session_start();
-
-require_once 'includes/db.php';
 require_once 'includes/handlers.php';
 //Enable/Disable Help centre
 if (!isset($_SESSION['helpenabled']) || !$_SESSION['helpenabled']) {

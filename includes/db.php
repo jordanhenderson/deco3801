@@ -3,6 +3,7 @@
  * Database contains a base database (PDO) and prepared query wrapper.
  * Add your custom database connection string and parameters to the constructor.
 */
+require_once "config.php";
 class Database {
 	private $db;
 	/**
@@ -34,7 +35,8 @@ class Database {
 	*Construct a Database object. 
 	*/
 	public function __construct() {
-		$this->db = new PDO('mysql:host=localhost;dbname=deco3801;charset=utf8', 'deco3801', 'hh2z2WG2q');
+		global $config;
+		$this->db = new PDO('mysql:host=localhost;dbname=' . $config['dbname'] . ';charset=utf8', $config['dbuser'], $config['dbpass']);
 		$this->db->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);	
 	}
 }
@@ -204,13 +206,18 @@ abstract class PCRObject implements JsonSerializable {
 	* An object is valid if an appropriate entry exists within the database.
 	* If forceCreate is not specified and no ID exists within the database, the provided
 	* object may have been created to access a specific entry (which does not exist)
+	* @returns if the object is currently valid.
 	*/
 	public function isValid() {
 		$this->Update();
 		return $this->id != null;
 	}
 	
-	public function getRow() {
+	/**
+	 * Return the objects' row by reference. This allows updating the row.
+	 * @returns a reference to the objects' row.
+	*/
+	public function &getRow() {
 		$this->Update();
 		return $this->row;
 	}
@@ -227,6 +234,30 @@ abstract class PCRObject implements JsonSerializable {
 	
 	public function commit() {
 		$this->updateRow($this->row);
+	}
+}
+
+class PCRBuilder {
+	private $db;
+	private $row;
+	
+	public function __construct($table) {
+		$this->db = $GLOBALS["db"];
+		$this->row = array();
+		$qry = $this->db->query("SHOW COLUMNS FROM $table;");
+		foreach($qry as $row) {
+			echo $row["Field"];
+			//if($row["Default"] == "NULL");
+			//$this->row[$row["Field"]] 
+		}
+		
+	}
+	
+	/**
+	 * Get the populated row.
+	*/
+	public function getRow() {
+		return $this->row;
 	}
 }
 

@@ -1,8 +1,6 @@
 <?php
-//Formatting here is not done and code needs added parts.
-session_start();
-require_once 'includes/db.php';
 require_once 'includes/handlers.php';
+
 $timezone = date_default_timezone_set('Australia/Brisbane');
 $date = date('m/d/Y h:i:s a', time());
 $id = $_GET['id'];

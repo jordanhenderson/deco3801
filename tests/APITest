@@ -6,8 +6,6 @@
 */
 
 require_once('includes/handlers.php');
-require_once('includes/db.php');
-
 
 class APITest extends PHPUnit_Framework_TestCase 
 {
