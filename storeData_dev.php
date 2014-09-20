@@ -6,7 +6,8 @@
     
     TODO: handle the submission ID and permissions
     */
-    echo $_GET['reviews'];
+    $reviews $_GET['reviews'];
+    echo $reviews[0];
     /*
     $startIndex = $_GET['startIndex'];
     $startLine = $_GET['startLine'];
