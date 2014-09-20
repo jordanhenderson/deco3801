@@ -78,8 +78,10 @@ $crs = new PCRHandler();
         */
         function getContents() {
             annotationText.push($('#annotator-field-0').val());
+        }
+        
+        function saveReviews() {
             var commentNum = 0;
-            alert(annotationText);
             var innerContents = $('#assignment_code').html();
             //alert(innerContents);
             var wordArray = innerContents.split('\n');
@@ -95,7 +97,6 @@ $crs = new PCRHandler();
                 if (startIndex >= 0) {
                     startIndexSet = startIndex;
                     startLine = i;
-                    
                     alert(wordArray[i]);
                     
                 }
@@ -103,20 +104,19 @@ $crs = new PCRHandler();
                     indexPairs.push([
                         startIndexSet, startLine, endIndex, i, annotationText[commentNum]]);
                     alert(indexPairs);
-                    alert(endIndex - 27);
                     commentNum++;
                 }  
             }
             //AJAX call to store the review in the database
-            /*$.ajax({
-			  url: "storeData_dev.php?anchor="+anchor+"&focus="+focus+"&annotation="+annotationText,
+            $.ajax({
+			  url: "storeData_dev.php?reviews="+indexPairs,
 			  type: "POST"
 			})
 			  .done(function( retval ) {
                 alert("Your comments have been saved! Woohoo!");
-            });*/
-            
+            });
         }
+        
 		//Handles when someone clicks on the file tree
 		function handleSwap(id) {
 			$('a.active').removeClass('active');
@@ -201,7 +201,7 @@ $crs = new PCRHandler();
                 </div>	
 				<p>
 					<a class="btn btn-primary" href="reviewhub.php" role="button">Submit</a>
-					<a class="btn btn-info" href="#" role="button">Save</a>
+					<a class="btn btn-info" href="#" onclick="saveReviews()" role="button">Save</a>
 					<a class="btn btn-warning" href="#" role="button">Reset</a>
 					<a class="btn btn-warning" href="reviewhub.php" role="button">Close</a>
 				</p>

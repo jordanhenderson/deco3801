@@ -6,11 +6,15 @@
     
     TODO: handle the submission ID and permissions
     */
-    $anchor = $_GET['anchor'];
-    $focus = $_GET['focus'];
-    $annotationText = $_GET['annotation'];
+    echo $_GET['reviews'];
+    /*
+    $startIndex = $_GET['startIndex'];
+    $startLine = $_GET['startLine'];
+    $endIndex = $_GET['endIndex'];
+    $endLine = $_GET['i'];
+    $annotationText = $_GET['comment']; 
     $stnid = $_SESSION['user_id'];
     $id = $_SESSION['id'];
     $review = new PCRHandler();
-    $review->getReview($stnid, $id, $annotationText, $anchor, $focus);
+    $review->getReview($stnid, $id, $annotationText, $anchor, $focus);*/
 ?>
