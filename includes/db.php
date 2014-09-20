@@ -246,17 +246,16 @@ class PCRBuilder {
 		$this->row = array();
 		$qry = $this->db->query("SHOW COLUMNS FROM $table;");
 		foreach($qry as $row) {
-			echo $row["Field"];
-			//if($row["Default"] == "NULL");
-			//$this->row[$row["Field"]] 
+			$def = $row["Default"];
+			if($def == "CURRENT_TIMESTAMP") $def = "";
+			$this->row[$row["Field"]] = $def;
 		}
-		
 	}
 	
 	/**
 	 * Get the populated row.
 	*/
-	public function getRow() {
+	public function &getRow() {
 		return $this->row;
 	}
 }

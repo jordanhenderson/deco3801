@@ -20,6 +20,8 @@ if (isset($_REQUEST['assid'])) { // TODO - restrict access to other courses assi
 	$new = false;
 } else {
 	$new = true;
+	$assignment = new PCRBuilder("Assignments");
+	$asg = $assignment->getRow();
 }
 
 ?>
