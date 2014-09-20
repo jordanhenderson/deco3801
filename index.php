@@ -18,12 +18,11 @@ if(!$config['DEBUG']) {
 	$_SESSION['admin'] = true;
 }
 
-require_once 'includes/handlers.php';
+/* LTI Handling */
 require_once 'blti/blti.php'; // Load up the Basic LTI Support code
 // Initialize: set secret, do not set session, and do not redirect
 $context = new BLTI($config['blti_psk'], false, false);
 
-$crs = new PCRHandler();
 if ($context->valid) { // Redirect from Moodle, reload data, in case different course.
 	session_unset(); // clear old data, ready for reload from POST
 	$_SESSION['user_id'] = $_POST['user_id'];
@@ -31,17 +30,20 @@ if ($context->valid) { // Redirect from Moodle, reload data, in case different c
 	$_SESSION['course_id'] = $_POST['context_id'];
 	$_SESSION['course_code'] = $_POST['context_label'];
 	$_SESSION['course_title'] = $_POST['context_title'];
-	$_SESSION['helpenabled'] = $crs->getCourse()->helpEnabled();
 	if ($context->isInstructor()) {
 		$_SESSION['admin'] = true;
 	}
-	
 } else if (isset($_SESSION['user_id'])) {
 	// No action, since user is already authenticated, and data stored
 } else {
 	header('Location: invalid.php');
 	exit(); // User didn't come from Moodle, and isn't authenticated.
 }
+
+require_once 'includes/handlers.php';
+$crs = new PCRHandler();
+
+$_SESSION['helpenabled'] = $crs->getCourse()->helpEnabled();
 
 // Pull admin from session var to local var for easier/faster calling
 if (isset($_SESSION['admin']) && $_SESSION['admin']) {

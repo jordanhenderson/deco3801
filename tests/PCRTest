@@ -1,0 +1,53 @@
+<?php
+session_start();
+$_SESSION['user_id'] = "0";
+require_once('config.php');
+require_once('includes/handlers.php');
+
+class PCRTest extends PHPUnit_Framework_TestCase {
+	/**
+	 * Tests a basic PCRObject's functionality (ID, deletion etc.)
+	*/
+	public function testObject()
+	{
+		$course = new Course(array("CourseID"=>"0"));
+		//Check PCRObject ID
+		$this->assertEquals("0", $course->getID());
+		
+		$courseRow = $course->getRow();
+		
+		$courseRow["HelpEnabled"] = "0";
+		
+		$course->commit();
+		
+		$course = new Course(array("CourseID" => "0"));
+		
+		$courseRow = $course->getRow();
+		$this->assertEquals("0", $courseRow["HelpEnabled"]);
+		
+		//Delete the PCRObject
+		$course->delete();
+		//Ensure course is invalid.
+		$this->assertEquals(false, $course->isValid());
+		
+	}
+	
+	public function testCourse()
+	{
+		$handler = new PCRHandler();
+		$_SESSION['course_id'] = "0";
+		$course = $handler->getCourse();
+		
+		//Ensure course is not null
+		$this->assertNotNull($course);
+		
+		$courseRow = $course->getRow();
+		
+		$courseRow["HelpEnabled"] = "1";
+		
+		$course->commit();
+		
+		
+	}
+	
+}
