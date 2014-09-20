@@ -49,32 +49,7 @@ $crs = new PCRHandler();
         TODO: remove alert once testing is complete
         */
         function getPosition() {
-            var innerContents = $('#assignment_code').html();
-            alert(innerContents);
-            var wordArray = innerContents.split('\n');
-            alert(wordArray.length);
-            var indexPairs = [];
-            var startIndex;
-            var startIndexSet;
-            var startLine;
-            var endIndex;
-            for (var i=0; i < wordArray.length; i++) {
-                startIndex = wordArray[i].indexOf('<span class="annotator-hl">');
-                endIndex = wordArray[i].indexOf('</span>');
-                if (startIndex >= 0) {
-                    startIndexSet = startIndex;
-                    startLine = i;
-                    
-                    alert(wordArray[i]);
-                    
-                }
-                if (endIndex >= 0) {
-                    indexPairs.push([
-                        startIndexSet, startLine, endIndex, i]);
-                    alert(indexPairs);
-                    alert(endIndex - 27);
-                }  
-            }
+            
             /*var selection = window.getSelection();        
             anchor = selection.anchorOffset;
             focus = selection.focusOffset;
@@ -103,6 +78,32 @@ $crs = new PCRHandler();
         function getContents() {
             var annotationText = $('#annotator-field-0').val();
             alert(annotationText);
+            var innerContents = $('#assignment_code').html();
+            //alert(innerContents);
+            var wordArray = innerContents.split('\n');
+            //alert(wordArray.length);
+            var indexPairs = [];
+            var startIndex;
+            var startIndexSet;
+            var startLine;
+            var endIndex;
+            for (var i=0; i < wordArray.length; i++) {
+                startIndex = wordArray[i].indexOf('<span class="annotator-hl">');
+                endIndex = wordArray[i].indexOf('</span>');
+                if (startIndex >= 0) {
+                    startIndexSet = startIndex;
+                    startLine = i;
+                    
+                    alert(wordArray[i]);
+                    
+                }
+                if (endIndex >= 0) {
+                    indexPairs.push([
+                        startIndexSet, startLine, endIndex, i, annotationText]);
+                    alert(indexPairs);
+                    alert(endIndex - 27);
+                }  
+            }
             //AJAX call to store the review in the database
             /*$.ajax({
 			  url: "storeData_dev.php?anchor="+anchor+"&focus="+focus+"&annotation="+annotationText,
