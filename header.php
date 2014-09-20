@@ -17,10 +17,6 @@ require_once('includes/handlers.php');
 				<ul class="nav navbar-nav">
 					<li><a href="index.php">Home Page</a></li>
 					<?php
-						// Display the admin bar only for administrators.
-						if (isset($_SESSION['admin']) && $_SESSION['admin']) {
-							echo '<li><a href="admin.php">Admin Panel</a></li>';
-						}
 						// Display the help center bar only if help is enaled.
 						if (isset($_SESSION['helpenabled']) && $_SESSION['helpenabled']) {
 							echo '<li><a href="help.php">Help Centre</a></li>';

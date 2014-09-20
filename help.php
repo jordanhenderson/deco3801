@@ -1,8 +1,19 @@
 <?php
+
+session_start();
+
+// Pull admin from session var to local var for easier/faster calling
+if (isset($_SESSION['admin']) && $_SESSION['admin']) {
+	$admin = true;
+} else {
+	$admin = false;
+}
+
 require_once 'includes/handlers.php';
+
 //Enable/Disable Help centre
-if (!isset($_SESSION['helpenabled']) || !$_SESSION['helpenabled']) {
-	exit();
+if (!$admin && (!isset($_SESSION['helpenabled']) || !$_SESSION['helpenabled'])) {
+	exit("Help has not enabled by the administrator of this course.");
 }
 
 $crs = new PCRHandler();
@@ -30,11 +41,22 @@ $crs = new PCRHandler();
 		<h1>Help Centre</h1>
 		<div class="col-lg-12">
 			<?php
-			//Get all the questions from teh DB to display in the centre
+				if ($admin) { // Help centre options
+					echo '
+			<h2>Enable/Disable Help Centre for Students</h2>
+			<form>
+				<select class="selectpicker" data-width="110px">
+					<option>Enabled</option>
+					<option>Disabled</option>
+				</select>
+			</form>';
+				}
+				
+				//Get all the questions from the DB to display in the centre
 				$questions = $crs->getCourse()->getHelpCentreQuestions();
 				
 				if (empty($questions)) {
-					echo 'no questions';
+					echo '<p>No questions</p>';
 				} else {
 			?>
 			<h2>Questions</h2>

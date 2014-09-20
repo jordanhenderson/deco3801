@@ -275,8 +275,7 @@ class PCRBuilder {
  * (text)			TestFiles
  * (timestamp)		OpenTime
  * (timestamp)		DueTime
- * (timestamp)		ReviewOpenTime
- * (timestamp)		ReviewsVisibleTime
+ * (timestamp)		ReviewsDue
  */
 class Assignment extends PCRObject {
 	public function __construct($data) {
