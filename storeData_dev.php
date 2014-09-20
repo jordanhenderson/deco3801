@@ -7,7 +7,9 @@
     TODO: handle the submission ID and permissions
     */
     $reviews = json_decode($_GET['reviews']);
-    echo $reviews[0];
+    echo '<pre>';
+    print_r($reviews[0]);
+    echo '</pre>';
     /*
     $startIndex = $_GET['startIndex'];
     $startLine = $_GET['startLine'];
