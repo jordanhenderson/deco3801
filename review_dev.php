@@ -102,7 +102,7 @@ $crs = new PCRHandler();
                 }
                 if (endIndex >= 0) {
                     indexPairs.push([
-                        startIndexSet, startLine, endIndex, i, annotationText[commentNum]]);
+                        startIndexSet, startLine, endIndex, i, annotationText[commentNum], $( "#file_heading" ).html()]);
                     alert(indexPairs);
                     commentNum++;
                 }  
@@ -114,6 +114,7 @@ $crs = new PCRHandler();
 			})
 			  .done(function( retval ) {
                 alert("Your comments have been saved! Woohoo!");
+                alert(retval);
             });
         }
         
@@ -181,7 +182,7 @@ $crs = new PCRHandler();
 		<div class="col-md-9">
 			<h1>Assignment 99 Submission</h1>
 			<div class="col-md-12">
-				<h2 id="file_heading"></h2>
+				<h2 id="file_heading">assign1_additional.cpp</h2>
 				<div id="innercontainer">
                     <pre id='assignment_code'><?php
                     /*
