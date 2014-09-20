@@ -6,7 +6,7 @@
     
     TODO: handle the submission ID and permissions
     */
-    $reviews = unserialize($_GET['reviews']);
+    $reviews = json_decode($_GET['reviews']);
     echo $reviews[0];
     /*
     $startIndex = $_GET['startIndex'];

@@ -110,7 +110,7 @@ $crs = new PCRHandler();
             }
             //AJAX call to store the review in the database
             $.ajax({
-			  url: "storeData_dev.php?reviews="+indexPairs,
+			  url: "storeData_dev.php?reviews="+JSON.stringify(indexPairs),
 			  type: "POST"
 			})
 			  .done(function( retval ) {
