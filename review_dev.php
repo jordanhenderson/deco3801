@@ -35,6 +35,7 @@ $crs = new PCRHandler();
 		//Initialises Annotator for writing reviews on the page
 		var annotationText = [];
         var reviewId = 0;
+        var selected;
         jQuery(function ($) {
 			$('#innercontainer').annotator();
 		});
@@ -49,10 +50,14 @@ $crs = new PCRHandler();
         TODO: remove alert once testing is complete and need to store submission
         ID and permissions
         */
+        function getHighlighted() {
+            selected = window.getSelection().toString();
+        }
+        
         function getContents() {
             var comment = $('#annotator-field-0').val();
-            alert("selection: " + window.getSelection().toString());
-            annotationText.push({"comment":comment, "text":window.getSelection().toString()});
+            alert("selection: " + selected);
+            annotationText.push({"comment":comment, "text":selected});
         }
         
         function saveReviews() {
