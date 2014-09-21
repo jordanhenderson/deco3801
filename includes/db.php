@@ -54,7 +54,6 @@ abstract class PCRObject implements JsonSerializable {
 	protected $id_field; //the field (column name) of the object's ID column (in which $id is stored)
 	protected $table; //table is the name of the table which stores the object
 	protected $row; //row holds the object
-	
 	/**
 	 * uptodate determines if the object has been populated by a row.
 	 * This allows set operations to occur without first retrieving data.
@@ -64,7 +63,6 @@ abstract class PCRObject implements JsonSerializable {
 	 * forceCreate specifies if a row with the provided ID does not already exist.
 	*/
 	protected $forceCreate;
-
 	 /**
 	 * PCRObject($id_field, $table, $data, $forceCreate)
 	 * param id_field: The ID field of the database table.
@@ -79,7 +77,7 @@ abstract class PCRObject implements JsonSerializable {
 		$this->id_field = $id_field;
 		$this->uptodate = 0;
 		$this->forceCreate = $forceCreate;
-		
+
 		if (is_array($data)) {
 			$this->row = $data;
 			if (isset($data[$id_field]) && $data[$id_field] != null) {
@@ -170,8 +168,7 @@ abstract class PCRObject implements JsonSerializable {
 				$sth->execute(array($this->id));
 				$row = $sth->fetch(PDO::FETCH_ASSOC);
 				if (!$row && !$this->forceCreate) {
-					//Failed to select row. Set ID to null.
-					$this->id = null;
+					$this->row = null;
 					return;
 				}
 			}
@@ -208,7 +205,7 @@ abstract class PCRObject implements JsonSerializable {
 	*/
 	public function isValid() {
 		$this->Update();
-		return $this->id != null;
+		return $this->id != null && $this->uptodate == 1;
 	}
 	
 	/**
@@ -284,7 +281,7 @@ class Assignment extends PCRObject {
 	
 	public function jsonSerialize() {
 		parent::Update();
-		return $this->row;
+		if(parent::isValid()) return $this->row;
 	}
 }
 
@@ -304,7 +301,7 @@ class File extends PCRObject  {
 
 	public function jsonSerialize() {
 		parent::Update();
-		return $this->row;
+		if(parent::isValid()) return $this->row;
 	}
 }
 
@@ -568,7 +565,7 @@ class Question extends PCRObject {
 	
 	public function jsonSerialize() {
 		parent::Update();
-		return $this->row;
+		if(parent::isValid()) return $this->row;
 	}
 	
 	public function addComment($stnid, $fullname, $content) {
@@ -606,7 +603,7 @@ class Review extends PCRObject {
 	
 	public function jsonSerialize() {
 		parent::Update();
-		return $this->row;
+		if(parent::isValid()) return $this->row;
 	}
 }
 /**
@@ -628,6 +625,6 @@ class Comment extends PCRObject {
 	
 	public function jsonSerialize() {
 		parent::Update();
-		return $this->row;
+		if(parent::isValid()) return $this->row;
 	}
 }

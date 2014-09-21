@@ -27,10 +27,7 @@ class PCRHandler {
 	* @returns the course
 	*/
 	public function getCourse() {
-		$course = new Course(array("CourseID"=>$_SESSION['course_id']));
-		if ($course->isValid()) {
-			return $course;
-		}
+		return new Course(array("CourseID"=>$_SESSION['course_id']));
 	}
 
 	public function removeQuestion($id) {
@@ -38,10 +35,10 @@ class PCRHandler {
 	}
 	
 	public function markResolved($id) {
-		$this->getQuestion($id)->markResolved($id);
+		$this->getQuestion($id)->markResolved();
 	}
 	public function markUnresolved($id) {
-		$this->getQuestion($id)->markUnresolved($id);
+		$this->getQuestion($id)->markUnresolved();
 	}
 	
 	/**
@@ -50,10 +47,7 @@ class PCRHandler {
 	* @returns the assignment object
 	*/
 	public function getAssignment($id) {
-		$assignment = new Assignment(array("AssignmentID"=>$id));
-		if ($assignment->isValid()) {
-			return $assignment;
-		}
+		return new Assignment(array("AssignmentID"=>$id));
 	}
 	
 	/**
@@ -65,10 +59,7 @@ class PCRHandler {
 	*/
 	public function getSubmission($id) {
 		$assignment = new Assignment(array("AssignmentID"=>$id));
-		if ($assignment->isValid()) {
-			$submission = new Submission(array("AssignmentID"=>$id, "StudentID"=>$_SESSION['user_id']));
-			return $submission;
-		}
+		return new Submission(array("AssignmentID"=>$id, "StudentID"=>$_SESSION['user_id']));
 	}
 	
 	/**
@@ -76,10 +67,7 @@ class PCRHandler {
 	* @param id the question ID
 	*/
 	public function getQuestion($id) {
-		$question = new Question(array("QuestionID"=>$id));
-		if ($question->isValid()) {
-			return $question;
-		}
+		return new Question(array("QuestionID"=>$id));
 	}
 	
 	public function addComment($question_id, $studentid, $fullname, $content) {
@@ -92,10 +80,7 @@ class PCRHandler {
 	* @param id the review ID
 	*/
 	public function getReview($stnid, $id, $startIndex, $startLine, $endIndex, $endLine, $annotationText, $fileName) {
-		$review = new Review(array("ReviewerID"=>$stnid, "ReviewID"=>$id, "SubmissionID"=>'0', "startIndex"=>$startIndex, "startLine"=>$startLine, "endIndex"=>$endIndex, "endLine"=>$endLine, "Comments"=>$annotationText, "fileName"=>$fileName));
-		if ($review->isValid()) {
-			return $review;
-		}
+		return new Review(array("ReviewerID"=>$stnid, "ReviewID"=>$id, "SubmissionID"=>'0', "startIndex"=>$startIndex, "startLine"=>$startLine, "endIndex"=>$endIndex, "endLine"=>$endLine, "Comments"=>$annotationText, "fileName"=>$fileName));
 	}
 	
 	/**
