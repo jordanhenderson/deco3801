@@ -9,9 +9,9 @@ if (!isset($_SESSION['admin']) || !$_SESSION['admin']) {
 $crs = new PCRHandler();
 
 if (isset($_REQUEST['assid'])) {
-	$asg = $crs->getAssignment($_REQUEST['assid']);
-	if ($asg->isValid()) {
-		$asg = &$asg->getRow();
+	$assignment = $crs->getAssignment($_REQUEST['assid']);
+	if ($assignment->isValid()) {
+		$asg = &$assignment->getRow();
 		if ($asg['CourseID'] != $_SESSION['course_id']) {
 			exit("Assignment is for a different course (course_id = $asg[CourseID]). Please log in to that course's page from Moodle to access it.");
 		}
@@ -35,7 +35,7 @@ if (isset($_POST['create']) || isset($_POST['update'])) {
 	$asg['ReviewsNeeded'] = $_POST['ReviewsNeeded'];
 	//$asg['TestFiles'] = $_POST['TestFiles'];
 	//$asg['AssignmentFiles'] = $_POST['AssignmentFiles'];
-	$asg->commit();
+	$assignment->commit();
 }
 
 ?>
