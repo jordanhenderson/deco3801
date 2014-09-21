@@ -67,7 +67,8 @@ $crs = new PCRHandler();
             $('#assignment_code span').each(function( index, element ) {
                    // alert($(this).html())
                    // return $(this).has('.annotator-h1').length > 0
-                alert("position: " + $(element).position());
+                var pos = $(element).position();
+                alert("Element: " + element + ", position: " + pos.left + "," + pos.top);
                    
                 });
             for (var i=0; i < wordArray.length; i++) {
