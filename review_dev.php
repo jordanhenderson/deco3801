@@ -87,9 +87,9 @@ $crs = new PCRHandler();
                     if (startIndex >= 0) {
                         for (var k=0; k < annotationText.length; k++) {
                             if (annotationText[k].reviewID === i) {
-                                annotationText[i].startIndexSet = startIndex;
-                                annotationText[i].startLine = j;
-                                annotationText[i].fileName = $( "#file_heading" ).html();
+                                annotationText[k].startIndexSet = startIndex;
+                                annotationText[k].startLine = j;
+                                annotationText[k].fileName = $( "#file_heading" ).html();
                                 break;
                             }
                         }                        
