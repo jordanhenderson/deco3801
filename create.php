@@ -11,7 +11,7 @@ $crs = new PCRHandler();
 if (isset($_REQUEST['assid'])) {
 	$asg = $crs->getAssignment($_REQUEST['assid']);
 	if ($asg->isValid()) {
-		$asg = $asg->getRow();
+		$asg = &$asg->getRow();
 		if ($asg['CourseID'] != $_SESSION['course_id']) {
 			exit("Assignment is for a different course (course_id = $asg[CourseID]). Please log in to that course's page from Moodle to access it.");
 		}
@@ -22,7 +22,7 @@ if (isset($_REQUEST['assid'])) {
 } else {
 	$new = true;
 	$assignment = new PCRBuilder("Assignments");
-	$asg = $assignment->getRow();
+	$asg = &$assignment->getRow();
 }
 
 if (isset($_POST['create']) || isset($_POST['update'])) {

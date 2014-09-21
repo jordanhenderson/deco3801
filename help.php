@@ -78,7 +78,7 @@ $crs = new PCRHandler();
 					<?php	
 					foreach ($questions as $question) {
 						if(!$question->isValid()) continue;
-						$questionRow = $question->getRow();
+						$questionRow = &$question->getRow();
 						//Get the last comment to display in the help centre
 						$lastpost = $question->getLastComment();
 						
@@ -90,7 +90,7 @@ $crs = new PCRHandler();
 						foreach ($lastpost as $last) {
 							if(!$last->isValid()) continue;
 							//Display last posts individually
-							$last = $last->getRow();
+							$last = &$last->getRow();
 							if (!isset($last['postdate'])) {
 								echo 'No postdate specified';
 							}

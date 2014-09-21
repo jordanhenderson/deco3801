@@ -36,7 +36,7 @@ $crs = new PCRHandler();
 	if($question->isValid()) {
 		//Get the comments for the question displaying
 		$comments = $question->getComments();
-		$questionRow = $question->getRow();
+		$questionRow = &$question->getRow();
 		$title = $questionRow["Title"];
 		$timeasked = $questionRow["Opendate"];
 		$status = $questionRow["Status"];
@@ -76,7 +76,7 @@ $crs = new PCRHandler();
 				<div class="col-md-6">
 					<?php
 					foreach ($comments as $comment){
-						$commentRow = $comment->getRow();
+						$commentRow = &$comment->getRow();
 						//Display each comment as readonly for specific question
 						echo "
 						<tr class='unresolved'>
