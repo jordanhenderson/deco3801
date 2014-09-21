@@ -1,6 +1,7 @@
 <?php
 
-require_once 'includes/handlers.php';
+session_start();
+
 require_once 'config.php';
 
 if (!$config['DEBUG']) {
@@ -16,6 +17,8 @@ if (!$config['DEBUG']) {
 	$_SESSION['helpenabled'] = "1";
 	$_SESSION['admin'] = true;
 }
+
+require_once 'includes/handlers.php';
 
 /* LTI Handling */
 require_once 'blti/blti.php'; // Load up the Basic LTI Support code

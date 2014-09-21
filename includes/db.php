@@ -96,13 +96,13 @@ abstract class PCRObject implements JsonSerializable {
 		$this->id = $row[$this->id_field];
 		/* Update the row to match the latest set of data. */
 		$update = "UPDATE $this->table SET ";
-		foreach ($this->row as $key=>$value) {
+		foreach ($row as $key=>$value) {
 			if ($key != $this->id_field)
-				$update = $update . "$key = :$key,";
+				$update .= "$key = :$key,";
 		}
 		$update = rtrim($update, ",");
-		$update = " WHERE $this->id_field = :$this->id_field;";
-		
+		$update .= " WHERE $this->id_field = :$this->id_field;";
+
 		try {
 			$sth = $this->db->prepare($update);
 			$sth->execute($this->row);
@@ -183,8 +183,6 @@ abstract class PCRObject implements JsonSerializable {
 				//Only recurse once to prevent a loop - this might not be necessary.
 				if (!$recursed) $this->Update(1);
 				return;
-			} else {
-				$this->updateRow($row);
 			}
 			
 			$this->row = $row;

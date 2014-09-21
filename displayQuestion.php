@@ -118,6 +118,7 @@ $crs = new PCRHandler();
 	<script src="js/bootstrap-datetimepicker.min.js"></script>
 	<!-- Bootstrap Select JavaScript -->
 	<script src="js/bootstrap-select.min.js"></script>
+	<script src="js/json.js"></script>
 	<?php
 		if($question->isValid()) {
 	?>
@@ -126,8 +127,8 @@ $crs = new PCRHandler();
 			$(":submit").click(function() {
 				var func = $(this).attr("name");
 				var request = {f: func, params: [<?php echo $questionRow["QuestionID"]; ?>]};
-				$.post("api.php", request, function() {
-					if(func == "markResolved" || func = "markUnresolved") location.reload();
+				$.post("api.php", JSON.stringify(request), function() {
+					if(func == "markResolved" || func == "markUnresolved") location.reload();
 					else window.location.replace("help.php");
 				});
 			});

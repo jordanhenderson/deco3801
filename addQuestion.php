@@ -10,26 +10,6 @@ $date = date('m/d/Y h:i:s a', time());
 <html lang="en">
 
 <head>
-	<script>
-		$(function() {
-			$('form').submit(function() {
-				var form = $(this);
-				//Use the action= property for ajax submission
-				var url = form.attr('action');
-				var params = form.serializeArray();
-				var func = form.data('function');
-				var request = {f: func, params: params};
-				//Post the serialized form.
-				$.post(url, request, function(data) {
-					//Handle submission.
-					
-				});
-				
-				
-				return false;
-			});
-		});
-	</script>
 	<meta charset="utf-8">
 	<meta name="viewport" content="width=device-width, initial-scale=1">
 
@@ -87,6 +67,7 @@ $date = date('m/d/Y h:i:s a', time());
 	<!-- Bootstrap Select JavaScript -->
 	<script src="js/bootstrap-select.min.js"></script>
 	
+	<script src="js/json.js"></script>
 	<script type="text/javascript">
 		window.onload = function () {
 			$('.selectpicker').selectpicker();
@@ -104,6 +85,26 @@ $date = date('m/d/Y h:i:s a', time());
 			$("#title").html("");
 			$("#content").html("");
 		}
+	</script>
+	<script>
+		$(function() {
+			$('form').submit(function() {
+				var form = $(this);
+				//Use the action= property for ajax submission
+				var url = form.attr('action');
+				var func = form.data('function');
+				var request = {f: func, params: [$("#QTitle").val(), $("#QContent").val()]};
+				
+				//Post the serialized form.
+				$.post(url, JSON.stringify(request), function(data) {
+					//Handle submission.
+					
+				});
+				
+				
+				return false;
+			});
+		});
 	</script>
 </body>
 </html>
