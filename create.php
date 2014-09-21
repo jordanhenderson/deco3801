@@ -33,8 +33,8 @@ if (isset($_POST['create']) || isset($_POST['update'])) {
 	$asg['ReviewsDue'] = $_POST['ReviewsDue'];
 	$asg['Weight'] = $_POST['Weight'];
 	$asg['ReviewsNeeded'] = $_POST['ReviewsNeeded'];
-	$asg['TestFiles'] = $_POST['TestFiles'];
-	$asg['AssignmentFiles'] = $_POST['AssignmentFiles'];
+	//$asg['TestFiles'] = $_POST['TestFiles'];
+	//$asg['AssignmentFiles'] = $_POST['AssignmentFiles'];
 	$asg->commit();
 }
 
