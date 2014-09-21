@@ -65,7 +65,8 @@ $crs = new PCRHandler();
                     $(element).addClass( 'span' + index );
                     size++;
                     for (var i=0; i < annotationText.length; i++) {
-                        if (annotationText[i].text === $(element).html()) {
+                        alert(JSON.stringify(annotationText[i]));
+                        if (annotationText[i].text === $(element).html() && annotationText[i].reviewID === '') {
                             annotationText[i].reviewID = index;
                             break;
                         }
