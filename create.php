@@ -62,7 +62,7 @@ if (isset($_POST['C'])) {
 		<h1>Edit Existing Assignment</h1>';
 		}
 		?>
-		<form role="form" method="post">
+		<form method="post">
 			<div class="row">
 				<div class="col-md-6">
 					<label for="AssignmentName">Assignment Name</label>
@@ -139,8 +139,10 @@ if (isset($_POST['C'])) {
 				<button class="btn btn-primary" type="submit" value="submit">Update</button>';
 				}
 				?>
-				<button class="btn btn-warning" id="Reset">Reset</button>
-				<a class="btn" href="index.php">Cancel</a>
+				<button class="btn btn-warning Reset">Reset</button>
+				<input class="btn btn-warning Reset">Reset</input>
+				<div class="btn btn-warning Reset">Reset</div>
+				<a class="btn btn-default" href="index.php">Cancel</a>
 				<br><br>
 			</div>
 		</form>
@@ -157,7 +159,8 @@ if (isset($_POST['C'])) {
 	
 	<script type="text/javascript">
 		//Reset form.
-		$("#Reset").click(function() {
+		$(".Reset").click(function() {
+			alert("clicked reset");
 			$("#AssignmentName").val(<?php echo "'$asg[AssignmentName]'"; ?>)
 			$("#OpenTime").val(<?php echo "'$asg[OpenTime]'"; ?>)
 			$("#DueTime").val(<?php echo "'$asg[DueTime]'"; ?>)
