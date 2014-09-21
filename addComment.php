@@ -18,9 +18,6 @@ $id = $_GET["QuestionID"];
 	
 	<!-- Bootstrap Select CSS -->
 	<link href="css/bootstrap-select.min.css" rel="stylesheet">
-	
-	<!-- Bootstrap datetimepicker CSS -->	
-	<link href="css/bootstrap-datetimepicker.min.css" rel="stylesheet">
 
 	<!-- Custom CSS -->
 	<link href="css/main.css" rel="stylesheet">
@@ -85,9 +82,6 @@ $id = $_GET["QuestionID"];
 
 	<!-- Bootstrap Core JavaScript -->
 	<script src="js/bootstrap.min.js"></script>
-
-	<!-- Bootstrap datetimepicker JavaScript -->
-	<script src="js/bootstrap-datetimepicker.min.js"></script>
 	
 	<!-- Bootstrap Select JavaScript -->
 	<script src="js/bootstrap-select.min.js"></script>
@@ -117,11 +111,5 @@ $id = $_GET["QuestionID"];
 			$('.selectpicker').selectpicker();
 		}
 	</script>
-	
-	<script type="text/javascript">
-		$(".form_datetime").datetimepicker({
-			format: 'dd M yyyy - hh:ii'
-		});
-	</script> 
 </body>
 </html>
