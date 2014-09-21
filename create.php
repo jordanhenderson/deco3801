@@ -101,14 +101,14 @@ if (isset($_POST['C'])) {
 			<div class="row">
 				<div class="col-md-4">
 					<div class="form-group">
-						<label for="specfiles">Assignment Files</label>
+						<label for="specfiles">Assignment Files TODO TODO</label>
 						<input type="file" id="specfiles">
 						<p class="help-block">PDF or zip containing the assignment specifications.</p>
 					</div>
 				</div>
 				<div class="col-md-4">
 					<div class="form-group">
-						<label for="testfiles">Unit Testing Files</label>
+						<label for="testfiles">Unit Testing Files TODO TODO</label>
 						<input type="file" id="testfiles">
 						<p class="help-block">Please zip test file(s). The file executed when testing must be named "runtest"</p>
 					</div>
@@ -158,14 +158,15 @@ if (isset($_POST['C'])) {
 	<script type="text/javascript">
 		//Reset form.
 		$("#Reset").click(function() {
-			$("#AssignmentName").val(<?php echo "'$asg[AssignmentName]'"; ?>)
-			$("#OpenTime").val(<?php echo "'$asg[OpenTime]'"; ?>)
-			$("#DueTime").val(<?php echo "'$asg[DueTime]'"; ?>)
-			$("#ReviewsDue").val(<?php echo "'$asg[ReviewsDue]'"; ?>)
-			$("#specfiles").val(<?php echo "'???'"; ?>)
-			$("#testfiles").val(<?php echo "'???'"; ?>)
-			$("#Weight").val(<?php echo "'$asg[Weight]'"; ?>)
-			$("#ReviewsNeeded").val(<?php echo "'$asg[ReviewsNeeded]'"; ?>)
+			$("#AssignmentName").val(<?php echo "'$asg[AssignmentName]'"; ?>);
+			$("#OpenTime").val(<?php echo "'$asg[OpenTime]'"; ?>);
+			$("#DueTime").val(<?php echo "'$asg[DueTime]'"; ?>);
+			$("#ReviewsDue").val(<?php echo "'$asg[ReviewsDue]'"; ?>);
+			$("#Weight").val(<?php echo "'$asg[Weight]'"; ?>);
+			$("#ReviewsNeeded").val(<?php echo "'$asg[ReviewsNeeded]'"; ?>);
+			
+			$("#specfiles").val(<?php echo "'???'"; ?>); // TODO
+			$("#testfiles").val(<?php echo "'???'"; ?>); // TODO
 		});
 		
 		$(".form_datetime").datetimepicker({
