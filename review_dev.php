@@ -93,7 +93,7 @@ $crs = new PCRHandler();
 			  .done(function( retval ) {
                 alert("Your comments have been saved! Woohoo!");
                 alert(retval);
-                $('span.annotator-h1').addClass('submitted');
+                $('span').find('.annotator-h1').addClass('submitted');
                 alert(1);
             });
         }
