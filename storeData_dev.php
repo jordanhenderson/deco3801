@@ -10,7 +10,9 @@
     $handler = new PCRHandler();
     $stnid = $_SESSION['user_id'];
     $id = $_SESSION['id'];
-    echo $review[0];
+    echo "<pre>";
+    print_r($review);
+    echo "</pre>";
     for ($i = 0; $i < count($review); $i++) {
         /* Id of reviewer, submission id, start position, start line, 
             end position, end line, comment contents, filename
