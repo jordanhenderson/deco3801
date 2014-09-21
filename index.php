@@ -18,8 +18,6 @@ if (!$config['DEBUG']) {
 	$_SESSION['admin'] = true;
 }
 
-require_once 'includes/handlers.php';
-
 /* LTI Handling */
 require_once 'blti/blti.php'; // Load up the Basic LTI Support code
 // Initialize: set secret, do not set session, and do not redirect
@@ -42,6 +40,8 @@ if ($context->valid) { // Redirect from Moodle, reload data, in case different c
 	exit(); // User didn't come from Moodle, and isn't authenticated.
 }
 
+
+require_once 'includes/handlers.php';
 $crs = new PCRHandler();
 
 $_SESSION['helpenabled'] = $crs->getCourse()->helpEnabled();
@@ -132,7 +132,7 @@ echo "</pre>\n";
 					foreach ($assignments as $asg) {
 						if(!$asg->isValid()) continue;
 						
-						$asg = $asg->getRow();
+						$asg = &$asg->getRow();
 						
 						// Convert and store the dates from the DB as Unix timestamps.
 						$CurrentTime = time();
@@ -145,7 +145,7 @@ echo "</pre>\n";
 						if (!$admin) { // student
 							$sub = $crs->getSubmission($asg['AssignmentID']);
 							if($sub->isValid()) {
-								$subRow = $sub->getRow();
+								$subRow = &$sub->getRow();
 								$date = date_create_from_format('Y-m-d G:i:s', $subRow['SubmitTime']);
 								$SubmitTime = (int) date_format($date, 'U');
 							}
