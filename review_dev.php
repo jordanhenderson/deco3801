@@ -64,7 +64,14 @@ $crs = new PCRHandler();
             var startIndexSet;
             var startLine;
             var endIndex;
-            
+            $('#assignment_code span.annotator-h1').each(function( index, element ) {
+                   // alert($(this).html())
+                   // return $(this).has('.annotator-h1').length > 0
+                alert($(element).position());  
+                   
+                   
+                   
+                });
             for (var i=0; i < wordArray.length; i++) {
           
                     startIndex = wordArray[i].indexOf('<span class="annotator-hl">');
@@ -94,12 +101,7 @@ $crs = new PCRHandler();
 			  .done(function( retval ) {
                 alert("Your comments have been saved! Woohoo!");
                 alert(retval);
-                $('#assignment_code span').filter(function() {
-                    alert($(this).html())
-                    return $(this).has('.annotator-h1').length > 0
-                }).each(function() {
-                    $('span.annotator-h1').attr('id', 'submitted');
-                });
+                
                 alert(1);
             });
         }
