@@ -1,10 +1,9 @@
 <?php
 
-session_start();
-
+require_once 'includes/handlers.php';
 require_once 'config.php';
 
-if(!$config['DEBUG']) {
+if (!$config['DEBUG']) {
 	//Forcefully pull new changes when visiting index.php
 	exec("git pull && git reset --hard origin/master");
 } else {
@@ -40,7 +39,6 @@ if ($context->valid) { // Redirect from Moodle, reload data, in case different c
 	exit(); // User didn't come from Moodle, and isn't authenticated.
 }
 
-require_once 'includes/handlers.php';
 $crs = new PCRHandler();
 
 $_SESSION['helpenabled'] = $crs->getCourse()->helpEnabled();

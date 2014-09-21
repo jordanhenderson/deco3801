@@ -1,6 +1,6 @@
 <?php
 
-session_start();
+require_once 'includes/handlers.php';
 
 // Pull admin from session var to local var for easier/faster calling
 if (isset($_SESSION['admin']) && $_SESSION['admin']) {
@@ -8,8 +8,6 @@ if (isset($_SESSION['admin']) && $_SESSION['admin']) {
 } else {
 	$admin = false;
 }
-
-require_once 'includes/handlers.php';
 
 //Enable/Disable Help centre
 if (!$admin && (!isset($_SESSION['helpenabled']) || !$_SESSION['helpenabled'])) {

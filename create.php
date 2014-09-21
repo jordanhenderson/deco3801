@@ -1,7 +1,5 @@
 <?php
 
-session_start();
-
 require_once 'includes/handlers.php';
 
 if (!isset($_SESSION['admin']) || !$_SESSION['admin']) {
@@ -22,6 +20,10 @@ if (isset($_REQUEST['assid'])) { // TODO - restrict access to other courses assi
 	$new = true;
 	$assignment = new PCRBuilder("Assignments");
 	$asg = $assignment->getRow();
+}
+
+if (isset($_POST['C'])) {
+	header('location: search.php');
 }
 
 ?>
@@ -60,36 +62,35 @@ if (isset($_REQUEST['assid'])) { // TODO - restrict access to other courses assi
 		<h1>Edit Existing Assignment</h1>';
 		}
 		?>
-		<form role="form" >
+		<form role="form" method="post">
 			<div class="row">
 				<div class="col-md-6">
-					<label for="name">Assignment Name</label>
-					<input class="form-control" type="text" id="name" <?php echo 'value="'.$asg['AssignmentName'].'"'; ?>></input>
+					<label for="AssignmentName">Assignment Name</label>
+					<input class="form-control" type="text" id="AssignmentName" <?php echo 'value="'.$asg['AssignmentName'].'"'; ?>></input>
 				</div>
 			</div>
 			<br>
 			<div class="row">
 				<div class="col-md-4">
-					<label for="open">Open Date</label>
-					<input size="24" type="text" <?php echo 'value="'.$asg['OpenTime'].'"'; ?> class="form-control form_datetime" id="open">
+					<label for="OpenTime">Open Date</label>
+					<input size="24" type="text" <?php echo 'value="'.$asg['OpenTime'].'"'; ?> class="form-control form_datetime" id="OpenTime">
 					<p class="help-block">
 						Date and time that assignment files are available, and submissions are permitted.
 					</p>
 				</div>
 				<div class="col-md-4">
-					<label for="due">Due Date</label>
-					<input size="24" type="text" <?php echo 'value="'.$asg['DueTime'].'"'; ?> class="form-control form_datetime" id="due">
+					<label for="DueTime">Due Date</label>
+					<input size="24" type="text" <?php echo 'value="'.$asg['DueTime'].'"'; ?> class="form-control form_datetime" id="DueTime">
 					<p class="help-block">
-						Date and time that the assignment must be submitted before.<br>
-						A late submission will be declared to both the student and teacher.<br>
-						The students will be allowed to begin peer reviewing <b>1 day</b> after this time. <br>
+						Date and time that the assignment must be submitted before, without being declared to both the student and teacher.<br>
+						The students may begin peer reviewing <b>1 day</b> after this time.<br>
 						A student who has not submitted before peer review begins can not participate in the peer review.<br>
 						Students cannot submit after peer review begins.
 					</p>
 				</div>
 				<div class="col-md-4">
-					<label for="review-due">Peer Reviews Due</label>
-					<input size="24" type="text" <?php echo 'value="'.$asg['ReviewsDue'].'"'; ?> class="form-control form_datetime" id="review-due">
+					<label for="ReviewsDue">Peer Reviews Due</label>
+					<input size="24" type="text" <?php echo 'value="'.$asg['ReviewsDue'].'"'; ?> class="form-control form_datetime" id="ReviewsDue">
 					<p class="help-block">
 						Date and time that students must finish their reviews by.<br>
 						Reviews are available from the due date onwards.
@@ -116,14 +117,12 @@ if (isset($_REQUEST['assid'])) { // TODO - restrict access to other courses assi
 			<br>
 			<div class="row">
 				<div class="col-md-4">
-					<label for="weight">Weight (%)</label>
-					<input <?php echo 'value="'.$asg['Weight'].'"'; ?> class="form-control" type="number" id="weight" min="1" max="100">
+					<label for="Weight">Weight (%)</label>
+					<input <?php echo 'value="'.$asg['Weight'].'"'; ?> class="form-control" type="number" id="Weight" min="1" max="100">
 				</div>
 				<div class="col-md-4">
-					<label for="reviewnum">Reviews Per Student</label>
-					<select class="selectpicker" data-width="120px" id="reviewnum">
-						<option>1</option><option>2</option><option>3</option><option>4</option><option>5</option><option>6</option><option>7</option><option>8</option><option>9</option><option>10</option>
-					</select>
+					<label for="ReviewsNeeded">Reviews Per Student</label><br>
+					<input <?php echo 'value="'.$asg['ReviewsNeeded'].'"'; ?> class="form-control" type="number" id="ReviewsNeeded" min="0" max="10">
 					<p class="help-block">
 						The amount of assignments each student will be assigned to review, after the due date.<br>
 						Students who have not submitted before the deadline will not be able to create or recieve reviews.
@@ -134,13 +133,15 @@ if (isset($_REQUEST['assid'])) { // TODO - restrict access to other courses assi
 				<?php
 				if ($new) {
 					echo '
-				<input class="btn btn-primary" role="button" type="submit" value="Create">';
+				<button class="btn btn-primary" type="submit" value="submit">Create</button>';
 				} else {
 					echo '
-				<input class="btn btn-primary" role="button" type="submit" value="Update">';
+				<button class="btn btn-primary" type="submit" value="submit">Update</button>';
 				}
 				?>
-				<input class="btn btn-warning" role="button" type="submit" value="Reset">
+				<button class="btn btn-warning" id="Reset">Reset</button>
+				<a class="btn" href="index.php">Cancel</a>
+				<br><br>
 			</div>
 		</form>
 	</div>
@@ -154,18 +155,21 @@ if (isset($_REQUEST['assid'])) { // TODO - restrict access to other courses assi
 	<!-- Bootstrap datetimepicker JavaScript -->
 	<script src="js/bootstrap-datetimepicker.min.js"></script>
 	
-	<!-- Bootstrap Select JavaScript -->
-	<script src="js/bootstrap-select.min.js"></script>
-	
 	<script type="text/javascript">
-		window.onload = function () {
-			$('.selectpicker').selectpicker();
-		}
-	</script>
-	
-	<script type="text/javascript">
+		//Reset form.
+		$("#Reset").click(function() {
+			$("#AssignmentName").val(<?php echo "'$asg[AssignmentName]'"; ?>)
+			$("#OpenTime").val(<?php echo "'$asg[OpenTime]'"; ?>)
+			$("#DueTime").val(<?php echo "'$asg[DueTime]'"; ?>)
+			$("#ReviewsDue").val(<?php echo "'$asg[ReviewsDue]'"; ?>)
+			$("#specfiles").val(<?php echo "'???'"; ?>)
+			$("#testfiles").val(<?php echo "'???'"; ?>)
+			$("#Weight").val(<?php echo "'$asg[Weight]'"; ?>)
+			$("#ReviewsNeeded").val(<?php echo "'$asg[ReviewsNeeded]'"; ?>)
+		});
+		
 		$(".form_datetime").datetimepicker({
-			format: 'dd M yyyy - hh:ii'
+			format: 'yyyy-mm-dd hh:ii:ss'
 		});
 	</script> 
 </body>
