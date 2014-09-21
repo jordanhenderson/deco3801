@@ -98,7 +98,7 @@ $crs = new PCRHandler();
                 //    return $(this).has('.annotator-h1').length > 0
                 //}).each(function() {
                 //    $('span.annotator-h1').attr('id', 'submitted');
-                });
+                //});
                 alert(1);
             });
         }
