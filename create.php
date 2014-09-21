@@ -8,6 +8,10 @@ if (!isset($_SESSION['admin']) || !$_SESSION['admin']) {
 
 $crs = new PCRHandler();
 
+foreach ($_POST as $key => $value) {
+	echo "$key = $value\n";
+}// debug^
+
 if (isset($_REQUEST['assid'])) {
 	$asg = $crs->getAssignment($_REQUEST['assid']);
 	if ($asg->isValid()) {
@@ -26,9 +30,6 @@ if (isset($_REQUEST['assid'])) {
 }
 
 if (isset($_POST['create'])) {
-	foreach ($_POST as $key => $value) {
-		echo "$key = $value\n";
-	}// debug^
 	$asg['AssignmentName'] = $_POST['AssignmentName'];
 	$asg['DueTime'] = $_POST['DueTime'];
 	$asg['OpenTime'] = $_POST['OpenTime'];
