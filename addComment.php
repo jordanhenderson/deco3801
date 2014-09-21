@@ -96,7 +96,7 @@ $id = $_GET["QuestionID"];
 				//Post the serialized form.
 				$.post(url, JSON.stringify(request), function(data) {
 					//Handle submission.
-					document.location.href = "/displayQuestion.php?id=<?php echo $id; ?>";
+					document.location.href = "displayQuestion.php?id=<?php echo $id; ?>";
 				});
 				
 				

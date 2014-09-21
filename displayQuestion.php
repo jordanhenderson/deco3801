@@ -87,7 +87,7 @@ $crs = new PCRHandler();
 				</div>
 			<div align="center">
 				<?php
-					echo "<a class='btn btn-xl btn-warning' href='addComment.php?Questionid=$questionRow[QuestionID]' role='button'>Reply</a>";
+					echo "<a class='btn btn-xl btn-warning' href='addComment.php?QuestionID=$questionRow[QuestionID]' role='button'>Reply</a>";
 				//If an admin is viewing, gives ability to delete a question
 				if ($_SESSION['admin']) {
 					echo "
