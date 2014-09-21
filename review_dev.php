@@ -34,7 +34,6 @@ $crs = new PCRHandler();
 	<script>
 		//Initialises Annotator for writing reviews on the page
 		var annotationText = [];
-        var reviewId = 0;
         jQuery(function ($) {
 			$('#innercontainer').annotator();
 		});
@@ -51,54 +50,58 @@ $crs = new PCRHandler();
         */
         function getContents() {
             alert($('#annotator-field-0').val());
-            var comment = $('#annotator-field-0').val();
-            annotationText.push({"comment":comment, "text":window.getSelection().toString()});
+            annotationText.push($('#annotator-field-0').val());
         }
         
         function saveReviews() {
             var commentNum = 0;
             alert(annotationText);
-            //alert(wordArray.length);
-            var startIndex;
-            var size = 0;
-            $('#assignment_code span').each(function( index, element ) {
-                   // return $(this).has('.annotator-hl').length > 0
-                if ($(element).hasClass('annotator-hl')) {
-                    $(element).addClass( 'span' + index );
-                    size++;
-                    for (var i=0; i < annotationText.length; i++) {
-                        if (annotationText[i].text === $(element).html()) {
-                            annotationText[i].reviewID = index;
-                            break;
-                        }
-                    }
-                }                   
-            });
             var innerContents = $('#assignment_code').html();
             var wordArray = innerContents.split('\n');
-            for (var i=0; i < size; i++) {
-                for (var j=0; j < wordArray.length; j++) {
-                    startIndex = wordArray[j].indexOf('<span class="annotator-hl span' + i + '">');
+            //alert(wordArray.length);
+            var indexPairs = [];
+            var startIndex;
+            var startIndexSet;
+            var startLine;
+            var endIndex;
+            $('#assignment_code span').each(function( index, element ) {
+                   // alert($(this).html())
+                   // return $(this).has('.annotator-h1').length > 0
+                var pos = $(element).position();
+                alert("Element: " + element + ", position: " + pos.left + "," + pos.top);
+                   
+                });
+            for (var i=0; i < wordArray.length; i++) {
+          
+                    startIndex = wordArray[i].indexOf('<span class="annotator-hl">');
+                    endIndex = wordArray[i].indexOf('</span>');
                     if (startIndex >= 0) {
-                        annotationText[i].startIndexSet = startIndex;
-                        annotationText[i].startLine = j;
-                        annotationText[i].fileName = $( "#file_heading" ).html();
+                        startIndexSet = startIndex;
+                        startLine = i;
+                        alert(wordArray[i]);
                         
-                        break;
-                        
+                    }
+                    if (endIndex >= 0) {
+                        if($('annotator-h1')){
+                            indexPairs.push([
+                                startIndexSet, startLine, endIndex, i, annotationText[commentNum], $( "#file_heading" ).html()]);
+                            alert(indexPairs);
+                            commentNum++;
+                        }
                     }  
 
-                }
             }
-            alert(JSON.stringify(annotationText));
+            $('span').find('.annotator-h1').addClass('submitted');
             //AJAX call to store the review in the database
             $.ajax({
-			  url: "storeData_dev.php?reviews="+JSON.stringify(annotationText),
+			  url: "storeData_dev.php?reviews="+JSON.stringify(indexPairs),
 			  type: "POST"
 			})
 			  .done(function( retval ) {
                 alert("Your comments have been saved! Woohoo!");
                 alert(retval);
+                
+                alert(1);
             });
         }
         
