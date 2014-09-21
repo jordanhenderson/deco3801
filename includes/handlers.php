@@ -90,8 +90,8 @@ class PCRHandler {
 	* getComment returns a comment using the provided parameters
 	* @param id the comment ID
 	*/
-	public function getComment($id, $content, $stnid, $fullname) {
-		$comment = new Comment(array("StudentID"=>$stnid, "StudentName"=>$fullname, "QuestionID"=>$id, "Content"=>$content));
+	public function getComment($id, $content) {
+		$comment = new Comment(array("StudentID"=>$_SESSION['user_id'], "StudentName"=>$_SESSION['userfullname'], "QuestionID"=>$id, "Content"=>$content));
 		if ($comment->isValid()) {
 			return $comment;
 		}

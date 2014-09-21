@@ -29,7 +29,6 @@ $id = $_GET["QuestionID"];
 	<div class="container">
 		<h1>Ask a New Question</h1>
 		<form name="cF" id="cF" action="api.php" method="post" data-function="getComment">
-			<input type="hidden" value="<?php echo $id; ?>" name="QuestionID">
 			<div class="row">
 			</div>
 			<br>
@@ -92,11 +91,10 @@ $id = $_GET["QuestionID"];
 				var form = $(this);
 				//Use the action= property for ajax submission
 				var url = form.attr('action');
-				var params = form.serializeArray();
 				var func = form.data('function');
-				var request = {f: func, params: params};
+				var request = {f: func, params: [<?php echo $id; ?>, $("#content").val()]};
 				//Post the serialized form.
-				$.post(url, request, function(data) {
+				$.post(url, JSON.stringify(request), function(data) {
 					//Handle submission.
 					document.location.href = "/displayQuestion.php?id=<?php echo $id; ?>";
 				});
