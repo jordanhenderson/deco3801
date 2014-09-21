@@ -50,14 +50,13 @@ $crs = new PCRHandler();
         ID and permissions
         */
         function getContents() {
-            alert($('#annotator-field-0').val());
             var comment = $('#annotator-field-0').val();
+            alert("selection: " + window.getSelection().toString());
             annotationText.push({"comment":comment, "text":window.getSelection().toString()});
         }
         
         function saveReviews() {
             var commentNum = 0;
-            alert(annotationText);
             //alert(wordArray.length);
             var startIndex;
             var size = 0;
