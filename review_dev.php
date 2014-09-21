@@ -94,11 +94,12 @@ $crs = new PCRHandler();
 			  .done(function( retval ) {
                 alert("Your comments have been saved! Woohoo!");
                 alert(retval);
-                //$('#assignment_code span').filter(function() {
-                //    return $(this).has('.annotator-h1').length > 0
-                //}).each(function() {
-                //    $('span.annotator-h1').attr('id', 'submitted');
-                //});
+                $('#assignment_code span').filter(function() {
+                    alert($(this).html())
+                    return $(this).has('.annotator-h1').length > 0
+                }).each(function() {
+                    $('span.annotator-h1').attr('id', 'submitted');
+                });
                 alert(1);
             });
         }
