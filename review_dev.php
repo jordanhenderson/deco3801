@@ -49,8 +49,8 @@ $crs = new PCRHandler();
         */
         function getHighlighted() {
             selected = window.getSelection().toString();
-            selected = selected.replace("<", "&lt;");
-            selected = selected.replace(">", "&gt;");
+            selected = selected.replace(/</g, "&lt;");
+            selected = selected.replace(/>/g, "&gt;");
         }
         
         function getContents() {
