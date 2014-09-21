@@ -51,6 +51,7 @@ $crs = new PCRHandler();
         ID and permissions
         */
         function getHighlighted() {
+            alert("here " + window.getSelection().toString());
             selected = window.getSelection().toString();
         }
         
