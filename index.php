@@ -4,7 +4,7 @@ session_start();
 
 require_once 'config.php';
 
-if (!$config['DEBUG']) {
+if ($config['DEBUG'] == false) {
 	//Forcefully pull new changes when visiting index.php
 	exec("git pull && git reset --hard origin/master");
 } else {
