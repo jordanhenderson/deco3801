@@ -8,12 +8,15 @@ if (!isset($_SESSION['admin']) || !$_SESSION['admin']) {
 
 $crs = new PCRHandler();
 
-if (isset($_REQUEST['assid'])) { // TODO - restrict access to other courses assignments
+if (isset($_REQUEST['assid'])) {
 	$asg = $crs->getAssignment($_REQUEST['assid']);
 	if ($asg->isValid()) {
 		$asg = $asg->getRow();
+		if ($asg['CourseID'] != $_SESSION['course_id']) {
+			exit("Assignment is for a different course (course_id = $asg[CourseID]). Please log in to that course's page from Moodle to access it.");
+		}
 	} else {
-		die();
+		exit("Corrupt/Invalid assignment. Please contact site administrator, with code: \"assid=$_REQUEST[assid])\"");
 	}
 	$new = false;
 } else {
@@ -22,8 +25,17 @@ if (isset($_REQUEST['assid'])) { // TODO - restrict access to other courses assi
 	$asg = $assignment->getRow();
 }
 
-if (isset($_POST['C'])) {
-	header('location: search.php');
+if (isset($_POST['create']) || isset($_POST['update'])) {
+	$asg['CourseID'] = $_SESSION['course_id'];
+	$asg['AssignmentName'] = $_POST['AssignmentName'];
+	$asg['DueTime'] = $_POST['DueTime'];
+	$asg['OpenTime'] = $_POST['OpenTime'];
+	$asg['ReviewsDue'] = $_POST['ReviewsDue'];
+	$asg['Weight'] = $_POST['Weight'];
+	$asg['ReviewsNeeded'] = $_POST['ReviewsNeeded'];
+	//$asg['TestFiles'] = $_POST['TestFiles'];
+	//$asg['AssignmentFiles'] = $_POST['AssignmentFiles'];
+	$asg->commit();
 }
 
 ?>
@@ -50,7 +62,13 @@ if (isset($_POST['C'])) {
 </head>
 
 <body>
-	<?php include 'header.php'; ?>
+	<?php include 'header.php';
+	
+	foreach ($_POST as $key => $value) {
+		echo "$key = $value\n";
+	}// debug^
+	
+	?>
 	
 	<div class="container">
 		<?php
@@ -64,23 +82,26 @@ if (isset($_POST['C'])) {
 		?>
 		<form method="post">
 			<div class="row">
-				<div class="col-md-6">
+				<div class="col-md-8">
 					<label for="AssignmentName">Assignment Name</label>
-					<input class="form-control" type="text" id="AssignmentName" <?php echo 'value="'.$asg['AssignmentName'].'"'; ?>></input>
+					<input class="form-control" id="AssignmentName" <?php echo 'value="'.$asg['AssignmentName'].'"'; ?> name="AssignmentName" type="text"></input>
 				</div>
 			</div>
 			<br>
 			<div class="row">
-				<div class="col-md-4">
+				<div class="col-md-8">
 					<label for="OpenTime">Open Date</label>
-					<input size="24" type="text" <?php echo 'value="'.$asg['OpenTime'].'"'; ?> class="form-control form_datetime" id="OpenTime">
+					<input class="form-control form_datetime" id="OpenTime" name="OpenTime" size="24" type="text" <?php echo 'value="'.$asg['OpenTime'].'"'; ?>>
 					<p class="help-block">
 						Date and time that assignment files are available, and submissions are permitted.
 					</p>
 				</div>
-				<div class="col-md-4">
+			</div>
+			<br>
+			<div class="row">
+				<div class="col-md-8">
 					<label for="DueTime">Due Date</label>
-					<input size="24" type="text" <?php echo 'value="'.$asg['DueTime'].'"'; ?> class="form-control form_datetime" id="DueTime">
+					<input class="form-control form_datetime" id="DueTime" name="DueTime" size="24" type="text" <?php echo 'value="'.$asg['DueTime'].'"'; ?>>
 					<p class="help-block">
 						Date and time that the assignment must be submitted before, without being declared to both the student and teacher.<br>
 						The students may begin peer reviewing <b>1 day</b> after this time.<br>
@@ -88,9 +109,12 @@ if (isset($_POST['C'])) {
 						Students cannot submit after peer review begins.
 					</p>
 				</div>
-				<div class="col-md-4">
+			</div>
+			<br>
+			<div class="row">
+				<div class="col-md-8">
 					<label for="ReviewsDue">Peer Reviews Due</label>
-					<input size="24" type="text" <?php echo 'value="'.$asg['ReviewsDue'].'"'; ?> class="form-control form_datetime" id="ReviewsDue">
+					<input class="form-control form_datetime" id="ReviewsDue" name="ReviewsDue" size="24" type="text" <?php echo 'value="'.$asg['ReviewsDue'].'"'; ?>>
 					<p class="help-block">
 						Date and time that students must finish their reviews by.<br>
 						Reviews are available from the due date onwards.
@@ -101,42 +125,42 @@ if (isset($_POST['C'])) {
 			<div class="row">
 				<div class="col-md-4">
 					<div class="form-group">
-						<label for="specfiles">Assignment Files TODO TODO</label>
-						<input type="file" id="specfiles">
-						<p class="help-block">PDF or zip containing the assignment specifications.</p>
+						<label for="AssignmentFiles">Assignment Files TODO TODO</label>
+						<input id="AssignmentFiles" name="AssignmentFiles" type="file">
+						<p class="help-block">PDF or zip containing the assignment specifications, for students to download.</p>
 					</div>
 				</div>
 				<div class="col-md-4">
 					<div class="form-group">
-						<label for="testfiles">Unit Testing Files TODO TODO</label>
-						<input type="file" id="testfiles">
-						<p class="help-block">Please zip test file(s). The file executed when testing must be named "runtest"</p>
+						<label for="TestFiles">Unit Testing Files TODO TODO</label>
+						<input id="TestFiles" name="TestFiles" type="file">
+						<p class="help-block">Please zip test file(s). The file executed when testing must be named "runtest".</p>
 					</div>
 				</div>
 			</div>
 			<br>
 			<div class="row">
 				<div class="col-md-4">
-					<label for="Weight">Weight (%)</label>
-					<input <?php echo 'value="'.$asg['Weight'].'"'; ?> class="form-control" type="number" id="Weight" min="1" max="100">
-				</div>
-				<div class="col-md-4">
 					<label for="ReviewsNeeded">Reviews Per Student</label><br>
-					<input <?php echo 'value="'.$asg['ReviewsNeeded'].'"'; ?> class="form-control" type="number" id="ReviewsNeeded" min="0" max="10">
+					<input class="form-control" id="ReviewsNeeded" min="0" max="10" name="ReviewsNeeded" type="number" <?php echo 'value="'.$asg['ReviewsNeeded'].'"'; ?>>
 					<p class="help-block">
 						The amount of assignments each student will be assigned to review, after the due date.<br>
 						Students who have not submitted before the deadline will not be able to create or recieve reviews.
 					</p>
+				</div>
+				<div class="col-md-4">
+					<label for="Weight">Weight (%)</label>
+					<input class="form-control" id="Weight" min="1" max="100" name="Weight" type="number" <?php echo 'value="'.$asg['Weight'].'"'; ?>>
 				</div>
 			</div>
 			<div align="center">
 				<?php
 				if ($new) {
 					echo '
-				<button class="btn btn-primary" type="submit" value="submit">Create</button>';
+				<button class="btn btn-primary" type="submit" value="create" name="create">Create</button>';
 				} else {
 					echo '
-				<button class="btn btn-primary" type="submit" value="submit">Update</button>';
+				<button class="btn btn-primary" type="submit" value="update" name="update">Update</button>';
 				}
 				?>
 				<div class="btn btn-warning" id="Reset">Reset</div>
@@ -165,8 +189,8 @@ if (isset($_POST['C'])) {
 			$("#Weight").val(<?php echo "'$asg[Weight]'"; ?>);
 			$("#ReviewsNeeded").val(<?php echo "'$asg[ReviewsNeeded]'"; ?>);
 			
-			$("#specfiles").val(<?php echo "'???'"; ?>); // TODO
-			$("#testfiles").val(<?php echo "'???'"; ?>); // TODO
+			$("#TestFiles").replaceWith($("#TestFiles").clone());
+			$("#AssignmentFiles").replaceWith($("#AssignmentFiles").clone());
 		});
 		
 		$(".form_datetime").datetimepicker({

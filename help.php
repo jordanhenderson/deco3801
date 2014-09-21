@@ -28,6 +28,9 @@ $crs = new PCRHandler();
 	<!-- Bootstrap Core CSS -->
 	<link href="css/bootstrap.min.css" rel="stylesheet">
 	
+	<!-- Bootstrap Select CSS -->
+	<link href="css/bootstrap-select.min.css" rel="stylesheet">
+	
 	<!-- Custom CSS -->
 	<link href="css/main.css" rel="stylesheet">
 </head>
@@ -121,5 +124,14 @@ $crs = new PCRHandler();
 	
 	<!-- Bootstrap Core JavaScript -->
 	<script src="js/bootstrap.min.js"></script>
+	
+	<!-- Bootstrap Select JavaScript -->
+	<script src="js/bootstrap-select.min.js"></script>
+	
+	<script type="text/javascript">
+		window.onload = function () {
+			$('.selectpicker').selectpicker();
+		}
+	</script>
 </body>
 </html>

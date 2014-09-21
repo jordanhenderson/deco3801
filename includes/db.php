@@ -224,7 +224,7 @@ abstract class PCRObject implements JsonSerializable {
 	* Delete the object within the database.
 	*/
 	public function delete() {
-		if($this->isValid()) {
+		if ($this->isValid()) {
 			$this->db->query("DELETE FROM $this->table WHERE $this->id_field = $this->id;");
 			$this->id = null;
 		}
@@ -243,9 +243,9 @@ class PCRBuilder {
 		$this->db = $GLOBALS["db"];
 		$this->row = array();
 		$qry = $this->db->query("SHOW COLUMNS FROM $table;");
-		foreach($qry as $row) {
+		foreach ($qry as $row) {
 			$def = $row["Default"];
-			if($def == "CURRENT_TIMESTAMP") $def = "";
+			if ($def == "CURRENT_TIMESTAMP") $def = "";
 			$this->row[$row["Field"]] = $def;
 		}
 	}
@@ -265,7 +265,7 @@ class PCRBuilder {
  * 
  * (uint_16)		AssignmentID
  * (uint_16)		CourseID
- * (tinytext)		AssignmentName
+ * (varchar(32))	AssignmentName
  * (uint_8)			Weight
  * (uint_8)			SubmissionMethod
  * (uint_8)			ReviewsNeeded
@@ -512,6 +512,8 @@ class Course extends PCRObject {
  * (uint_16)		QuestionID
  * (varchar(32))	StudentID
  * (varchar(32))	CourseID
+ * (varchar(32))	StudentName
+ * (timestamp)		OpenDate
  * (text)			Title
  * (text)			Content
  * (int_8)			Status
@@ -576,11 +578,15 @@ class Question extends PCRObject {
  * 
  * After population, contains the following rows:
  * 
+ * (uint_16)		SubmissionID
+ * (text)			Comments
+ * (varchar(32))	ReviewerID
  * (uint_16)		ReviewID
- * (text)   		Comments
- * (varchar(32))	StudentID
- * (int(11))		StartOffset
- * (int(11))        EndOffset
+ * (int(11))		startIndex
+ * (int(11))		startLine
+ * (int(11))		endIndex
+ * (int(11))		endLine
+ * text				fileName
  */	
 class Review extends PCRObject {
 	public function __construct($data) {
@@ -600,7 +606,7 @@ class Review extends PCRObject {
  * (uint_16)		CommentID
  * (uint_16)		QuestionID
  * (varchar(32))	StudentID
- * (text)			StudentName
+ * (varchar(32))	StudentName
  * (text)			Content
  * (timestamp)		postdate
  */	
