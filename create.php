@@ -8,10 +8,6 @@ if (!isset($_SESSION['admin']) || !$_SESSION['admin']) {
 
 $crs = new PCRHandler();
 
-foreach ($_POST as $key => $value) {
-	echo "$key = $value\n";
-}// debug^
-
 if (isset($_REQUEST['assid'])) {
 	$asg = $crs->getAssignment($_REQUEST['assid']);
 	if ($asg->isValid()) {
@@ -65,7 +61,14 @@ if (isset($_POST['create'])) {
 </head>
 
 <body>
-	<?php include 'header.php'; ?>
+	<?php include 'header.php';
+	
+	echo "I am baka";
+	foreach ($_POST as $key => $value) {
+		echo "$key = $value\n";
+	}// debug^
+	
+	?>
 	
 	<div class="container">
 		<?php
