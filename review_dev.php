@@ -64,12 +64,10 @@ $crs = new PCRHandler();
             var startIndexSet;
             var startLine;
             var endIndex;
-            $('#assignment_code span.annotator-h1').each(function( index, element ) {
+            $('#assignment_code span').each(function( index, element ) {
                    // alert($(this).html())
                    // return $(this).has('.annotator-h1').length > 0
-                alert($(element).position());  
-                   
-                   
+                alert("position: " + $(element).position());
                    
                 });
             for (var i=0; i < wordArray.length; i++) {
