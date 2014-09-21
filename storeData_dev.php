@@ -6,11 +6,11 @@
     
     TODO: handle the submission ID and permissions
     */
-    $reviews = json_decode($_GET['reviews']);
+    $review = json_decode($_GET['reviews']);
     $handler = new PCRHandler();
     $stnid = $_SESSION['user_id'];
     $id = $_SESSION['id'];
-    for ($i = 0; $i < count($reviews); $i++) {
+    for ($i = 0; $i < count($review); $i++) {
         /* Id of reviewer, submission id, start position, start line, 
             end position, end line, comment contents, filename
         */
