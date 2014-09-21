@@ -64,21 +64,26 @@ $crs = new PCRHandler();
             var startIndexSet;
             var startLine;
             var endIndex;
+            
             for (var i=0; i < wordArray.length; i++) {
-                startIndex = wordArray[i].indexOf('<span class="annotator-hl">');
-                endIndex = wordArray[i].indexOf('</span>');
-                if (startIndex >= 0) {
-                    startIndexSet = startIndex;
-                    startLine = i;
-                    alert(wordArray[i]);
-                    
-                }
-                if (endIndex >= 0) {
-                    indexPairs.push([
-                        startIndexSet, startLine, endIndex, i, annotationText[commentNum], $( "#file_heading" ).html()]);
-                    alert(indexPairs);
-                    commentNum++;
-                }  
+          
+                    startIndex = wordArray[i].indexOf('<span class="annotator-hl">');
+                    endIndex = wordArray[i].indexOf('</span>');
+                    if (startIndex >= 0) {
+                        startIndexSet = startIndex;
+                        startLine = i;
+                        alert(wordArray[i]);
+                        
+                    }
+                    if (endIndex >= 0) {
+                        if($('annotator-h1')){
+                            indexPairs.push([
+                                startIndexSet, startLine, endIndex, i, annotationText[commentNum], $( "#file_heading" ).html()]);
+                            alert(indexPairs);
+                            commentNum++;
+                        }
+                    }  
+
             }
             //AJAX call to store the review in the database
             $.ajax({
@@ -88,6 +93,7 @@ $crs = new PCRHandler();
 			  .done(function( retval ) {
                 alert("Your comments have been saved! Woohoo!");
                 alert(retval);
+                $('span.annotator-h1').addClass('submitted');
             });
         }
         
