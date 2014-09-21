@@ -36,7 +36,9 @@ class PCRHandler {
 	public function storeNewQuestion($title, $content) {
 		$this->getCourse()->addNewQuestion($title, $content, $_SESSION['user_id'], $_SESSION['userfullname']);
 	}
-
+	public function storeNewComment($QuestionID, $content) {
+		$this->getComment()->addNewComment($QuestionID, $_SESSION['user_id'], $_SESSION['userfullname'], $content);
+	}
 	public function removeQuestion($id) {
 		$this->getQuestion($id)->delete();
 	}

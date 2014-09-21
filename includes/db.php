@@ -457,7 +457,17 @@ class Course extends PCRObject {
 								
 		return $question;
 	}
-	
+	public function addNewComment($QuestionID, $stnid, $fullname, $content){
+		$comment = new Comment(array(
+										"StudentID"	=> $stnid, 
+										"QuestionID"	=> $QuestionID,
+										"StudentName"=> $fullname,
+										"Content"	=> $content,
+									)
+								);
+								
+		return $comment;
+	}	
 	/**
 	* helpEnabled returns if the help center is enabled for the current course.
 	*/
