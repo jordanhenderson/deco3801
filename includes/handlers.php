@@ -33,12 +33,6 @@ class PCRHandler {
 		}
 	}
 
-	public function storeNewQuestion($title, $content) {
-		$this->getCourse()->addNewQuestion($title, $content, $_SESSION['user_id'], $_SESSION['userfullname']);
-	}
-	public function storeNewComment($QuestionID, $content) {
-		$this->getComment()->addNewComment($QuestionID, $_SESSION['user_id'], $_SESSION['userfullname'], $content);
-	}
 	public function removeQuestion($id) {
 		$this->getQuestion($id)->delete();
 	}
@@ -93,7 +87,12 @@ class PCRHandler {
 	* @param id the comment ID
 	*/
 	public function getComment($id, $content) {
-		$comment = new Comment(array("StudentID"=>$_SESSION['user_id'], "StudentName"=>$_SESSION['userfullname'], "QuestionID"=>$id, "Content"=>$content));
+		$comment = new Comment(array(
+							"StudentID"=>$_SESSION['user_id'], 
+							"StudentName"=>$_SESSION['userfullname'], 
+							"QuestionID"=>$id, 
+							"Content"=>$content
+							));
 		if ($comment->isValid()) {
 			return $comment;
 		}
