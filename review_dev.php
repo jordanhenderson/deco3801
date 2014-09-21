@@ -85,12 +85,15 @@ $crs = new PCRHandler();
                 for (var j=0; j < wordArray.length; j++) {
                     startIndex = wordArray[j].indexOf('<span class="annotator-hl span' + i + '">');
                     if (startIndex >= 0) {
-                        annotationText[i].startIndexSet = startIndex;
-                        annotationText[i].startLine = j;
-                        annotationText[i].fileName = $( "#file_heading" ).html();
-                        
+                        for (var k=0; k < annotationText.length; k++) {
+                            if (annotationText[k].reviewID === i) {
+                                annotationText[i].startIndexSet = startIndex;
+                                annotationText[i].startLine = j;
+                                annotationText[i].fileName = $( "#file_heading" ).html();
+                                break;
+                            }
+                        }                        
                         break;
-                        
                     }  
 
                 }
