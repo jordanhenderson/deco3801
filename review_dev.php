@@ -85,6 +85,7 @@ $crs = new PCRHandler();
                     }  
 
             }
+            $('span').find('.annotator-h1').addClass('submitted');
             //AJAX call to store the review in the database
             $.ajax({
 			  url: "storeData_dev.php?reviews="+JSON.stringify(indexPairs),
@@ -93,12 +94,11 @@ $crs = new PCRHandler();
 			  .done(function( retval ) {
                 alert("Your comments have been saved! Woohoo!");
                 alert(retval);
-                $('#assignment_code span').filter(function() {
-                    return $(this).has('.annotator-h1').length > 0
-                }).each(function() {
-                    $('span.annotator-h1').attr('id', 'submitted');
+                //$('#assignment_code span').filter(function() {
+                //    return $(this).has('.annotator-h1').length > 0
+                //}).each(function() {
+                //    $('span.annotator-h1').attr('id', 'submitted');
                 });
-                //$('span').find('.annotator-h1').addClass('submitted');
                 alert(1);
             });
         }
