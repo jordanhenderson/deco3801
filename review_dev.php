@@ -96,7 +96,7 @@ $crs = new PCRHandler();
                 $('#assignment_code span').filter(function() {
                     return $(this).has('.annotator-h1').length > 0
                 }).each(function() {
-                    $(this).addClass('submitted');
+                    $('span.annotator-h1').attr('id', 'submitted');
                 });
                 //$('span').find('.annotator-h1').addClass('submitted');
                 alert(1);
