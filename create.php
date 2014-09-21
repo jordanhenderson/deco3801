@@ -25,7 +25,8 @@ if (isset($_REQUEST['assid'])) {
 	$asg = $assignment->getRow();
 }
 
-if (isset($_POST['create'])) {
+if (isset($_POST['create']) || isset($_POST['update'])) {
+	$asg['CourseID'] = $_SESSION['course_id'];
 	$asg['AssignmentName'] = $_POST['AssignmentName'];
 	$asg['DueTime'] = $_POST['DueTime'];
 	$asg['OpenTime'] = $_POST['OpenTime'];
@@ -63,7 +64,6 @@ if (isset($_POST['create'])) {
 <body>
 	<?php include 'header.php';
 	
-	echo "I am baka";
 	foreach ($_POST as $key => $value) {
 		echo "$key = $value\n";
 	}// debug^
