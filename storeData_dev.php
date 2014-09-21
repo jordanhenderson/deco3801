@@ -14,7 +14,7 @@
         /* Id of reviewer, submission id, start position, start line, 
             end position, end line, comment contents, filename
         */
-        echo $review[$i]->comment . "%%";
+        echo $review[$i]['comment'] . "%%";
         $handler->getReview($stnid, $id, $review[$i]->startIndexSet, $review[$i]->startLine, $review[$i]->comment,
         $review[$i]->text, $review[$i]->reviewID, $review[$i]->fileName);
     }
