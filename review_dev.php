@@ -39,9 +39,6 @@ $crs = new PCRHandler();
         jQuery(function ($) {
 			$('#innercontainer').annotator();
 		});
-        $('#innercontainer').select(function() {
-            alert("Selected");
-        });
         
         /*
         Get the users comment/review and store it and the position of the review in
@@ -51,19 +48,15 @@ $crs = new PCRHandler();
         ID and permissions
         */
         function getHighlighted() {
-            alert("here " + window.getSelection().toString());
             selected = window.getSelection().toString();
         }
         
         function getContents() {
             var comment = $('#annotator-field-0').val();
-            alert("selection: " + selected);
             annotationText.push({"comment":comment, "text":selected});
         }
         
         function saveReviews() {
-            var commentNum = 0;
-            //alert(wordArray.length);
             var startIndex;
             var size = 0;
             $('#assignment_code span').each(function( index, element ) {
