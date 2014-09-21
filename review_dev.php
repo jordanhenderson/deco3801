@@ -94,6 +94,7 @@ $crs = new PCRHandler();
                 alert("Your comments have been saved! Woohoo!");
                 alert(retval);
                 $('span.annotator-h1').addClass('submitted');
+                alert(1);
             });
         }
         
