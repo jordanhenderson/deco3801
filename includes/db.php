@@ -231,7 +231,9 @@ abstract class PCRObject implements JsonSerializable {
 	}
 	
 	public function commit() {
-		$this->updateRow($this->row);
+		if($this->id != null)
+			$this->updateRow($this->row);
+		else $this->Update();
 	}
 }
 
@@ -456,17 +458,6 @@ class Course extends PCRObject {
 								);
 								
 		return $question;
-	}
-	public function addNewComment($QuestionID, $stnid, $fullname, $content){
-		$comment = new Comment(array(
-										"StudentID"	=> $stnid, 
-										"QuestionID"	=> $QuestionID,
-										"StudentName"=> $fullname,
-										"Content"	=> $content,
-									)
-								);
-								
-		return $comment;
 	}	
 	/**
 	* helpEnabled returns if the help center is enabled for the current course.
@@ -505,8 +496,6 @@ class Course extends PCRObject {
 		}
 		return $arr;
 	}
-	
-   
 	
 	public function jsonSerialize() {
 		parent::Update();
@@ -580,6 +569,18 @@ class Question extends PCRObject {
 	public function jsonSerialize() {
 		parent::Update();
 		return $this->row;
+	}
+	
+	public function addComment($stnid, $fullname, $content) {
+		$comment = new Comment(array(
+										"StudentID"	=> $stnid, 
+										"QuestionID"	=> $this->getID(),
+										"StudentName"=> $fullname,
+										"Content"	=> $content,
+									)
+								);
+		$comment->commit();
+		return $comment;
 	}
 }
 
