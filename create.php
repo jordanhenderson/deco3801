@@ -139,9 +139,7 @@ if (isset($_POST['C'])) {
 				<button class="btn btn-primary" type="submit" value="submit">Update</button>';
 				}
 				?>
-				<button class="btn btn-warning Reset">Reset</button>
-				<input class="btn btn-warning Reset">Reset</input>
-				<div class="btn btn-warning Reset">Reset</div>
+				<div class="btn btn-warning" id="Reset">Reset</div>
 				<a class="btn btn-default" href="index.php">Cancel</a>
 				<br><br>
 			</div>
@@ -159,8 +157,7 @@ if (isset($_POST['C'])) {
 	
 	<script type="text/javascript">
 		//Reset form.
-		$(".Reset").click(function() {
-			alert("clicked reset");
+		$("#Reset").click(function() {
 			$("#AssignmentName").val(<?php echo "'$asg[AssignmentName]'"; ?>)
 			$("#OpenTime").val(<?php echo "'$asg[OpenTime]'"; ?>)
 			$("#DueTime").val(<?php echo "'$asg[DueTime]'"; ?>)
