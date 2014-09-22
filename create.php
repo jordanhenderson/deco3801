@@ -25,19 +25,6 @@ if (isset($_REQUEST['assid'])) {
 	$asg = &$assignment->getRow();
 }
 
-if (isset($_POST['create']) || isset($_POST['update'])) {
-	$asg['CourseID'] = $_SESSION['course_id'];
-	$asg['AssignmentName'] = $_POST['AssignmentName'];
-	$asg['DueTime'] = $_POST['DueTime'];
-	$asg['OpenTime'] = $_POST['OpenTime'];
-	$asg['ReviewsDue'] = $_POST['ReviewsDue'];
-	$asg['Weight'] = $_POST['Weight'];
-	$asg['ReviewsNeeded'] = $_POST['ReviewsNeeded'];
-	//$asg['TestFiles'] = $_POST['TestFiles'];
-	//$asg['AssignmentFiles'] = $_POST['AssignmentFiles'];
-	$assignment->commit();
-}
-
 ?>
 <!DOCTYPE html>
 <html lang="en">
@@ -62,13 +49,7 @@ if (isset($_POST['create']) || isset($_POST['update'])) {
 </head>
 
 <body>
-	<?php include 'header.php';
-	
-	foreach ($_POST as $key => $value) {
-		echo "$key = $value\n";
-	}// debug^
-	
-	?>
+	<?php include 'header.php'; ?>
 	
 	<div class="container">
 		<?php
@@ -197,18 +178,18 @@ if (isset($_POST['create']) || isset($_POST['update'])) {
 		$(".form_datetime").datetimepicker({
 			format: 'yyyy-mm-dd hh:ii:ss'
 		});
-		$(function() {
-			$(":submit").click(function() {
-				var func = $(this).attr("name");
-				var request = {f: func, params: [							$("#AssignmentName").val(),
-							$("#ReviewsNeeded").val(),
-							$("#ReviewsDue").val(),
-							$("#Weight").val(),
-							$("#OpenTime").val(),
-							$("#DueTime").val()
-					]};
-				$.post("api.php", JSON.stringify(request), function() {
-				});
+		
+		$(":submit").click(function() {
+			var func = $(this).attr("name");
+			var request = {f: func, params: [
+						$("#AssignmentName").val(),
+						$("#ReviewsNeeded").val(),
+						$("#ReviewsDue").val(),
+						$("#Weight").val(),
+						$("#OpenTime").val(),
+						$("#DueTime").val()
+				]};
+			$.post("api.php", JSON.stringify(request), function() {
 			});
 		});
 	</script> 
