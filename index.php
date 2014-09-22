@@ -116,6 +116,19 @@ echo "</pre>\n";
 					echo "Currently no assignments have been released.";
 				} else {
 					// print table head
+					echo '
+			<table class="table">
+				<thead>
+					<tr>
+						<th>Title</th>
+						<th>Open Date</th>
+						<th>Due Date</th>
+						<th>Peer Review Due Date</th>
+						<th>Weight</th>
+						<th>Status</th>
+					</tr>
+				</thead>
+				<tbody>';
 					// print table contents
 					foreach ($assignments as $asg) {
 						if (!$asg->isValid()) {
