@@ -77,7 +77,6 @@ abstract class PCRObject implements JsonSerializable {
 		$this->id_field = $id_field;
 		$this->uptodate = 0;
 		$this->forceCreate = $forceCreate;
-
 		if (is_array($data)) {
 			$this->row = $data;
 			if (isset($data[$id_field]) && $data[$id_field] != null) {
@@ -116,7 +115,6 @@ abstract class PCRObject implements JsonSerializable {
 	private function insertRow() {
 		//Insert a new row.
 		$field_count = sizeof($this->row);
-		
 		//Generate a prepared insert statement.
 		$cols = "";
 		$vals = "";
@@ -154,7 +152,6 @@ abstract class PCRObject implements JsonSerializable {
 	 */
 	public function Update($recursed=0) {
 		if (!$this->uptodate) {
-			
 			//Populate the PCRObject.
 			$sth = $this->db->prepare("SELECT * FROM $this->table WHERE $this->id_field = ?;");
 			
