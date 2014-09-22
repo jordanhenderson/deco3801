@@ -59,7 +59,7 @@ $crs = new PCRHandler();
             for(var i=0; i < annotationText.length; i++) {
                 if(comment == annotationText[i].comment) {
                     alert('Your comment matches another comment, please dont take other peoples comments');
-                    $(annotator-cancel).trigger("click");
+                    $('annotator-cancel').trigger("click");
                     return;
                 }
             }
@@ -125,17 +125,11 @@ $crs = new PCRHandler();
             //for
             //if found
             //splice(index,1)
-            var comment = $('#annotator-field-0').val();
+            var comment = $('.annotator-item').val();
+            alert(comment);
             for(var i=0; i < annotationText.length; i++) {
                 if(annotationText[i].comment == comment) {
-                    alert(comment);
                     annotationText.splice(i, 1);
-                     $('#assignment_code span').each(function( index, element ) {
-                        if ($(element).hasClass('span' + i)) {
-                            alert($(this));
-                            $('<span id=' + id).remove();
-                        }
-                     });
                     break;
                 }
             }
