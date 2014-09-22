@@ -31,14 +31,25 @@ class PCRHandler {
 	}
 
 	public function removeQuestion($id) {
-		$this->getQuestion($id)->delete();
+		$question = new Question(array("QuestionID"=>$id));
+		
+		if ($question->isValid()) {
+			$question->delete();
+		}
+		//$this->getQuestion($id)->delete();
 	}
 	
 	public function markResolved($id) {
-		$this->getQuestion($id)->markResolved();
+		$question = new Question(array("QuestionID"=>$id));
+		$questionRow = &$question->getRow();
+		$questionRow["Status"] = "1";
+		$question->commit();
 	}
 	public function markUnresolved($id) {
-		$this->getQuestion($id)->markUnresolved();
+		$question = new Question(array("QuestionID"=>$id));
+		$questionRow = &$question->getRow();
+		$questionRow["Status"] = "0";
+		$question->commit();
 	}
 	
 	/**
@@ -114,7 +125,6 @@ class PCRHandler {
 	public function updateAssignment($assignment_id, $course_id, $assignment_name, 
 									$reviews_needed, $review_due, $weight, 
 									$open_time, $due_time) {
-		
 		$assignment = new Assignment(array("AssignmentID"=>$assignment_id,
 										   "CourseID"=>$course_id,
 										   "AssignmentName"=>$assignment_name,
@@ -123,9 +133,9 @@ class PCRHandler {
 										   "Weight"=>$weight,
 										   "OpenTime"=>$open_time,
 										   "DueTime"=>$due_time));
-		if ($assignment->isValid()) {
+			//$assignment = new Assignment(array("AssignmentID"=>'00020'));
+			$assignment->commit();
 			return $assignment;
-		}					   
 	}
 }
 

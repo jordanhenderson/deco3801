@@ -157,10 +157,10 @@ if (isset($_POST['create']) || isset($_POST['update'])) {
 				<?php
 				if ($new) {
 					echo '
-				<button class="btn btn-primary" type="submit" value="create" name="create">Create</button>';
+				<input class="btn btn-primary" type="submit" value="create" name="updateAssignment">';
 				} else {
 					echo '
-				<button class="btn btn-primary" type="submit" value="update" name="update">Update</button>';
+				<input class="btn btn-primary" type="submit" value="update" name="update">';
 				}
 				?>
 				<div class="btn btn-warning" id="Reset">Reset</div>
@@ -178,9 +178,10 @@ if (isset($_POST['create']) || isset($_POST['update'])) {
 
 	<!-- Bootstrap datetimepicker JavaScript -->
 	<script src="js/bootstrap-datetimepicker.min.js"></script>
-	
+	<script src="js/json.js"></script>
+
 	<script type="text/javascript">
-		//Reset form.
+		
 		$("#Reset").click(function() {
 			$("#AssignmentName").val(<?php echo "'$asg[AssignmentName]'"; ?>);
 			$("#OpenTime").val(<?php echo "'$asg[OpenTime]'"; ?>);
@@ -195,6 +196,22 @@ if (isset($_POST['create']) || isset($_POST['update'])) {
 		
 		$(".form_datetime").datetimepicker({
 			format: 'yyyy-mm-dd hh:ii:ss'
+		});
+		$(function() {
+			$(":submit").click(function() {
+				var func = $(this).attr("name");
+				var request = {f: func, params: [
+					null, '2', 'test', '2', '2014-10-01 18:00:00', '10', '2014-09-01 18:00:00', '2014-09-29 18:00:00'
+							// $(".AssignmentName").val(),
+							// $("#ReviewsNeeded").val(),
+							// $("#ReviewsDue").val(),
+							// $("#Weight").val(),
+							// $("#OpenTime").val(),
+							// $("#DueTime").val()
+					]};
+				$.post("api.php", JSON.stringify(request), function() {
+				});
+			});
 		});
 	</script> 
 </body>

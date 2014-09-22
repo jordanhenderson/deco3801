@@ -126,15 +126,21 @@ $crs = new PCRHandler();
 		$(function() {
 			$(":submit").click(function() {
 				var func = $(this).attr("name");
-				var request = {f: func, params: [<?php echo $questionRow["QuestionID"]; ?>]};
+				var request = {f: func, params:  ['<?php echo $_GET['id']; ?>']};
 				$.post("api.php", JSON.stringify(request), function() {
-					if(func == "markResolved" || func == "markUnresolved") location.reload();
+					if(func == "markResolved" || func == "markUnresolved") location.reload(); 
 					else window.location.replace("help.php");
 				});
 			});
 		});
 	</script>
 	<?php
+
+		}
+		else
+		{
+			$message = "wrong answer";
+echo "<script type='text/javascript'>alert('$message');</script>";
 		}
 	?>
 </body>

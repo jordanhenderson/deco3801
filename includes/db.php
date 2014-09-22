@@ -133,7 +133,7 @@ abstract class PCRObject implements JsonSerializable {
 		try {
 			$sth = $this->db->prepare("INSERT INTO $this->table ($cols) VALUES ($vals);");
 			$sth->execute($this->row);
-
+				echo "INSERT INTO $this->table ($cols) VALUES ($vals);";
 			$this->id = $this->row[$this->id_field] = $this->db->lastInsertId();
 		} catch (PDOException $e) {
 			//An error occured while inserting.
