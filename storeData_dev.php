@@ -18,6 +18,10 @@
         print_r($rev);
     }
     echo "</pre>";
+    if (count($reviews) > 0) {
+        $query = "DELETE * FROM 'Review' WHERE 'SubmissionID'='00002' AND 'fileName'=" . $reviews[0].fileName . ";";
+        $handler->query($query);
+    }
     foreach ($reviews as $review) {
         /* Id of reviewer, submission id, start position, start line, 
             end position, end line, comment contents, filename
