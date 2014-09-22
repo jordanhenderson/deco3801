@@ -128,10 +128,12 @@ $crs = new PCRHandler();
             var comment = $('#annotator-field-0').val();
             for(var i=0; i < annotationText.length; i++) {
                 if(annotationText[i].comment == comment) {
+                    alert(comment);
                     annotationText.splice(i, 1);
                      $('#assignment_code span').each(function( index, element ) {
                         if ($(element).hasClass('span' + i)) {
-                            $(this).remove();
+                            alert($(this));
+                            $('<span id=' + id).remove();
                         }
                      });
                     break;
