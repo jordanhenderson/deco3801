@@ -18,7 +18,7 @@
             end position, end line, comment contents, filename
         */
     //    echo $review[$i]['comment'] . "%%";
-        print_r($review->comment);
+        print_r($review);
         
         $handler->getReview($stnid, $id, $review->startIndexSet, $review->startLine, $review->comment,
         $review->text, $review->reviewID, $review->fileName);
