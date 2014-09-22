@@ -125,7 +125,7 @@ $crs = new PCRHandler();
             //for
             //if found
             //splice(index,1)
-            var comment = $('.annotator-item').html();
+            var comment = $('.annotator-item').children('div').html();
             alert(comment);
             for(var i=0; i < annotationText.length; i++) {
                 if(annotationText[i].comment == comment) {
