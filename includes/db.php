@@ -606,6 +606,7 @@ class Review extends PCRObject {
 	
 	public function jsonSerialize() {
 		parent::Update();
+        echo ">>jsonSerialize<<";
 		if(parent::isValid()) return $this->row;
 	}
 }

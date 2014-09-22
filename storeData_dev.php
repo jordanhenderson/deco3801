@@ -19,6 +19,7 @@
         */
     //    echo $review[$i]['comment'] . "%%";
         print_r($review);
+        echo $id;
         
         $handler->getReview($stnid, $id, $review->startIndexSet, $review->startLine, '' . $review->comment,
         '' . $review->text, $review->reviewID, '' . $review->fileName);
