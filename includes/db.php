@@ -3,7 +3,7 @@
  * Database contains a base database (PDO) and prepared query wrapper.
  * Add your custom database connection string and parameters to the constructor.
 */
-require_once "config.php";
+require_once "../config.php";
 class Database {
 	private $db;
 	/**
