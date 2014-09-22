@@ -449,7 +449,6 @@ class Course extends PCRObject {
 										"Status"	=> "0"
 									)
 								);
-								
 		return $question;
 	}	
 	/**

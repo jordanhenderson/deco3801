@@ -116,22 +116,11 @@ echo "</pre>\n";
 					echo "Currently no assignments have been released.";
 				} else {
 					// print table head
-					echo '
-			<table class="table">
-				<thead>
-					<tr>
-						<th>Title</th>
-						<th>Open Date</th>
-						<th>Due Date</th>
-						<th>Peer Review Due Date</th>
-						<th>Weight</th>
-						<th>Status</th>
-					</tr>
-				</thead>
-				<tbody>';
 					// print table contents
 					foreach ($assignments as $asg) {
-						if(!$asg->isValid()) continue;
+						if (!$asg->isValid()) {
+							continue;
+						}
 						
 						$asg = &$asg->getRow();
 						
@@ -148,7 +137,7 @@ echo "</pre>\n";
 						
 						if (!$admin) { // student
 							$sub = $crs->getSubmission($asg['AssignmentID']);
-							if($sub->isValid()) {
+							if ($sub->isValid()) {
 								$subRow = &$sub->getRow();
 								$date = date_create_from_format('Y-m-d G:i:s', $subRow['SubmitTime']);
 								$SubmitTime = (int) date_format($date, 'U');
@@ -211,9 +200,9 @@ echo "</pre>\n";
 						}
 						
 						// TODO
-						if (1) { // Peer review not open
+						if (true) { // Peer review not open
 							echo "<br>Peer Reviews Not Open.";
-						} else if (1) { // Peer review complete
+						} else if (true) { // Peer review complete
 							echo "<br>Peer Reviews Complete.";
 						} else { // Peer review incomplete
 							echo "<br>Peer Reviews Not Complete.";
@@ -223,6 +212,7 @@ echo "</pre>\n";
 					</tr>
 				</tbody>
 			</table>";
+					}
 				}
 				// admin's have a button to create new assignments
 				if ($admin) {
