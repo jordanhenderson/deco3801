@@ -59,7 +59,7 @@ $crs = new PCRHandler();
             for(var i=0; i < annotationText.length; i++) {
                 if(comment == annotationText[i].comment) {
                     alert('Your comment matches another comment, please dont take other peoples comments');
-                    $('annotator-cancel').trigger("click");
+                    $('annotator-delete').trigger("click");
                     return;
                 }
             }
@@ -125,7 +125,7 @@ $crs = new PCRHandler();
             //for
             //if found
             //splice(index,1)
-            var comment = $('.annotator-item').val();
+            var comment = $('.annotator-item').html();
             alert(comment);
             for(var i=0; i < annotationText.length; i++) {
                 if(annotationText[i].comment == comment) {
