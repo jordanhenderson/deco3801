@@ -18,10 +18,10 @@
             end position, end line, comment contents, filename
         */
     //    echo $review[$i]['comment'] . "%%";
-        print_r($review);
+        print_r($review->comment);
         
-        $handler->getReview($stnid, $id, $review->startIndexSet, $review->startLine, '' . $review->comment,
-        '' . $review->text, $review->reviewID, '' . $review->fileName);
+        $handler->getReview($stnid, $id, $review->startIndexSet, $review->startLine, $review->comment,
+        $review->text, $review->reviewID, $review->fileName);
     }
     echo "</pre>";
 ?>
