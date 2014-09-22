@@ -117,7 +117,7 @@ echo "</pre>\n";
 				} else {
 					// print table head
 					// print table contents
-					foreach ($assignments as $asg) {
+					foreach ($assignments as $asg) {/*
 						if (!$asg->isValid()) {
 							continue;
 						}
@@ -211,7 +211,7 @@ echo "</pre>\n";
 						echo "</td>
 					</tr>
 				</tbody>
-			</table>";
+			</table>";*/
 					}
 				}
 				// admin's have a button to create new assignments
