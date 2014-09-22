@@ -10,6 +10,14 @@
     $handler = new PCRHandler();
     $stnid = $_SESSION['user_id'];
     $id = $_SESSION['id'];
+    // delete the reviews for the submission/file
+    $sub = $handler->getSubmission('00000');
+    $arr = $handler->getFiles();
+    echo "<pre>";
+    foreach ($arr as $rev) {
+        print_r($rev);
+    }
+    echo "</pre>";
     foreach ($reviews as $review) {
         /* Id of reviewer, submission id, start position, start line, 
             end position, end line, comment contents, filename
