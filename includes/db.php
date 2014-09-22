@@ -77,9 +77,10 @@ abstract class PCRObject implements JsonSerializable {
 		$this->id_field = $id_field;
 		$this->uptodate = 0;
 		$this->forceCreate = $forceCreate;
-
+        print_r("array is:" . $data);
 		if (is_array($data)) {
 			$this->row = $data;
+            echo ">>Is array woo<<";
 			if (isset($data[$id_field]) && $data[$id_field] != null) {
                 //echo ">>id set>>";
 				$this->id = $data[$id_field];
@@ -600,7 +601,6 @@ class Question extends PCRObject {
  */	
 class Review extends PCRObject {
 	public function __construct($data) {
-        echo ">>ConstructingReview<<";
 		parent::__construct("ReviewID", "Review", $data, 1);
 	}
 	

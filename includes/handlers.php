@@ -80,7 +80,6 @@ class PCRHandler {
 	* @param id the review ID
 	*/
 	public function getReview($stnid, $id, $startIndex, $startLine, $annotationText, $text, $reviewID, $fileName) {
-        echo ">>in handlers>>";
 		return new Review(array("SubmissionID"=>'0', "Comments"=>$annotationText, "ReviewerID"=>$stnid, "ReviewID"=>$id, "startIndex"=>$startIndex, "startLine"=>$startLine, "fileName"=>$fileName, "text"=>$text));
 	}
 	
