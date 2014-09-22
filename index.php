@@ -123,6 +123,7 @@ echo "</pre>\n";
 						<th>Title</th>
 						<th>Open Date</th>
 						<th>Due Date</th>
+						<th>Peer Review Due Date</th>
 						<th>Weight</th>
 						<th>Status</th>
 					</tr>
@@ -142,6 +143,9 @@ echo "</pre>\n";
 						$date = date_create_from_format('Y-m-d G:i:s', $asg['DueTime']);
 						$DueTime = (int) date_format($date, 'U');
 						
+						$date = date_create_from_format('Y-m-d G:i:s', $asg['ReviewsDue']);
+						$ReviewsDue = (int) date_format($date, 'U');
+						
 						if (!$admin) { // student
 							$sub = $crs->getSubmission($asg['AssignmentID']);
 							if($sub->isValid()) {
@@ -151,91 +155,72 @@ echo "</pre>\n";
 							}
 						}
 						
-						if ($admin && $CurrentTime < $OpenTime) { // Not open (Admin only)
-							$total = $OpenTime - $CurrentTime;
+						$timeUntilOpen = $OpenTime - $CurrentTime; // Opens in:
+						$timeSinceOpen = $CurrentTime - $OpenTime; // Opened:ago
+						$timeUntilDue = $DueTime - $CurrentTime; // Due in:
+						$timeSinceDue = $CurrentTime - $DueTime; // Closed:ago
+						$timeUntilReview = $ReviewsDue - $CurrentTime; // Due in:
+						$timeSinceReview = $CurrentTime - $ReviewsDue; // Closed:ago
+						
+						if ($admin) {
 							echo "
 					<tr href=\"create.php?assid=$asg[AssignmentID]\">
-						<td>$asg[AssignmentName]<br><i>Not Open</i></td>
-						<td>$asg[OpenTime]</td>
-						<td>$asg[DueTime]</td>
-						<td>$asg[Weight]%</td>
-						<td>Opens in: ".seconds2human($total)."<br><i>Click to Edit</i></td>
-					</tr>";
-						} else if ($admin && $CurrentTime <= $DueTime) { // Currently open (Admin only)
-							$total = $DueTime - $CurrentTime;
-							echo "
-					<tr href=\"create.php?assid=$asg[AssignmentID]\">
-						<td>$asg[AssignmentName]<br><i>Open</i></td>
-						<td>$asg[OpenTime]</td>
-						<td>$asg[DueTime]</td>
-						<td>$asg[Weight]%</td>
-						<td>Closes in: ".seconds2human($total)."<br><i>Click to Edit</i></td>
-					</tr>";
-						} else if ($admin && $CurrentTime > $DueTime) { // Currently closed (Admin only)
-							$total = $CurrentTime - $DueTime;
-							echo "
-					<tr href=\"create.php?assid=$asg[AssignmentID]\">
-						<td>$asg[AssignmentName]<br><i>Closed</i></td>
-						<td>$asg[OpenTime]</td>
-						<td>$asg[DueTime]</td>
-						<td>$asg[Weight]%</td>
-						<td>Closed ".seconds2human($total)." ago<br><i>Click to Edit</i></td>
-					</tr>";
-						} else if ($CurrentTime < $OpenTime) { // Not open (Student only)
-							$total = $OpenTime - $CurrentTime;
+						<td>$asg[AssignmentName]</td>";
+						} else {
 							echo "
 					<tr>
-						<td>$asg[AssignmentName]<br><i>Not Open For Submission</i></td>
-						<td>$asg[OpenTime]</td>
-						<td>$asg[DueTime]</td>
-						<td>$asg[Weight]%</td>
-						<td>Not Open. Opens in: ".seconds2human($total)."</td>
-					</tr>";
-						} else if ($SubmitTime == 0 && $CurrentTime > $DueTime) { // Currently overdue (Student only)
-							$total = $CurrentTime - $DueTime;
-							echo "
-					<tr class=\"bg-danger\">
-						<td>$asg[AssignmentName]<br><i>Overdue</i></td>
-						<td>$asg[OpenTime]</td>
-						<td>$asg[DueTime]</td>
-						<td>$asg[Weight]%</td>
-						<td>Not Submitted. Due: $asg[DueTime]<br><i>Late by: ".seconds2human($total)."</i></td>
-					</tr>";
-						} else if ($SubmitTime == 0) { // Not submitted, still open (Student only)
-							$total = $DueTime - $CurrentTime;
-							echo "
-					<tr class=\"bg-warning\">
-						<td>$asg[AssignmentName]<br><i>Not Submitted</i></td>
-						<td>$asg[OpenTime]</td>
-						<td>$asg[DueTime]</td>
-						<td>$asg[Weight]%</td>
-						<td>Not Submitted. Due: $asg[DueTime]<br><i>Remaining: ".seconds2human($total)."</i></td>
-					</tr>";
-						} else if ($SubmitTime > $DueTime) { // Submitted overdue (Student only)
-							$total = $SubmitTime - $DueTime;
-							echo "
-					<tr class=\"bg-success\">
-						<td>$asg[AssignmentName]<br><i>Submitted Overdue</i></td>
-						<td>$asg[OpenTime]</td>
-						<td>$asg[DueTime]</td>
-						<td>$asg[Weight]%</td>
-						<td>Submitted: $sub[SubmitTime]<br><i>Late by: ".seconds2human($total)."</i></td>
-					</tr>";
-						} else if ($SubmitTime <= $DueTime) { // Submitted on time (Student only)
-							echo "
-					<tr class=\"bg-success\">
-						<td>$asg[AssignmentName]<br><i>Submitted</i></td>
-						<td>$asg[OpenTime]</td>
-						<td>$asg[DueTime]</td>
-						<td>$asg[Weight]%</td>
-						<td>Submitted: $sub[SubmitTime]</td>
-					</tr>";
-						} else {
-							echo "error...<br>\n";
+						<td>$asg[AssignmentName]</td>"; // TODO Conisder adding hyperlink for student to view submission
 						}
-					}
-					// print table end
-					echo "
+						
+						if ($CurrentTime < $OpenTime) { // Before open time
+							echo "
+						<td>$asg[OpenTime]<br><i>Opens in: ".seconds2human($timeUntilOpen)."</i></td>";
+						} else { // After open time
+							echo "
+						<td>$asg[OpenTime]<br><i>Opened: ".seconds2human($timeSinceOpen)." ago</i></td>";
+						}
+						
+						if ($admin && $CurrentTime <= $DueTime) { // Before due time
+							echo "
+						<td>$asg[DueTime]<br><i>Due in: ".seconds2human($timeUntilDue)."</i></td>";
+						} else { // After due time
+							echo "
+						<td>$asg[DueTime]<br><i>Closed: ".seconds2human($timeSinceDue)." ago</i></td>";
+						}
+						
+						if ($admin && $CurrentTime <= $ReviewsDue) { // Before reviews due time
+							echo "
+						<td>$asg[ReviewsDue]<br><i>Due in: ".seconds2human($timeUntilReview)."</i></td>";
+						} else { // After reviews due time
+							echo "
+						<td>$asg[ReviewsDue]<br><i>Closed: ".seconds2human($timeSinceReview)." ago</i></td>";
+						}
+						
+						echo "
+						<td>$asg[Weight]%</td>
+						<td>";
+						
+						if ($SubmitTime == 0 && $CurrentTime < $DueTime) { // Not Submitted
+							echo "Not Submitted.";
+						} else if ($SubmitTime == 0) { // Overdue
+							echo "Overdue.";
+						} else if ($SubmitTime <= $DueTime) { // Submitted on time
+							echo "Submitted.";
+						} else { // Submitted late
+							echo "Submitted late.";
+						}
+						
+						// TODO
+						if (1) { // Peer review not open
+							echo "<br>Peer Reviews Not Open.";
+						} else if (1) { // Peer review complete
+							echo "<br>Peer Reviews Complete.";
+						} else { // Peer review incomplete
+							echo "<br>Peer Reviews Not Complete.";
+						}
+						
+						echo "</td>
+					</tr>
 				</tbody>
 			</table>";
 				}
