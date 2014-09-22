@@ -107,6 +107,15 @@ if (isset($_REQUEST['assid'])) {
 				<div class="col-md-4">
 					<div class="form-group">
 						<label for="AssignmentFiles">Assignment Files TODO TODO</label>
+						<p id="AssignmentFilesStatus">Currently Uploaded: 
+						<?php
+						if (!$new) {
+							echo $asg['AssignmentFiles'];
+						} else {
+							echo 'No File Uploaded';
+						}
+						?>
+						</p>
 						<input id="AssignmentFiles" name="AssignmentFiles" type="file">
 						<p class="help-block">PDF or zip containing the assignment specifications, for students to download.</p>
 					</div>
@@ -114,6 +123,15 @@ if (isset($_REQUEST['assid'])) {
 				<div class="col-md-4">
 					<div class="form-group">
 						<label for="TestFiles">Unit Testing Files TODO TODO</label>
+						<p id="TestFilesStatus">Currently Uploaded: 
+						<?php
+						if (!$new) {
+							echo $asg['TestFiles'];
+						} else {
+							echo 'No File Uploaded';
+						}
+						?>
+						</p>
 						<input id="TestFiles" name="TestFiles" type="file">
 						<p class="help-block">Please zip test file(s). The file executed when testing must be named "runtest".</p>
 					</div>
@@ -138,10 +156,10 @@ if (isset($_REQUEST['assid'])) {
 				<?php
 				if ($new) {
 					echo '
-				<input class="btn btn-primary" type="submit" value="create" name="updateAssignment">';
+				<input class="btn btn-primary" type="submit" value="Create" name="updateAssignment">';
 				} else {
 					echo '
-				<input class="btn btn-primary" type="submit" value="update" name="update">';
+				<input class="btn btn-primary" type="submit" value="Update" name="update">';
 				}
 				?>
 				<div class="btn btn-warning" id="Reset">Reset</div>
@@ -179,17 +197,19 @@ if (isset($_REQUEST['assid'])) {
 			format: 'yyyy-mm-dd hh:ii:ss'
 		});
 		
-		$(":submit").click(function() {
-			var func = $(this).attr("name");
-			var request = {f: func, params: [
-						$("#AssignmentName").val(),
-						$("#ReviewsNeeded").val(),
-						$("#ReviewsDue").val(),
-						$("#Weight").val(),
-						$("#OpenTime").val(),
-						$("#DueTime").val()
-				]};
-			$.post("api.php", JSON.stringify(request), function() {
+		$(function() {
+			$(":submit").click(function() {
+				var func = $(this).attr("name");
+				var request = {f: func, params: [
+							$("#AssignmentName").val(),
+							$("#ReviewsNeeded").val(),
+							$("#ReviewsDue").val(),
+							$("#Weight").val(),
+							$("#OpenTime").val(),
+							$("#DueTime").val()
+					]};
+				$.post("api.php", JSON.stringify(request), function() {
+				});
 			});
 		});
 	</script> 
