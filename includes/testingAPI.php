@@ -54,6 +54,7 @@ class functionalTestAPI {
 
 	/**
 	* This function will update the given test results for the database submission entry.
+	* It will return true if the data is inserted successfully, false otherwise
 	* 
 	* $testResults must be an array with each element containing the value 
 	* "pass" or "fail"
@@ -70,10 +71,14 @@ class functionalTestAPI {
 
 		echo "dbString:" . $dbString;
 
-		if ($db->query("UPDATE Submission SET Results=$testResults WHERE SubmissionID=$submissionID") != false) {
+		$db = new Database();
+
+		if ($db->query("UPDATE Submission SET Results='$dbString' WHERE SubmissionID='$submissionID'") != false) {
 			echo "Test data inserted successfully\n";
+			return true;
 		} else {
 			echo "Error entering test results into database\n";
+			return false;
 		}
 	}
 
@@ -84,7 +89,7 @@ class functionalTestAPI {
 	* "pass" or "fail"
 	*/
 	public static function dbRetrieveTestResults($submissionID) {
-		if ($db->query("SELECT Results FROM Submission WHERE SubmissionID = $submissionID") != false) {
+		if ($db->query("SELECT Results FROM Submission WHERE SubmissionID='$submissionID'") != false) {
 			echo "Test data retrieved successfully\n";
 		} else {
 			echo "Error retrieving test results from database\n";
