@@ -200,14 +200,12 @@ if (isset($_POST['create']) || isset($_POST['update'])) {
 		$(function() {
 			$(":submit").click(function() {
 				var func = $(this).attr("name");
-				var request = {f: func, params: [
-					null, '2', 'test', '2', '2014-10-01 18:00:00', '10', '2014-09-01 18:00:00', '2014-09-29 18:00:00'
-							// $(".AssignmentName").val(),
-							// $("#ReviewsNeeded").val(),
-							// $("#ReviewsDue").val(),
-							// $("#Weight").val(),
-							// $("#OpenTime").val(),
-							// $("#DueTime").val()
+				var request = {f: func, params: [							$("#AssignmentName").val(),
+							$("#ReviewsNeeded").val(),
+							$("#ReviewsDue").val(),
+							$("#Weight").val(),
+							$("#OpenTime").val(),
+							$("#DueTime").val()
 					]};
 				$.post("api.php", JSON.stringify(request), function() {
 				});
