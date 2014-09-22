@@ -131,7 +131,7 @@ $crs = new PCRHandler();
                     annotationText.splice(i, 1);
                      $('#assignment_code span').each(function( index, element ) {
                         if ($(element).hasClass('span' + i)) {
-                            $(element).remove();
+                            $(this).remove();
                         }
                      });
                     break;
