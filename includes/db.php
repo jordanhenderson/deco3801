@@ -81,7 +81,7 @@ abstract class PCRObject implements JsonSerializable {
 		if (is_array($data)) {
 			$this->row = $data;
 			if (isset($data[$id_field]) && $data[$id_field] != null) {
-                echo ">>id set>>";
+                //echo ">>id set>>";
 				$this->id = $data[$id_field];
 			}
 		}
@@ -117,7 +117,7 @@ abstract class PCRObject implements JsonSerializable {
 	private function insertRow() {
 		//Insert a new row.
 		$field_count = sizeof($this->row);
-		echo ">>inserting>>";
+		//echo ">>inserting>>";
 		//Generate a prepared insert statement.
 		$cols = "";
 		$vals = "";
@@ -155,7 +155,7 @@ abstract class PCRObject implements JsonSerializable {
 	 */
 	public function Update($recursed=0) {
 		if (!$this->uptodate) {
-			echo ">>updating with recursed:" . $recursed . ">>";
+			//echo ">>updating with recursed:" . $recursed . ">>";
 			//Populate the PCRObject.
 			$sth = $this->db->prepare("SELECT * FROM $this->table WHERE $this->id_field = ?;");
 			
@@ -176,7 +176,7 @@ abstract class PCRObject implements JsonSerializable {
 			
 			//The provided ID did not return a row.
 			if (!$row) {
-                echo ">>About to insert>>";
+                //echo ">>About to insert>>";
 				$this->insertRow();
 				//Populate the freshly inserted row by calling Update again.
 				//Only recurse once to prevent a loop - this might not be necessary.
@@ -600,6 +600,7 @@ class Question extends PCRObject {
  */	
 class Review extends PCRObject {
 	public function __construct($data) {
+        echo ">>ConstructingReview<<";
 		parent::__construct("ReviewID", "Review", $data, 1);
 	}
 	
