@@ -136,6 +136,7 @@ abstract class PCRObject implements JsonSerializable {
 
 			$this->id = $this->row[$this->id_field] = $this->db->lastInsertId();
 		} catch (PDOException $e) {
+            echo $e;
 			//An error occured while inserting.
 			return;
 		}
