@@ -18,8 +18,8 @@
         print_r($rev);
     }
     echo "</pre>";
-        $query = "DELETE * FROM 'Review' WHERE 'SubmissionID'='00002' AND 'fileName'='assign1_additional.cpp';";
-        $handler->query($query);
+        //$query = "DELETE * FROM 'Review' WHERE 'SubmissionID'='00002' AND 'fileName'='assign1_additional.cpp';";
+        //$handler->query($query);
     foreach ($reviews as $review) {
         /* Id of reviewer, submission id, start position, start line, 
             end position, end line, comment contents, filename
