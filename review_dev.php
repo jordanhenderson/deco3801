@@ -55,14 +55,6 @@ $crs = new PCRHandler();
         
         function getContents() {
             var comment = $('#annotator-field-0').val();
-            // add code to make sure the comment is unique
-            for(var i=0; i < annotationText.length; i++) {
-                if(comment == annotationText[i].comment) {
-                    alert('Your comment matches another comment, please dont take other peoples comments');
-                    $(annotator-cancel).trigger("click");
-                    return;
-                }
-            }
             annotationText.push({"comment":comment, "text":selected});
         }
         
@@ -111,32 +103,6 @@ $crs = new PCRHandler();
                 alert("Your comments have been saved! Woohoo!");
                 alert(retval);
             });
-            
-        }
-        
-        /*
-        * Run when the user clicks the x button in the annotation window
-        * Finds the corresponding annotation and deletes it from the array
-        * using the array splice method
-        */
-        function deleteAnnotation() {
-            // get the comment and compare against ones in annotationText
-            // Comments must be unique
-            //for
-            //if found
-            //splice(index,1)
-            var comment = $('#annotator-field-0').val();
-            for(var i=0; i < annotationText.length; i++) {
-                if(annotationText[i].comment == comment) {
-                    annotationText.splice(i, 1);
-                     $('#assignment_code span').each(function( index, element ) {
-                        if ($(element).hasClass('span' + i)) {
-                            $(element).remove();
-                        }
-                     });
-                    break;
-                }
-            }
         }
         
 		//Handles when someone clicks on the file tree
