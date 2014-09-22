@@ -19,7 +19,7 @@
     }
     echo "</pre>";
     if (count($reviews) > 0) {
-        $query = "DELETE * FROM 'Review' WHERE 'SubmissionID'='00002' AND 'fileName'=" . $reviews[0].fileName . ";";
+        $query = "DELETE * FROM 'Review' WHERE 'SubmissionID'='00002' AND 'fileName'='" . $reviews[0].fileName . "';";
         $handler->query($query);
     }
     foreach ($reviews as $review) {
