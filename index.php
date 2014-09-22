@@ -222,10 +222,11 @@ echo "</pre>\n";
 						}
 						
 						echo "</td>
-					</tr>
+					</tr>";
+					}
+					echo "
 				</tbody>
 			</table>";
-					}
 				}
 				// admin's have a button to create new assignments
 				if ($admin) {
