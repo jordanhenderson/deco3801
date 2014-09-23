@@ -290,19 +290,13 @@ class Assignment extends PCRObject {
 	}
 	
 	/**
-	 * Returns an array of all the submissions from this assignment.
-	 * 
-	 * @return an array of all submissions with the same AssignmentID as the
-	 *         object this was called from.
+	 * Returns the submissions from this assignment.
 	 */
-	public function getSubmissions() {
+	public function getSubmission($studentid) {
 		$arr = array();
-		$sth = $this->db->prepare("SELECT * FROM Submission WHERE AssignmentID = ?;");
-		$sth->execute(array($this->getID()));
-		while ($file_row = $sth->fetch(PDO::FETCH_ASSOC)) {
-			array_push($arr, new Submission($file_row));
-		}
-		return $arr;
+		$sth = $this->db->prepare("SELECT * FROM Submission WHERE AssignmentID = ? AND StudentID = ?;");
+		$sth->execute(array($this->getID(), $studentid));
+		return new Submission($sth->fetch(PDO::FETCH_ASSOC));
 	}
 }
 
