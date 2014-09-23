@@ -288,6 +288,22 @@ class Assignment extends PCRObject {
 			return $this->row;
 		}
 	}
+
+	/**
+	 * Returns an array of all the submissions from this assignment.
+	 * 
+	 * @return an array of all submissions with the same AssignmentID as the
+	 *         object this was called from.
+	 */
+	public function getSubmissions() {
+		$arr = array();
+		$sth = $this->db->prepare("SELECT * FROM Submission WHERE AssignmentID = ?;");
+		$sth->execute(array($this->getID()));
+		while ($file_row = $sth->fetch(PDO::FETCH_ASSOC)) {
+			array_push($arr, new Submission($file_row));
+		}
+		return $arr;
+	}
 	
 	/**
 	 * Returns the submissions from this assignment.
