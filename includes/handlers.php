@@ -80,7 +80,7 @@ class PCRHandler {
 	 * @return the submission object
 	 */
 	public function getSubmission($id) {
-		$assignment = new Assignment(array("AssignmentID"=>$id)); // Do we need this???
+		//$assignment = new Assignment(array("AssignmentID"=>$id)); // Do we need this???
 		return new Submission(array("AssignmentID"=>$id, "StudentID"=>$_SESSION['user_id']));
 	}
 	

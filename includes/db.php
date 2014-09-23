@@ -434,8 +434,8 @@ class Submission extends PCRObject {
 		$arr = array();
 		$sth = $this->db->prepare("SELECT * FROM Review WHERE SubmissionID = ?;");
 		$sth->execute(array($this->getID()));
-        echo "hherrfre";
 		while ($file_row = $sth->fetch(PDO::FETCH_ASSOC)) {
+            echo "hherrfre";
 			array_push($arr, new Review($file_row));
 		}
 		return $arr;
