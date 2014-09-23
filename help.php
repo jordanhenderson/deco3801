@@ -1,7 +1,6 @@
 <?php
 
 require_once 'includes/handlers.php';
-
 // Pull admin from session var to local var for easier/faster calling
 if (isset($_SESSION['admin']) && $_SESSION['admin']) {
 	$admin = true;
@@ -33,6 +32,8 @@ $crs = new PCRHandler();
 	
 	<!-- Custom CSS -->
 	<link href="css/main.css" rel="stylesheet">
+	<link href="css/help.css" rel="stylesheet">
+
 </head>
 
 <body>	
@@ -43,7 +44,7 @@ $crs = new PCRHandler();
 	//$m = round(($ss%3600)/60, 0.1);
 	$h = floor(($s%86400)/3600);
 	$d = floor($s/86400);
-	$str = ""; //do i need this?
+	$str = ""; //do i need this? <- yes you do
 	if ($d) {
 		$str .= "$d days, ";
 	}
@@ -82,8 +83,8 @@ $crs = new PCRHandler();
 			<a class="btn btn-xl btn-danger" href="#" role="button">My Questions</a>
 
 			<table class="table">
-				<thead>
-					<tr>
+				<thead >
+					<tr class = 'columns'>
 						<th>Title</th>
 						<th>Last Post</th>
 						<th>Original Poster</th>
@@ -100,8 +101,8 @@ $crs = new PCRHandler();
 						
 						//This sends the question ID in the URL to enable $_GET elsewhere
 						echo "
-						<tr class='unresolved'>
-						<td><a href='displayQuestion.php?id=$questionRow[QuestionID]'>$questionRow[Title]</a></td>
+						<tr class='unresolved' data-href='displayQuestion.php?id=$questionRow[QuestionID]'>
+						<td ><a href='displayQuestion.php?id=$questionRow[QuestionID]'>$questionRow[Title]</a></td>
 						<td>";
 						foreach ($lastpost as $last) {
 							if(!$last->isValid()) continue;
@@ -138,10 +139,15 @@ $crs = new PCRHandler();
 				<?php } ?>
 		</div>
 	</div>
-
+	
 	<!-- jQuery Version 1.11.0 -->
 	<script src="js/jquery-1.11.0.js"></script>
-	
+	<script>
+$('.unresolved').on("click", function () {
+    var href = $(this).data('href');
+        document.location = href;
+});
+</script>
 	<!-- Bootstrap Core JavaScript -->
 	<script src="js/bootstrap.min.js"></script>
 	
