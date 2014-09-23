@@ -32,9 +32,9 @@ if (isset($_REQUEST['assid'])) {
 <head>
 	<meta charset="utf-8">
 	<meta name="viewport" content="width=device-width, initial-scale=1">
-
+	
 	<title>Create - PCR</title>
-
+	
 	<!-- Bootstrap Core CSS -->
 	<link href="css/bootstrap.min.css" rel="stylesheet">
 	
@@ -43,7 +43,7 @@ if (isset($_REQUEST['assid'])) {
 	
 	<!-- Bootstrap datetimepicker CSS -->
 	<link href="css/bootstrap-datetimepicker.min.css" rel="stylesheet">
-
+	
 	<!-- Custom CSS -->
 	<link href="css/main.css" rel="stylesheet">
 </head>
@@ -63,14 +63,14 @@ if (isset($_REQUEST['assid'])) {
 		?>
 		<form method="post">
 			<div class="row">
-				<div class="col-md-8">
+				<div class="col-md-12">
 					<label for="AssignmentName">Assignment Name</label>
 					<input class="form-control" id="AssignmentName" <?php echo 'value="'.$asg['AssignmentName'].'"'; ?> name="AssignmentName" type="text"></input>
 				</div>
 			</div>
 			<br>
 			<div class="row">
-				<div class="col-md-8">
+				<div class="col-md-12">
 					<label for="OpenTime">Open Date</label>
 					<input class="form-control form_datetime" id="OpenTime" name="OpenTime" size="24" type="text" <?php echo 'value="'.$asg['OpenTime'].'"'; ?>>
 					<p class="help-block">
@@ -80,7 +80,7 @@ if (isset($_REQUEST['assid'])) {
 			</div>
 			<br>
 			<div class="row">
-				<div class="col-md-8">
+				<div class="col-md-12">
 					<label for="DueTime">Due Date</label>
 					<input class="form-control form_datetime" id="DueTime" name="DueTime" size="24" type="text" <?php echo 'value="'.$asg['DueTime'].'"'; ?>>
 					<p class="help-block">
@@ -93,7 +93,7 @@ if (isset($_REQUEST['assid'])) {
 			</div>
 			<br>
 			<div class="row">
-				<div class="col-md-8">
+				<div class="col-md-12">
 					<label for="ReviewsDue">Peer Reviews Due</label>
 					<input class="form-control form_datetime" id="ReviewsDue" name="ReviewsDue" size="24" type="text" <?php echo 'value="'.$asg['ReviewsDue'].'"'; ?>>
 					<p class="help-block">
@@ -104,7 +104,7 @@ if (isset($_REQUEST['assid'])) {
 			</div>
 			<br>
 			<div class="row">
-				<div class="col-md-4">
+				<div class="col-md-6">
 					<div class="form-group">
 						<label for="AssignmentFiles">Assignment Files TODO TODO</label>
 						<p id="AssignmentFilesStatus">Currently Uploaded: 
@@ -120,7 +120,7 @@ if (isset($_REQUEST['assid'])) {
 						<p class="help-block">PDF or zip containing the assignment specifications, for students to download.</p>
 					</div>
 				</div>
-				<div class="col-md-4">
+				<div class="col-md-6">
 					<div class="form-group">
 						<label for="TestFiles">Unit Testing Files TODO TODO</label>
 						<p id="TestFilesStatus">Currently Uploaded: 
@@ -139,7 +139,7 @@ if (isset($_REQUEST['assid'])) {
 			</div>
 			<br>
 			<div class="row">
-				<div class="col-md-4">
+				<div class="col-md-6">
 					<label for="ReviewsNeeded">Reviews Per Student</label><br>
 					<input class="form-control" id="ReviewsNeeded" min="0" max="10" name="ReviewsNeeded" type="number" <?php echo 'value="'.$asg['ReviewsNeeded'].'"'; ?>>
 					<p class="help-block">
@@ -147,7 +147,7 @@ if (isset($_REQUEST['assid'])) {
 						Students who have not submitted before the deadline will not be able to create or recieve reviews.
 					</p>
 				</div>
-				<div class="col-md-4">
+				<div class="col-md-6">
 					<label for="Weight">Weight (%)</label>
 					<input class="form-control" id="Weight" min="1" max="100" name="Weight" type="number" <?php echo 'value="'.$asg['Weight'].'"'; ?>>
 				</div>

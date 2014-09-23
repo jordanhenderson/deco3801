@@ -1,39 +1,39 @@
 <?php
-/*
+/**
  * Database contains a base database (PDO) and prepared query wrapper.
  * Add your custom database connection string and parameters to the constructor.
-*/
+ */
 require_once "config.php";
 class Database {
 	private $db;
 	/**
-	*query exeutes a single SQL query.
-	*@param stmt the SQL string to execute
-	*@return the SQL query object
-	*/
+	 * query exeutes a single SQL query.
+	 * @param stmt the SQL string to execute
+	 * @return the SQL query object
+	 */
 	public function query($stmt) {
 		return $this->db->query($stmt);
 	}
 	/**
-	*prepare returns a prepared PDO statement object
-	*@param stmt the SQL string to prepare
-	*@returns the prepared statement object.
-	*/
+	 * prepare returns a prepared PDO statement object
+	 * @param stmt the SQL string to prepare
+	 * @return the prepared statement object.
+	 */
 	public function prepare($stmt) {
 		return $this->db->prepare($stmt);
 	}
 	
 	/**
-	*@lastInsertID returns the last inserted database row ID.
-	*@returns the last inserted row ID.
-	*/
+	 * lastInsertID returns the last inserted database row ID.
+	 * @return the last inserted row ID.
+	 */
 	public function lastInsertId() {
 		return $this->db->lastInsertId();
 	}
 
 	/**
-	*Construct a Database object. 
-	*/
+	 * Construct a Database object. 
+	 */
 	public function __construct() {
 		global $config;
 		$this->db = new PDO('mysql:host=localhost;dbname=' . $config['dbname'] . ';charset=utf8', $config['dbuser'], $config['dbpass']);
@@ -43,11 +43,11 @@ class Database {
 
 $db = new Database();
 
-/*
+/**
  * PCRObject provides a generic base class for objects represented within a relational database.
  * All functions relying on object data must first call parent::Update() to populate the row.
  * All derived classes must implement jsonSerialize() in order to serialize the object to JSON.
-*/
+ */
 abstract class PCRObject implements JsonSerializable {
 	protected $db; //Database object reference
 	private $id; //ID of the database object (within the objects' table)
@@ -57,19 +57,19 @@ abstract class PCRObject implements JsonSerializable {
 	/**
 	 * uptodate determines if the object has been populated by a row.
 	 * This allows set operations to occur without first retrieving data.
-	*/
+	 */
 	protected $uptodate;
 	/**
 	 * forceCreate specifies if a row with the provided ID does not already exist.
-	*/
+	 */
 	protected $forceCreate;
-	 /**
+	/**
 	 * PCRObject($id_field, $table, $data, $forceCreate)
-	 * param id_field: The ID field of the database table.
-	 * param table: The name of the database table.
-	 * param data: A row containing the data. 
-	 * param forceCreate: Should a new row be auto-created if an ID is 
-	 * provided and a matching row is not found.
+	 * @param id_field: The ID field of the database table.
+	 * @param table: The name of the database table.
+	 * @param data: A row containing the data. 
+	 * @param forceCreate: Should a new row be auto-created if an ID is 
+	 *        provided and a matching row is not found.
 	 */
 	protected function __construct($id_field, $table, $data, $forceCreate = 0) {
 		$this->db = $GLOBALS["db"];
@@ -87,7 +87,7 @@ abstract class PCRObject implements JsonSerializable {
 	
 	/**
 	* updateRow commits the object into the database, synchronising any changes.
-	* @params an array containing the individual key/value field pairs representing the object.
+	* @param row an array containing the individual key/value field pairs representing the object.
 	*/
 	private function updateRow($row) {
 		$this->id = $row[$this->id_field];
@@ -184,21 +184,21 @@ abstract class PCRObject implements JsonSerializable {
 	}
 	
 	/**
-	* getID updates the object and returns the objects' ID
-	* @return the row ID
-	*/
+	 * getID updates the object and returns the objects' ID
+	 * @return the row ID
+	 */
 	public function getID() {
 		$this->Update();
 		return $this->id;
 	}
 	
 	/**
-	* isValid returns if the object is valid.
-	* An object is valid if an appropriate entry exists within the database.
-	* If forceCreate is not specified and no ID exists within the database, the provided
-	* object may have been created to access a specific entry (which does not exist)
-	* @returns if the object is currently valid.
-	*/
+	 * isValid returns if the object is valid.
+	 * An object is valid if an appropriate entry exists within the database.
+	 * If forceCreate is not specified and no ID exists within the database, the provided
+	 * object may have been created to access a specific entry (which does not exist)
+	 * @return if the object is currently valid.
+	 */
 	public function isValid() {
 		$this->Update();
 		return $this->id != null && $this->uptodate == 1;
@@ -206,16 +206,16 @@ abstract class PCRObject implements JsonSerializable {
 	
 	/**
 	 * Return the objects' row by reference. This allows updating the row.
-	 * @returns a reference to the objects' row.
-	*/
+	 * @return a reference to the objects' row.
+	 */
 	public function &getRow() {
 		$this->Update();
 		return $this->row;
 	}
 
 	/**
-	* Delete the object within the database.
-	*/
+	 * Delete the object within the database.
+	 */
 	public function delete() {
 		if ($this->isValid()) {
 			$this->db->query("DELETE FROM $this->table WHERE $this->id_field = $this->id;");
@@ -223,10 +223,15 @@ abstract class PCRObject implements JsonSerializable {
 		}
 	}
 	
+	/**
+	 * Needs comment.
+	 */
 	public function commit() {
-		if($this->id != null)
+		if ($this->id != null) {
 			$this->updateRow($this->row);
-		else $this->Update();
+		} else {
+			$this->Update();
+		}
 	}
 }
 
@@ -240,14 +245,16 @@ class PCRBuilder {
 		$qry = $this->db->query("SHOW COLUMNS FROM $table;");
 		foreach ($qry as $row) {
 			$def = $row["Default"];
-			if ($def == "CURRENT_TIMESTAMP") $def = "";
+			if ($def == "CURRENT_TIMESTAMP") {
+				$def = "";
+			}
 			$this->row[$row["Field"]] = $def;
 		}
 	}
 	
 	/**
 	 * Get the populated row.
-	*/
+	 */
 	public function &getRow() {
 		return $this->row;
 	}
@@ -277,7 +284,25 @@ class Assignment extends PCRObject {
 	
 	public function jsonSerialize() {
 		parent::Update();
-		if(parent::isValid()) return $this->row;
+		if (parent::isValid()) {
+			return $this->row;
+		}
+	}
+	
+	/**
+	 * Returns an array of all the submissions from this assignment.
+	 * 
+	 * @return an array of all submissions with the same AssignmentID as the
+	 *         object this was called from.
+	 */
+	public function getSubmissions() {
+		$arr = array();
+		$sth = $this->db->prepare("SELECT * FROM Submission WHERE AssignmentID = ?;");
+		$sth->execute(array($this->getID()));
+		while ($file_row = $sth->fetch(PDO::FETCH_ASSOC)) {
+			array_push($arr, new Submission($file_row));
+		}
+		return $arr;
 	}
 }
 
@@ -297,7 +322,9 @@ class File extends PCRObject  {
 
 	public function jsonSerialize() {
 		parent::Update();
-		if(parent::isValid()) return $this->row;
+		if (parent::isValid()) {
+			return $this->row;
+		}
 	}
 }
 
@@ -330,9 +357,9 @@ class Submission extends PCRObject {
 	}
 	
 	/**
-	* getFiles returns an array of file objects which may be further manipulated.
-	* @return an array of File objects.
-	*/
+	 * getFiles returns an array of file objects which may be further manipulated.
+	 * @return an array of File objects.
+	 */
 	public function getFiles() {
 		$arr = array();
 		$sth = $this->db->prepare("SELECT * FROM Files WHERE SubmissionID = ?;");
@@ -344,9 +371,9 @@ class Submission extends PCRObject {
 	}
 	
 	/**
-	* addFiles iterates over the submissions' directory, recursively adding all
-	* files within as new database objects.
-	*/
+	 * addFiles iterates over the submissions' directory, recursively adding all
+	 * files within as new database objects.
+	 */
 	public function addFiles() {
 		$iterator = new RecursiveIteratorIterator(
 					new RecursiveDirectoryIterator($this->storage_dir), 
@@ -364,10 +391,10 @@ class Submission extends PCRObject {
 	}
 	
 	/**
-	* This function can only be called from a file uploader script (passing 
-	* a file within the global $_FILES array).
-	* The provided archive will be extracted to the submission storage directory.
-	*/
+	 * This function can only be called from a file uploader script (passing 
+	 * a file within the global $_FILES array).
+	 * The provided archive will be extracted to the submission storage directory.
+	 */
 	public function uploadArchive() {
 		if ($_FILES["file"]["error"] == 0) {
 			$id = $this->getID();
@@ -389,20 +416,20 @@ class Submission extends PCRObject {
 	}
 
 	/**
-	* Check out a git repository to the assignment submission directory.
-	* @param repo_url the repository repo_url
-	* @param username the repository username
-	* @param password the repository password
-	*/
+	 * Check out a git repository to the assignment submission directory.
+	 * @param repo_url the repository repo_url
+	 * @param username the repository username
+	 * @param password the repository password
+	 */
 	public function uploadRepo($repo_url, $username, $password) {
 		$id = $this->getID();
 		exec("cd $this->storage_dir && git clone https://$username:$password@$repo_url .");
 	}
 
 	/**
-	* getReviews returns an array of reviews for a submission.
-	* @return an array of reviews
-	*/
+	 * getReviews returns an array of reviews for a submission.
+	 * @return an array of reviews
+	 */
 	public function getReviews() {
 		$arr = array();
 		$sth = $this->db->prepare("SELECT * FROM Review WHERE SubmissionID = ?;");
@@ -433,37 +460,36 @@ class Course extends PCRObject {
 	}
 
 	/**
-	* addNewQuestion adds a new question to a course.
-	* @param title the question title
-	* @param content the question body content
-	* @param stnid the student ID
-	* @param $fullname full name of the student
-	*/
-	public function addNewQuestion($title, $content, $stnid, $fullname){
+	 * addNewQuestion adds a new question to a course.
+	 * @param title the question title
+	 * @param content the question body content
+	 * @param stnid the student ID
+	 * @param fullname full name of the student
+	 */
+	public function addNewQuestion($title, $content, $stnid, $fullname) {
 		$question = new Question(array(
-										"StudentID"	=> $stnid, 
-										"CourseID"	=> $this->getID(),
-										"StudentName"=> $fullname,
-										"Title"	=> $title,
-										"Content"	=> $content,
-										"Status"	=> "0"
-									)
-								);
+									"StudentID" => $stnid,
+									"CourseID" => $this->getID(),
+									"StudentName" => $fullname,
+									"Title" => $title,
+									"Content" => $content,
+									"Status" => "0"
+								));
 		return $question;
 	}	
 	/**
-	* helpEnabled returns if the help center is enabled for the current course.
-	*/
+	 * helpEnabled returns if the help center is enabled for the current course.
+	 */
 	public function helpEnabled() {
-		if($this->isValid()) {
+		if ($this->isValid()) {
 			return $this->row["HelpEnabled"];
 		}
 	}
 
 	/**
-	*getHelpCentreQuestions returns an array of help centre questions for the course.
-	*@return an array containing each help centre question added to the course.
-	*/
+	 *getHelpCentreQuestions returns an array of help centre questions for the course.
+	 *@return an array containing each help centre question added to the course.
+	 */
 	public function getHelpCentreQuestions() {
 		$arr = array();
 		$sth = $this->db->prepare("SELECT * FROM Question WHERE CourseID = ?;");
@@ -475,10 +501,10 @@ class Course extends PCRObject {
 	}
 
 	/**
-	* getAssignments returns an array of Assignment objects for the given
-	* course, which may be further manipulated.
-	* @return an array of Assignment objects.
-	*/
+	 * getAssignments returns an array of Assignment objects for the given
+	 * course, which may be further manipulated.
+	 * @return an array of Assignment objects.
+	 */
 	public function getAssignments() {
 		$arr = array();
 		$sth = $this->db->prepare("SELECT * FROM Assignments WHERE CourseID = ?;");
@@ -515,24 +541,24 @@ class Question extends PCRObject {
 	}
 	
 	/**
-	* markResolved sets the question status to resolved.
-	*/
-	public function markResolved(){
+	 * markResolved sets the question status to resolved.
+	 */
+	public function markResolved() {
 		$this->row["Status"] = "1";
 		$this->commit();
 	}
 	
 	/**
-	* markUnresolved sets the question status to resolved.
-	*/
-	public function markUnresolved(){
+	 * markUnresolved sets the question status to resolved.
+	 */
+	public function markUnresolved() {
 		$this->row["Status"] = "0";
 		$this->commit();
 	}
 
 	/**
-	* getLastComment returns the last made comment object.
-	*/
+	 * getLastComment returns the last made comment object.
+	 */
 	public function getLastComment() {
 		$arr = array();
 		$sth = $this->db->prepare("SELECT * FROM Comment WHERE QuestionID = ? ORDER BY postdate DESC limit 1;");
@@ -544,10 +570,10 @@ class Question extends PCRObject {
 	}
 
 	/**
-	* getComments returns an array of Comment objects for the given question,
-	* which may be further manipulated.
-	* @return an array of Question objects.
-	*/
+	 * getComments returns an array of Comment objects for the given question,
+	 * which may be further manipulated.
+	 * @return an array of Question objects.
+	 */
 	public function getComments() {
 		$arr = array();
 		$sth = $this->db->prepare("SELECT * FROM Comment WHERE QuestionID = ?;");
@@ -560,17 +586,26 @@ class Question extends PCRObject {
 	
 	public function jsonSerialize() {
 		parent::Update();
-		if(parent::isValid()) return $this->row;
+		if (parent::isValid()) {
+			return $this->row;
+		}
 	}
 	
+	/**
+	 * addComment adds a new Comment to the database.
+	 * 
+	 * @param stnid the student ID
+	 * @param fullname the students full name
+	 * @param content the content of the question
+	 * @return the newly created Comment object
+	 */
 	public function addComment($stnid, $fullname, $content) {
 		$comment = new Comment(array(
-										"StudentID"	=> $stnid, 
-										"QuestionID"	=> $this->getID(),
-										"StudentName"=> $fullname,
-										"Content"	=> $content,
-									)
-								);
+									"StudentID" => $stnid, 
+									"QuestionID" => $this->getID(),
+									"StudentName" => $fullname,
+									"Content" => $content,
+								));
 		$comment->commit();
 		return $comment;
 	}
@@ -587,9 +622,8 @@ class Question extends PCRObject {
  * (uint_16)		ReviewID
  * (int(11))		startIndex
  * (int(11))		startLine
- * (int(11))		endIndex
- * (int(11))		endLine
  * text				fileName
+ * text				text
  */	
 class Review extends PCRObject {
 	public function __construct($data) {
@@ -598,9 +632,12 @@ class Review extends PCRObject {
 	
 	public function jsonSerialize() {
 		parent::Update();
-		if(parent::isValid()) return $this->row;
+		if (parent::isValid()) {
+			return $this->row;
+		}
 	}
 }
+
 /**
  * Comment Object
  * 
@@ -620,6 +657,8 @@ class Comment extends PCRObject {
 	
 	public function jsonSerialize() {
 		parent::Update();
-		if(parent::isValid()) return $this->row;
+		if (parent::isValid()) {
+			return $this->row;
+		}
 	}
 }

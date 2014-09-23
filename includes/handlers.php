@@ -10,26 +10,30 @@ if (!isset($_SESSION['user_id'])) {
 
 require_once("db.php");
 
+/**
+ * Needs Comment.
+ */
 class PCRHandler {
-	/* Add additional API functions here. */
+	/* Add additional API functions here.*/
+	
 	/**
-	* getFiles retrieves all files within a submission
-	* @param id the submission ID
-	* @returns an array of files within a submission
-	*/
+	 * getFiles retrieves all files within a submission
+	 * @param id the submission ID
+	 * @return an array of files within a submission
+	 */
 	public function getFiles($id) {
 		$submission = new Submission(array("SubmissionID"=>$id));
 		return $submission->getFiles();
 	}
-
+	
 	/**
-	* getCourse returns the current course.
-	* @returns the course
-	*/
+	 * getCourse returns the current course.
+	 * @return the course
+	 */
 	public function getCourse() {
 		return new Course(array("CourseID"=>$_SESSION['course_id']));
 	}
-
+	
 	public function removeQuestion($id) {
 		$question = new Question(array("QuestionID"=>$id));
 		
@@ -39,12 +43,19 @@ class PCRHandler {
 		//$this->getQuestion($id)->delete();
 	}
 	
+	/**
+	 * Needs Comment.
+	 */
 	public function markResolved($id) {
 		$question = new Question(array("QuestionID"=>$id));
 		$questionRow = &$question->getRow();
 		$questionRow["Status"] = "1";
 		$question->commit();
 	}
+	
+	/**
+	 * Needs Comment.
+	 */
 	public function markUnresolved($id) {
 		$question = new Question(array("QuestionID"=>$id));
 		$questionRow = &$question->getRow();
@@ -53,30 +64,30 @@ class PCRHandler {
 	}
 	
 	/**
-	* getAssignment returns an assignment with the provided id.
-	* @param id the assignment ID
-	* @returns the assignment object
-	*/
+	 * getAssignment returns an assignment with the provided id.
+	 * @param id the assignment ID
+	 * @return the assignment object
+	 */
 	public function getAssignment($id) {
 		return new Assignment(array("AssignmentID"=>$id));
 	}
 	
 	/**
-	* getSubmission returns a submission with the provided id.
-	* One submission per student per assignment.
-	* Only a submission for the current student can be returned 
-	* @param id the assignment id.
-	* @returns the submission object
-	*/
+	 * getSubmission returns a submission with the provided id.
+	 * One submission per student per assignment.
+	 * Only a submission for the current student can be returned 
+	 * @param id the assignment id.
+	 * @return the submission object
+	 */
 	public function getSubmission($id) {
-		$assignment = new Assignment(array("AssignmentID"=>$id));
+		$assignment = new Assignment(array("AssignmentID"=>$id)); // Do we need this???
 		return new Submission(array("AssignmentID"=>$id, "StudentID"=>$_SESSION['user_id']));
 	}
 	
 	/**
-	* getQuestion returns a question using the provided id.
-	* @param id the question ID
-	*/
+	 * getQuestion returns a question using the provided id.
+	 * @param id the question ID
+	 */
 	public function getQuestion($id) {
 		return new Question(array("QuestionID"=>$id));
 	}
@@ -85,18 +96,18 @@ class PCRHandler {
 		$question = $this->getQuestion($question_id);
 		return $question->addComment($studentid, $fullname, $content);
 	}
-
+	
 	/**
-	* getReview returns a review using the provided parameters
-	* @param id the review ID
-	*/
+	 * getReview returns a review using the provided parameters
+	 * @param id the review ID
+	 */
 	public function getReview($stnid, $id, $startIndex, $startLine, $annotationText, $text, $reviewID, $fileName) {
 		return new Review(array("SubmissionID"=>'0', "Comments"=>$annotationText, "ReviewerID"=>$stnid, "ReviewID"=>$id, "startIndex"=>$startIndex, "startLine"=>$startLine, "fileName"=>$fileName, "text"=>$text));
 	}
 	
 	/**
-	* uploadArchive uploads an archive to a submission
-	*/
+	 * uploadArchive uploads an archive to a submission
+	 */
 	public function uploadArchive() {
 		$submission_id = isset($_POST["submission_id"]) ? $_POST["submission_id"] : null;
 		$submission = new Submission(array("SubmissionID"=>$submission_id));
@@ -106,10 +117,9 @@ class PCRHandler {
 		}
 	}
 	
-		
 	/**
-	* uploadRepo uploads a repository to a submission
-	*/
+	 * uploadRepo uploads a repository to a submission
+	 */
 	public function uploadRepo($submission_id, $repo_url, $username, $password) {
 		$submission = new Submission(array("SubmissionID"=>$submission_id));
 		if ($submission->isValid()) {
@@ -117,11 +127,10 @@ class PCRHandler {
 			$submission->addFiles();
 		}
 	}
-
-
-	/*
+	
+	/**
 	 * Create or update assignments.
-	*/
+	 */
 	public function updateAssignment($assignment_name, 
 									$reviews_needed, $review_due, $weight, 
 									$open_time, $due_time) {
@@ -139,6 +148,9 @@ class PCRHandler {
 	}
 }
 
+/**
+ * Needs Comment.
+ */
 class PCRBackend {
 	private $request;
 	private $handler;
@@ -151,6 +163,9 @@ class PCRBackend {
 		
 	}
 	
+	/**
+	 * Needs Comment.
+	 */
 	public function handleRequest() {
 		try {
 			$response = null;
@@ -170,7 +185,4 @@ class PCRBackend {
 			return "{}";
 		}
 	}
-
 }
-
-

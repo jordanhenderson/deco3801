@@ -58,7 +58,6 @@ function seconds2human($s) {
 	//$m = round(($ss%3600)/60, 0.1);
 	$h = floor(($s%86400)/3600);
 	$d = floor($s/86400);
-	$str = ""; //do i need this?
 	if ($d) {
 		$str .= "$d days, ";
 	}
@@ -221,12 +220,12 @@ echo "</pre>\n";
 							echo "<br>Peer Reviews Not Complete.";
 						}
 						
-						echo "</td>
-					</tr>";
+						echo '</td>
+					</tr>';
 					}
-					echo "
+					echo '
 				</tbody>
-			</table>";
+			</table>';
 				}
 				// admin's have a button to create new assignments
 				if ($admin) {

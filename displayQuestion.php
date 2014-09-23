@@ -34,7 +34,6 @@ $crs = new PCRHandler();
 	//$m = round(($ss%3600)/60, 0.1);
 	$h = floor(($s%86400)/3600);
 	$d = floor($s/86400);
-	$str = ""; //do i need this?
 	if ($d) {
 		$str .= "$d days, ";
 	}
