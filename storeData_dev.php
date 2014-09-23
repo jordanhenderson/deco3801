@@ -12,7 +12,7 @@
     $id = $_SESSION['id'];
     // delete the reviews for the submission/file
     $sub = $handler->getSubmission('00002');
-    $arr = $sub->getFiles();
+    $arr = $sub->getReviews();
     echo "<pre>";
     foreach ($arr as $rev) {
         print_r($rev);
