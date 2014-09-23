@@ -29,7 +29,20 @@ $crs = new PCRHandler();
 </head>
 <body>
 	<?php 
-	
+	function seconds2human($s) {
+	$m = floor(($s%3600)/60);
+	//$m = round(($ss%3600)/60, 0.1);
+	$h = floor(($s%86400)/3600);
+	$d = floor($s/86400);
+	$str = ""; //do i need this?
+	if ($d) {
+		$str .= "$d days, ";
+	}
+	if ($h) {
+		$str .= "$h hours, ";
+	}
+	return "$str$m mins";
+}
 	include 'header.php'; 
 	//Get contents and data of each question based on the ID
 	$question = $crs->getQuestion($id);
@@ -41,6 +54,10 @@ $crs = new PCRHandler();
 		$timeasked = $questionRow["Opendate"];
 		$status = $questionRow["Status"];
 	}
+	$CurrentTime = time();
+	$date = date_create_from_format('Y-m-d G:i:s', $timeasked);
+	$OpenTime = (int) date_format($date, 'U');
+	$daysago = seconds2human($CurrentTime - $OpenTime);
 	?>
 	<div class="container">
 		<h1><?php 
@@ -63,7 +80,7 @@ $crs = new PCRHandler();
 				<div class="row">
 				<div class="col-md-6">
 					<label for="open">Asked On</label>
-					<input size="24" type="text" readonly="readonly" value= "<?php echo $timeasked; echo ' by '.$questionRow['StudentName']; ?>" class="form-control form_datetime" id="open" name="open">
+					<input size="24" type="text" readonly="readonly" value= "<?php echo $daysago; echo ' by '.$questionRow['StudentName']; ?>" class="form-control form_datetime" id="open" name="open">
 				</div>
 			</div>
 

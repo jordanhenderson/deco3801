@@ -36,7 +36,23 @@ $crs = new PCRHandler();
 </head>
 
 <body>	
-	<?php include 'header.php'; ?>
+<?php include 'header.php'; 
+
+	function seconds2human($s) {
+	$m = floor(($s%3600)/60);
+	//$m = round(($ss%3600)/60, 0.1);
+	$h = floor(($s%86400)/3600);
+	$d = floor($s/86400);
+	$str = ""; //do i need this?
+	if ($d) {
+		$str .= "$d days, ";
+	}
+	if ($h) {
+		$str .= "$h hours, ";
+	}
+	return "$str$m mins";
+}
+?>
 	
 	<div class="container">
 		<h1>Help Centre</h1>
@@ -95,11 +111,15 @@ $crs = new PCRHandler();
 								echo 'No postdate specified';
 							}
 							else {
+								$CurrentTime = time();
+								$date = date_create_from_format('Y-m-d G:i:s', $last['postdate']);
+								$OpenTime = (int) date_format($date, 'U');
+								$daysago = $CurrentTime - $OpenTime;
 								/*
 								Show the last post time + student who posted it
 								Subject to change in regards to "hours ago" format
 								*/
-								echo substr($last['Content'], 0, 28).'<br>'.$last['postdate']." by ".$last['StudentName'];
+								echo substr($last['Content'], 0, 28).'<br>'.seconds2human($daysago)." ago by ".$last['StudentName'];
 							}
 						}
 						echo "</td>";
