@@ -69,7 +69,7 @@ function seconds2human($s) {
 
 function formatDBtime($dbtime) {
 	$date = date_create_from_format('Y-m-d G:i:s', $dbtime);
-	return date_format($date, 'j M \'y, g:ia'); // e.g: 6 Feb '14, 8:30pm
+	return date_format($date, 'j M Y, g:ia'); // e.g: 6 Feb 2014, 8:30pm
 }
 
 ?>
@@ -206,7 +206,9 @@ echo "</pre>\n";
 						<td>$asg[Weight]%</td>
 						<td>";
 						
-						if ($SubmitTime == 0 && $CurrentTime < $DueTime) { // Not Submitted
+						if ($admin) {
+							echo 'Admin - TODO';
+						} else if ($SubmitTime == 0 && $CurrentTime < $DueTime) { // Not Submitted
 							echo 'Not Submitted.';
 						} else if ($SubmitTime == 0) { // Overdue
 							echo 'Overdue.';

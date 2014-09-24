@@ -141,15 +141,17 @@ if (isset($_REQUEST['assid'])) {
 				<?php
 				if ($new) {
 					echo '
-				<a class="btn btn-primary" href="index.php" id="create">Create</a>';
+				<a class="btn btn-primary" href="index.php" id="create">Create</a>
+				<a class="btn btn-default" href="index.php">Cancel</a>
+				<div class="btn btn-warning" id="reset">Reset</div>';
 				} else {
 					echo '
-				<a class="btn btn-primary" href="overview.php?assid='.$assid.'" id="update">Update</a>';
+				<a class="btn btn-primary" href="overview.php?assid='.$assid.'" id="update">Update</a>
+				<a class="btn btn-default" href="overview.php?assid='.$assid.'">Cancel</a>
+				<div class="btn btn-warning" id="reset">Reset</div>
+				<a class="btn btn-danger" href="index.php">Delete</a>';
 				}
 				?>
-				<div class="btn btn-warning" id="reset">Reset</div>
-				<a class="btn btn-default" href="index.php">Cancel</a>
-				<a class="btn btn-danger" href="">Delete</a>
 				<br><br><br>
 			</div>
 		</form>
@@ -185,7 +187,7 @@ if (isset($_REQUEST['assid'])) {
 		
 		$("#update").click(function() {
 			var request = {f: 'updateAssignment', params: [
-					<?php echo $assid; ?>,
+					<?php echo '"'.$assid.'"'; ?>,
 					$("#AssignmentName").val(),
 					$("#ReviewsNeeded").val(),
 					$("#ReviewsDue").val(),
@@ -210,7 +212,7 @@ if (isset($_REQUEST['assid'])) {
 		
 		$("#delete").click(function() {
 			var request = {f: 'deleteAssignment', params: [
-					<?php echo $assid; ?>
+					<?php echo '"'.$assid.'"'; ?>
 			]};
 			$.post("api.php", JSON.stringify(request), function() {});
 		});
