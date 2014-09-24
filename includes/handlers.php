@@ -147,14 +147,14 @@ class PCRHandler {
 	public function createAssignment($AssignmentName, 
 									$ReviewsNeeded, $ReviewsDue, $Weight, 
 									$OpenTime, $DueTime) {
-		$assignment = new Assignment(array("AssignmentID"=>$AssignmentID);
+		$assignment = new Assignment(array("AssignmentID"=>$AssignmentID));
 			
-		$assignment['AssignmentName'] = $AssignmentName,
-		$assignment['ReviewsNeeded'] = $ReviewsNeeded,
-		$assignment['ReviewsDue'] = $ReviewsDue,
-		$assignment['Weight'] = $Weight,
-		$assignment['OpenTime'] = $OpenTime,
-		$assignment['DueTime'] = $DueTime));
+		$assignment['AssignmentName'] = $AssignmentName;
+		$assignment['ReviewsNeeded'] = $ReviewsNeeded;
+		$assignment['ReviewsDue'] = $ReviewsDue;
+		$assignment['Weight'] = $Weight;
+		$assignment['OpenTime'] = $OpenTime;
+		$assignment['DueTime'] = $DueTime;
 
 		$assignment->commit();
 		return $assignment;
@@ -166,14 +166,14 @@ class PCRHandler {
 	public function updateAssignment($AssignmentID, $AssignmentName, 
 									$ReviewsNeeded, $ReviewsDue, $Weight, 
 									$OpenTime, $DueTime) {
-		$assignment = new Assignment(array("AssignmentID"=>$AssignmentID);
+		$assignment = new Assignment(array("AssignmentID"=>$AssignmentID));
 			
-		$assignment['AssignmentName'] = $AssignmentName,
-		$assignment['ReviewsNeeded'] = $ReviewsNeeded,
-		$assignment['ReviewsDue'] = $ReviewsDue,
-		$assignment['Weight'] = $Weight,
-		$assignment['OpenTime'] = $OpenTime,
-		$assignment['DueTime'] = $DueTime));
+		$assignment['AssignmentName'] = $AssignmentName;
+		$assignment['ReviewsNeeded'] = $ReviewsNeeded;
+		$assignment['ReviewsDue'] = $ReviewsDue;
+		$assignment['Weight'] = $Weight;
+		$assignment['OpenTime'] = $OpenTime;
+		$assignment['DueTime'] = $DueTime;
 
 		$assignment->commit();
 		return $assignment;
@@ -183,7 +183,7 @@ class PCRHandler {
 	 * Delete an assignment.
 	 */
 	public function deleteAssignment($AssignmentID) {
-		$assignment = new Assignment(array("AssignmentID"=>$AssignmentID);
+		$assignment = new Assignment(array("AssignmentID"=>$AssignmentID));
 		$assignment->delete();
 	}
 }
@@ -200,7 +200,6 @@ class PCRBackend {
 		//Deserialize JSON request
 		$this->request = json_decode($postData, true);
 		$this->handler = new PCRHandler();
-		
 	}
 	
 	/**

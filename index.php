@@ -66,11 +66,11 @@ function seconds2human($s) {
 	}
 	return "$str$m mins";
 }
-/*
+
 function formatDBtime($dbtime) {
 	$date = date_create_from_format('Y-m-d G:i:s', $dbtime);
 	return date_format($date, 'j M \'y, g:ia'); // e.g: 6 Feb '14, 8:30pm
-}*/
+}
 
 ?>
 <!DOCTYPE html>
@@ -177,7 +177,7 @@ echo "</pre>\n";
 					<tr>
 						<td>$asg[AssignmentName]</td>"; // TODO Conisder adding hyperlink for student to view submission
 						}
-						/*
+						
 						if ($CurrentTime < $OpenTime) { // Before open time
 							echo '
 						<td>'.formatDBtime($asg['OpenTime']).'<br><i>Opens in: '.seconds2human($timeUntilOpen).'</i></td>';
@@ -200,7 +200,7 @@ echo "</pre>\n";
 						} else { // After reviews due time
 							echo '
 						<td>'.formatDBtime($asg['ReviewsDue']).'<br><i>Closed: '.seconds2human($timeSinceReview).' ago</i></td>';
-						}*/
+						}
 						
 						echo "
 						<td>$asg[Weight]%</td>
