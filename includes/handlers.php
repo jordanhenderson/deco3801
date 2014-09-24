@@ -64,7 +64,11 @@ class PCRHandler {
 		$questionRow["Status"] = "0";
 		$question->commit();
 	}
-	
+	public function storeNewQuestion($title, $content, $stnid, $fullname){
+		$question = new Question(array("QuestionID"=>$id));
+		$question->addNewQuestion($title, $content, $stnid, $fullname);
+		$question->commit();
+	}
 	/**
 	 * getAssignment returns an assignment with the provided id.
 	 * @param id the assignment ID
