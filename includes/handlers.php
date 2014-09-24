@@ -64,7 +64,7 @@ class PCRHandler {
 		$questionRow["Status"] = "0";
 		$question->commit();
 	}
-
+/**
 	 * getAssignment returns an assignment with the provided id.
 	 * @param id the assignment ID
 	 * @return the assignment object
