@@ -462,7 +462,7 @@ class Submission extends PCRObject {
 								"fileName"=>$fileName,
 								"text"=>$text));
         $review->commit();
-        echo "review - " . $review.jsonSerialize() . "::";
+        echo "review - " . $review->jsonSerialize() . "::";
         return $review;
     }
 
