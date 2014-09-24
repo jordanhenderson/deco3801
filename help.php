@@ -81,6 +81,7 @@ $crs = new PCRHandler();
 			<a class="btn btn-xl btn-default" href="addQuestion.php" role="button">Ask a Question</a>
 			<!-- This will filter your own questions at some point -->
 			<a class="btn btn-xl btn-success" href="#" role="button">My Questions</a>
+			<br><br>
 			<table class="table">
 				<thead >
 					<tr class = 'columns'>
