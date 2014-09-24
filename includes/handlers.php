@@ -103,12 +103,17 @@ class PCRHandler {
 	}
 	
 	/**
-	 * getReview returns a review using the provided parameters
+	 * addReview adds a review to the database using the provided parameters
 	 * @param id the review ID
 	 * @return review object
 	 */
-	public function getReview($stnid, $id, $startIndex, $startLine, $annotationText, $text, $reviewID, $fileName) {
-		return new Review(array("SubmissionID"=>'0',
+	public function addReview($stnid, $id, $assignmentID, $startIndex, $startLine, $annotationText, $text, $reviewID, $fileName) {
+        // Get the submission for the student you are submitting a review for
+        $submission = new Submission(array("SubmissionID"=>$id));
+        // Then add the review to the database
+        return $submission->addReview($annotationText, $stnid, $id, $startIndex, $startLine, $fileName, $text);
+		/*return new Review(array("AssignmentID"=>'3',
+                                "SubmissionID"=>'2',
 								"Comments"=>$annotationText,
 								"ReviewerID"=>$stnid,
 								"ReviewID"=>$id,
@@ -116,6 +121,7 @@ class PCRHandler {
 								"startLine"=>$startLine,
 								"fileName"=>$fileName,
 								"text"=>$text));
+                                */
 	}
 	
 	/**

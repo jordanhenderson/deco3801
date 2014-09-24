@@ -448,6 +448,20 @@ class Submission extends PCRObject {
 		}
 		return $arr;
 	}
+    
+    public function addReview($annotationText, $stnid, $id, $startIndex, $startLine, $fileName, $text) {
+        $review = new Review(array("AssignmentID"=>$assignmentid,
+                                "SubmissionID"=>$this->getID(),
+								"Comments"=>$annotationText,
+								"ReviewerID"=>$stnid,
+								"ReviewID"=>$id,
+								"startIndex"=>$startIndex,
+								"startLine"=>$startLine,
+								"fileName"=>$fileName,
+								"text"=>$text));
+        $review->commit();
+        return $review;
+    }
 
 	public function jsonSerialize() {
 		parent::Update();
