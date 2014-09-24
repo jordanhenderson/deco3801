@@ -68,8 +68,9 @@ function seconds2human($s) {
 }
 
 function formatDBtime($dbtime) {
-	$date = date_create_from_format('Y-m-d G:i:s', $dbtime);
-	return date_format($date, 'j M \'y, g:ia'); // e.g: 6 Feb '14, 8:30pm
+	return "test";
+	//$date = date_create_from_format('Y-m-d G:i:s', $dbtime);
+	//return date_format($date, 'j M \'y, g:ia'); // e.g: 6 Feb '14, 8:30pm
 }
 
 ?>
