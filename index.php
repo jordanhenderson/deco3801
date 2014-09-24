@@ -177,7 +177,7 @@ echo "</pre>\n";
 					<tr>
 						<td>$asg[AssignmentName]</td>"; // TODO Conisder adding hyperlink for student to view submission
 						}
-						
+						/*
 						if ($CurrentTime < $OpenTime) { // Before open time
 							echo '
 						<td>'.formatDBtime($asg['OpenTime']).'<br><i>Opens in: '.seconds2human($timeUntilOpen).'</i></td>';
@@ -200,7 +200,7 @@ echo "</pre>\n";
 						} else { // After reviews due time
 							echo '
 						<td>'.formatDBtime($asg['ReviewsDue']).'<br><i>Closed: '.seconds2human($timeSinceReview).' ago</i></td>';
-						}
+						}*/
 						
 						echo "
 						<td>$asg[Weight]%</td>
