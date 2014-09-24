@@ -75,26 +75,24 @@ $date = date('m/d/Y h:i:s a', time());
 		}
 	</script>
 	<script>
-		
-			$('#qF').submit(function() {
+		$(function() {
+			$('form').submit(function() {
 				var form = $(this);
-				var fullname = '<?php echo $_SESSION['userfullname'];?>'
-				var stnid = '<?php echo $_SESSION['user_id'];?>'
 				//Use the action= property for ajax submission
 				var url = form.attr('action');
 				var func = form.data('function');
-				var request = {f: func, params: [$("#QTitle").val(), $("#QContent").val(), stnid, fullname]};
+				var request = {f: func, params: [$("#QTitle").val(), $("#QContent").val()]};
 				
 				//Post the serialized form.
 				$.post(url, JSON.stringify(request), function(data) {
 					//Handle submission.
-					window.location.replace("help.php");
+					
 				});
 				
-	
+				
 				return false;
 			});
-
+		});
 	</script>
 </body>
 </html>
