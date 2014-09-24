@@ -2,3 +2,26 @@
 	background-color:#8FC6F2;
 
 }
+
+.columns{
+	background-color:#C2C2C2;
+	color:#777;
+}
+.table{
+	padding-top:30px;
+}
+tr:nth-child(even) {
+    background: #F1F1F1;
+}
+tr {
+	  background-color:#fff;
+    border-width:1px;
+    border-style:solid;
+    border-bottom-color:#aaa;
+    border-right-color:#aaa;
+    border-top-color:#ddd;
+    border-left-color:#ddd;
+    border-radius:3px;
+    -moz-border-radius:3px;
+    -webkit-border-radius:3px
+}
