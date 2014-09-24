@@ -68,9 +68,8 @@ function seconds2human($s) {
 }
 
 function formatDBtime($dbtime) {
-	return "test";
-	//$date = date_create_from_format('Y-m-d G:i:s', $dbtime);
-	//return date_format($date, 'j M \'y, g:ia'); // e.g: 6 Feb '14, 8:30pm
+	$date = date_create_from_format('Y-m-d G:i:s', $dbtime);
+	return date_format($date, 'j M \'y, g:ia'); // e.g: 6 Feb '14, 8:30pm
 }
 
 ?>
@@ -158,7 +157,7 @@ echo "</pre>\n";
 							if ($sub->isValid()) {
 								$subRow = &$sub->getRow();
 								$date = date_create_from_format('Y-m-d G:i:s', $subRow['SubmitTime']);
-								$SubmitTime = date_format($date, 'U');
+								$SubmitTime = (int) date_format($date, 'U');
 							}
 						}
 						
