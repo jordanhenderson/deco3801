@@ -230,7 +230,6 @@ abstract class PCRObject implements JsonSerializable {
 		if ($this->id != null) {
 			$this->updateRow($this->row);
 		} else {
-            echo "here";
 			$this->Update();
 		}
 	}
