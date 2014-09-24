@@ -453,7 +453,7 @@ class Submission extends PCRObject {
     
     public function addReview($annotationText, $stnid, $id, $startIndex, $startLine, $fileName, $text) {
         echo "adding comment::";
-        $review = new Review(array("AssignmentID"=>3,
+        $review = new Review(array("AssignmentID"=>'3',
                                 "SubmissionID"=>$this->getID(),
 								"Comments"=>$annotationText,
 								"ReviewerID"=>$stnid,
@@ -462,7 +462,7 @@ class Submission extends PCRObject {
 								"fileName"=>$fileName,
 								"text"=>$text));
         $review->commit();
-        echo "review - " . $review.jsonSerialize();
+        echo "review - " . $review.jsonSerialize() . "::";
         return $review;
     }
 

@@ -26,6 +26,6 @@
         */
         $reviewObject = $crs->addReview($stnid, $id, '00003', $review->startIndexSet, $review->startLine, '' . $review->comment,
         '' . $review->text, $review->reviewID, '' . $review->fileName);
-        echo $reviewObject->jsonSerialize();
+        
     }
 ?>
