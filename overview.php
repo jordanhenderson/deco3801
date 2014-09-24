@@ -55,7 +55,7 @@ if (isset($_REQUEST['assid'])) {
 						<tr>
 							<th>Assignment Name</th>
 							<th>Course</th>
-							<th>Weighting (%)</th>
+							<th>Weight</th>
 							<th>Reviews/Student</th>
 							<th>Open Date</th>
 							<th>Due Date</th>
@@ -65,19 +65,25 @@ if (isset($_REQUEST['assid'])) {
 					<tbody>
 						<tr>
 							<?php
-							echo "<td>Assignment Name: $asg[Weight]</td>\n";
-							echo "<td>Course: $_SESSION[course_code]</td>\n";
-							echo "<td>Weight: $asg[Weight]</td>\n";
-							echo "<td><br>Reviews Needed: $asg[ReviewsNeeded]</td>\n";
-							echo "<td><br>Assignment Open: $asg[OpenTime]</td>\n";
-							echo "<td><br>Assignment Due: $asg[DueTime]</td>\n";
-							echo "<td><br>Reviews Due: $asg[ReviewsDue]</td>\n";
+							echo "<td>$asg[AssignmentName]</td>";
+							echo "
+							<td>$_SESSION[course_code]</td>";
+							echo "
+							<td>$asg[Weight]%</td>";
+							echo "
+							<td>$asg[ReviewsNeeded]</td>";
+							echo "
+							<td>$asg[OpenTime]</td>";
+							echo "
+							<td>$asg[DueTime]</td>";
+							echo "
+							<td>$asg[ReviewsDue]</td>";
 							?>
 
 						</tr>
 					</tbody>
 				</table>
-				<a class="btn btn-primary" href="create.php?assid=<?php echo '$_REQUEST[assid]'; ?>" role="button">Edit Assignment</a>
+				<a class="btn btn-primary" href="create.php?assid=<?php echo "$_REQUEST[assid]"; ?>" role="button">Edit Assignment</a>
 			</div>
 		</div>
 		<div class="row">
@@ -112,9 +118,9 @@ if (isset($_REQUEST['assid'])) {
 						
 						echo "
 						<tr>
-							<td>StudentID: $sub[StudentID]</td>
-							<td>Results: $sub[Results]</td>
-							<td>SubmitTime: $sub[SubmitTime]</td>
+							<td>TODO: $sub[StudentID]</td>
+							<td>$sub[Results]</td>
+							<td>$sub[SubmitTime]</td>
 							<td>";
 						
 						if (empty($submissions)) { // No submissions

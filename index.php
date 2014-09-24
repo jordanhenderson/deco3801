@@ -165,7 +165,7 @@ echo "</pre>\n";
 						
 						if ($admin) {
 							echo "
-					<tr href=\"create.php?assid=$asg[AssignmentID]\">
+					<tr href=\"overview.php?assid=$asg[AssignmentID]\">
 						<td>$asg[AssignmentName]</td>";
 						} else {
 							echo "
