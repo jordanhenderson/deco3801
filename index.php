@@ -144,13 +144,13 @@ echo "</pre>\n";
 						// Convert and store the dates from the DB as Unix timestamps.
 						$CurrentTime = time();
 						$date = date_create_from_format('Y-m-d G:i:s', $asg['OpenTime']);
-						$OpenTime = date_format($date, 'U');
+						$OpenTime = (int) date_format($date, 'U');
 						
 						$date = date_create_from_format('Y-m-d G:i:s', $asg['DueTime']);
-						$DueTime = date_format($date, 'U');
+						$DueTime = (int) date_format($date, 'U');
 						
 						$date = date_create_from_format('Y-m-d G:i:s', $asg['ReviewsDue']);
-						$ReviewsDue = date_format($date, 'U');
+						$ReviewsDue = (int) date_format($date, 'U');
 						
 						if (!$admin) { // student
 							$sub = $crs->getSubmission($asg['AssignmentID']);
