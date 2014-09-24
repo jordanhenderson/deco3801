@@ -230,6 +230,7 @@ abstract class PCRObject implements JsonSerializable {
 		if ($this->id != null) {
 			$this->updateRow($this->row);
 		} else {
+            echo "here";
 			$this->Update();
 		}
 	}
@@ -450,7 +451,7 @@ class Submission extends PCRObject {
 	}
     
     public function addReview($annotationText, $stnid, $id, $startIndex, $startLine, $fileName, $text) {
-        $review = new Review(array("AssignmentID"=>$assignmentid,
+        $review = new Review(array("AssignmentID"=>'00003',
                                 "SubmissionID"=>$this->getID(),
 								"Comments"=>$annotationText,
 								"ReviewerID"=>$stnid,
