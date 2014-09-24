@@ -104,23 +104,7 @@ if (isset($_REQUEST['assid'])) {
 			</div>
 			<br>
 			<div class="row">
-				<div class="col-md-6">
-					<div class="form-group">
-						<label for="AssignmentFiles">Assignment Files TODO TODO</label>
-						<p id="AssignmentFilesStatus">Currently Uploaded: 
-						<?php
-						if (!$new) {
-							echo $asg['AssignmentFiles'];
-						} else {
-							echo 'No File Uploaded';
-						}
-						?>
-						</p>
-						<input id="AssignmentFiles" name="AssignmentFiles" type="file">
-						<p class="help-block">PDF or zip containing the assignment specifications, for students to download.</p>
-					</div>
-				</div>
-				<div class="col-md-6">
+				<div class="col-md-12">
 					<div class="form-group">
 						<label for="TestFiles">Unit Testing Files TODO TODO</label>
 						<p id="TestFilesStatus">Currently Uploaded: 

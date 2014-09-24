@@ -69,7 +69,7 @@ abstract class PCRObject implements JsonSerializable {
 	 * @param table: The name of the database table.
 	 * @param data: A row containing the data. 
 	 * @param forceCreate: Should a new row be auto-created if an ID is 
-	 *        provided and a matching row is not found.
+	 *		  provided and a matching row is not found.
 	 */
 	protected function __construct($id_field, $table, $data, $forceCreate = 0) {
 		$this->db = $GLOBALS["db"];
@@ -271,7 +271,6 @@ class PCRBuilder {
  * (uint_8)			Weight
  * (uint_8)			SubmissionMethod
  * (uint_8)			ReviewsNeeded
- * (text)			AssignmentFiles
  * (text)			TestFiles
  * (timestamp)		OpenTime
  * (timestamp)		DueTime
@@ -293,7 +292,7 @@ class Assignment extends PCRObject {
 	 * Returns an array of all the submissions from this assignment.
 	 * 
 	 * @return an array of all submissions with the same AssignmentID as the
-	 *         object this was called from.
+	 *		 object this was called from.
 	 */
 	public function getSubmissions() {
 		$arr = array();
@@ -445,7 +444,6 @@ class Submission extends PCRObject {
 		$sth = $this->db->prepare("SELECT * FROM Review WHERE SubmissionID = ?;");
 		$sth->execute(array($this->getID()));
 		while ($file_row = $sth->fetch(PDO::FETCH_ASSOC)) {
-            echo "hherrfre";
 			array_push($arr, new Review($file_row));
 		}
 		return $arr;
