@@ -442,15 +442,28 @@ class Submission extends PCRObject {
 	public function getReviews() {
 		$arr = array();
 		$sth = $this->db->prepare("SELECT * FROM Review WHERE SubmissionID = ?;");
-		$sth->execute(array($this->getID()));
+		//$sth->execute(array($this->getID()));
+        // TODO: remove hardcoding
+        $sth->execute(array('2'));
 		while ($file_row = $sth->fetch(PDO::FETCH_ASSOC)) {
 			array_push($arr, new Review($file_row));
 		}
 		return $arr;
 	}
     
+    public function removeReview($comment) {
+        // get the id of the review associated with $comment and the submission id
+        // Create a new review out of it
+        // Delete that review
+    }
+    
+    /**
+     * addReview adds a review to the database
+     * @return the review that was added
+     */
     public function addReview($annotationText, $stnid, $id, $startIndex, $startLine, $fileName, $text) {
-        echo $annotationText . "::" . $this->getID() . "::";
+        // $this->getID() is returning empty
+        // TODO: unhardcode assignmentid and submissionid
         $review = new Review(array("AssignmentID"=>'3',
                                 "SubmissionID"=>'2',
 								"Comments"=>$annotationText,

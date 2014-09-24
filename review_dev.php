@@ -63,7 +63,7 @@ $crs = new PCRHandler();
                     return;
                 }
             }
-            annotationText.push({"comment":comment, "text":selected});
+            annotationText.push({"comment":comment, "text":selected, "status":'n'});
         }
         
         function saveReviews() {
@@ -129,12 +129,28 @@ $crs = new PCRHandler();
             alert(comment);
             for(var i=0; i < annotationText.length; i++) {
                 if(annotationText[i].comment == comment) {
-                    annotationText.splice(i, 1);
+                    //annotationText.splice(i, 1);
+                    annotationText[i].status = 'd';
                     break;
                 }
             }
         }
         
+        /*
+         * Function to mark a comment as being modified.
+         * Code is nearly identical to delete, so will integrate
+         */
+        function editAnnotation() {
+            var comment = $('.annotator-item').children('div').html();
+            alert(comment);
+            for(var i=0; i < annotationText.length; i++) {
+                if(annotationText[i].comment == comment) {
+                    //annotationText.splice(i, 1);
+                    annotationText[i].status = 'e';
+                    break;
+                }
+            }
+        }
 		//Handles when someone clicks on the file tree
 		function handleSwap(id) {
             annotationText = [];

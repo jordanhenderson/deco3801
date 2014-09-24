@@ -101,7 +101,27 @@ class PCRHandler {
 		$question = $this->getQuestion($question_id);
 		return $question->addComment($studentid, $fullname, $content);
 	}
-	
+    
+    /**
+     * Function that is run when save is clicked. It will remove any deleted
+     * reviews, update any edited ones and insert any new ones
+     */
+    public function saveReviews($reviews) {
+        //if (status == d) { removeReview; }
+        // elseif (status == e || status == n) { addReview; }
+    }
+    
+	/**
+	 * Removes a review with the given id from the database.
+	 * @param id of the review to remove
+	 */
+	public function removeReview($comment, $id) {
+        // get submission
+        // call delete review for that submission
+		/*$review = new Review(array("ReviewID"=>$id));
+		$review->delete();*/
+	}
+    
 	/**
 	 * addReview adds a review to the database using the provided parameters
 	 * @param id the review ID
@@ -112,17 +132,17 @@ class PCRHandler {
         $submission = new Submission(array("SubmissionID"=>$id));
         // Then add the review to the database
         return $submission->addReview($annotationText, $stnid, $id, $startIndex, $startLine, $fileName, $text);
-		/*return new Review(array("AssignmentID"=>'3',
-                                "SubmissionID"=>'2',
-								"Comments"=>$annotationText,
-								"ReviewerID"=>$stnid,
-								"ReviewID"=>$id,
-								"startIndex"=>$startIndex,
-								"startLine"=>$startLine,
-								"fileName"=>$fileName,
-								"text"=>$text));
-                                */
 	}
+    
+    /**
+     * getReview returns an array of all the reviews for a given submission
+     * @param the submission id
+     * @return the list of arrays
+     */
+    public function getReviews($id) {
+        // Get submission
+        // Get reviews for that submission
+    }
 	
 	/**
 	 * uploadArchive uploads an archive to a submission
