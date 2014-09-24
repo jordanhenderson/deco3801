@@ -65,6 +65,12 @@ class PCRHandler {
 		$question->commit();
 	}
 
+
+	public function storeNewQuestion($title, $content, $stnid, $fullname){
+		$question = PCRHandler::getCourse();
+		$question->addNewQuestion($title, $content, $stnid, $fullname)->commit();
+	}
+
 	 * getAssignment returns an assignment with the provided id.
 	 * @param id the assignment ID
 	 * @return the assignment object
