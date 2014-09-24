@@ -68,7 +68,7 @@ class PCRHandler {
 		$question = new Course(array("CourseID"=>$_SESSION['course_id']));
 		$question->addNewQuestion($title, $content, $stnid, $fullname);
 		$question->commit();
-		echo "data";
+		return $question;
 	}
 	/**
 	 * getAssignment returns an assignment with the provided id.
