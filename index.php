@@ -67,6 +67,11 @@ function seconds2human($s) {
 	return "$str$m mins";
 }
 
+function formatDBtime($dbtime) {
+	$date = date_create_from_format('Y-m-d G:i:s', $dbtime);
+	return date_format($date, 'j M \'y, g:ia'); // e.g: 6 Feb '14, 8:30pm
+}
+
 ?>
 <!DOCTYPE html>
 <html lang="en">
@@ -139,20 +144,20 @@ echo "</pre>\n";
 						// Convert and store the dates from the DB as Unix timestamps.
 						$CurrentTime = time();
 						$date = date_create_from_format('Y-m-d G:i:s', $asg['OpenTime']);
-						$OpenTime = (int) date_format($date, 'U');
+						$OpenTime = date_format($date, 'U');
 						
 						$date = date_create_from_format('Y-m-d G:i:s', $asg['DueTime']);
-						$DueTime = (int) date_format($date, 'U');
+						$DueTime = date_format($date, 'U');
 						
 						$date = date_create_from_format('Y-m-d G:i:s', $asg['ReviewsDue']);
-						$ReviewsDue = (int) date_format($date, 'U');
+						$ReviewsDue = date_format($date, 'U');
 						
 						if (!$admin) { // student
 							$sub = $crs->getSubmission($asg['AssignmentID']);
 							if ($sub->isValid()) {
 								$subRow = &$sub->getRow();
 								$date = date_create_from_format('Y-m-d G:i:s', $subRow['SubmitTime']);
-								$SubmitTime = (int) date_format($date, 'U');
+								$SubmitTime = date_format($date, 'U');
 							}
 						}
 						
@@ -174,27 +179,27 @@ echo "</pre>\n";
 						}
 						
 						if ($CurrentTime < $OpenTime) { // Before open time
-							echo "
-						<td>$asg[OpenTime]<br><i>Opens in: ".seconds2human($timeUntilOpen)."</i></td>";
+							echo '
+						<td>'.formatDBtime($asg['OpenTime']).'<br><i>Opens in: '.seconds2human($timeUntilOpen).'</i></td>';
 						} else { // After open time
-							echo "
-						<td>$asg[OpenTime]<br><i>Opened: ".seconds2human($timeSinceOpen)." ago</i></td>";
+							echo '
+						<td>'.formatDBtime($asg['OpenTime']).'<br><i>Opened: '.seconds2human($timeSinceOpen).' ago</i></td>';
 						}
 						
 						if ($admin && $CurrentTime <= $DueTime) { // Before due time
-							echo "
-						<td>$asg[DueTime]<br><i>Due in: ".seconds2human($timeUntilDue)."</i></td>";
+							echo '
+						<td>'.formatDBtime($asg['DueTime']).'<br><i>Due in: '.seconds2human($timeUntilDue).'</i></td>';
 						} else { // After due time
-							echo "
-						<td>$asg[DueTime]<br><i>Closed: ".seconds2human($timeSinceDue)." ago</i></td>";
+							echo '
+						<td>'.formatDBtime($asg['DueTime']).'<br><i>Closed: '.seconds2human($timeSinceDue).' ago</i></td>';
 						}
 						
 						if ($admin && $CurrentTime <= $ReviewsDue) { // Before reviews due time
-							echo "
-						<td>$asg[ReviewsDue]<br><i>Due in: ".seconds2human($timeUntilReview)."</i></td>";
+							echo '
+						<td>'.formatDBtime($asg['ReviewsDue']).'<br><i>Due in: '.seconds2human($timeUntilReview).'</i></td>';
 						} else { // After reviews due time
-							echo "
-						<td>$asg[ReviewsDue]<br><i>Closed: ".seconds2human($timeSinceReview)." ago</i></td>";
+							echo '
+						<td>'.formatDBtime($asg['ReviewsDue']).'<br><i>Closed: '.seconds2human($timeSinceReview).' ago</i></td>';
 						}
 						
 						echo "
@@ -202,22 +207,22 @@ echo "</pre>\n";
 						<td>";
 						
 						if ($SubmitTime == 0 && $CurrentTime < $DueTime) { // Not Submitted
-							echo "Not Submitted.";
+							echo 'Not Submitted.';
 						} else if ($SubmitTime == 0) { // Overdue
-							echo "Overdue.";
+							echo 'Overdue.';
 						} else if ($SubmitTime <= $DueTime) { // Submitted on time
-							echo "Submitted.";
+							echo 'Submitted.';
 						} else { // Submitted late
-							echo "Submitted late.";
+							echo 'Submitted late.';
 						}
 						
 						// TODO
 						if (true) { // Peer review not open
-							echo "<br>Peer Reviews Not Open.";
+							echo '<br>Peer Reviews Not Open.';
 						} else if (true) { // Peer review complete
-							echo "<br>Peer Reviews Complete.";
+							echo '<br>Peer Reviews Complete.';
 						} else { // Peer review incomplete
-							echo "<br>Peer Reviews Not Complete.";
+							echo '<br>Peer Reviews Not Complete.';
 						}
 						
 						echo '</td>

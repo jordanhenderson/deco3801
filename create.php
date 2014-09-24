@@ -9,14 +9,15 @@ if (!isset($_SESSION['admin']) || !$_SESSION['admin']) {
 $crs = new PCRHandler();
 
 if (isset($_REQUEST['assid'])) {
-	$assignment = $crs->getAssignment($_REQUEST['assid']);
+	$assid = $_REQUEST['assid'];
+	$assignment = $crs->getAssignment($assid);
 	if ($assignment->isValid()) {
 		$asg = &$assignment->getRow();
 		if ($asg['CourseID'] != $_SESSION['course_id']) {
 			exit("Assignment is for a different course (course_id = $asg[CourseID]). Please log in to that course's page from Moodle to access it.");
 		}
 	} else {
-		exit("Corrupt/Invalid assignment. Please contact site administrator, with code: \"assid=$_REQUEST[assid])\"");
+		exit("Corrupt/Invalid assignment. Please contact site administrator, with code: \"assid=$assid)\"");
 	}
 	$new = false;
 } else {
@@ -140,15 +141,16 @@ if (isset($_REQUEST['assid'])) {
 				<?php
 				if ($new) {
 					echo '
-				<input class="btn btn-primary" type="submit" value="Create" name="updateAssignment">';
+				<a class="btn btn-primary" href="index.php" id="create">Create</a>';
 				} else {
 					echo '
-				<input class="btn btn-primary" type="submit" value="Update" name="update">';
+				<a class="btn btn-primary" href="overview.php?assid='.$assid.'" id="update">Update</a>';
 				}
 				?>
-				<div class="btn btn-warning" id="Reset">Reset</div>
+				<div class="btn btn-warning" id="reset">Reset</div>
 				<a class="btn btn-default" href="index.php">Cancel</a>
-				<br><br>
+				<a class="btn btn-danger" href="">Delete</a>
+				<br><br><br>
 			</div>
 		</form>
 	</div>
@@ -161,11 +163,12 @@ if (isset($_REQUEST['assid'])) {
 
 	<!-- Bootstrap datetimepicker JavaScript -->
 	<script src="js/bootstrap-datetimepicker.min.js"></script>
+	
 	<script src="js/json.js"></script>
 
 	<script type="text/javascript">
 		
-		$("#Reset").click(function() {
+		$("#reset").click(function() {
 			$("#AssignmentName").val(<?php echo "'$asg[AssignmentName]'"; ?>);
 			$("#OpenTime").val(<?php echo "'$asg[OpenTime]'"; ?>);
 			$("#DueTime").val(<?php echo "'$asg[DueTime]'"; ?>);
@@ -174,27 +177,42 @@ if (isset($_REQUEST['assid'])) {
 			$("#ReviewsNeeded").val(<?php echo "'$asg[ReviewsNeeded]'"; ?>);
 			
 			$("#TestFiles").replaceWith($("#TestFiles").clone());
-			$("#AssignmentFiles").replaceWith($("#AssignmentFiles").clone());
 		});
 		
 		$(".form_datetime").datetimepicker({
 			format: 'yyyy-mm-dd hh:ii:ss'
 		});
 		
-		$(function() {
-			$(":submit").click(function() {
-				var func = $(this).attr("name");
-				var request = {f: func, params: [
-							$("#AssignmentName").val(),
-							$("#ReviewsNeeded").val(),
-							$("#ReviewsDue").val(),
-							$("#Weight").val(),
-							$("#OpenTime").val(),
-							$("#DueTime").val()
-					]};
-				$.post("api.php", JSON.stringify(request), function() {
-				});
-			});
+		$("#update").click(function() {
+			var request = {f: 'updateAssignment', params: [
+					<?php echo $assid; ?>,
+					$("#AssignmentName").val(),
+					$("#ReviewsNeeded").val(),
+					$("#ReviewsDue").val(),
+					$("#Weight").val(),
+					$("#OpenTime").val(),
+					$("#DueTime").val()
+			]};
+			$.post("api.php", JSON.stringify(request), function() {});
+		});
+		
+		$("#create").click(function() {
+			var request = {f: 'createAssignment', params: [
+					$("#AssignmentName").val(),
+					$("#ReviewsNeeded").val(),
+					$("#ReviewsDue").val(),
+					$("#Weight").val(),
+					$("#OpenTime").val(),
+					$("#DueTime").val()
+			]};
+			$.post("api.php", JSON.stringify(request), function() {});
+		});
+		
+		$("#delete").click(function() {
+			var request = {f: 'deleteAssignment', params: [
+					<?php echo $assid; ?>
+			]};
+			$.post("api.php", JSON.stringify(request), function() {});
 		});
 	</script> 
 </body>

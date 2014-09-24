@@ -34,17 +34,18 @@ class PCRHandler {
 		return new Course(array("CourseID"=>$_SESSION['course_id']));
 	}
 	
+	/**
+	 * Removes a question with the given id from the database.
+	 * @param id of the question to remove
+	 */
 	public function removeQuestion($id) {
 		$question = new Question(array("QuestionID"=>$id));
-		
-		if ($question->isValid()) {
-			$question->delete();
-		}
-		//$this->getQuestion($id)->delete();
+		$question->delete();
 	}
 	
 	/**
-	 * Needs Comment.
+	 * Marks the question specified by id as resolved.
+	 * @param id of the question to mark as resolved
 	 */
 	public function markResolved($id) {
 		$question = new Question(array("QuestionID"=>$id));
@@ -54,7 +55,8 @@ class PCRHandler {
 	}
 	
 	/**
-	 * Needs Comment.
+	 * Marks the question specified by id as unresolved.
+	 * @param id of the question to mark as unresolved
 	 */
 	public function markUnresolved($id) {
 		$question = new Question(array("QuestionID"=>$id));
@@ -80,7 +82,7 @@ class PCRHandler {
 	 * @return the submission object
 	 */
 	public function getSubmission($id) {
-		$assignment = new Assignment(array("AssignmentID"=>$id)); // Do we need this???
+		$assignment = new Assignment(array("AssignmentID"=>$id));
 		return $assignment->getSubmission($_SESSION['user_id']);
 	}
 	
@@ -92,6 +94,9 @@ class PCRHandler {
 		return new Question(array("QuestionID"=>$id));
 	}
 	
+	/**
+	 * addComment adds a comment to the database using the given parameters
+	 */
 	public function addComment($question_id, $studentid, $fullname, $content) {
 		$question = $this->getQuestion($question_id);
 		return $question->addComment($studentid, $fullname, $content);
@@ -100,9 +105,17 @@ class PCRHandler {
 	/**
 	 * getReview returns a review using the provided parameters
 	 * @param id the review ID
+	 * @return review object
 	 */
 	public function getReview($stnid, $id, $startIndex, $startLine, $annotationText, $text, $reviewID, $fileName) {
-		return new Review(array("SubmissionID"=>'0', "Comments"=>$annotationText, "ReviewerID"=>$stnid, "ReviewID"=>$id, "startIndex"=>$startIndex, "startLine"=>$startLine, "fileName"=>$fileName, "text"=>$text));
+		return new Review(array("SubmissionID"=>'0',
+								"Comments"=>$annotationText,
+								"ReviewerID"=>$stnid,
+								"ReviewID"=>$id,
+								"startIndex"=>$startIndex,
+								"startLine"=>$startLine,
+								"fileName"=>$fileName,
+								"text"=>$text));
 	}
 	
 	/**
@@ -129,22 +142,49 @@ class PCRHandler {
 	}
 	
 	/**
-	 * Create or update assignments.
+	 * Create a new assignment.
 	 */
-	public function updateAssignment($assignment_name, 
-									$reviews_needed, $review_due, $weight, 
-									$open_time, $due_time) {
-		$assignment = new Assignment(array("AssignmentID"=>null,
-										   "CourseID"=>$_SESSION['course_id'],
-										   "AssignmentName"=>$assignment_name,
-										   "ReviewsNeeded"=>$reviews_needed,
-										   "ReviewsDue"=>$review_due,
-										   "Weight"=>$weight,
-										   "OpenTime"=>$open_time,
-										   "DueTime"=>$due_time));
-			//$assignment = new Assignment(array("AssignmentID"=>'00020'));
-			$assignment->commit();
-			return $assignment;
+	public function createAssignment($AssignmentName, 
+									$ReviewsNeeded, $ReviewsDue, $Weight, 
+									$OpenTime, $DueTime) {
+		$assignment = new Assignment(array("AssignmentID"=>$AssignmentID);
+			
+		$assignment['AssignmentName'] = $AssignmentName,
+		$assignment['ReviewsNeeded'] = $ReviewsNeeded,
+		$assignment['ReviewsDue'] = $ReviewsDue,
+		$assignment['Weight'] = $Weight,
+		$assignment['OpenTime'] = $OpenTime,
+		$assignment['DueTime'] = $DueTime));
+
+		$assignment->commit();
+		return $assignment;
+	}
+	
+	/**
+	 * Update an existing assignment.
+	 */
+	public function updateAssignment($AssignmentID, $AssignmentName, 
+									$ReviewsNeeded, $ReviewsDue, $Weight, 
+									$OpenTime, $DueTime) {
+		$assignment = new Assignment(array("AssignmentID"=>$AssignmentID);
+			
+		$assignment['AssignmentName'] = $AssignmentName,
+		$assignment['ReviewsNeeded'] = $ReviewsNeeded,
+		$assignment['ReviewsDue'] = $ReviewsDue,
+		$assignment['Weight'] = $Weight,
+		$assignment['OpenTime'] = $OpenTime,
+		$assignment['DueTime'] = $DueTime));
+
+		$assignment->commit();
+		return $assignment;
+	}
+	
+	/**
+	 * Delete an assignment.
+	 */
+	public function deleteAssignment($AssignmentID) {
+		$assignment = new Assignment(array("AssignmentID"=>$AssignmentID);
+		$assignment->delete();
 	}
 }
 

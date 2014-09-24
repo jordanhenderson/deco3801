@@ -22,6 +22,11 @@ if (isset($_REQUEST['assid'])) {
 	exit("No Assignment Specified For Overview.");
 }
 
+function formatDBtime($dbtime) {
+	$date = date_create_from_format('Y-m-d G:i:s', $dbtime);
+	return date_format($date, 'j M \'y, g:ia'); // e.g: 6 Feb '14, 8:30pm
+}
+
 ?>
 <!DOCTYPE html>
 <html lang="en">
@@ -72,18 +77,18 @@ if (isset($_REQUEST['assid'])) {
 							<td>$asg[Weight]%</td>";
 							echo "
 							<td>$asg[ReviewsNeeded]</td>";
-							echo "
-							<td>$asg[OpenTime]</td>";
-							echo "
-							<td>$asg[DueTime]</td>";
-							echo "
-							<td>$asg[ReviewsDue]</td>";
+							echo '
+							<td>'.formatDBtime($asg['OpenTime']).'</td>';
+							echo '
+							<td>'.formatDBtime($asg['DueTime']).'</td>';
+							echo '
+							<td>'.formatDBtime($asg['ReviewsDue']).'</td>';
 							?>
 
 						</tr>
 					</tbody>
 				</table>
-				<a class="btn btn-primary" href="create.php?assid=<?php echo "$_REQUEST[assid]"; ?>" role="button">Edit Assignment</a>
+				<a class="btn btn-primary" href="create.php?assid=<?php echo $_REQUEST['assid']; ?>" role="button">Edit Assignment</a>
 			</div>
 		</div>
 		<div class="row">
