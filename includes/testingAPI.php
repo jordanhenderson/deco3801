@@ -16,6 +16,8 @@ class functionalTestAPI {
 	* 
 	* Script output format should be "test_number:pass/fail" without quotes, 
 	* separated by semi-colons. e.g. "1:pass;2:fail;3:pass"
+	* 
+	* Returns null if there were no test results
 	*/
 	public static function executeBashScript($script_path) {
 		// Execute student assignment
@@ -50,6 +52,51 @@ class functionalTestAPI {
 		}
 
 		return $testOutput;
+	}
+
+	/**
+	* This function takes a directory containing java source files and compiles them.
+	* It will return true if the compilation was successful, false otherwise.
+	* 
+	*/
+	public static function compileJavaSubmission($source_directory) {
+		$scriptOutput = shell_exec("javac " . $source_directory . "*.java");
+
+		echo "=== Compilation output ===\n" . $scriptOutput . "=======================\n";
+	}
+
+	/**
+	* This function takes a JUnit test file as input and runs it. If all tests
+	* pass, it will return true. Otherwise, it will return an array of test 
+	* names and results in the following format
+	*
+	* e.g. $failedTests[0] == "test_name:expected_result:actual_result"
+	*/
+	public static function runJUnitTestFile($test_class_path, $test_class) {
+		$scriptOutput = shell_exec("cd " . $test_class_path . " && java " . $test_class);
+
+		echo "=== Execution output ===\n" . $scriptOutput . "=======================\n";
+
+		if ($scriptOutput == "true") { // All tests passed
+			return true;
+		} else {
+			$counter = 0;
+
+			// Some tests failed, parse output to find names of failed tests
+			foreach(preg_split("/((\r?\n)|(\r\n?))/", $scriptOutput) as $line){
+    			if (strpos($line, 'expected') !== FALSE) {
+				    // Lines contained the string "expected" are lines with failing test names
+    				$testName = substr($line, 0, strpos($line, "("));
+    				$expectedResult = substr($line, strpos($line, "expected:") + 9, strpos($line, " but ") - (strpos($line, "expected:") + 9));
+    				$actualResult = substr($line, strpos($line, "was:") + 4);
+    				echo "Failed test: " . $testName . " -- Expected: " . $expectedResult . " -- Actual: " . $actualResult . PHP_EOL;
+
+    				$failedTests[$counter++] = $testName . ":" . $expectedResult . ":" . $actualResult;
+				}
+			}
+
+			return $failedTests;
+		}
 	}
 
 	/**
