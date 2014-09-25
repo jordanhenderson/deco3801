@@ -111,11 +111,20 @@ class PCRHandler {
     
     /**
      * Function that is run when save is clicked. It will remove any deleted
-     * reviews, update any edited ones and insert any new ones
+     * reviews, update any edited ones, insert any new ones and ignore
+     * unchanged ones
      */
     public function saveReviews($reviews) {
-        //if (status == d) { removeReview; }
-        // elseif (status == e || status == n) { addReview; }
+        $reviews = json_decode($reviews);
+        foreach ($reviews as &$review) {
+            $review->subid = $_SESSION['id'];
+            $review->stnid = $_SESSION['user_id'];
+            if ($review->status == 'd') { 
+                removeReview($review->comment, $review->subid);
+            } elseif ($review->status == 'e' || $review->status == 'n') { 
+                addReview($review);
+            }
+        }
     }
     
 	/**
@@ -124,9 +133,23 @@ class PCRHandler {
 	 */
 	public function removeReview($comment, $id) {
         // get submission
+        $submission = new Submission(array("SubmissionID"=>$id));
         // call delete review for that submission
-		/*$review = new Review(array("ReviewID"=>$id));
-		$review->delete();*/
+        return $submission->removeReview($comment);
+	}
+    
+    /**
+	 * addReview adds a review to the database using the provided parameters
+	 * @param id the review ID
+	 * @return review object
+	 */
+	public function addReview($review) {
+        // Get the submission for the student you are submitting a review for
+        $submission = new Submission(array("SubmissionID"=>$review->subid));
+        // Then add the review to the database
+        return $submission->addReview($review->annotationText, $review->stnid, 
+                        $review->subid, $review->startIndex, $review->startLine, 
+                        $review->fileName, $review->text);
 	}
     
 	/**
@@ -134,11 +157,13 @@ class PCRHandler {
 	 * @param id the review ID
 	 * @return review object
 	 */
-	public function addReview($stnid, $id, $assignmentID, $startIndex, $startLine, $annotationText, $text, $reviewID, $fileName) {
+	public function addReview($stnid, $id, $assignmentID, $startIndex, 
+    $startLine, $annotationText, $text, $reviewID, $fileName) {
         // Get the submission for the student you are submitting a review for
         $submission = new Submission(array("SubmissionID"=>$id));
         // Then add the review to the database
-        return $submission->addReview($annotationText, $stnid, $id, $startIndex, $startLine, $fileName, $text);
+        return $submission->addReview($annotationText, $stnid, $id, 
+                        $startIndex, $startLine, $fileName, $text);
 	}
     
     /**
