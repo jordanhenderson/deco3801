@@ -70,7 +70,7 @@ $crs = new PCRHandler();
                     annotationText[edit].prevComment = annotationText[edit].comment;
                 }
                 annotationText[edit].comment = comment;
-                if (annotationText[edit].reviewID === undefined) {
+                if (annotationText[edit].reviewID !== undefined) {
                     annotationText[edit].status = 'e';
                 }
                 edit = -1;
