@@ -4,7 +4,7 @@ require_once 'includes/handlers.php';
 //Initialise the PCRHandler
 $crs = new PCRHandler();
 // hardcoding 2 for the time being
-$reviews = $crs->getReviews('2'));
+$reviews = $crs->getReviews('2');
 $annotationText = array();
 foreach ($reviews as $review) {
     array_push($annotationText, $review->getRow());
