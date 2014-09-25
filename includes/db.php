@@ -472,6 +472,7 @@ class Submission extends PCRObject {
     public function addReview($annotationText, $stnid, $id, $startIndex, $startLine, $fileName, $text) {
         // $this->getID() is returning empty
         // TODO: unhardcode assignmentid and submissionid
+        echo $annotationText . "::" . $stnid . "::" . $id . "::" . $startIndex . "::" . $startLine . "::" . $fileName . "::" . $text . "::";
         $review = new Review(array("AssignmentID"=>'3',
                                 "SubmissionID"=>'2',
 								"Comments"=>$annotationText,

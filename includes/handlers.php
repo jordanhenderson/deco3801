@@ -144,7 +144,6 @@ class PCRHandler {
 	public function addReview($review) {
         // Get the submission for the student you are submitting a review for
         $submission = new Submission(array("SubmissionID"=>$review->subid));
-        echo "preparing add";
         // Then add the review to the database
         return $submission->addReview($review->annotationText, $_SESSION['user_id'], 
                         $_SESSION['id'], $review->startIndex, $review->startLine, 
