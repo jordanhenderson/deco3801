@@ -66,9 +66,13 @@ $crs = new PCRHandler();
                 }
             }
             if (edit >= 0) {
-                annotationText[edit].prevComment = annotationText[edit].comment;
+                if (annotationText[edit].prevComment === undefined) {
+                    annotationText[edit].prevComment = annotationText[edit].comment;
+                }
                 annotationText[edit].comment = comment;
-                annotationText[edit].status = 'e';
+                if (annotationText[edit].reviewID === undefined) {
+                    annotationText[edit].status = 'e';
+                }
                 edit = -1;
                 return;
             }
@@ -123,6 +127,7 @@ $crs = new PCRHandler();
                         annotationText.splice(i, 1);
                     } else {
                         annotationText[i].status = '';
+                        annotationText[i].prevComment = undefined;
                     }
                 }
             });
@@ -137,9 +142,6 @@ $crs = new PCRHandler();
         function deleteAnnotation() {
             // get the comment and compare against ones in annotationText
             // Comments must be unique
-            //for
-            //if found
-            //splice(index,1)
             var comment = $('.annotator-item').children('div').html();
             alert(comment);
             for(var i=0; i < annotationText.length; i++) {
