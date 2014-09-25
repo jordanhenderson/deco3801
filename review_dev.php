@@ -36,6 +36,7 @@ $crs = new PCRHandler();
 		var annotationText = [];
         var reviewId = 0;
         var selected;
+        var edit = -1;
         jQuery(function ($) {
 			$('#innercontainer').annotator();
 		});
@@ -57,11 +58,16 @@ $crs = new PCRHandler();
             var comment = $('#annotator-field-0').val();
             // add code to make sure the comment is unique
             for(var i=0; i < annotationText.length; i++) {
-                if(comment == annotationText[i].comment) {
+                if (comment == annotationText[i].comment) {
                     alert('Your comment matches another comment, please dont take other peoples comments');
                     $('annotator-delete').trigger("click");
                     return;
                 }
+            }
+            if (edit >= 0) {
+                annotationText[edit].comment = comment;
+                edit = -1;
+                return;
             }
             annotationText.push({"comment":comment, "text":selected, "status":'n'});
         }
@@ -70,7 +76,6 @@ $crs = new PCRHandler();
             var startIndex;
             var size = 0;
             $('#assignment_code span').each(function( index, element ) {
-                   // return $(this).has('.annotator-hl').length > 0
                 if ($(element).hasClass('annotator-hl')) {
                     $(element).addClass( 'span' + index );
                     size++;
@@ -142,11 +147,11 @@ $crs = new PCRHandler();
          */
         function editAnnotation() {
             var comment = $('.annotator-item').children('div').html();
-            alert(comment);
             for(var i=0; i < annotationText.length; i++) {
                 if(annotationText[i].comment == comment) {
                     //annotationText.splice(i, 1);
                     annotationText[i].status = 'e';
+                    edit = i;
                     break;
                 }
             }
