@@ -66,6 +66,7 @@ $crs = new PCRHandler();
                 }
             }
             if (edit >= 0) {
+                annotationText[edit].prevComment = annotationText[edit].comment;
                 annotationText[edit].comment = comment;
                 annotationText[edit].status = 'e';
                 edit = -1;
@@ -117,6 +118,13 @@ $crs = new PCRHandler();
 			  .done(function( retval ) {
                 alert("Your comments have been saved! Woohoo!");
                 alert(retval);
+                for (var i=0; i < annotationText.length; i++) {
+                    if(annotationText[i].status == 'd') {
+                        annotationText.splice(i, 1);
+                    } else {
+                        annotationText[i].status = '';
+                    }
+                }
             });
             
         }
@@ -136,9 +144,14 @@ $crs = new PCRHandler();
             alert(comment);
             for(var i=0; i < annotationText.length; i++) {
                 if(annotationText[i].comment == comment) {
-                    //annotationText.splice(i, 1);
+                    // Check if the review hasn't been saved to the database
+                    if (annotationText[i].reviewID === undefined) {
+                        annotationText.splice(i, 1);
+                        return;
+                    }
+                    // if it has then mark it for deletion
                     annotationText[i].status = 'd';
-                    break;
+                    return;
                 }
             }
         }

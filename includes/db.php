@@ -485,6 +485,23 @@ class Submission extends PCRObject {
         $review->commit();
         return $review;
     }
+    
+    /**
+     * editReview edits one of the reviews in the database
+     * @return the edited review
+     */
+    public function editReview($prevComment, $annotationText) {
+        $arr = array();
+        $sth = $this->db->prepare("SELECT ReviewID FROM Review WHERE SubmissionID = ? AND Comments = '" . $prevComment . "';");
+        //$sth->execute(array($this->getID()));
+        // TODO: remove hardcoding
+        $sth->execute(array('2'));
+        $file_row = $sth->fetch(PDO::FETCH_ASSOC);
+        $file_row["Comments"] = $annotationText;
+        $review = new Review($file_row);
+        $review->commit();
+        return $review;
+    }
 
 	public function jsonSerialize() {
 		parent::Update();

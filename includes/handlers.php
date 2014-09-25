@@ -119,7 +119,9 @@ class PCRHandler {
         foreach ($reviews as $review) {
             if ($review->status == 'd') { 
                 $this->removeReview($review->comment, $_SESSION['id']);
-            } elseif ($review->status == 'e' || $review->status == 'n') { 
+            } elseif ($review->status == 'e') { 
+                $this->editReview($review->prevComment, $review->comment, $review->subid);
+            } elseif ($review->status == 'n') { 
                 $this->addReview($review);
             }
         }
@@ -127,7 +129,7 @@ class PCRHandler {
     
 	/**
 	 * Removes a review with the given id from the database.
-	 * @param id of the review to remove
+	 * @param submission id and comment of the review to remove
 	 */
 	public function removeReview($comment, $id) {
         // get submission
@@ -135,6 +137,15 @@ class PCRHandler {
         // call delete review for that submission
         return $submission->removeReview($comment);
 	}
+    
+    /**
+     * Edits a review with the given id from the database
+     * @param submission id, comment and previous comment of the review to edit
+     */
+    public function editReview($prevComment, $annotationText, $id) {
+        $submission = new Submission(array("SubmissionID"=>$id));
+        return $submission->editReview($prevComment, $annotationText);
+    }
     
     /**
 	 * addReview adds a review to the database using the provided parameters
@@ -149,20 +160,6 @@ class PCRHandler {
                         $_SESSION['id'], $review->startIndexSet, $review->startLine, 
                         $review->fileName, $review->text);
 	}
-    
-	/**
-	 * addReview adds a review to the database using the provided parameters
-	 * @param id the review ID
-	 * @return review object
-	 *
-	public function addReview($stnid, $id, $assignmentID, $startIndex, 
-    $startLine, $annotationText, $text, $reviewID, $fileName) {
-        // Get the submission for the student you are submitting a review for
-        $submission = new Submission(array("SubmissionID"=>$id));
-        // Then add the review to the database
-        return $submission->addReview($annotationText, $stnid, $id, 
-                        $startIndex, $startLine, $fileName, $text);
-	}*/
     
     /**
      * getReview returns an array of all the reviews for a given submission
