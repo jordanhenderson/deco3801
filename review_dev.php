@@ -52,6 +52,7 @@ $crs = new PCRHandler();
             selected = window.getSelection().toString();
             selected = selected.replace(/</g, "&lt;");
             selected = selected.replace(/>/g, "&gt;");
+            edit = -1;
         }
         
         function getContents() {
@@ -66,6 +67,7 @@ $crs = new PCRHandler();
             }
             if (edit >= 0) {
                 annotationText[edit].comment = comment;
+                annotationText[edit].status = 'e';
                 edit = -1;
                 return;
             }
@@ -149,8 +151,6 @@ $crs = new PCRHandler();
             var comment = $('.annotator-item').children('div').html();
             for(var i=0; i < annotationText.length; i++) {
                 if(annotationText[i].comment == comment) {
-                    //annotationText.splice(i, 1);
-                    annotationText[i].status = 'e';
                     edit = i;
                     break;
                 }

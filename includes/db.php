@@ -456,7 +456,7 @@ class Submission extends PCRObject {
         // Create a new review out of it
         // Delete that review
         $arr = array();
-		$sth = $this->db->prepare("SELECT 'ReviewID' FROM Review WHERE 'SubmissionID' = ? AND 'Comments' = '" . $comment . "';");
+		$sth = $this->db->prepare("SELECT ReviewID FROM Review WHERE SubmissionID = ? AND Comments = '" . $comment . "';");
 		//$sth->execute(array($this->getID()));
         // TODO: remove hardcoding
         $sth->execute(array('2'));
@@ -473,6 +473,7 @@ class Submission extends PCRObject {
         // $this->getID() is returning empty
         // TODO: unhardcode assignmentid and submissionid
         echo $annotationText . "::" . $stnid . "::" . $id . "::" . $startIndex . "::" . $startLine . "::" . $fileName . "::" . $text . "::";
+        // Need to check if the review already exists and update if that's the case
         $review = new Review(array("AssignmentID"=>'3',
                                 "SubmissionID"=>'2',
 								"Comments"=>$annotationText,
