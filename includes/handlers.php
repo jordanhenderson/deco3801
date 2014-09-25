@@ -157,7 +157,7 @@ class PCRHandler {
         $submission = new Submission(array("SubmissionID"=>$review->subid));
         // Then add the review to the database
         return $submission->addReview($review->comment, $_SESSION['user_id'], 
-                        $_SESSION['id'], $review->startIndexSet, $review->startLine, 
+                        $_SESSION['id'], $review->startIndex, $review->startLine, 
                         $review->fileName, $review->text);
 	}
     

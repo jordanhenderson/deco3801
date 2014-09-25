@@ -3,7 +3,13 @@
 require_once 'includes/handlers.php';
 //Initialise the PCRHandler
 $crs = new PCRHandler();
-echo "<pre>"; print_r($crs->getReviews('2')); echo"</pre>";
+// hardcoding 2 for the time being
+$reviews = $crs->getReviews('2'));
+$annotationText = array();
+foreach ($reviews as $review) {
+    array_push($annotationText, $review->getRow());
+}
+echo "<pre>"; print_r($annotationText); echo "</pre>";
 ?>
 <!DOCTYPE html>
 <html lang="en">
@@ -35,6 +41,7 @@ echo "<pre>"; print_r($crs->getReviews('2')); echo"</pre>";
 	<script>
 		//Initialises Annotator for writing reviews on the page
 		var annotationText = [];
+        var testRetrieve = <?php json_encode($annotationText); ?>;
         var reviewId = 0;
         var selected;
         var edit = -1;
@@ -103,7 +110,7 @@ echo "<pre>"; print_r($crs->getReviews('2')); echo"</pre>";
                     if (startIndex >= 0) {
                         for (var k=0; k < annotationText.length; k++) {
                             if (annotationText[k].reviewID === i) {
-                                annotationText[k].startIndexSet = startIndex;
+                                annotationText[k].startIndex = startIndex;
                                 annotationText[k].startLine = j;
                                 annotationText[k].fileName = $( "#file_heading" ).html();
                                 break;
