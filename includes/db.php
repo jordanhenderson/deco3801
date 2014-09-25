@@ -455,6 +455,14 @@ class Submission extends PCRObject {
         // get the id of the review associated with $comment and the submission id
         // Create a new review out of it
         // Delete that review
+        $arr = array();
+		$sth = $this->db->prepare("SELECT 'ReviewID' FROM Review WHERE 'SubmissionID' = ? AND 'Comments' = '" . $comment . "';");
+		//$sth->execute(array($this->getID()));
+        // TODO: remove hardcoding
+        $sth->execute(array('2'));
+		$file_row = $sth->fetch(PDO::FETCH_ASSOC);
+		$review = new Review($file_row);
+		$review->delete();
     }
     
     /**
