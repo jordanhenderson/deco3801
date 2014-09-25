@@ -41,8 +41,8 @@ echo "<pre>"; print_r($annotationText); echo "</pre>";
 	<script>
 		//Initialises Annotator for writing reviews on the page
 		var annotationText = [];
-        var testRetrieve = <?php json_encode($annotationText); ?>;
-        var reviewId = 0;
+        var testRetrieve = <?php echo json_encode($annotationText); ?>;
+        alert(testRetrieve[0].Comments);
         var selected;
         var edit = -1;
         jQuery(function ($) {
@@ -78,7 +78,7 @@ echo "<pre>"; print_r($annotationText); echo "</pre>";
                     annotationText[edit].prevComment = annotationText[edit].comment;
                 }
                 annotationText[edit].comment = comment;
-                if (annotationText[edit].reviewID !== undefined) {
+                if (annotationText[edit].reviewNum !== undefined) {
                     annotationText[edit].status = 'e';
                 }
                 edit = -1;
@@ -95,8 +95,8 @@ echo "<pre>"; print_r($annotationText); echo "</pre>";
                     $(element).addClass( 'span' + index );
                     size++;
                     for (var i=0; i < annotationText.length; i++) {
-                        if (annotationText[i].text === $(element).html() && annotationText[i].reviewID === undefined) {
-                            annotationText[i].reviewID = index;
+                        if (annotationText[i].text === $(element).html() && annotationText[i].reviewNum === undefined) {
+                            annotationText[i].reviewNum = index;
                             break;
                         }
                     }
@@ -109,7 +109,7 @@ echo "<pre>"; print_r($annotationText); echo "</pre>";
                     startIndex = wordArray[j].indexOf('<span class="annotator-hl span' + i + '">');
                     if (startIndex >= 0) {
                         for (var k=0; k < annotationText.length; k++) {
-                            if (annotationText[k].reviewID === i) {
+                            if (annotationText[k].reviewNum === i) {
                                 annotationText[k].startIndex = startIndex;
                                 annotationText[k].startLine = j;
                                 annotationText[k].fileName = $( "#file_heading" ).html();
@@ -155,7 +155,7 @@ echo "<pre>"; print_r($annotationText); echo "</pre>";
             for(var i=0; i < annotationText.length; i++) {
                 if(annotationText[i].comment == comment) {
                     // Check if the review hasn't been saved to the database
-                    if (annotationText[i].reviewID === undefined) {
+                    if (annotationText[i].reviewNum === undefined) {
                         annotationText.splice(i, 1);
                         return;
                     }

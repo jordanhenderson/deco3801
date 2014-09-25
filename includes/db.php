@@ -469,7 +469,7 @@ class Submission extends PCRObject {
      * addReview adds a review to the database
      * @return the review that was added
      */
-    public function addReview($annotationText, $stnid, $id, $startIndex, $startLine, $fileName, $text) {
+    public function addReview($annotationText, $stnid, $id, $startIndex, $startLine, $fileName, $text, $reviewNum) {
         // $this->getID() is returning empty
         // TODO: unhardcode assignmentid and submissionid
         echo $annotationText . "::" . $stnid . "::" . $id . "::" . $startIndex . "::" . $startLine . "::" . $fileName . "::" . $text . "::";
@@ -481,7 +481,8 @@ class Submission extends PCRObject {
 								"startIndex"=>$startIndex,
 								"startLine"=>$startLine,
 								"fileName"=>$fileName,
-								"text"=>$text));
+								"text"=>$text,
+                                "reviewNum"=>$reviewNum));
         $review->commit();
         return $review;
     }
