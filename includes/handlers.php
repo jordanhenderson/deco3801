@@ -168,7 +168,9 @@ class PCRHandler {
      */
     public function getReviews($id) {
         // Get submission
+        $submission = new Submission(array("SubmissionID"=>$id));
         // Get reviews for that submission
+        return $submission->getReviews();
     }
 	
 	/**

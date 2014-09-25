@@ -3,6 +3,7 @@
 require_once 'includes/handlers.php';
 //Initialise the PCRHandler
 $crs = new PCRHandler();
+echo "<pre>"; print_r($crs->getReviews('2')); echo"</pre>";
 ?>
 <!DOCTYPE html>
 <html lang="en">
