@@ -68,7 +68,7 @@ class PCRHandler {
 	//Comment here
 	public function storeNewQuestion($title, $content, $stnid, $fullname){
 		$question = PCRHandler::getCourse();
-		$question->addNewQuestion($title, $content, $stnid, $fullname)->commit();
+		return $question->addNewQuestion($title, $content, $stnid, $fullname);
 	}
 
 

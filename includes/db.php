@@ -539,6 +539,7 @@ class Course extends PCRObject {
 									"Content" => $content,
 									"Status" => "0"
 								));
+		$question->commit();
 		return $question;
 	}	
 	/**
