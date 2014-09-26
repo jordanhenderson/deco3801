@@ -52,11 +52,13 @@ echo "<pre>"; print_r($annotationText); echo "</pre>";
             var innerContents = $('#assignment_code').html();
             var wordArray = innerContents.split('\n');
             for(var i=0; i < testRetrieve.length; i++) {
+                alert(testRetrieve[i]);
                 if (testRetrieve[i].fileName == $( "#file_heading" ).html()) {
                     var index = testRetrieve[i].startIndex;
                     var line = testRetrieve[i].startLine;
                     var text = testRetrieve[i].text;
                     var numLines = (text.match(/\n/g) || []).length;
+                    alert(text + "::" + numLines);
                     var endLine = line + numLines;
                     var spanString = '<span class="annotator-hl span' + testRetrieve[i].reviewNum + '">';
                     var endIndex = index + text.length + spanString.length;
