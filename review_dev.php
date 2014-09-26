@@ -67,6 +67,7 @@ echo "<pre>"; print_r($annotationText); echo "</pre>";
                     alert(endLine + "::" + wordArray[endLine]);
                     wordArray[line] = wordArray[line].slice(0,index) + spanString + wordArray[line].slice(index,wordArray[line].length);
                     wordArray[endLine] = wordArray[endLine].slice(0,endIndex) + "</span>" + wordArray[endLine].slice(endIndex, wordArray[endLine].length);
+                    $('.annotator-widget annotator-listing').html(testRetrieve[i].Comments);
                 }
             }
             $('#assignment_code').html(wordArray.join('\n'));
