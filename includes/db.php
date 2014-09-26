@@ -524,25 +524,6 @@ class Course extends PCRObject {
 	}
 
 	/**
-	 * addNewQuestion adds a new question to a course.
-	 * @param title the question title
-	 * @param content the question body content
-	 * @param stnid the student ID
-	 * @param fullname full name of the student
-	 */
-	public function addNewQuestion($title, $content, $stnid, $fullname) {
-		$question = new Question(array(
-									"StudentID" => $stnid,
-									"CourseID" => $this->getID(),
-									"StudentName" => $fullname,
-									"Title" => $title,
-									"Content" => $content,
-									"Status" => "0"
-								));
-		$question->commit();
-		return $question;
-	}	
-	/**
 	 * helpEnabled returns if the help center is enabled for the current course.
 	 */
 	public function helpEnabled() {

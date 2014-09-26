@@ -65,10 +65,24 @@ class PCRHandler {
 		$question->commit();
 	}
 	
-	//Comment here
+	/**
+	 * storeNewQuestion adds a new question to a course.
+	 * @param title the question title
+	 * @param content the question body content
+	 * @param stnid the student ID
+	 * @param fullname full name of the student
+	 */
 	public function storeNewQuestion($title, $content, $stnid, $fullname){
-		$question = PCRHandler::getCourse();
-		return $question->addNewQuestion($title, $content, $stnid, $fullname);
+		$question = new Question(array(
+									"StudentID" => $stnid,
+									"CourseID" => $_SESSION["course_id"],
+									"StudentName" => $fullname,
+									"Title" => $title,
+									"Content" => $content,
+									"Status" => "0"
+								));
+		$question->commit();
+		return $question;
 	}
 
 
@@ -199,41 +213,21 @@ class PCRHandler {
 	/**
 	 * Create a new assignment.
 	 */
-	public function createAssignment($AssignmentName, 
-									$ReviewsNeeded, $ReviewsDue, $Weight, 
-									$OpenTime, $DueTime) {
-		$assignment = new Assignment(array("AssignmentID"=>$AssignmentID));
-			
-		$assignment['AssignmentName'] = $AssignmentName;
-		$assignment['ReviewsNeeded'] = $ReviewsNeeded;
-		$assignment['ReviewsDue'] = $ReviewsDue;
-		$assignment['Weight'] = $Weight;
-		$assignment['OpenTime'] = $OpenTime;
-		$assignment['DueTime'] = $DueTime;
-
+	public function changeAssignment($AssignmentID, $AssignmentName, $ReviewsNeeded, $ReviewsDue, $weight, $OpenTime, $DueTime){
+		$assignment = new Assignment(array("AssignmentID" => $AssignmentID));
+			$assignmentrow = &$assignment->getRow();
+			$assignmentrow["AssignmentName"] = $AssignmentName;
+			$assignmentrow["CourseID"] = $_SESSION['course_id'];
+			$assignmentrow["ReviewsNeeded"] = $ReviewsNeeded;
+			$assignmentrow["ReviewsDue"] = $ReviewsDue;
+			$assignmentrow["Weight"] = $weight;
+			$assignmentrow["OpenTime"] = $OpenTime;
+			$assignmentrow["DueTime"] = $DueTime;
 		$assignment->commit();
 		return $assignment;
-	}
-	
-	/**
-	 * Update an existing assignment.
-	 */
-	public function updateAssignment($AssignmentID, $AssignmentName, 
-									$ReviewsNeeded, $ReviewsDue, $Weight, 
-									$OpenTime, $DueTime) {
-		$assignment = new Assignment(array("AssignmentID"=>$AssignmentID));
-			
-		$assignment['AssignmentName'] = $AssignmentName;
-		$assignment['ReviewsNeeded'] = $ReviewsNeeded;
-		$assignment['ReviewsDue'] = $ReviewsDue;
-		$assignment['Weight'] = $Weight;
-		$assignment['OpenTime'] = $OpenTime;
-		$assignment['DueTime'] = $DueTime;
+		
 
-		$assignment->commit();
-		return $assignment;
-	}
-	
+	}	
 	/**
 	 * Delete an assignment.
 	 */
