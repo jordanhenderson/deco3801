@@ -67,7 +67,7 @@ echo "<pre>"; print_r($annotationText); echo "</pre>";
                     alert(endLine + "::" + wordArray[endLine]);
                     wordArray[line] = wordArray[line].slice(0,index) + spanString + wordArray[line].slice(index,wordArray[line].length);
                     wordArray[endLine] = wordArray[endLine].slice(0,endIndex) + "</span>" + wordArray[endLine].slice(endIndex, wordArray[endLine].length);
-                    $('.annotator-widget annotator-listing').append('<li class="annotator-annotation annotator-item"><span class="annotator-controls"><button title="Edit" class="annotator-edit" onclick="editAnnotation()">Edit</button><button title="Delete" class="annotator-delete" onclick="deleteAnnotation()">Delete</button></span><div>' + testRetrieve[i].Comments + '</div></li>');
+                    $('.annotator-widget annotator-listing').html('<li class="annotator-annotation annotator-item"><span class="annotator-controls"><button title="Edit" class="annotator-edit" onclick="editAnnotation()">Edit</button><button title="Delete" class="annotator-delete" onclick="deleteAnnotation()">Delete</button></span><div>' + testRetrieve[i].Comments + '</div></li>');
                 }
             }
             $('#assignment_code').html(wordArray.join('\n'));
