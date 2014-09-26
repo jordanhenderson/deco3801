@@ -46,8 +46,32 @@ echo "<pre>"; print_r($annotationText); echo "</pre>";
         var selected;
         var edit = -1;
         jQuery(function ($) {
-			$('#innercontainer').annotator();
+            $('#innercontainer').annotator();
 		});
+        
+        $(function getComments() {
+            var innerContents = $('#assignment_code').html();
+            var wordArray = innerContents.split('\n');
+               
+            for(var i=0; i < testRetrieve; i++) {
+                if (testRetrieve[i].fileName == $( "#file_heading" ).html()) {
+                    var index = testRetrieve[i].startIndex;
+                    var line = testRetrieve[i].startLine;
+                    var text = testRetrieve[i].text;
+                    var numLines = (text.match(/\n/g) || []).length;
+                    var endLine = line + numLines;
+                    var spanString = '<span class="annotator-hl span' + testRetrieve[i].reviewNum + '">';
+                    var endIndex = index + text.length + spanString.length;
+                    if (numLines > 0) {
+                        var textArr = text.split('\n');
+                        endIndex = textArr[textArr.length-1].length;
+                    }
+                    wordArray[line] = wordArray[line].slice(0,index) + spanString + wordArray[line].slice(index,wordArray[line].length);
+                    wordArray[endLine] = wordArray[endLine].slice(0,endIndex) + "</span>" + wordArray[endLine].slice(endIndex, wordArray[endLine].length);
+                }
+            }
+            $('#assignment_code').html(wordArray.join('\n'));
+        });
         
         /*
         Get the users comment/review and store it and the position of the review in
