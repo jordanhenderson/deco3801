@@ -105,7 +105,7 @@ class PCRHandler {
 	 * addComment adds a comment to the database using the given parameters
 	 */
 	public function addComment($question_id, $studentid, $fullname, $content) {
-		$question = $this->getQuestion($question_id);
+		$question = PCRHandler::getQuestion($question_id);
 		return $question->addComment($studentid, $fullname, $content);
 	}
     
