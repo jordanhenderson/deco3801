@@ -50,10 +50,9 @@ echo "<pre>"; print_r($annotationText); echo "</pre>";
 		});
         
         $(function getComments() {
-            alert('wtf');
             var innerContents = $('#assignment_code').html();
             var wordArray = innerContents.split('\n');
-               
+            alert(innerContents);
             for(var i=0; i < testRetrieve; i++) {
                 if (testRetrieve[i].fileName == $( "#file_heading" ).html()) {
                     var index = testRetrieve[i].startIndex;
