@@ -28,7 +28,7 @@ $id = $_GET["QuestionID"];
 	
 	<div class="container">
 		<h1>Ask a New Question</h1>
-		<form name="cF" id="cF" action="api.php" method="post" data-function="getComment">
+		<form name="cF" id="cF" action="api.php" method="post" data-function="addComment">
 			<div class="row">
 			</div>
 			<br>
