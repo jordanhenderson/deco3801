@@ -42,7 +42,6 @@ echo "<pre>"; print_r($annotationText); echo "</pre>";
 		//Initialises Annotator for writing reviews on the page
 		var annotationText = [];
         var testRetrieve = <?php echo json_encode($annotationText); ?>;
-        alert(testRetrieve[0].Comments);
         var selected;
         var edit = -1;
         jQuery(function ($) {
@@ -52,8 +51,8 @@ echo "<pre>"; print_r($annotationText); echo "</pre>";
         $(function getComments() {
             var innerContents = $('#assignment_code').html();
             var wordArray = innerContents.split('\n');
-            alert(innerContents);
-            for(var i=0; i < testRetrieve; i++) {
+            for(var i=0; i < testRetrieve.length; i++) {
+                alert(testRetrieve[i].Comments);
                 if (testRetrieve[i].fileName == $( "#file_heading" ).html()) {
                     var index = testRetrieve[i].startIndex;
                     var line = testRetrieve[i].startLine;
