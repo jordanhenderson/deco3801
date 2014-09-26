@@ -50,6 +50,7 @@ echo "<pre>"; print_r($annotationText); echo "</pre>";
 		});
         
         $(function getComments() {
+            alert('wtf');
             var innerContents = $('#assignment_code').html();
             var wordArray = innerContents.split('\n');
                
