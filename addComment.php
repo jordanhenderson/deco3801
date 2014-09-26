@@ -87,7 +87,7 @@ $id = $_GET["QuestionID"];
 	
 	<script type="text/javascript">
 		$(function() {
-			$('form').submit(function() {
+			$('#cF').submit(function() {
 				var form = $(this);
 				//Use the action= property for ajax submission
 				var fullname = '<?php echo $_SESSION['userfullname'];?>'
