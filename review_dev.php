@@ -53,7 +53,7 @@ echo "<pre>"; print_r($annotationText); echo "</pre>";
             var wordArray = innerContents.split('\n');
             for(var i=0; i < testRetrieve.length; i++) {
                 if (testRetrieve[i].fileName == $( "#file_heading" ).html()) {
-                    var index = parseInt(testRetrieve[i].startInde)x;
+                    var index = parseInt(testRetrieve[i].startIndex);
                     var line = parseInt(testRetrieve[i].startLine);
                     var text = testRetrieve[i].text;
                     var numLines = (text.match(/\n/g) || []).length;
