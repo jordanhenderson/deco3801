@@ -67,7 +67,7 @@ echo "<pre>"; print_r($annotationText); echo "</pre>";
                     alert(endLine + "::" + wordArray[endLine] + "::" + testRetrieve[i].Comments);
                     wordArray[line] = wordArray[line].slice(0,index) + spanString + wordArray[line].slice(index,wordArray[line].length);
                     wordArray[endLine] = wordArray[endLine].slice(0,endIndex) + "</span>" + wordArray[endLine].slice(endIndex, wordArray[endLine].length);
-                    $('.annotator-widget').html('<div class="annotator-outer annotator-viewer">\n  <ul class="annotator-widget annotator-listing"></ul>\n</div><li class="annotator-annotation annotator-item">\n  <span class="annotator-controls">\n    <a href="#" title="View as webpage" class="annotator-link">View as webpage</a>\n    <button title="Edit" class="annotator-edit" onclick="editAnnotation()">Edit</button>\n    <button title="Delete" class="annotator-delete" onclick="deleteAnnotation()">Delete</button>\n  </span>\n <div>' +  testRetrieve[i].Comments + '</div>\n </li>');
+                    $('.annotator-widget annotator-listing').html('<li class="annotator-annotation annotator-item">\n  <span class="annotator-controls">\n    <a href="#" title="View as webpage" class="annotator-link">View as webpage</a>\n    <button title="Edit" class="annotator-edit" onclick="editAnnotation()">Edit</button>\n    <button title="Delete" class="annotator-delete" onclick="deleteAnnotation()">Delete</button>\n  </span>\n <div>' +  testRetrieve[i].Comments + '</div>\n </li>');
                 }
             }
             $('#assignment_code').html(wordArray.join('\n'));
