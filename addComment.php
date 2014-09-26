@@ -90,9 +90,11 @@ $id = $_GET["QuestionID"];
 			$('form').submit(function() {
 				var form = $(this);
 				//Use the action= property for ajax submission
+				var fullname = '<?php echo $_SESSION['userfullname'];?>'
+				var stnid = '<?php echo $_SESSION['user_id'];?>'
 				var url = form.attr('action');
 				var func = form.data('function');
-				var request = {f: func, params: [<?php echo $id; ?>, $("#content").val()]};
+				var request = {f: func, params: [<?php echo $id; ?>, stnid, fullname, $("#content").val()]};
 				//Post the serialized form.
 				$.post(url, JSON.stringify(request), function(data) {
 					//Handle submission.
