@@ -64,7 +64,7 @@ echo "<pre>"; print_r($annotationText); echo "</pre>";
                         var textArr = text.split('\n');
                         endIndex = textArr[textArr.length-1].length;
                     }
-                    alert(endLine + "::" + wordArray[endLine] + "::" + testRestrieve[i].Comments);
+                    alert(endLine + "::" + wordArray[endLine] + "::" + testRetrieve[i].Comments);
                     wordArray[line] = wordArray[line].slice(0,index) + spanString + wordArray[line].slice(index,wordArray[line].length);
                     wordArray[endLine] = wordArray[endLine].slice(0,endIndex) + "</span>" + wordArray[endLine].slice(endIndex, wordArray[endLine].length);
                     $('.annotator-widget annotator-listing').html('<li class="annotator-annotation annotator-item">\n  <span class="annotator-controls">\n    <a href="#" title="View as webpage" class="annotator-link">View as webpage</a>\n    <button title="Edit" class="annotator-edit" onclick="editAnnotation()">Edit</button>\n    <button title="Delete" class="annotator-delete" onclick="deleteAnnotation()">Delete</button>\n  </span>\n <div>' +  testRetrieve[i].Comments + '</div>\n </li>');
