@@ -671,7 +671,7 @@ class Question extends PCRObject {
 									"StudentName" => $fullname,
 									"Content" => $content,
 								));
-		//$comment->commit();
+		$comment->commit();
 		return $comment;
 	}
 }
