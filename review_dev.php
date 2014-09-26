@@ -52,7 +52,6 @@ echo "<pre>"; print_r($annotationText); echo "</pre>";
             var innerContents = $('#assignment_code').html();
             var wordArray = innerContents.split('\n');
             for(var i=0; i < testRetrieve.length; i++) {
-                alert(testRetrieve[i].Comments);
                 if (testRetrieve[i].fileName == $( "#file_heading" ).html()) {
                     var index = testRetrieve[i].startIndex;
                     var line = testRetrieve[i].startLine;
@@ -65,6 +64,7 @@ echo "<pre>"; print_r($annotationText); echo "</pre>";
                         var textArr = text.split('\n');
                         endIndex = textArr[textArr.length-1].length;
                     }
+                    alert(endLine + "::" + wordArray[endLine]);
                     wordArray[line] = wordArray[line].slice(0,index) + spanString + wordArray[line].slice(index,wordArray[line].length);
                     wordArray[endLine] = wordArray[endLine].slice(0,endIndex) + "</span>" + wordArray[endLine].slice(endIndex, wordArray[endLine].length);
                 }
