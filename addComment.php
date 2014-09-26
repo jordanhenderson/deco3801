@@ -2,6 +2,7 @@
 session_start();
 $timezone = date_default_timezone_set('Australia/Brisbane');
 $date = date('m/d/Y h:i:s a', time());
+//Dont think we need this $id var here really anymore, leave it for now
 $id = $_GET["QuestionID"];
 ?>
 <!DOCTYPE html>
@@ -93,14 +94,12 @@ $id = $_GET["QuestionID"];
 				var fullname = '<?php echo $_SESSION['userfullname'];?>'
 				var stnid = '<?php echo $_SESSION['user_id'];?>'
 				var url = form.attr('action');
+				//I changed this and now it works, before it was GETTING some other question ID for some reason
 				var Qid = '<?php echo $_GET['QuestionID'];?>'
 				var func = form.data('function');
-				alert(func);
 				var request = {f: func, params: [Qid, stnid, fullname, $("#content").val()]};
-				alert(JSON.stringify(request));
 				//Post the serialized form.
 				$.post(url, JSON.stringify(request), function(data) {
-					alert(JSON.stringify(data));
 					//Handle submission.
 					document.location.href = "displayQuestion.php?id=<?php echo $id; ?>";
 				});
