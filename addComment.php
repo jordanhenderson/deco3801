@@ -93,9 +93,10 @@ $id = $_GET["QuestionID"];
 				var fullname = '<?php echo $_SESSION['userfullname'];?>'
 				var stnid = '<?php echo $_SESSION['user_id'];?>'
 				var url = form.attr('action');
+				var Qid = '<?php echo $_GET['QuestionID'];?>'
 				var func = form.data('function');
 				alert(func);
-				var request = {f: func, params: [<?php echo $id; ?>, stnid, fullname, $("#content").val()]};
+				var request = {f: func, params: [Qid, stnid, fullname, $("#content").val()]};
 				alert(JSON.stringify(request));
 				//Post the serialized form.
 				$.post(url, JSON.stringify(request), function(data) {
