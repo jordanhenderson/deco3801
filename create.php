@@ -8,8 +8,8 @@ if (!isset($_SESSION['admin']) || !$_SESSION['admin']) {
 
 $crs = new PCRHandler();
 
-if (isset($_REQUEST['assid'])) {
-	$assid = $_REQUEST['assid'];
+if (isset($_GET['assid'])) {
+	$assid = $_GET['assid'];
 	$assignment = $crs->getAssignment($assid);
 	if ($assignment->isValid()) {
 		$asg = &$assignment->getRow();
@@ -24,6 +24,7 @@ if (isset($_REQUEST['assid'])) {
 	$new = true;
 	$assignment = new PCRBuilder("Assignments");
 	$asg = &$assignment->getRow();
+	$assid ='';
 }
 
 ?>
@@ -141,16 +142,15 @@ if (isset($_REQUEST['assid'])) {
 				<?php
 				if ($new) {
 					echo '
-				<a class="btn btn-primary" href="index.php" id="create">Create</a>
-				<a class="btn btn-default" href="index.php">Cancel</a>
-				<div class="btn btn-warning" id="reset">Reset</div>';
+				<input type="submit" class="btn btn-primary" href="index.php" id="assignmentchange" name="changeAssignment" value="Create"></input>';
 				} else {
 					echo '
-				<a class="btn btn-primary" href="overview.php?assid='.$assid.'" id="update">Update</a>
-				<a class="btn btn-default" href="overview.php?assid='.$assid.'">Cancel</a>
-				<div class="btn btn-warning" id="reset">Reset</div>
-				<a class="btn btn-danger" href="index.php">Delete</a>';
+				<input type="submit" class="btn btn-primary" href="overview.php?assid='.$assid.'" id="assignmentchange" name="changeAssignment" value="Update"></input>		
+				<input type="submit" class="btn btn-danger" href="index.php" id="assignmentchange" name="deleteAssignment" value="Delete"></input>';
 				}
+				echo '
+				<input type="submit" class="btn btn-warning" id="reset" value="Reset"></input>
+				<input type="submit" class="btn btn-default" href="overview.php?assid='.$assid.'" value="Cancel"></input>';
 				?>
 				<br><br><br>
 			</div>
@@ -169,7 +169,6 @@ if (isset($_REQUEST['assid'])) {
 	<script src="js/json.js"></script>
 
 	<script type="text/javascript">
-		
 		$("#reset").click(function() {
 			$("#AssignmentName").val(<?php echo "'$asg[AssignmentName]'"; ?>);
 			$("#OpenTime").val(<?php echo "'$asg[OpenTime]'"; ?>);
@@ -184,38 +183,29 @@ if (isset($_REQUEST['assid'])) {
 		$(".form_datetime").datetimepicker({
 			format: 'yyyy-mm-dd hh:ii:ss'
 		});
-		
-		$("#update").click(function() {
-			var request = {f: 'updateAssignment', params: [
-					<?php echo '"'.$assid.'"'; ?>,
-					$("#AssignmentName").val(),
-					$("#ReviewsNeeded").val(),
-					$("#ReviewsDue").val(),
-					$("#Weight").val(),
-					$("#OpenTime").val(),
-					$("#DueTime").val()
-			]};
-			$.post("api.php", JSON.stringify(request), function() {});
-		});
-		
-		$("#create").click(function() {
-			var request = {f: 'createAssignment', params: [
-					$("#AssignmentName").val(),
-					$("#ReviewsNeeded").val(),
-					$("#ReviewsDue").val(),
-					$("#Weight").val(),
-					$("#OpenTime").val(),
-					$("#DueTime").val()
-			]};
-			$.post("api.php", JSON.stringify(request), function() {});
-		});
-		
-		$("#delete").click(function() {
-			var request = {f: 'deleteAssignment', params: [
-					<?php echo '"'.$assid.'"'; ?>
-			]};
-			$.post("api.php", JSON.stringify(request), function() {});
-		});
+		$(":submit").click(function() {
+				var func = $(this).attr("name");
+				switch (func) {
+				  case "changeAssignment":
+					var funcparams = [
+						<?php echo '"'.$assid.'"'; ?>,
+						$("#AssignmentName").val(),
+						$("#ReviewsNeeded").val(),
+						$("#ReviewsDue").val(),
+						$("#Weight").val(),
+						$("#OpenTime").val(),
+						$("#DueTime").val()
+					];
+				    break;
+				  case "deleteAssignment":
+				  	var funcparams = [ <?php echo '"'.$assid.'"'; ?>];
+					break;
+				}
+				var request = {f: func, params: funcparams};
+				$.post("api.php", JSON.stringify(request), function() {
+					window.location.replace("index.php")
+				});
+			});
 	</script> 
 </body>
 </html>
