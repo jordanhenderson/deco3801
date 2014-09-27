@@ -48,6 +48,12 @@ echo "<pre>"; print_r($annotationText); echo "</pre>";
             $('#innercontainer').annotator();
 		});
         
+        $('.annotator-hl').hover({
+            // showViewer
+            var spanNum = 1;
+            Annotator.prototype.showViewer(testRetrieve[spanNum], Util.mousePosition(event,this.wrapper[0]));
+        });
+        
         $(function getComments() {
             var innerContents = $('#assignment_code').html();
             var wordArray = innerContents.split('\n');
@@ -68,7 +74,7 @@ echo "<pre>"; print_r($annotationText); echo "</pre>";
                     wordArray[line] = wordArray[line].slice(0,index) + spanString + wordArray[line].slice(index,wordArray[line].length);
                     wordArray[endLine] = wordArray[endLine].slice(0,endIndex) + "</span>" + wordArray[endLine].slice(endIndex, wordArray[endLine].length);
                     /*$('.annotator-widget annotator-listing').html('<li class="annotator-annotation annotator-item">\n  <span class="annotator-controls">\n    <a href="#" title="View as webpage" class="annotator-link">View as webpage</a>\n    <button title="Edit" class="annotator-edit" onclick="editAnnotation()">Edit</button>\n    <button title="Delete" class="annotator-delete" onclick="deleteAnnotation()">Delete</button>\n  </span>\n <div>' +  testRetrieve[i].Comments + '</div>\n </li>');*/
-					$('.annotator-outer annotator-viewer annotator-hide').append('<ul class="annotator-widget annotator-listing"> <li class="annotator-annotation annotator-item">\n  <span class="annotator-controls">\n    <a href="#" title="View as webpage" class="annotator-link">View as webpage</a>\n    <button title="Edit" class="annotator-edit" onclick="editAnnotation()">Edit</button>\n    <button title="Delete" class="annotator-delete" onclick="deleteAnnotation()">Delete</button>\n  </span>\n <div>' +  testRetrieve[i].Comments + '</div>\n </li>\n </ul>');
+					/*$('.annotator-outer annotator-viewer').append('<ul class="annotator-widget annotator-listing"> <li class="annotator-annotation annotator-item">\n  <span class="annotator-controls">\n    <a href="#" title="View as webpage" class="annotator-link">View as webpage</a>\n    <button title="Edit" class="annotator-edit" onclick="editAnnotation()">Edit</button>\n    <button title="Delete" class="annotator-delete" onclick="deleteAnnotation()">Delete</button>\n  </span>\n <div>' +  testRetrieve[i].Comments + '</div>\n </li>\n </ul>');*/
                 }
             }
             $('#assignment_code').html(wordArray.join('\n'));
