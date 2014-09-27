@@ -48,11 +48,13 @@ echo "<pre>"; print_r($annotationText); echo "</pre>";
             $('#innercontainer').annotator();
 		});
         
-        $('.annotator-hl').hover({
+        $('span.annotator-hl').hover( function() {
             // showViewer
             var spanNum = 1;
             //Annotator.prototype.showViewer(testRetrieve[spanNum], Util.mousePosition(event,this.wrapper[0]));
             alert(testRetrieve[spanNum] + "::");
+        }, function() {
+            alert("gone");
         });
         
         $(function getComments() {
