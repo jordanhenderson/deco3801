@@ -48,11 +48,12 @@ echo "<pre>"; print_r($annotationText); echo "</pre>";
             $('#innercontainer').annotator();
 		});
         
-        /*$('.annotator-hl').hover({
+        $('.annotator-hl').hover({
             // showViewer
             var spanNum = 1;
-            Annotator.prototype.showViewer(testRetrieve[spanNum], Util.mousePosition(event,this.wrapper[0]));
-        });*/
+            //Annotator.prototype.showViewer(testRetrieve[spanNum], Util.mousePosition(event,this.wrapper[0]));
+            alert(testRetrieve[spanNum] + "::" + Util.mousePosition(event,this.wrapper[0]));
+        });
         
         $(function getComments() {
             var innerContents = $('#assignment_code').html();
