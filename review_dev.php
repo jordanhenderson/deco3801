@@ -41,18 +41,18 @@ echo "<pre>"; print_r($annotationText); echo "</pre>";
 	<script>
 		//Initialises Annotator for writing reviews on the page
 		var annotationText = [];
-        var testRetrieve = <?php echo json_encode($annotationText); ?>;
+        var annotations = <?php echo json_encode($annotationText); ?>;
         var selected;
         var edit = -1;
         jQuery(function ($) {
             $('#innercontainer').annotator();
 		});
         
-        $('.annotator-hl').hover( function() {
+        $('span').hover( function() {
             // showViewer
             var spanNum = 1;
-            //Annotator.prototype.showViewer(testRetrieve[spanNum], Util.mousePosition(event,this.wrapper[0]));
-            alert(testRetrieve[spanNum] + "::");
+            //Annotator.prototype.showViewer(annotations[spanNum], Util.mousePosition(event,this.wrapper[0]));
+            alert(annotations[spanNum] + "::");
         }, function() {
             alert("gone");
         });
@@ -60,23 +60,23 @@ echo "<pre>"; print_r($annotationText); echo "</pre>";
         $(function getComments() {
             var innerContents = $('#assignment_code').html();
             var wordArray = innerContents.split('\n');
-            for(var i=0; i < testRetrieve.length; i++) {
-                if (testRetrieve[i].fileName == $( "#file_heading" ).html()) {
-                    var index = parseInt(testRetrieve[i].startIndex);
-                    var line = parseInt(testRetrieve[i].startLine);
-                    var text = testRetrieve[i].text;
+            for(var i=0; i < annotations.length; i++) {
+                if (annotations[i].fileName == $( "#file_heading" ).html()) {
+                    var index = parseInt(annotations[i].startIndex);
+                    var line = parseInt(annotations[i].startLine);
+                    var text = annotations[i].text;
                     var numLines = (text.match(/\n/g) || []).length;
                     var endLine = line + numLines;
-                    var spanString = '<span class="annotator-hl span' + testRetrieve[i].reviewNum + '">';
+                    var spanString = '<span class="annotator-hl span' + annotations[i].reviewNum + '">';
                     var endIndex = index + text.length + spanString.length;
                     if (numLines > 0) {
                         var textArr = text.split('\n');
                         endIndex = textArr[textArr.length-1].length;
                     }
-                    alert(endLine + "::" + wordArray[endLine] + "::" + testRetrieve[i].Comments);
+                    alert(endLine + "::" + wordArray[endLine] + "::" + annotations[i].Comments);
                     wordArray[line] = wordArray[line].slice(0,index) + spanString + wordArray[line].slice(index,wordArray[line].length);
                     wordArray[endLine] = wordArray[endLine].slice(0,endIndex) + "</span>" + wordArray[endLine].slice(endIndex, wordArray[endLine].length);
-					$('.annotator-outer annotator-viewer annotator-hide').html('<ul class="annotator-widget annotator-listing"> <li class="annotator-annotation annotator-item">\n  <span class="annotator-controls">\n    <a href="#" title="View as webpage" class="annotator-link">View as webpage</a>\n    <button title="Edit" class="annotator-edit" onclick="editAnnotation()">Edit</button>\n    <button title="Delete" class="annotator-delete" onclick="deleteAnnotation()">Delete</button>\n  </span>\n <div>' +  testRetrieve[i].Comments + '</div>\n </li>\n </ul>');
+					$('.annotator-outer annotator-viewer annotator-hide').html('<ul class="annotator-widget annotator-listing"> <li class="annotator-annotation annotator-item">\n  <span class="annotator-controls">\n    <a href="#" title="View as webpage" class="annotator-link">View as webpage</a>\n    <button title="Edit" class="annotator-edit" onclick="editAnnotation()">Edit</button>\n    <button title="Delete" class="annotator-delete" onclick="deleteAnnotation()">Delete</button>\n  </span>\n <div>' +  annotations[i].Comments + '</div>\n </li>\n </ul>');
                 }
             }
             $('#assignment_code').html(wordArray.join('\n'));
