@@ -48,15 +48,6 @@ echo "<pre>"; print_r($annotationText); echo "</pre>";
             $('#innercontainer').annotator();
 		});
         
-        $('span').hover( function() {
-            // showViewer
-            var spanNum = 1;
-            //Annotator.prototype.showViewer(annotations[spanNum], Util.mousePosition(event,this.wrapper[0]));
-            alert(annotations[spanNum] + "::");
-        }, function() {
-            alert("gone");
-        });
-        
         $(function getComments() {
             var innerContents = $('#assignment_code').html();
             var wordArray = innerContents.split('\n');
@@ -310,5 +301,15 @@ echo "<pre>"; print_r($annotationText); echo "</pre>";
 
 	<!-- Bootstrap Core JavaScript -->
 	<script src="js/bootstrap.min.js"></script>
+    <script>
+    $('span').hover( function() {
+        // showViewer
+        var spanNum = 1;
+        //Annotator.prototype.showViewer(annotations[spanNum], Util.mousePosition(event,this.wrapper[0]));
+        alert(annotations[spanNum] + "::");
+    }, function() {
+        alert("gone");
+    });
+    </script>
 </body>
 </html>
