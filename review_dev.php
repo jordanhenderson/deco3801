@@ -78,7 +78,7 @@ echo "<pre>"; print_r($annotationText); echo "</pre>";
                     alert(endLine + "::" + wordArray[endLine] + "::" + annotations[i].Comments);
                     wordArray[line] = wordArray[line].slice(0,index) + spanString + wordArray[line].slice(index,wordArray[line].length);
                     wordArray[endLine] = wordArray[endLine].slice(0,endIndex) + "</span>" + wordArray[endLine].slice(endIndex, wordArray[endLine].length);
-					$('.annotator-outer annotator-viewer annotator-hide').html('<ul class="annotator-widget annotator-listing"> <li class="annotator-annotation annotator-item">\n  <span class="annotator-controls">\n    <a href="#" title="View as webpage" class="annotator-link">View as webpage</a>\n    <button title="Edit" class="annotator-edit" onclick="editAnnotation()">Edit</button>\n    <button title="Delete" class="annotator-delete" onclick="deleteAnnotation()">Delete</button>\n  </span>\n <div>' +  annotations[i].Comments + '</div>\n </li>\n </ul>');
+					//$('.annotator-outer annotator-viewer annotator-hide').html('<ul class="annotator-widget annotator-listing"> <li class="annotator-annotation annotator-item">\n  <span class="annotator-controls">\n    <a href="#" title="View as webpage" class="annotator-link">View as webpage</a>\n    <button title="Edit" class="annotator-edit" onclick="editAnnotation()">Edit</button>\n    <button title="Delete" class="annotator-delete" onclick="deleteAnnotation()">Delete</button>\n  </span>\n <div>' +  annotations[i].Comments + '</div>\n </li>\n </ul>');
                 }
             }
             $('#assignment_code').html(wordArray.join('\n'));
@@ -277,7 +277,7 @@ echo "<pre>"; print_r($annotationText); echo "</pre>";
 			</div>
 		</div>
 		<div class="col-md-9">
-			<h1>Assignment 99 Submission</h1>
+			<h1>Assignment <span>99</span> Submission</h1>
 			<div class="col-md-12">
 				<h2 id="file_heading">assign1_additional.cpp</h2>
 				<div id="innercontainer">
