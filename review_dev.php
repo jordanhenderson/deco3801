@@ -48,7 +48,7 @@ echo "<pre>"; print_r($annotationText); echo "</pre>";
             $('#innercontainer').annotator();
 		});
         
-        $('span.annotator-hl').hover( function() {
+        $('.annotator-hl').hover( function() {
             // showViewer
             var spanNum = 1;
             //Annotator.prototype.showViewer(testRetrieve[spanNum], Util.mousePosition(event,this.wrapper[0]));
