@@ -131,7 +131,7 @@ function formatDBtime($dbtime) {
 						
 						// reviewsTodo used later.
 						$reviewsTodo = $asg->getIncompleteReviews($_SESSION['user_id']);
-						array_merge($incompleteReviews, $reviewsTodo);
+						$incompleteReviews = array_merge($incompleteReviews, $reviewsTodo);
 						
 						$asg = &$asg->getRow();
 						
