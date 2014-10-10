@@ -2,8 +2,8 @@
 
 require_once 'includes/handlers.php';
 
-if (!isset($_SESSION['admin']) || !$_SESSION['admin']) {
-	exit("Not logged in as admin");
+if (isset($_SESSION['admin']) && $_SESSION['admin']) {
+	$admin = true;
 }
 
 $crs = new PCRHandler();
@@ -88,7 +88,11 @@ function formatDBtime($dbtime) {
 						</tr>
 					</tbody>
 				</table>
-				<a class="btn btn-primary" href="create.php?assid=<?php echo $_REQUEST['assid']; ?>" role="button">Edit Assignment</a>
+				<?php
+					if ($admin) {
+						echo '<a class="btn btn-primary" href="create.php?assid='.$_REQUEST['assid'].'" role="button">Edit Assignment</a>';
+					}
+				?>
 			</div>
 		</div>
 		<div class="row">
@@ -96,13 +100,14 @@ function formatDBtime($dbtime) {
 				<h2>Submissions</h2>
 				<?php
 				
-				$submissions = $assignment->getSubmissions();
-				
-				if (empty($submissions)) { // No submissions
-					echo "There are currently no submissions for this assignment.";
-				} else {
-					// print table head
-					echo '
+				if ($admin) { // ADMIN
+					$submissions = $assignment->getSubmissions();
+					
+					if (empty($submissions)) { // No submissions
+						echo "There are currently no submissions for this assignment.";
+					} else {
+						// print table head
+						echo '
 				<table class="table">
 					<thead>
 						<tr>
@@ -113,38 +118,41 @@ function formatDBtime($dbtime) {
 						</tr>
 					</thead>
 					<tbody>';
-				
-					foreach ($submissions as $sub) {
-						if (!$sub->isValid()) {
-							continue;
-						}
-						$reviews = $sub->getReviews();
-						$sub = &$sub->getRow();
-						
-						echo "
+					
+						foreach ($submissions as $sub) {
+							if (!$sub->isValid()) {
+								continue;
+							}
+							$reviews = $sub->getReviews();
+							$sub = &$sub->getRow();
+							
+							echo "
 						<tr>
 							<td>TODO: $sub[StudentID]</td>
 							<td>$sub[Results]</td>
 							<td>$sub[SubmitTime]</td>
 							<td>";
-						
-						if (empty($submissions)) { // No submissions
-							echo "No reviews.";
-						} else {
-							foreach ($reviews as $rev) {
-								if (!$rev->isValid()) {
-									continue;
+							
+							if (empty($submissions)) { // No submissions
+								echo "No reviews.";
+							} else {
+								foreach ($reviews as $rev) {
+									if (!$rev->isValid()) {
+										continue;
+									}
+									$rev = &$rev->getRow();
+									echo "<a href=\"#\">$rev[Comments] - $rev[text]</a><br>";
 								}
-								$rev = &$rev->getRow();
-								echo "<a href=\"#\">$rev[Comments] - $rev[text]</a><br>";
 							}
-						}
-						echo '</td>
+							echo '</td>
 						</tr>';
-					}
-					echo '
+						}
+						echo '
 					</tbody>
 				</table>';
+					}
+				} else { // STUDENT
+					
 				}
 				?>
 

@@ -162,15 +162,9 @@ function formatDBtime($dbtime) {
 						$timeUntilReview = $ReviewsDue - $CurrentTime; // Due in:
 						$timeSinceReview = $CurrentTime - $ReviewsDue; // Closed:ago
 						
-						if ($admin) {
-							echo "
+						echo "
 					<tr href=\"overview.php?assid=$asg[AssignmentID]\">
 						<td>$asg[AssignmentName]</td>";
-						} else {
-							echo "
-					<tr>
-						<td>$asg[AssignmentName]</td>"; // TODO Conisder adding hyperlink for student to view submission
-						}
 						
 						if ($CurrentTime < $OpenTime) { // Before open time
 							echo '
