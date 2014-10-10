@@ -129,7 +129,9 @@ function formatDBtime($dbtime) {
 							continue;
 						}
 						
-						array_merge($incompleteReviews, $asg->getIncompleteReviews($_SESSION['user_id']));
+						// reviewsTodo used later.
+						$reviewsTodo = $asg->getIncompleteReviews($_SESSION['user_id'])
+						array_merge($incompleteReviews, $reviewsTodo);
 						
 						$asg = &$asg->getRow();
 						
@@ -178,7 +180,7 @@ function formatDBtime($dbtime) {
 						<td>'.formatDBtime($asg['OpenTime']).'<br><i>Opened: '.seconds2human($timeSinceOpen).' ago</i></td>';
 						}
 						
-						if ($admin && $CurrentTime <= $DueTime) { // Before due time
+						if ($CurrentTime <= $DueTime) { // Before due time
 							echo '
 						<td>'.formatDBtime($asg['DueTime']).'<br><i>Due in: '.seconds2human($timeUntilDue).'</i></td>';
 						} else { // After due time
@@ -186,7 +188,7 @@ function formatDBtime($dbtime) {
 						<td>'.formatDBtime($asg['DueTime']).'<br><i>Closed: '.seconds2human($timeSinceDue).' ago</i></td>';
 						}
 						
-						if ($admin && $CurrentTime <= $ReviewsDue) { // Before reviews due time
+						if ($CurrentTime <= $ReviewsDue) { // Before reviews due time
 							echo '
 						<td>'.formatDBtime($asg['ReviewsDue']).'<br><i>Due in: '.seconds2human($timeUntilReview).'</i></td>';
 						} else { // After reviews due time
@@ -198,8 +200,9 @@ function formatDBtime($dbtime) {
 						<td>$asg[Weight]%</td>
 						<td>";
 						
+						// Status
 						if ($admin) {
-							echo 'Admin - TODO';
+							echo 'None';
 						} else if ($SubmitTime == 0 && $CurrentTime < $DueTime) { // Not Submitted
 							echo 'Not Submitted.';
 						} else if ($SubmitTime == 0) { // Overdue
@@ -210,12 +213,9 @@ function formatDBtime($dbtime) {
 							echo 'Submitted late.';
 						}
 						
-						// TODO
-						if ($admin) {
-							// none
-						} else if (true) { // Peer review not open
+						if ($CurrentTime <= $DueTime) { // Peer review not open
 							echo '<br>Peer Reviews Not Open.';
-						} else if (true) { // Peer review complete
+						} else if (count($reviewsTodo) == 0) { // Peer review complete
 							echo '<br>Peer Reviews Complete.';
 						} else { // Peer review incomplete
 							echo '<br>Peer Reviews Not Complete.';
