@@ -1,7 +1,6 @@
 <?php
 require_once 'includes/handlers.php';
 $crs = new PCRHandler();
-$_SESSION["student_id"] = 2;
 ?>
 <!DOCTYPE html>
 <html lang="en">
@@ -39,8 +38,7 @@ $_SESSION["student_id"] = 2;
 				if (empty($reviews)) { // No assignments
 					echo "All of the assignments designated to you have been reviewed. Consider stopping by the Help Center to answer some of your peers' questions.";
 				} else {
-					echo 'test';
-					// print table head
+\					// print table head
 					echo '
 					<table class="table">
 						<thead>
