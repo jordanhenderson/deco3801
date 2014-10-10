@@ -2,7 +2,6 @@
 if (session_id() == "") {
 	session_start(); // start session if not already started
 }
-
 if (!isset($_SESSION['user_id'])) {
 	header('Location: invalid.php');
 	exit(); 
@@ -110,7 +109,7 @@ class PCRHandler {
 	 * @return the Student
 	 */
 	public function getStudent() {
-		return new Review(array("StudentID"=>$_SESSION['student_id']));
+		return new Review(array("StudentID"=>$_SESSION['user_id']));
 	}
 	/**
 	 * getQuestion returns a question using the provided id.
@@ -180,17 +179,17 @@ class PCRHandler {
                         $review->fileName, $review->text, $review->reviewNum);
 	}
     
-    // /**
-    //  * getReview returns an array of all the reviews for a given submission
-    //  * @param the submission id
-    //  * @return the list of arrays
-    //  */
-    // public function getReviews($id) {
-    //     // Get submission
-    //     $submission = new Submission(array("SubmissionID"=>$id));
-    //     // Get reviews for that submission
-    //     return $submission->getReviews();
-    // }
+    /**
+     * getReview returns an array of all the reviews for a given submission
+     * @param the submission id
+     * @return the list of arrays
+     */
+    public function getReviews($id) {
+        // Get submission
+        $submission = new Submission(array("SubmissionID"=>$id));
+        // Get reviews for that submission
+        return $submission->getReviews();
+    }
 	
 	/**
 	 * uploadArchive uploads an archive to a submission

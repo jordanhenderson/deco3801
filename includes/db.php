@@ -391,9 +391,9 @@ class Submission extends PCRObject {
 			
 			$assignmentid = $this->row["AssignmentID"];
 			$this->storage_dir = "/var/www/upload/course_$courseid/assign_$assignmentid/submissions/$id/";
-			if (!file_exists($this->storage_dir)) {
-				mkdir($this->storage_dir, 0700, true);
-			}
+			// if (!file_exists($this->storage_dir)) {
+			// 	mkdir($this->storage_dir, 0700, true);
+			// }
 		}
 	}
 	
@@ -707,8 +707,7 @@ class Review extends PCRObject {
 	 */
 	public function getReviews() {
 		$arr = array();
-		$sth = $this->db->prepare("SELECT * FROM review INNER JOIN submission
-ON review.SubmissionID=submission.SubmissionID INNER JOIN Assignments ON submission.assignmentid=Assignments.assignmentid AND review.ReviewerID = ? AND Assignments.CourseID = ?");
+		$sth = $this->db->prepare("SELECT * FROM Review INNER JOIN Submission ON Review.SubmissionID=Submission.SubmissionID INNER JOIN Assignments ON Submission.assignmentid=Assignments.assignmentid AND Review.ReviewerID = ? AND Assignments.CourseID = ?");
 		$sth->execute(array($this->row["StudentID"], $_SESSION["course_id"]));
 		while ($file_row = $sth->fetch(PDO::FETCH_ASSOC)) {
 			array_push($arr, new Review($file_row));
