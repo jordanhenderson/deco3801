@@ -106,7 +106,13 @@ class PCRHandler {
 		$assignment = new Assignment(array("AssignmentID"=>$id));
 		return $assignment->getSubmission($_SESSION['user_id']);
 	}
-	
+	/**
+	 * getStudent returns the current Student.
+	 * @return the Student
+	 */
+	public function getStudent() {
+		return new Review(array("StudentID"=>$_SESSION['student_id']));
+	}
 	/**
 	 * getQuestion returns a question using the provided id.
 	 * @param id the question ID
@@ -175,17 +181,17 @@ class PCRHandler {
                         $review->fileName, $review->text, $review->reviewNum);
 	}
     
-    /**
-     * getReview returns an array of all the reviews for a given submission
-     * @param the submission id
-     * @return the list of arrays
-     */
-    public function getReviews($id) {
-        // Get submission
-        $submission = new Submission(array("SubmissionID"=>$id));
-        // Get reviews for that submission
-        return $submission->getReviews();
-    }
+    // /**
+    //  * getReview returns an array of all the reviews for a given submission
+    //  * @param the submission id
+    //  * @return the list of arrays
+    //  */
+    // public function getReviews($id) {
+    //     // Get submission
+    //     $submission = new Submission(array("SubmissionID"=>$id));
+    //     // Get reviews for that submission
+    //     return $submission->getReviews();
+    // }
 	
 	/**
 	 * uploadArchive uploads an archive to a submission

@@ -378,7 +378,7 @@ class Submission extends PCRObject {
 		}
 		return $arr;
 	}
-	
+
 	/**
 	 * addFiles iterates over the submissions' directory, recursively adding all
 	 * files within as new database objects.
@@ -435,21 +435,7 @@ class Submission extends PCRObject {
 		exec("cd $this->storage_dir && git clone https://$username:$password@$repo_url .");
 	}
 
-	/**
-	 * getReviews returns an array of reviews for a submission.
-	 * @return an array of reviews
-	 */
-	public function getReviews() {
-		$arr = array();
-		$sth = $this->db->prepare("SELECT * FROM Review WHERE SubmissionID = ?;");
-		//$sth->execute(array($this->getID()));
-        // TODO: remove hardcoding
-        $sth->execute(array('2'));
-		while ($file_row = $sth->fetch(PDO::FETCH_ASSOC)) {
-			array_push($arr, new Review($file_row));
-		}
-		return $arr;
-	}
+
     
     public function removeReview($comment) {
         // get the id of the review associated with $comment and the submission id
@@ -503,7 +489,12 @@ class Submission extends PCRObject {
         $review->commit();
         return $review;
     }
-
+    /**
+     */
+    public function getAssignmentID() {
+    	parent::Update();
+    	return $this->row["AssignmentID"];
+    }
 	public function jsonSerialize() {
 		parent::Update();
 		return $this->row;
@@ -675,7 +666,20 @@ class Review extends PCRObject {
 	public function __construct($data) {
 		parent::__construct("ReviewID", "Review", $data, 1);
 	}
-	
+		/**
+	 * getReviews returns an array of reviews for a submission.
+	 * @return an array of reviews
+	 */
+	public function getReviews() {
+		$arr = array();
+		$sth = $this->db->prepare("SELECT * FROM review INNER JOIN submission
+ON review.SubmissionID=submission.SubmissionID INNER JOIN Assignments  on submission.assignmentid=Assignments.assignmentid and review.ReviewerID = ? AND Assignments.CourseID = ?");
+		$sth->execute(array($this->row["StudentID"], $_SESSION["course_id"]));
+		while ($file_row = $sth->fetch(PDO::FETCH_ASSOC)) {
+			array_push($arr, new Review($file_row));
+		}
+		return $arr;
+	}
 	public function jsonSerialize() {
 		parent::Update();
 		if (parent::isValid()) {
