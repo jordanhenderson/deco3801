@@ -311,7 +311,7 @@ class Assignment extends PCRObject {
 	 */
 	public function getIncompleteReviews($studentid) {
 		$arr = array();
-		$sth = $this->db->prepare("SELECT * FROM Reviews WHERE AssignmentID = ? AND ReviewerID = ? AND Submitted = 0;");
+		$sth = $this->db->prepare("SELECT * FROM Review WHERE AssignmentID = ? AND ReviewerID = ? AND Submitted = 0;");
 		$sth->execute(array($this->getID(), studentid));
 		while ($file_row = $sth->fetch(PDO::FETCH_ASSOC)) {
 			array_push($arr, new Review($file_row));
