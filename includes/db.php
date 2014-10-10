@@ -312,8 +312,9 @@ class Assignment extends PCRObject {
 	public function getUnreviewedSubmissions($studentid) {
 		$arr = array();
 		// I'm sorry.
-		$sth = $this->db->prepare("SELECT * FROM Submission WHERE SubmissionID IN (SELECT SubmissionID FROM Review INNER JOIN (SELECT max(ReviewID) AS ID, SubmissionID FROM Review GROUP BY SubmissionID) ID ON ID.ID = Review.ReviewID AND AssignmentID = ? AND ReviewerID = ? AND Submitted = 0)");
-		$sth->execute(array($this->getID(), $studentid));
+		$sth = $this->db->prepare("SELECT * FROM Submission WHERE SubmissionID IN (SELECT Review.SubmissionID FROM Review INNER JOIN (SELECT max(ReviewID) AS ID, SubmissionID FROM Review GROUP BY SubmissionID) ID ON ID.ID = Review.ReviewID AND ReviewerID = ? AND Submitted = 0)");
+		// AND AssignmentID = ?
+		$sth->execute(array($studentid));
 		while ($file_row = $sth->fetch(PDO::FETCH_ASSOC)) {
 			array_push($arr, new Submission($file_row));
 		}
@@ -325,10 +326,11 @@ class Assignment extends PCRObject {
 	 * given submission.
 	 * @return an array of Review objects.
 	 */
-	public function getSubmittedReviews($submissionid) {
+	public function getSubmittedReviews() {
 		$arr = array();
-		$sth = $this->db->prepare("SELECT * FROM Review INNER JOIN (SELECT max(ReviewID) AS ID, SubmissionID FROM Review GROUP BY SubmissionID) ID ON ID.ID = Review.ReviewID AND AssignmentID = ? AND ReviewerID = ? AND Submitted = 1");
-		$sth->execute(array($this->getID(), $studentid));
+		$sth = $this->db->prepare("SELECT * FROM Review INNER JOIN (SELECT max(ReviewID) AS ID, SubmissionID FROM Review GROUP BY SubmissionID) ID ON ID.ID = Review.ReviewID AND ReviewerID = ? AND Submitted = 1");
+		// AND AssignmentID = ?
+		$sth->execute(array($studentid));
 		while ($file_row = $sth->fetch(PDO::FETCH_ASSOC)) {
 			array_push($arr, new Review($file_row));
 		}
