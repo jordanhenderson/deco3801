@@ -84,8 +84,7 @@ class PCRHandler {
 		$question->commit();
 		return $question;
 	}
-
-
+	
 	/**
 	 * getAssignment returns an assignment with the provided id.
 	 * @param id the assignment ID
