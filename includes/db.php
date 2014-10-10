@@ -305,13 +305,29 @@ class Assignment extends PCRObject {
 	}
 	
 	/**
-	 * getIncompleteReviews returns the reviews that have not been completed
-	 * for a given student.
+	 * getUnreviewedSubmissions returns the submissions that have not been
+	 * reviewed by a given student (and that were assigned to them).
+	 * @return an array of Submission objects.
+	 */
+	public function getUnreviewedSubmissions($studentid) {
+		$arr = array();
+		// I'm sorry.
+		$sth = $this->db->prepare("SELECT * FROM Submission WHERE SubmissionID IN (SELECT SubmissionID FROM Review INNER JOIN (SELECT max(ReviewID) AS ID, SubmissionID FROM Review GROUP BY SubmissionID) ID ON ID.ID = Review.ReviewID AND AssignmentID = ? AND ReviewerID = ? AND Submitted = 0)");
+		$sth->execute(array($this->getID(), $studentid));
+		while ($file_row = $sth->fetch(PDO::FETCH_ASSOC)) {
+			array_push($arr, new Submission($file_row));
+		}
+		return $arr;
+	}
+	
+	/**
+	 * getSubmittedReviews returns the reviews that have been submitted for a
+	 * given submission.
 	 * @return an array of Review objects.
 	 */
-	public function getIncompleteReviews($studentid) {
+	public function getSubmittedReviews($submissionid) {
 		$arr = array();
-		$sth = $this->db->prepare("SELECT Review.* from Review inner join (SELECT max(ReviewID) as ID, SubmissionID from Review group by SubmissionID) ID ON ID.ID = Review.ReviewID AND AssignmentID = ? AND ReviewerID = ?");
+		$sth = $this->db->prepare("SELECT * FROM Review INNER JOIN (SELECT max(ReviewID) AS ID, SubmissionID FROM Review GROUP BY SubmissionID) ID ON ID.ID = Review.ReviewID AND AssignmentID = ? AND ReviewerID = ? AND Submitted = 1");
 		$sth->execute(array($this->getID(), $studentid));
 		while ($file_row = $sth->fetch(PDO::FETCH_ASSOC)) {
 			array_push($arr, new Review($file_row));
@@ -450,14 +466,12 @@ class Submission extends PCRObject {
 		$id = $this->getID();
 		exec("cd $this->storage_dir && git clone https://$username:$password@$repo_url .");
 	}
-
-
-    
-    public function removeReview($comment) {
-        // get the id of the review associated with $comment and the submission id
-        // Create a new review out of it
-        // Delete that review
-        $arr = array();
+	
+	public function removeReview($comment) {
+		// get the id of the review associated with $comment and the submission id
+		// Create a new review out of it
+		// Delete that review
+		$arr = array();
 		$sth = $this->db->prepare("SELECT ReviewID FROM Review WHERE SubmissionID = ? AND Comments = '" . $comment . "';");
 		//$sth->execute(array($this->getID()));
 		// TODO: remove hardcoding
@@ -484,33 +498,36 @@ class Submission extends PCRObject {
 								"startLine"=>$startLine,
 								"fileName"=>$fileName,
 								"text"=>$text,
-                                "reviewNum"=>$reviewNum));
-        $review->commit();
-        return $review;
-    }
-    
-    /**
-     * editReview edits one of the reviews in the database
-     * @return the edited review
-     */
-    public function editReview($prevComment, $annotationText) {
-        $arr = array();
-        $sth = $this->db->prepare("SELECT ReviewID FROM Review WHERE SubmissionID = ? AND Comments = '" . $prevComment . "';");
-        //$sth->execute(array($this->getID()));
-        // TODO: remove hardcoding
-        $sth->execute(array('2'));
-        $file_row = $sth->fetch(PDO::FETCH_ASSOC);
-        $file_row["Comments"] = $annotationText;
-        $review = new Review($file_row);
-        $review->commit();
-        return $review;
-    }
-    /**
-     */
-    public function getAssignmentID() {
-    	parent::Update();
-    	return $this->row["AssignmentID"];
-    }
+								"reviewNum"=>$reviewNum));
+		$review->commit();
+		return $review;
+	}
+	
+	/**
+	 * editReview edits one of the reviews in the database
+	 * @return the edited review
+	 */
+	public function editReview($prevComment, $annotationText) {
+		$arr = array();
+		$sth = $this->db->prepare("SELECT ReviewID FROM Review WHERE SubmissionID = ? AND Comments = '" . $prevComment . "';");
+		//$sth->execute(array($this->getID()));
+		// TODO: remove hardcoding
+		$sth->execute(array('2'));
+		$file_row = $sth->fetch(PDO::FETCH_ASSOC);
+		$file_row["Comments"] = $annotationText;
+		$review = new Review($file_row);
+		$review->commit();
+		return $review;
+	}
+	
+	/**
+	 * Returns the assignmentID of the submission.
+	 */
+	public function getAssignmentID() {
+		parent::Update();
+		return $this->row["AssignmentID"];
+	}
+	
 	public function jsonSerialize() {
 		parent::Update();
 		return $this->row;
@@ -683,20 +700,22 @@ class Review extends PCRObject {
 	public function __construct($data) {
 		parent::__construct("ReviewID", "Review", $data, 1);
 	}
-		/**
+	
+	/**
 	 * getReviews returns an array of reviews for a submission.
 	 * @return an array of reviews
 	 */
 	public function getReviews() {
 		$arr = array();
 		$sth = $this->db->prepare("SELECT * FROM review INNER JOIN submission
-ON review.SubmissionID=submission.SubmissionID INNER JOIN Assignments  on submission.assignmentid=Assignments.assignmentid and review.ReviewerID = ? AND Assignments.CourseID = ?");
+ON review.SubmissionID=submission.SubmissionID INNER JOIN Assignments ON submission.assignmentid=Assignments.assignmentid AND review.ReviewerID = ? AND Assignments.CourseID = ?");
 		$sth->execute(array($this->row["StudentID"], $_SESSION["course_id"]));
 		while ($file_row = $sth->fetch(PDO::FETCH_ASSOC)) {
 			array_push($arr, new Review($file_row));
 		}
 		return $arr;
 	}
+	
 	public function jsonSerialize() {
 		parent::Update();
 		if (parent::isValid()) {
