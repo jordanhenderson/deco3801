@@ -224,7 +224,7 @@ abstract class PCRObject implements JsonSerializable {
 	}
 	
 	/**
-	 * Needs comment.
+	 * Pushes changes to object to database.
 	 */
 	public function commit() {
 		if ($this->id != null) {
@@ -287,12 +287,12 @@ class Assignment extends PCRObject {
 			return $this->row;
 		}
 	}
-
+	
 	/**
 	 * Returns an array of all the submissions from this assignment.
 	 * 
 	 * @return an array of all submissions with the same AssignmentID as the
-	 *		 object this was called from.
+	 * object this was called from.
 	 */
 	public function getSubmissions() {
 		$arr = array();
@@ -305,7 +305,23 @@ class Assignment extends PCRObject {
 	}
 	
 	/**
-	 * Returns the submissions from this assignment.
+	 * getIncompleteReviews returns the reviews that have not been completed
+	 * for a given student.
+	 * @return an array of Review objects.
+	 */
+	public function getIncompleteReviews($studentid) {
+		$arr = array();
+		$sth = $this->db->prepare("SELECT * FROM Reviews WHERE AssignmentID = ? AND ReviewerID = ? AND Submitted = 0;");
+		$sth->execute(array($this->getID(), studentid));
+		while ($file_row = $sth->fetch(PDO::FETCH_ASSOC)) {
+			array_push($arr, new Review($file_row));
+		}
+		return $arr;
+	}
+	
+	/**
+	 * Returns the submissions from this assignment. Should only ever be 1.
+	 * @return an array of Submission objects.
 	 */
 	public function getSubmission($studentid) {
 		$arr = array();
@@ -328,7 +344,7 @@ class File extends PCRObject  {
 	public function __construct($data) {
 		parent::__construct("FileID", "Files", $data);
 	}
-
+	
 	public function jsonSerialize() {
 		parent::Update();
 		if (parent::isValid()) {
@@ -434,7 +450,7 @@ class Submission extends PCRObject {
 		$id = $this->getID();
 		exec("cd $this->storage_dir && git clone https://$username:$password@$repo_url .");
 	}
-
+	
 	/**
 	 * getReviews returns an array of reviews for a submission.
 	 * @return an array of reviews
@@ -443,67 +459,67 @@ class Submission extends PCRObject {
 		$arr = array();
 		$sth = $this->db->prepare("SELECT * FROM Review WHERE SubmissionID = ?;");
 		//$sth->execute(array($this->getID()));
-        // TODO: remove hardcoding
-        $sth->execute(array('2'));
+		// TODO: remove hardcoding
+		$sth->execute(array('2'));
 		while ($file_row = $sth->fetch(PDO::FETCH_ASSOC)) {
 			array_push($arr, new Review($file_row));
 		}
 		return $arr;
 	}
-    
-    public function removeReview($comment) {
-        // get the id of the review associated with $comment and the submission id
-        // Create a new review out of it
-        // Delete that review
-        $arr = array();
+	
+	public function removeReview($comment) {
+		// get the id of the review associated with $comment and the submission id
+		// Create a new review out of it
+		// Delete that review
+		$arr = array();
 		$sth = $this->db->prepare("SELECT ReviewID FROM Review WHERE SubmissionID = ? AND Comments = '" . $comment . "';");
 		//$sth->execute(array($this->getID()));
-        // TODO: remove hardcoding
-        $sth->execute(array('2'));
+		// TODO: remove hardcoding
+		$sth->execute(array('2'));
 		$file_row = $sth->fetch(PDO::FETCH_ASSOC);
 		$review = new Review($file_row);
 		$review->delete();
-    }
-    
-    /**
-     * addReview adds a review to the database
-     * @return the review that was added
-     */
-    public function addReview($annotationText, $stnid, $id, $startIndex, $startLine, $fileName, $text, $reviewNum) {
-        // $this->getID() is returning empty
-        // TODO: unhardcode assignmentid and submissionid
-        echo $annotationText . "::" . $stnid . "::" . $id . "::" . $startIndex . "::" . $startLine . "::" . $fileName . "::" . $text . "::";
-        // Need to check if the review already exists and update if that's the case
-        $review = new Review(array("AssignmentID"=>'3',
-                                "SubmissionID"=>'2',
+	}
+	
+	/**
+	 * addReview adds a review to the database
+	 * @return the review that was added
+	 */
+	public function addReview($annotationText, $stnid, $id, $startIndex, $startLine, $fileName, $text, $reviewNum) {
+		// $this->getID() is returning empty
+		// TODO: unhardcode assignmentid and submissionid
+		echo $annotationText . "::" . $stnid . "::" . $id . "::" . $startIndex . "::" . $startLine . "::" . $fileName . "::" . $text . "::";
+		// Need to check if the review already exists and update if that's the case
+		$review = new Review(array("AssignmentID"=>'3',
+								"SubmissionID"=>'2',
 								"Comments"=>$annotationText,
 								"ReviewerID"=>$stnid,
 								"startIndex"=>$startIndex,
 								"startLine"=>$startLine,
 								"fileName"=>$fileName,
 								"text"=>$text,
-                                "reviewNum"=>$reviewNum));
-        $review->commit();
-        return $review;
-    }
-    
-    /**
-     * editReview edits one of the reviews in the database
-     * @return the edited review
-     */
-    public function editReview($prevComment, $annotationText) {
-        $arr = array();
-        $sth = $this->db->prepare("SELECT ReviewID FROM Review WHERE SubmissionID = ? AND Comments = '" . $prevComment . "';");
-        //$sth->execute(array($this->getID()));
-        // TODO: remove hardcoding
-        $sth->execute(array('2'));
-        $file_row = $sth->fetch(PDO::FETCH_ASSOC);
-        $file_row["Comments"] = $annotationText;
-        $review = new Review($file_row);
-        $review->commit();
-        return $review;
-    }
-
+								"reviewNum"=>$reviewNum));
+		$review->commit();
+		return $review;
+	}
+	
+	/**
+	 * editReview edits one of the reviews in the database
+	 * @return the edited review
+	 */
+	public function editReview($prevComment, $annotationText) {
+		$arr = array();
+		$sth = $this->db->prepare("SELECT ReviewID FROM Review WHERE SubmissionID = ? AND Comments = '" . $prevComment . "';");
+		//$sth->execute(array($this->getID()));
+		// TODO: remove hardcoding
+		$sth->execute(array('2'));
+		$file_row = $sth->fetch(PDO::FETCH_ASSOC);
+		$file_row["Comments"] = $annotationText;
+		$review = new Review($file_row);
+		$review->commit();
+		return $review;
+	}
+	
 	public function jsonSerialize() {
 		parent::Update();
 		return $this->row;
@@ -522,16 +538,17 @@ class Course extends PCRObject {
 	public function __construct($data) {
 		parent::__construct("CourseID", "Course", $data, 1);
 	}
-
+	
 	/**
 	 * helpEnabled returns if the help center is enabled for the current course.
+	 * @return boolean
 	 */
 	public function helpEnabled() {
 		if ($this->isValid()) {
 			return $this->row["HelpEnabled"];
 		}
 	}
-
+	
 	/**
 	 *getHelpCentreQuestions returns an array of help centre questions for the course.
 	 *@return an array containing each help centre question added to the course.
@@ -545,7 +562,7 @@ class Course extends PCRObject {
 		}
 		return $arr;
 	}
-
+	
 	/**
 	 * getAssignments returns an array of Assignment objects for the given
 	 * course, which may be further manipulated.

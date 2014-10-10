@@ -100,21 +100,11 @@ function formatDBtime($dbtime) {
 	
 	<div class="container">
 		<h1>Peer Code Review Home Page</h1>
-<?php /*
-// DEBUG & INFO
-echo '<pre style="height: 18pc; overflow-y: scroll;"><b>Context Information:</b>';
-echo $context->dump();
-echo "\n<b>POST Parameters:</b>\n";
-foreach ($_POST as $key => $value) {
-	echo "$key = $value\n";
-}
-echo "\n<b>Assignments</b>\n";
-print_r(array_values($crs->getCourse()->getAssignments()));
-echo "</pre>\n";
-*/ ?>
 		<div class="col-lg-12">
 			<h2>Assignments</h2>
 			<?php
+				$incompleteReviews = array();
+				
 				$assignments = $crs->getCourse()->getAssignments();
 				if (empty($assignments)) { // No assignments
 					echo "Currently no assignments have been released.";
@@ -138,6 +128,8 @@ echo "</pre>\n";
 						if (!$asg->isValid()) {
 							continue;
 						}
+						
+						array_merge($incompleteReviews, $asg->getIncompleteReviews($_SESSION['user_id']));
 						
 						$asg = &$asg->getRow();
 						
@@ -219,7 +211,9 @@ echo "</pre>\n";
 						}
 						
 						// TODO
-						if (true) { // Peer review not open
+						if ($admin) {
+							// none
+						} else if (true) { // Peer review not open
 							echo '<br>Peer Reviews Not Open.';
 						} else if (true) { // Peer review complete
 							echo '<br>Peer Reviews Complete.';
@@ -247,11 +241,11 @@ echo "</pre>\n";
 			<?php
 			if ($admin) {
 				// teacher still has the option to review submissions. Count ALL submissions.
-				echo '<p>There are currently '.'3'.' student submitted assignments that have not recieved a teacher review. If no teacher input is required, then these can be dismissed at any time, either individually or per assignment.</p>
+				echo '<p>There are currently '.'TODO'.' student submitted assignments that have not recieved a teacher review. If no teacher input is required, then these can be dismissed at any time, either individually or per assignment.</p>
 			<p><a class="btn btn-info" href="reviewhub.php" role="button">Review Assignments &raquo;</a></p>';
-			} else if (mt_rand(0, 1)) { // reviews need marking
+			} else if (count($incompleteReviews) > 0) { // reviews need marking
 				//TODO ^ Actually decide this at some point
-				echo '<p>There are '.'3'.' submissions ready for reviewing. Please take the time to assist your peers by offering suggestions and improvements.</p>
+				echo '<p>There are '.count($incompleteReviews).' submissions ready for reviewing. Please take the time to assist your peers by offering suggestions and improvements.</p>
 			<p><a class="btn btn-warning" href="reviewhub.php" role="button">Start Now &raquo;</a></p>';
 			} else { // no reviews to mark
 				echo '<p>All your assigned submissions to date have already been reviewed. However, if you would like to further assist your peers, consider stopping by the Help Center to answer some of your peers\' questions.</p>
