@@ -212,7 +212,7 @@ function formatDBtime($dbtime) {
 						} else if (count($reviewsTodo) == 0) { // Peer review complete
 							echo '<br>Peer Reviews Complete.';
 						} else { // Peer review incomplete
-							echo '<br>Peer Reviews Not Complete.';
+							echo '<br>Peer Reviews Not Complete ('.count($reviewsTodo).' left).';
 						}
 						
 						echo '</td>
