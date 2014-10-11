@@ -3,11 +3,28 @@
 require_once 'includes/handlers.php';
 //Initialise the PCRHandler
 $crs = new PCRHandler();
+// Get the owner of the submission from the url
+
+// Check who is accessing the page (submission owner or reviewer)
+if ($_SESSION['user_id'] == '2') {
+	// Load all reviews made for the submission for viewing
+	$reviews = $crs->getReviews('2');
+} else {
+	// Load only the reviews for the current reviewer
+	$reviews = $crs->getStudent()->getReviews();
+}
 // hardcoding 2 for the time being
-$reviews = $crs->getReviews('2');
+
 $annotations = array();
 foreach ($reviews as &$review) {
-    array_push($annotations, $review->getRow());
+	/*
+	 * push review into the array if the submission id of the 
+	 * review matches the current submission
+	 */
+	$row = $review->getRow();
+	if ($row->SubmissionID == '2') {
+		array_push($annotations, $row);
+	}
 }
 
 echo $_SESSION['user_id'];

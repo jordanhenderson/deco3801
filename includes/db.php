@@ -473,7 +473,8 @@ class Submission extends PCRObject {
 	 * NOTE
 	 * Please don't change where this is. It will break the review page.
 	 *
-	 * getReviews returns an array of reviews for a submission.
+	 * getReviews returns an array of all the reviews by all students 
+	 * for a submission.
 	 * @return an array of reviews
 	 */
 	public function getReviews() {
@@ -721,7 +722,7 @@ class Review extends PCRObject {
 	}
 	
 	/**
-	 * getReviews returns an array of reviews for a submission.
+	 * getReviews returns an array of reviews for a user.
 	 * @return an array of reviews
 	 */
 	public function getReviews() {
