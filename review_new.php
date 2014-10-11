@@ -9,7 +9,6 @@ $annotations = array();
 foreach ($reviews as &$review) {
     array_push($annotations, $review->getRow());
 }
-echo "<pre>"; print_r($annotations); echo "</pre>";
 ?>
 <!DOCTYPE html>
 <html lang="en">
@@ -123,7 +122,6 @@ echo "<pre>"; print_r($annotations); echo "</pre>";
                         var textArr = text.split('\n');
                         endIndex = textArr[textArr.length-1].length;
                     }
-                    alert(endLine + "::" + wordArray[endLine] + "::" + annotations[i].Comments);
                     wordArray[line] = wordArray[line].slice(0,index) + spanString + wordArray[line].slice(index,wordArray[line].length);
                     wordArray[endLine] = wordArray[endLine].slice(0,endIndex) + "</span>" + wordArray[endLine].slice(endIndex, wordArray[endLine].length); 
                     $('#reviews').append('<div id="review' + count + '" class="reviewContainer"><div id="reviewControls' + count + '"><a class="delete_btn" href="#" onclick="clearReview(' + count + ')" role="button" id="delete' + count + '"></a><a class="edit_btn" href="#" onclick="editAnnotation(' + count + ')" role="button" id="edit' + count + '"></a></div><br><textarea class="reviewContent" rows="2" cols="32" id="textarea' + count + '" readonly="true">'+ annotations[i].Comments + '</textarea></br><a class="cancel_btn" href="#" onclick="cancelEdit(' + count + ')" role="button" id="cancel' + count + '" style="display:none;">Cancel</a><a class="save_btn" href="#" onclick="getContents(' + count + ')" role="button" id="save' + count + '" style="display:none">Save</a></div>');
@@ -205,7 +203,6 @@ echo "<pre>"; print_r($annotations); echo "</pre>";
 			})
 			  .done(function( retval ) {
                 alert("Your comments have been saved! Woohoo!");
-                alert(retval);
                 for (var i=0; i < annotations.length; i++) {
                     if(annotations[i].status == 'd') {
                         annotations.splice(i, 1);
@@ -254,7 +251,7 @@ echo "<pre>"; print_r($annotations); echo "</pre>";
 				$( "#file_heading" ).html( id );
 				// remove previous annotations and add the new ones
 				$('#reviews').html('');
-				getContents();
+				getComments();
 			});	  
             
 		}
