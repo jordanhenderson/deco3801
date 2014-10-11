@@ -35,7 +35,6 @@
         this.context = element;
         this.$context = $(element);
         this.options = $.extend({}, $[plugin.name].defaults, options);
-        console.log(this.options);
         this.init();
     }
 
@@ -511,7 +510,6 @@
          * Returns HTML element to wrap selected text in.
          */
         createWrapper: function(options) {
-            console.log(options.id);
             return $('<span id="span'+ options.id +'"></span>')
                 .css('backgroundColor', options.color)
                 .addClass(options.highlightedClass);

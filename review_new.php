@@ -97,12 +97,12 @@ echo "<pre>"; print_r($annotations); echo "</pre>";
         }
         
         function getComments() {
-			alert("running");
             var innerContents = $('#assignment_code').html();
             var wordArray = innerContents.split('\n');
             for(var i=0; i < annotations.length; i++) {
 				// hard coding ReviewerID to be 2 for the time being
-                if (annotations[i].fileName == $( "#file_heading" ).html() && annotations[i].ReviewerID == 2) {
+				// && annotations[i].ReviewerID == '2'
+                if (annotations[i].fileName == $( "#file_heading" ).html() ) {
                     var index = parseInt(annotations[i].startIndex);
                     var line = parseInt(annotations[i].startLine);
                     var text = annotations[i].text;
@@ -184,13 +184,13 @@ echo "<pre>"; print_r($annotations); echo "</pre>";
 		 * the positions. These arrays are then sent via POST
 		 * to get saved in the database.
 		 *
-		 * This will likely change to become simpler
+		 * This will definitely change to become simpler
 		 */
 		function saveReviews() {
             var startIndex;
             var size = 0;
             $('#assignment_code span').each(function( index, element ) {
-                if ($(element).hasClass('annotator-hl')) {
+                if ($(element).hasClass('highlighted')) {
                     $(element).addClass( 'span' + index );
                     size++;
                     for (var i=0; i < annotations.length; i++) {
@@ -205,7 +205,7 @@ echo "<pre>"; print_r($annotations); echo "</pre>";
             var wordArray = innerContents.split('\n');
             for (var i=0; i < size; i++) {
                 for (var j=0; j < wordArray.length; j++) {
-                    startIndex = wordArray[j].indexOf('<span class="annotator-hl span' + i + '">');
+                    startIndex = wordArray[j].indexOf('<span id="span' + i + '">');
                     if (startIndex >= 0) {
                         for (var k=0; k < annotations.length; k++) {
                             if (annotations[k].reviewNum === i) {
