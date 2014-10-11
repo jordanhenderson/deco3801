@@ -273,6 +273,9 @@ echo "<pre>"; print_r($annotations); echo "</pre>";
 			  .done(function( filecode ) {
 				$( "#assignment_code" ).html( filecode );
 				$( "#file_heading" ).html( id );
+				// remove previous annotations and add the new ones
+				$('#reviews').html('');
+				getContents();
 			});	  
             
 		}
