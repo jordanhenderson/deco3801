@@ -5,7 +5,7 @@ require_once 'includes/handlers.php';
 $crs = new PCRHandler();
 // Get the submissionID from the url
 //$subID = $_GET['subid'];
-$subID = 2;
+$subID = '2';
 // Get the owner of the submission
 $owner = $crs->getSubmissionOwner($subID);
 echo $owner . "::";

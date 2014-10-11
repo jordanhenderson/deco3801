@@ -106,7 +106,7 @@ class PCRHandler {
 	}
 	
 	public function getSubmissionOwner($id) {
-		$submission = getSubmission($id);
+		$submission = $this->getSubmission($id);
 		return $submission->getOwner();
 	}
 	/**
