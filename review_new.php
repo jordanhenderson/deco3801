@@ -7,10 +7,7 @@ $crs = new PCRHandler();
 $reviews = $crs->getReviews('2');
 $annotations = array();
 foreach ($reviews as &$review) {
-	// add status to mark as already in database
-	$review['status'] = 'o';
     array_push($annotations, $review->getRow());
-	
 }
 echo "<pre>"; print_r($annotations); echo "</pre>";
 ?>
@@ -124,6 +121,8 @@ echo "<pre>"; print_r($annotations); echo "</pre>";
                         var textArr = text.split('\n');
                         endIndex = textArr[textArr.length-1].length;
                     }
+					// add status to mark as already in database
+					annotations[i].status = 'o';
                     alert(endLine + "::" + wordArray[endLine] + "::" + annotations[i].Comments);
                     wordArray[line] = wordArray[line].slice(0,index) + spanString + wordArray[line].slice(index,wordArray[line].length);
                     wordArray[endLine] = wordArray[endLine].slice(0,endIndex) + "</span>" + wordArray[endLine].slice(endIndex, wordArray[endLine].length); 
