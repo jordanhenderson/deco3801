@@ -104,6 +104,11 @@ class PCRHandler {
 		$assignment = new Assignment(array("AssignmentID"=>$id));
 		return $assignment->getSubmission($_SESSION['user_id']);
 	}
+	
+	public function getSubmissionOwner($id) {
+		$submission = getSubmission($id);
+		return $submission->getOwner();
+	}
 	/**
 	 * getStudent returns the current Student.
 	 * @return the Student
