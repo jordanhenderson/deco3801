@@ -136,9 +136,9 @@ class PCRHandler {
         $reviews = json_decode($reviews);
         foreach ($reviews as $review) {
             if ($review->status == 'd') { 
-                $this->removeReview($review->comment, $_SESSION['id']);
+                $this->removeReview($review->Comments, $review->SubmissionID);
             } elseif ($review->status == 'e') { 
-                $this->editReview($review->prevComment, $review->comment, $review->subid);
+                $this->editReview($review->prevComment, $review->Comments, $review->SubmissionID);
             } elseif ($review->status == 'n') { 
                 $this->addReview($review);
             }
@@ -174,9 +174,9 @@ class PCRHandler {
         // Get the submission for the student you are submitting a review for
         $submission = new Submission(array("SubmissionID"=>$review->subid));
         // Then add the review to the database
-        return $submission->addReview($review->comment, $_SESSION['user_id'], 
+        return $submission->addReview($review->Comments, $_SESSION['user_id'], 
                         $_SESSION['id'], $review->startIndex, $review->startLine, 
-                        $review->fileName, $review->text, $review->reviewNum);
+                        $review->fileName, $review->text);
 	}
     
     /**
