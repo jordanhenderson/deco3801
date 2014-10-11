@@ -107,6 +107,8 @@ echo "<pre>"; print_r($annotations); echo "</pre>";
             var innerContents = $('#assignment_code').html();
             var wordArray = innerContents.split('\n');
             for(var i=0; i < annotations.length; i++) {
+				// add status to mark as already in database
+				annotations[i].status = 'o';
 				// hard coding ReviewerID to be 2 for the time being
 				// && annotations[i].ReviewerID == '2'
                 if (annotations[i].fileName == $( "#file_heading" ).html() ) {
@@ -121,8 +123,6 @@ echo "<pre>"; print_r($annotations); echo "</pre>";
                         var textArr = text.split('\n');
                         endIndex = textArr[textArr.length-1].length;
                     }
-					// add status to mark as already in database
-					annotations[i].status = 'o';
                     alert(endLine + "::" + wordArray[endLine] + "::" + annotations[i].Comments);
                     wordArray[line] = wordArray[line].slice(0,index) + spanString + wordArray[line].slice(index,wordArray[line].length);
                     wordArray[endLine] = wordArray[endLine].slice(0,endIndex) + "</span>" + wordArray[endLine].slice(endIndex, wordArray[endLine].length); 
