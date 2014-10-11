@@ -36,9 +36,6 @@ echo "<pre>"; print_r($annotations); echo "</pre>";
 	<!-- JQuery text highlighter library -->
 	<script type="text/javascript" src="js/jquery.textHighlighter.js"></script>
 	
-	<!-- Annotator -->
-	<script src="js/annotator-full.min.js"></script> 
-	<link rel="stylesheet" type="text/css" href="css/annotator.min.css">
 
 	<script>
 		var annotations = [];
@@ -48,7 +45,8 @@ echo "<pre>"; print_r($annotations); echo "</pre>";
 		var prevReview = [];
 		var count = 0;
         
-        $(window).load(function() {            
+        $(window).load(function() {
+			getComments();
             $( "#createComment" ).click(function() {
 				$('#reviews').append('<div id="review' + count + '" class="reviewContainer"><div id="reviewControls' + count + '" style="display:none"><a class="delete_btn" href="#" onclick="clearReview(' + count + ')" role="button" id="delete' + count + '"></a><a class="edit_btn" href="#" onclick="editAnnotation(' + count + ')" role="button" id="edit' + count + '"></a></div><br><textarea class="reviewContent" rows="2" cols="32" id="textarea' + count + '"></textarea></br><a class="cancel_btn" href="#" onclick="clearReview(' + count + ')" role="button" id="cancel' + count + '">Cancel</a><a class="save_btn" href="#" onclick="getContents(' + count + ')" role="button" id="save' + count + '">Save</a></div>');
 				$('#createComment').hide();
@@ -98,7 +96,8 @@ echo "<pre>"; print_r($annotations); echo "</pre>";
 			edit = -1;
         }
         
-        $(function getComments() {
+        function getComments() {
+			alert("running");
             var innerContents = $('#assignment_code').html();
             var wordArray = innerContents.split('\n');
             for(var i=0; i < annotations.length; i++) {
@@ -123,7 +122,7 @@ echo "<pre>"; print_r($annotations); echo "</pre>";
                 }
             }
             $('#assignment_code').html(wordArray.join('\n'));
-        });
+        }
         
         /*
         Get the users comment/review and store it and the position of the review in
@@ -359,7 +358,6 @@ echo "<pre>"; print_r($annotations); echo "</pre>";
 	<!-- JQuery text highlighter library setup code -->
 	<script type="text/javascript" id="snippet-source">
 		function setupHighlighter() {
-			alert(count);
 			$('#assignment_code').textHighlighter({
 				onAfterHighlight: function(highlights, range) {
 					$('#createComment').trigger("click");

@@ -62,7 +62,7 @@ textarea#content, textarea#comment {
 
 .edit_btn{
         display:block;
-        background-image: url('css/img/edit-icon3.png');
+        background-image: url('img/edit-icon3.png');
         background-size: contain;
         width: 15px !important;
         height:15px !important;
@@ -73,14 +73,14 @@ textarea#content, textarea#comment {
     }
     .delete_btn{
         display:block;
-        background-image: url('css/img/editing-delete-icon.png');
+        background-image: url('img/editing-delete-icon.png');
         background-size: contain;
         width: 15px !important;
         height:15px !important;
         float:right;
         margin: 3px;
     }
-    textarea {
+    .reviewContainer textarea {
         resize: none;
         margin-top:10px;
         margin-left:15px;
