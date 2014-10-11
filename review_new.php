@@ -6,8 +6,11 @@ $crs = new PCRHandler();
 // hardcoding 2 for the time being
 $reviews = $crs->getReviews('2');
 $annotations = array();
-foreach ($reviews as $review) {
+foreach ($reviews as &$review) {
+	// add status to mark as already in database
+	$review['status'] = 'o';
     array_push($annotations, $review->getRow());
+	
 }
 echo "<pre>"; print_r($annotations); echo "</pre>";
 ?>
@@ -40,32 +43,32 @@ echo "<pre>"; print_r($annotations); echo "</pre>";
 	<script>
 		var annotations = [];
         var annotations = <?php echo json_encode($annotations); ?>;
-        var selected;
         var edit = -1;
+		var selected;
 		var prevReview = [];
 		var count = 0;
-        
-        $(window).load(function() {
-			getComments();
-            $( "#createComment" ).click(function() {
-				$('#reviews').append('<div id="review' + count + '" class="reviewContainer"><div id="reviewControls' + count + '" style="display:none"><a class="delete_btn" href="#" onclick="clearReview(' + count + ')" role="button" id="delete' + count + '"></a><a class="edit_btn" href="#" onclick="editAnnotation(' + count + ')" role="button" id="edit' + count + '"></a></div><br><textarea class="reviewContent" rows="2" cols="32" id="textarea' + count + '"></textarea></br><a class="cancel_btn" href="#" onclick="clearReview(' + count + ')" role="button" id="cancel' + count + '">Cancel</a><a class="save_btn" href="#" onclick="getContents(' + count + ')" role="button" id="save' + count + '">Save</a></div>');
-				$('#createComment').hide();
-				$('#assignment_code').getHighlighter().destroy();
-            });
-        });
+
+		/**
+		 *
+		 *
+		 */
+		function createReview() {
+			$('#reviews').append('<div id="review' + count + '" class="reviewContainer"><div id="reviewControls' + count + '" style="display:none"><a class="delete_btn" href="#" onclick="clearReview(' + count + ')" role="button" id="delete' + count + '"></a><a class="edit_btn" href="#" onclick="editAnnotation(' + count + ')" role="button" id="edit' + count + '"></a></div><br><textarea class="reviewContent" rows="2" cols="32" id="textarea' + count + '"></textarea></br><a class="cancel_btn" href="#" onclick="clearReview(' + count + ')" role="button" id="cancel' + count + '">Cancel</a><a class="save_btn" href="#" onclick="getContents(' + count + ')" role="button" id="save' + count + '">Save</a></div>');
+			$('#assignment_code').getHighlighter().destroy();
+		}
 		
-		/*
+		/**
         * Run when the user clicks the x button in the annotation window
         * Finds the corresponding annotation and deletes it from the array
         * using the array splice method
         */
-        function clearReview(num) {
+        function clearReview(id) {
             //fix when reviewnum sorted
-            var comment = $('#textarea' + num).val();
+            var comment = $('#textarea' + id).val();
             for(var i=0; i < annotations.length; i++) {
-                if(annotations[i].comment == comment) {
+                if(annotations[i].Comments == comment) {
                     // Check if the review hasn't been saved to the database
-                    if (annotations[i].reviewNum === undefined) {
+                    if (annotations[i].status != 'o') {
                         annotations.splice(i, 1);
                         break;
                     }
@@ -74,28 +77,35 @@ echo "<pre>"; print_r($annotations); echo "</pre>";
                     break;
                 }
             }
-            if (num == count-1) {
+			// This is the last review created, so decrement count
+            if (id == count-1) {
                 count = count - 1;
             }
+			// want to destroy and recreate to update the id (count)
             if ($('#assignment_code').getHighlighter() !== undefined) {
                 $('#assignment_code').getHighlighter().destroy();
             }
             setupHighlighter();
-            $('#review' + num).remove();
-            $('#assignment_code').getHighlighter().removeHighlights($('#span' + num));
-            // remove the highlight
+            $('#review' + id).remove();
+			// remove the highlight
+            $('#assignment_code').getHighlighter().removeHighlights($('#span' + id));
         }
         
+		/**
+		 *
+		 *
+		 */
         function cancelEdit(id) {
             $('#textarea' + id).val(prevReview[id]);
             // show/hide things
-            $('#textarea' + id).attr('readonly', true);
-            $('#save' + id).hide();
-            $('#cancel' + id).hide();
-            $('#reviewControls' + id).show();
+            reviewContainerOriginalDisplay(id);
 			edit = -1;
         }
         
+		/**
+		 *
+		 *
+		 */
         function getComments() {
             var innerContents = $('#assignment_code').html();
             var wordArray = innerContents.split('\n');
@@ -124,20 +134,6 @@ echo "<pre>"; print_r($annotations); echo "</pre>";
             $('#assignment_code').html(wordArray.join('\n'));
         }
         
-        /*
-        Get the users comment/review and store it and the position of the review in
-        the database
-        
-        TODO: remove alert once testing is complete and need to store submission
-        ID and permissions
-        */
-        function getHighlighted() {
-            selected = window.getSelection().toString();
-            selected = selected.replace(/</g, "&lt;");
-            selected = selected.replace(/>/g, "&gt;");
-            edit = -1;
-        }
-        
 		/**
 		 * Gets the contents of the review when they click
 		 * the save button in the review box and stores it in an array
@@ -145,7 +141,6 @@ echo "<pre>"; print_r($annotations); echo "</pre>";
 		 */
         function getContents(id) {
             var comment = $('#textarea'+id).val();
-            alert(comment);
             // add code to make sure the comment is unique
             for(var i=0; i < annotations.length; i++) {
                 if (comment == annotations[i].comment) {
@@ -153,32 +148,48 @@ echo "<pre>"; print_r($annotations); echo "</pre>";
                     return;
                 }
             }
+			$('#cancel' + id).attr('onclick', 'cancelEdit(' + id + ')');
+			reviewContainerOriginalDisplay(id);
             if (edit >= 0) {
                 if (annotations[edit].prevComment === undefined) {
-                    annotations[edit].prevComment = annotations[edit].comment;
+                    annotations[edit].prevComment = annotations[edit].Comments;
                 }
-                annotations[edit].comment = comment;
-                if (annotations[edit].reviewNum !== undefined) {
+                annotations[edit].Comments = comment;
+                if (annotations[edit].status == 'o') {
                     annotations[edit].status = 'e';
                 }
                 edit = -1;
-				$('#textarea'+id).attr('readonly', true);
-				$('#save' + id).hide();
-				$('#cancel' + id).attr('onclick', 'cancelEdit(' + id + ')');
-				$('#cancel' + id).hide();
-				$('#reviewControls' + id).show();
                 return;
             }
-            annotations.push({"comment":comment, "text":selected, "status":'n'});
+			var innerContents = $('#assignment_code').html();
+			var wordArray = innerContents.split('\n');
+			var startIndex;
+			var startLine;
+			for (var i = 0; i < wordArray.length; i++) {
+				// Find the line the comment starts on
+				startIndex = wordArray[i].indexOf('id="span' + id + '"');
+				if (startIndex >= 0) {
+					startLine = i;
+					break;
+				}
+			}
+            annotations.push({"Comments":comment, "text":selected, "status":'n', "startLine":startLine, "startIndex":startIndex, "fileName":$( "#file_heading" ).html()});
             count = count + 1;
-            $('#textarea'+id).attr('readonly', true);
-            $('#save' + id).hide();
-            $('#cancel' + id).attr('onclick', 'cancelEdit(' + id + ')');
-            $('#cancel' + id).hide();
-            $('#reviewControls' + id).show();
             setupHighlighter();
         }
         
+		/**
+		 *
+		 *
+		 */
+		function reviewContainerOriginalDisplay(id) {
+			$('#textarea'+id).attr('readonly', true);
+            $('#save' + id).hide();
+            
+            $('#cancel' + id).hide();
+            $('#reviewControls' + id).show();
+		}
+		
         /**
 		 * Gets the reviews from the array and loops through to get
 		 * the positions. These arrays are then sent via POST
@@ -187,39 +198,6 @@ echo "<pre>"; print_r($annotations); echo "</pre>";
 		 * This will definitely change to become simpler
 		 */
 		function saveReviews() {
-            var startIndex;
-            var size = 0;
-            $('#assignment_code span').each(function( index, element ) {
-                if ($(element).hasClass('highlighted')) {
-                    $(element).addClass( 'span' + index );
-                    size++;
-                    for (var i=0; i < annotations.length; i++) {
-                        if (annotations[i].text === $(element).html() && annotations[i].reviewNum === undefined) {
-                            annotations[i].reviewNum = index;
-                            break;
-                        }
-                    }
-                }                   
-            });
-            var innerContents = $('#assignment_code').html();
-            var wordArray = innerContents.split('\n');
-            for (var i=0; i < size; i++) {
-                for (var j=0; j < wordArray.length; j++) {
-                    startIndex = wordArray[j].indexOf('<span id="span' + i + '">');
-                    if (startIndex >= 0) {
-                        for (var k=0; k < annotations.length; k++) {
-                            if (annotations[k].reviewNum === i) {
-                                annotations[k].startIndex = startIndex;
-                                annotations[k].startLine = j;
-                                annotations[k].fileName = $( "#file_heading" ).html();
-                                break;
-                            }
-                        }                        
-                        break;
-                    }  
-
-                }
-            }
             alert(JSON.stringify(annotations));
             //AJAX call to store the review in the database
             $.ajax({
@@ -241,7 +219,7 @@ echo "<pre>"; print_r($annotations); echo "</pre>";
             
         }
         
-        /*
+        /**
          * Function to mark a comment as being modified.
          * Code is nearly identical to delete, so will integrate
          */
@@ -260,9 +238,11 @@ echo "<pre>"; print_r($annotations); echo "</pre>";
             }
         }
 		
-		//Handles when someone clicks on the file tree
+		/**
+		 * Handles when someone clicks on the file tree
+		 *
+		 */
 		function handleSwap(id) {
-            annotations = [];
 			$('a.active').removeClass('active');
 			$('#' + id.split('.')[0]).addClass('active');
 			//Loads the selected file into the main content area using AJAX
@@ -330,7 +310,6 @@ echo "<pre>"; print_r($annotations); echo "</pre>";
 			<div class="col-md-12">
 				<h2 id="file_heading">assign1_additional.cpp</h2>
 				<div id="innercontainer">
-					<button id="createComment" style="display:none;">Make Comment Dude!</button></br>
                     <pre id='assignment_code' style="float:left"><?php
                     /*
                     Loads the first file in the file tree if its not empty
@@ -363,16 +342,18 @@ echo "<pre>"; print_r($annotations); echo "</pre>";
 		function setupHighlighter() {
 			$('#assignment_code').textHighlighter({
 				onAfterHighlight: function(highlights, range) {
-					$('#createComment').trigger("click");
+					createReview();
 					highlights.id = 'span' + count;
+					selected = range.toString();
 				},
 				id: count
 			});
 		}
 		
-		  $(document).ready(function() {
-			  setupHighlighter();
-		  });
+		$(document).ready(function() {
+			getComments();
+			setupHighlighter();
+		});
     </script>
 	<!-- Bootstrap Core JavaScript -->
 	<script src="js/bootstrap.min.js"></script>
