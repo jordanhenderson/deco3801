@@ -469,6 +469,25 @@ class Submission extends PCRObject {
 		exec("cd $this->storage_dir && git clone https://$username:$password@$repo_url .");
 	}
 	
+	/**
+	 * NOTE
+	 * Please don't change where this is. It will break the review page.
+	 *
+	 * getReviews returns an array of reviews for a submission.
+	 * @return an array of reviews
+	 */
+	public function getReviews() {
+		$arr = array();
+		$sth = $this->db->prepare("SELECT * FROM Review WHERE SubmissionID = ?;");
+		//$sth->execute(array($this->getID()));
+        // TODO: remove hardcoding
+        $sth->execute(array('2'));
+		while ($file_row = $sth->fetch(PDO::FETCH_ASSOC)) {
+			array_push($arr, new Review($file_row));
+		}
+		return $arr;
+	}
+	
 	public function removeReview($comment) {
 		// get the id of the review associated with $comment and the submission id
 		// Create a new review out of it
