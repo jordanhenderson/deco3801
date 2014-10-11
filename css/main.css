@@ -59,3 +59,80 @@ textarea#content, textarea#comment {
 	cursor: inherit;
 	display: block;
 }
+
+.edit_btn{
+        display:block;
+        background-image: url('css/img/edit-icon3.png');
+        background-size: contain;
+        width: 15px !important;
+        height:15px !important;
+        float:right;
+		
+        margin: 3px;
+        font-weight: 2em;
+    }
+    .delete_btn{
+        display:block;
+        background-image: url('css/img/editing-delete-icon.png');
+        background-size: contain;
+        width: 15px !important;
+        height:15px !important;
+        float:right;
+        margin: 3px;
+    }
+    textarea {
+        resize: none;
+        margin-top:10px;
+        margin-left:15px;
+		margin-bottom: 3px;
+        border: none;
+        background: #fff;
+        color: #333;
+        border: 1px solid #ccc;
+		font-size: 8pt;
+    }
+	.cancel_btn, .save_btn{
+		background: #ec971f;
+		padding: 5px;
+		font-size: 9pt;
+		color: #fff;
+		border-radius: 4px;
+	}
+	.cancel_btn{
+		background: #ec971f;
+		margin-left:15px;
+		margin-right: 2px;
+	}
+	.save_btn{
+		background: #31b0d5;
+	}
+	.cancel_btn:hover, .save_btn:hover{
+		text-decoration: none;
+		color: #fff;
+	}
+  .reviewContainer{
+    position: relative;
+    width: 215px;
+    height: 105px;
+    padding: 0px;
+    background: #f5f5f5;
+    -webkit-border-radius: 5px;
+    -moz-border-radius: 5px;
+    border-radius: 5px;
+	margin-top: 5px;
+	border: 1px solid #ccc;
+	box-shadow: 1px 1px 5px rgba(0,0,0,.2);
+}
+
+  .reviewContainer:after  {
+      content: "";
+    position: absolute;
+    top: 7px;
+    left: -25px;
+    border-style: solid;
+    border-width: 7px 25px 7px 0;
+    border-color: transparent #CCCCCC;
+    display: block;
+    width: 0;
+    z-index: 1;
+}
