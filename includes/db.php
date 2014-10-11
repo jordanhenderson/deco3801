@@ -506,10 +506,10 @@ class Submission extends PCRObject {
 	 * addReview adds a review to the database
 	 * @return the review that was added
 	 */
-	public function addReview($annotationText, $stnid, $id, $startIndex, $startLine, $fileName, $text) {
+	public function addReview($annotationText, $stnid, $startIndex, $startLine, $fileName, $text) {
 		// $this->getID() is returning empty
 		// TODO: unhardcode assignmentid and submissionid
-		echo $annotationText . "::" . $stnid . "::" . $id . "::" . $startIndex . "::" . $startLine . "::" . $fileName . "::" . $text . "--";
+		echo $annotationText . "::" . $stnid . "::" . $startIndex . "::" . $startLine . "::" . $fileName . "::" . $text . "--";
 		// Need to check if the review already exists and update if that's the case
 		$review = new Review(array("SubmissionID"=>'2',
 								"Comments"=>$annotationText,

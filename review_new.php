@@ -9,6 +9,9 @@ $annotations = array();
 foreach ($reviews as &$review) {
     array_push($annotations, $review->getRow());
 }
+
+echo $_SESSION['user_id'];
+echo "::" . $_SESSION['userfullname'];
 ?>
 <!DOCTYPE html>
 <html lang="en">
@@ -182,7 +185,6 @@ foreach ($reviews as &$review) {
 		function reviewContainerOriginalDisplay(id) {
 			$('#textarea'+id).attr('readonly', true);
             $('#save' + id).hide();
-            
             $('#cancel' + id).hide();
             $('#reviewControls' + id).show();
 		}
@@ -196,13 +198,10 @@ foreach ($reviews as &$review) {
 		 */
 		function saveReviews() {
             alert(JSON.stringify(annotations));
-            //AJAX call to store the review in the database
-            $.ajax({
-			  url: "storeData_dev.php?reviews="+JSON.stringify(annotations),
-			  type: "POST"
-			})
-			  .done(function( retval ) {
-                alert("Your comments have been saved! Woohoo!");
+			//AJAX call to store the review in the database
+			var request = {f: 'saveReviews', params:  [JSON.stringify(annotations)]};
+			$.post("api.php", JSON.stringify(request), function() {
+				alert("Your comments have been saved for later!");
                 for (var i=0; i < annotations.length; i++) {
                     if(annotations[i].status == 'd') {
                         annotations.splice(i, 1);
@@ -211,9 +210,16 @@ foreach ($reviews as &$review) {
                         annotations[i].prevComment = undefined;
                     }
                 }
-            });
-            
+			});
         }
+		
+		/**
+		 * Placeholder for submitting reviews function
+		 *
+		 */
+		function submitReviews() {
+		
+		}
         
         /**
          * Function to mark a comment as being modified.
@@ -326,7 +332,6 @@ foreach ($reviews as &$review) {
 				<p style="float:left;clear:left;">
 					<a class="btn btn-primary" href="reviewhub.php" role="button">Submit</a>
 					<a class="btn btn-info" href="#" onclick="saveReviews()" role="button">Save</a>
-					<a class="btn btn-warning" href="#" role="button">Reset</a>
 					<a class="btn btn-warning" href="reviewhub.php" role="button">Close</a>
 				</p>
 			</div>
