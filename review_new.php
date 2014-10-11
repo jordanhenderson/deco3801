@@ -356,9 +356,6 @@ echo "<pre>"; print_r($annotations); echo "</pre>";
 		</div>
 	</div>
 	
-	<!-- jQuery Version 1.11.0 -->
-	<script src="js/jquery-1.11.0.js"></script>
-	
 	<!-- JQuery text highlighter library setup code -->
 	<script type="text/javascript" id="snippet-source">
 		function setupHighlighter() {
