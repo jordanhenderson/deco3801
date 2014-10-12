@@ -556,6 +556,7 @@ class Submission extends PCRObject {
 	 * Returns the assignmentID of the submission.
 	 */
 	public function getAssignmentID() {
+		echo "subid:" . $this->getID();
 		parent::Update();
 		return $this->row["AssignmentID"];
 	}

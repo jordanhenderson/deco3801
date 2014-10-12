@@ -7,6 +7,10 @@ $crs = new PCRHandler();
 $subID = $_GET['subid'];
 $courseid = $_SESSION['course_id'];
 $assignid = $crs->getSubmission($subID)->getAssignmentID();
+if (intval($assignid) == 0) {
+	echo ":(";
+	$assignid = '00003';
+}
 //$subID = '2';
 // Get the owner of the submission
 $submission = $crs->getSubmission($subID);
@@ -360,6 +364,7 @@ foreach ($reviews as $review) {
                 TODO: replace hard coding
                 */
                 $dir = "/var/www/upload/course_$courseid/assign_$assignid/submissions/$subID/";
+				echo "path:" . $dir;
                 $filesArray = array();
                 // Open a directory, and read its contents
                 if (is_dir($dir)){
