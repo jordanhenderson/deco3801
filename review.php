@@ -8,12 +8,7 @@ $subID = $_GET['subid'];
 $courseid = $_SESSION['course_id'];
 // This currently returns an empty value
 $assignid = $crs->getSubmissionForReviewing($subID)->getAssignmentID();
-// TODO: Fix hardcoded value
-if (intval($assignid) == 0) {
-	echo ":(";
-	$assignid = '00003';
-}
-//$subID = '2';
+
 // Get the owner of the submission
 $owner = $crs->getSubmissionForReviewing($subID)->getOwner();
 $isOwner = 0;
@@ -244,7 +239,7 @@ foreach ($reviews as $review) {
 					break;
 				}
 			}
-            annotations.push({"Comments":comment, "text":selected, "status":'n', "startLine":startLine, "startIndex":startIndex, "fileName":$( "#file_heading" ).html()});
+            annotations.push({"Comments":comment, "text":selected, "status":'n', "startLine":startLine, "startIndex":startIndex, "fileName":$( "#file_heading" ).html(), "SubmissionID":<?php echo $subID;?>});
             count = count + 1;
             setupHighlighter();
         }
