@@ -420,7 +420,7 @@ class Submission extends PCRObject {
 	public function getResults() {
 		$arr = array();
 		$sth = $this->db->prepare("SELECT Results FROM Submission WHERE SubmissionID = ?;");
-		$sth->execute(array('2'));
+		$sth->execute(array('1'));
 		while ($file_row = $sth->fetch(PDO::FETCH_ASSOC)) {
 			array_push($arr, $file_row);
 		}
