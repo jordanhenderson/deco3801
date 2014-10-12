@@ -409,7 +409,7 @@ class Submission extends PCRObject {
 	 */
 	public function getOwner() {
 		$sth = $this->db->prepare("SELECT StudentID FROM Submission WHERE SubmissionID = ?;");
-		$sth->execute($this->getID());
+		$sth->execute(array($this->getID()));
 		return $sth->fetch(PDO::FETCH_ASSOC)['StudentID'];
 	}
 
