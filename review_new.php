@@ -32,7 +32,7 @@ foreach ($reviews as $review) {
 	 * review matches the current submission
 	 */
 	$row = $review->getRow();
-	echo "??" . print_r(intval($row->SubmissionID)) . "??";
+	echo $row->SubmissionID . "and";
 	if (intval($row->SubmissionID) == 2) {
 		array_push($annotations, $row);
 	}
