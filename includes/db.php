@@ -311,13 +311,16 @@ class Assignment extends PCRObject {
 	 */
 	public function getUnreviewedSubmissions($studentid) {
 		$arr = array();
-		// I'm sorry.
+		echo '1';
 		$sth = $this->db->prepare("SELECT * FROM Submission WHERE SubmissionID IN (SELECT Review.SubmissionID FROM Review INNER JOIN (SELECT max(ReviewID) AS ID, SubmissionID FROM Review GROUP BY SubmissionID) ID ON ID.ID = Review.ReviewID AND ReviewerID = ? AND Submitted = 0)");
 		//AND AssignmentID = ?
+		echo '2';
 		$sth->execute(array($studentid));
+		echo '3';
 		while ($file_row = $sth->fetch(PDO::FETCH_ASSOC)) {
 			array_push($arr, new Submission($file_row));
 		}
+		echo '4';
 		return $arr;
 	}
 	
