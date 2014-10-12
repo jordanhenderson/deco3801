@@ -10,9 +10,9 @@ $subID = $_GET['subid'];
 $submission = $crs->getSubmission($subID);
 $owner = $submission->getOwner();
 $isOwner = 0;
-echo "User:" . $_SESSION['user_id'];
+echo "User:" . $_SESSION['user_id'] . "=" . $owner[0]["StudentID"];
 // Check who is accessing the page (submission owner or reviewer)
-if (intval($_SESSION['user_id']) == intval($owner[0]->StudentID)) {
+if (intval($_SESSION['user_id']) == intval($owner[0]["StudentID"])) {
 	// Load all reviews made for the submission for viewing
 	$reviews = $crs->getReviews($subID);
 	echo "show all::";
