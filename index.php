@@ -124,16 +124,16 @@ function formatDBtime($dbtime) {
 				</thead>
 				<tbody>';
 					// print table contents
-					foreach ($assignments as $asg) {
-						if (!$asg->isValid()) {
+					foreach ($assignments as $asg_obj) {
+						if (!$asg_obj->isValid()) {
 							continue;
 						}
 						
 						// Both variables used later.
-						$reviewsTodo = $asg->getUnreviewedSubmissions($_SESSION['user_id']);
+						$reviewsTodo = $asg_obj->getUnreviewedSubmissions($_SESSION['user_id']);
 						$unreviewedSubs = array_merge($unreviewedSubs, $reviewsTodo);
 						
-						$asg = &$asg->getRow();
+						$asg = &$asg_obj->getRow();
 						
 						// Convert and store the dates from the DB as Unix timestamps.
 						$CurrentTime = time();
@@ -147,7 +147,7 @@ function formatDBtime($dbtime) {
 						$ReviewsDue = (int) date_format($date, 'U');
 						
 						// Check if assignment needs to have reviews distributed.
-						if ($asg['ReviewsAllocated'] && $CurrentTime > $DueTime) {
+						if (!$asg['ReviewsAllocated'] && $CurrentTime > $DueTime) {
 							// Reviews have not been distributed to students. Do so now.
 							include 'assignReviews.php';
 						}
