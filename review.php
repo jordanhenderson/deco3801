@@ -6,15 +6,16 @@ $crs = new PCRHandler();
 // Get the submissionID from the url
 $subID = $_GET['subid'];
 $courseid = $_SESSION['course_id'];
+// This currently returns an empty value
 $assignid = $crs->getSubmission($subID)->getAssignmentID();
+// TODO: Fix hardcoded value
 if (intval($assignid) == 0) {
 	echo ":(";
 	$assignid = '00003';
 }
 //$subID = '2';
 // Get the owner of the submission
-$submission = $crs->getSubmission($subID);
-$owner = $submission->getOwner();
+$owner = $crs->getSubmission($subID)->getOwner();
 $isOwner = 0;
 
 // Check who is accessing the page (submission owner or reviewer)
@@ -26,7 +27,6 @@ if (intval($_SESSION['user_id']) == intval($owner[0]["StudentID"])) {
 	// Load only the reviews for the current reviewer
 	$reviews = $crs->getStudent()->getStudentsReviews();
 }
-// hardcoding 2 for the time being
 
 $annotations = array();
 foreach ($reviews as $review) {
@@ -67,6 +67,7 @@ foreach ($reviews as $review) {
 	
 
 	<script>
+		// GLOBALS
 		var annotations = [];
         var annotations = <?php echo json_encode($annotations); ?>;
 		var isOwner = <?php echo $isOwner;?>;
@@ -171,10 +172,7 @@ foreach ($reviews as $review) {
 			for(var i=0; i < annotations.length; i++) {
 				// add status to mark as already in database
 				annotations[i].status = 'o';
-				// hard coding ReviewerID to be 2 for the time being
-				// && annotations[i].ReviewerID == '2'
 				
-				//var arr = [{"ReviewerID":'2'}, {"ReviewerID":'2'}, {"ReviewerID":'3'}, {"ReviewerID":'1'}, {"ReviewerID":'3'}, {"ReviewerID":'3'}, {"ReviewerID":'3'}, {"ReviewerID":'1'}];
 				if (isOwner == 0) {
 					if (annotations[i].fileName == $( "#file_heading" ).html() ) {
 						wordArray = reviewPopulate(wordArray, i);
@@ -322,9 +320,7 @@ foreach ($reviews as $review) {
 			$('#' + id.split('.')[0]).addClass('active');
 			//Loads the selected file into the main content area using AJAX
 			var request = {f: 'loadFile', params:  ['<?php echo $courseid; ?>', '<?php echo $assignid; ?>', '<?php echo $subID; ?>', id]};
-			alert(JSON.stringify(request));
 			$.post("api.php", JSON.stringify(request), function( filecode ) {
-				alert(filecode);
 				var contentObj = $.parseJSON(filecode);
 				$( "#assignment_code" ).html( contentObj.r );
 				$( "#file_heading" ).html( id );
@@ -352,11 +348,7 @@ foreach ($reviews as $review) {
 		
 			<div class="list-group">
 			<?php
-                /*
-                Handles the retrieval of files from the server for the first load
-                
-                TODO: replace hard coding
-                */
+                // Handles the retrieval of files from the server for the first load
                 $dir = "/var/www/upload/course_$courseid/assign_$assignid/submissions/$subID/";
                 $filesArray = array();
                 // Open a directory, and read its contents
@@ -389,18 +381,16 @@ foreach ($reviews as $review) {
 				<div id="studentReviews" class="list-group" style="float:right"></div>
 				<div id="innercontainer">
                     <pre id='assignment_code' style="float:left"><?php
-                    /*
-                    Loads the first file in the file tree if its not empty
-                    TODO: remove hard coding
-                    */
+                    //Loads the first file in the file tree if its not empty
                     if (count($filesArray) > 0) {
-                        $assignment = "/var/www/upload/course_$courseid/assign_$assignid/submissions/$subID/" . $filesArray[0];
+						echo $crs->loadFile($courseid, $assignid, $subID, $filesArray[0]);
+                        /*$assignment = "/var/www/upload/course_$courseid/assign_$assignid/submissions/$subID/" . $filesArray[0];
                         $handle = fopen($assignment, "r");
                         $contents = fread($handle, filesize($assignment));
                         $contents = str_replace('<', '&lt;', $contents);
                         $contents = str_replace('>', '&gt;', $contents);
                         echo $contents;
-                        fclose($handle);
+                        fclose($handle);*/
                     }
                 ?></pre>
 				<div id="reviews" style="clear:right; float:right;"></div>

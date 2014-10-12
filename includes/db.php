@@ -405,6 +405,7 @@ class Submission extends PCRObject {
 	public function getOwner() {
 		$arr = array();
 		$sth = $this->db->prepare("SELECT StudentID FROM Submission WHERE SubmissionID = ?;");
+		// TODO: Fix hardcoded value
 		$sth->execute(array('2'));
 		while ($file_row = $sth->fetch(PDO::FETCH_ASSOC)) {
 			array_push($arr, $file_row);
@@ -493,7 +494,7 @@ class Submission extends PCRObject {
 		$arr = array();
 		$sth = $this->db->prepare("SELECT * FROM Review WHERE SubmissionID = ?;");
 		//$sth->execute(array($this->getID()));
-        // TODO: remove hardcoding
+        // TODO: Fix hardcoded value
         $sth->execute(array('2'));
 		while ($file_row = $sth->fetch(PDO::FETCH_ASSOC)) {
 			array_push($arr, new Review($file_row));
@@ -508,7 +509,7 @@ class Submission extends PCRObject {
 		$arr = array();
 		$sth = $this->db->prepare("SELECT ReviewID FROM Review WHERE SubmissionID = ? AND Comments = '" . $comment . "';");
 		//$sth->execute(array($this->getID()));
-		// TODO: remove hardcoding
+		// TODO: Fix hardcoded value
 		$sth->execute(array('2'));
 		$file_row = $sth->fetch(PDO::FETCH_ASSOC);
 		$review = new Review($file_row);
@@ -521,7 +522,7 @@ class Submission extends PCRObject {
 	 */
 	public function addReview($annotationText, $stnid, $startIndex, $startLine, $fileName, $text) {
 		// $this->getID() is returning empty
-		// TODO: unhardcode assignmentid and submissionid
+		// TODO: Fix hardcoded value
 		echo $annotationText . "::" . $stnid . "::" . $startIndex . "::" . $startLine . "::" . $fileName . "::" . $text . "--";
 		// Need to check if the review already exists and update if that's the case
 		$review = new Review(array("SubmissionID"=>'2',
@@ -543,7 +544,7 @@ class Submission extends PCRObject {
 		$arr = array();
 		$sth = $this->db->prepare("SELECT ReviewID FROM Review WHERE SubmissionID = ? AND Comments = '" . $prevComment . "';");
 		//$sth->execute(array($this->getID()));
-		// TODO: remove hardcoding
+		// TODO: Fix hardcoded value
 		$sth->execute(array('2'));
 		$file_row = $sth->fetch(PDO::FETCH_ASSOC);
 		$file_row["Comments"] = $annotationText;
@@ -556,7 +557,7 @@ class Submission extends PCRObject {
 	 * Returns the assignmentID of the submission.
 	 */
 	public function getAssignmentID() {
-		echo "subid:" . $this->getID();
+		// This returns empty :(
 		parent::Update();
 		return $this->row["AssignmentID"];
 	}
