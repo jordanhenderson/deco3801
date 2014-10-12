@@ -400,6 +400,20 @@ class Submission extends PCRObject {
 	}
 	
 	/**
+	 * getOwner returns the owner of the submission
+	 * @return the id of the owner
+	 */
+	public function getOwner() {
+		$arr = array();
+		$sth = $this->db->prepare("SELECT StudentID FROM Submission WHERE SubmissionID = ?;");
+		$sth->execute(array('2'));
+		while ($file_row = $sth->fetch(PDO::FETCH_ASSOC)) {
+			array_push($arr, $file_row);
+		}
+		return $arr;
+	}
+	
+	/**
 	 * getFiles returns an array of file objects which may be further manipulated.
 	 * @return an array of File objects.
 	 */
