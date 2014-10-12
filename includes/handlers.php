@@ -105,10 +105,6 @@ class PCRHandler {
 		return $assignment->getSubmission($_SESSION['user_id']);
 	}
 	
-	public function getSubmissionOwner($id) {
-		$submission = $this->getSubmission($id);
-		return $submission->getOwner();
-	}
 	/**
 	 * getStudent returns the current Student.
 	 * @return the Student
