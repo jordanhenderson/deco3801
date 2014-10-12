@@ -10,6 +10,7 @@ $crs = new PCRHandler();
 
 if (isset($_REQUEST['assid'])) {
 	$assignment = $crs->getAssignment($_REQUEST['assid']);
+	$submission = $crs->getSubmission($_REQUEST['subid'])
 	if ($assignment->isValid()) {
 		$asg = &$assignment->getRow();
 		if ($asg['CourseID'] != $_SESSION['course_id']) {
@@ -65,6 +66,7 @@ function formatDBtime($dbtime) {
 							<th>Open Date</th>
 							<th>Due Date</th>
 							<th>Reviews Due</th>
+							<th>Test Results</th>
 						</tr>
 					</thead>
 					<tbody>
@@ -83,6 +85,14 @@ function formatDBtime($dbtime) {
 							<td>'.formatDBtime($asg['DueTime']).'</td>';
 							echo '
 							<td>'.formatDBtime($asg['ReviewsDue']).'</td>';
+							
+							$query = $this->db->prepare(
+								"SELECT Results FROM Submissions WHERE StudentID = $_SESSION['user_id'] AND AssignmentID = $asg['AssignmentID'] LIMIT 1;");
+							$query->execute(array($this->id));
+							$row = $query->fetch(PDO::FETCH_ASSOC);
+
+							echo "
+							<td>$row['Results']</td>";
 							?>
 
 						</tr>

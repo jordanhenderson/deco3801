@@ -191,6 +191,18 @@ class PCRHandler {
         // Get reviews for that submission
         return $submission->getReviews();
     }
+
+    /**
+     * getResults returns an array of all the reviews for a given submission
+     * @param the submission id
+     * @return the list of arrays
+     */
+    public function getResults($id) {
+        // Get submission
+        $submission = new Submission(array("SubmissionID"=>$id));
+        // Get reviews for that submission
+        return $submission->getResults();
+    }
 	
 	/**
 	 * uploadArchive uploads an archive to a submission
