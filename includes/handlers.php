@@ -201,7 +201,6 @@ class PCRHandler {
         // Get submission
         $submission = new Submission(array("SubmissionID"=>$id));
         // Get reviews for that submission
-        echo "handler " . $submission.getResults();
         return $submission->getResults();
     }
 	

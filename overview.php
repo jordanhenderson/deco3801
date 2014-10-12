@@ -10,7 +10,6 @@ $crs = new PCRHandler();
 
 if (isset($_REQUEST['assid'])) {
 	$assignment = $crs->getAssignment($_REQUEST['assid']);
-	$submission = $crs->getSubmission($_REQUEST['subid'])
 	if ($assignment->isValid()) {
 		$asg = &$assignment->getRow();
 		if ($asg['CourseID'] != $_SESSION['course_id']) {
