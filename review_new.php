@@ -14,7 +14,7 @@ foreach ($owner as $val) {
 	echo "..." . print_r($val->getRow()) . "::";
 }
 // Check who is accessing the page (submission owner or reviewer)
-if (intval($_SESSION['user_id']) == 2) {
+if ($_SESSION['user_id'] == 2) {
 	// Load all reviews made for the submission for viewing
 	$reviews = $crs->getReviews('2');
 	echo ".....all....";
