@@ -140,10 +140,22 @@ foreach ($reviews as $review) {
 			}
 			for (var key in counts) {
 				alert(key);
-				$('#studentReviews').append('<a href="#" class="reviewedBy">' + key + '</a>');
+				$('#studentReviews').append('<a href="#" class="reviewedBy" onclick="changeReviewer(' + key + ')">Student: ' + key + '</a>');
 			}
 		}
-        
+		
+		/**
+		 *
+		 *
+		 */
+		function changeReviewer(id) {
+			$('#student_heading').html(id);
+			$('#assignment_code').getHighlighter().removeHighlights();
+			count = 0;
+			$('#reviews').html('');
+			getComments();
+		}
+
 		/**
 		 *
 		 *
