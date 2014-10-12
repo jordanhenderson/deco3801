@@ -30,8 +30,8 @@ foreach ($reviews as $review) {
 	 */
 	$row = $review->getRow();
 
-	print_r($row);
-	if (intval($row->SubmissionID) == 2) {
+	echo $row->SubmissionID . "++";
+	if ($row->SubmissionID == '00002') {
 		array_push($annotations, $row);
 	}
 }
