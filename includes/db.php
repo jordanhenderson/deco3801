@@ -313,7 +313,7 @@ class Assignment extends PCRObject {
 		$arr = array();
 		// I'm sorry.
 		$sth = $this->db->prepare("SELECT * FROM Submission WHERE SubmissionID IN (SELECT Review.SubmissionID FROM Review INNER JOIN (SELECT max(ReviewID) AS ID, SubmissionID FROM Review GROUP BY SubmissionID) ID ON ID.ID = Review.ReviewID AND ReviewerID = ? AND Submitted = 0)");
-		// AND AssignmentID = ?
+		//AND AssignmentID = ?
 		$sth->execute(array($studentid));
 		while ($file_row = $sth->fetch(PDO::FETCH_ASSOC)) {
 			array_push($arr, new Submission($file_row));
@@ -400,20 +400,6 @@ class Submission extends PCRObject {
 	}
 	
 	/**
-	 * getOwner returns the owner of the submission
-	 * @return the id of the owner
-	 */
-	public function getOwner() {
-		$arr = array();
-		$sth = $this->db->prepare("SELECT StudentID FROM Submission WHERE SubmissionID = ?;");
-		$sth->execute(array('2'));
-		while ($file_row = $sth->fetch(PDO::FETCH_ASSOC)) {
-			array_push($arr, $file_row);
-		}
-		return $arr;
-	}
-	
-	/**
 	 * getFiles returns an array of file objects which may be further manipulated.
 	 * @return an array of File objects.
 	 */
@@ -487,8 +473,7 @@ class Submission extends PCRObject {
 	 * NOTE
 	 * Please don't change where this is. It will break the review page.
 	 *
-	 * getReviews returns an array of all the reviews by all students 
-	 * for a submission.
+	 * getReviews returns an array of reviews for a submission.
 	 * @return an array of reviews
 	 */
 	public function getReviews() {
@@ -736,12 +721,12 @@ class Review extends PCRObject {
 	}
 	
 	/**
-	 * getReviews returns an array of reviews for a user.
+	 * getReviews returns an array of reviews available for a Student in a course
 	 * @return an array of reviews
 	 */
 	public function getReviews() {
 		$arr = array();
-		$sth = $this->db->prepare("SELECT * FROM Review INNER JOIN Submission ON Review.SubmissionID=Submission.SubmissionID INNER JOIN Assignments ON Submission.assignmentid=Assignments.assignmentid AND Review.ReviewerID = ? AND Assignments.CourseID = ?");
+		$sth = $this->db->prepare("SELECT * FROM Review INNER JOIN Submission ON Review.SubmissionID=Submission.SubmissionID INNER JOIN Assignments ON Submission.assignmentid=Assignments.assignmentid AND Review.ReviewerID = ? AND Assignments.CourseID = ? GROUP BY Review.SubmissionID");
 		$sth->execute(array($this->row["StudentID"], $_SESSION["course_id"]));
 		while ($file_row = $sth->fetch(PDO::FETCH_ASSOC)) {
 			array_push($arr, new Review($file_row));

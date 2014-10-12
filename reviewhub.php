@@ -44,8 +44,8 @@ $crs = new PCRHandler();
 						<thead>
 							<tr>
 								<th>Assignment Name</th>
-								<th>File Name</th>
 								<th>Due Date</th>
+								<th>Submitted (Y/N)</th>
 								<th></th>
 							</tr>
 						</thead>
@@ -53,14 +53,21 @@ $crs = new PCRHandler();
 							// print table contents
 							foreach ($reviews as $rev) {
 								$rev = &$rev->getRow();
+								if ($rev['Submitted'] == 0) {
+									$Completed = "N";
+								} else {
+									$Completed = "Y";
+								}
+								
 								$submission = new Submission(array("SubmissionID"=>$rev["SubmissionID"]));
-								$Assignment = new Assignment(array("AssignmentID" => $submission->getAssignmentID()));
+								$submission = &$submission->getRow();
+								$Assignment = new Assignment(array("AssignmentID" => $submission['AssignmentID']));
 								$Assignment = &$Assignment->getRow();
 								echo "<tr>
 								<td>$Assignment[AssignmentName]</td>
-								<td>$rev[fileName]</td>
 								<td>$Assignment[ReviewsDue]</td>
-								<td><a class='btn btn-xs btn-info' href='review.php' role='button'>Mark</a></td>
+								<td>$Completed</td>
+								<td><a class='btn btn-xs btn-info' href='review.php?subid=$submission[SubmissionID]' role='button'>Mark</a></td>
 								<tr>";
 							}
 						echo '</tbody>
