@@ -5,6 +5,8 @@ require_once 'includes/handlers.php';
 $crs = new PCRHandler();
 // Get the submissionID from the url
 $subID = $_GET['subid'];
+$courseid = $_SESSION['course_id'];
+$assignid = $crs->getSubmission($subID)->getAssignmentID();
 //$subID = '2';
 // Get the owner of the submission
 $submission = $crs->getSubmission($subID);
@@ -357,7 +359,7 @@ foreach ($reviews as $review) {
                 
                 TODO: replace hard coding
                 */
-                $dir = "/var/www/upload/course_00001/assign_00001/submissions/s1234567/";
+                $dir = "/var/www/upload/course_$courseid/assign_$assignid/submissions/$subID/";
                 $filesArray = array();
                 // Open a directory, and read its contents
                 if (is_dir($dir)){
@@ -382,10 +384,11 @@ foreach ($reviews as $review) {
 			</div>
 		</div>
 		<div class="col-md-9">
-			<h1>Assignment 99 Submission</h1>
+			<h1>Assignment <?php echo intval($assignid); ?></h1>
 			<div class="col-md-12">
-				<h2 id="file_heading">assign1_additional.cpp</h2>
+				<h2 id="file_heading"><?php if (count($filesArray) > 0) echo $filesArray[0]; ?></h2>
 				<h3 id="student_heading"></h3>
+				<div id="studentReviews" class="list-group" style="float:right"></div>
 				<div id="innercontainer">
                     <pre id='assignment_code' style="float:left"><?php
                     /*
@@ -393,7 +396,7 @@ foreach ($reviews as $review) {
                     TODO: remove hard coding
                     */
                     if (count($filesArray) > 0) {
-                        $assignment = "/var/www/upload/course_00001/assign_00001/submissions/s1234567/" . $filesArray[0];
+                        $assignment = "/var/www/upload/course_$courseid/assign_$assignid/submissions/$subID/" . $filesArray[0];
                         $handle = fopen($assignment, "r");
                         $contents = fread($handle, filesize($assignment));
                         $contents = str_replace('<', '&lt;', $contents);
@@ -402,7 +405,6 @@ foreach ($reviews as $review) {
                         fclose($handle);
                     }
                 ?></pre>
-				<div id="studentReviews" class="list-group" style="float:right"></div>
 				<div id="reviews" style="clear:right; float:right;"></div>
                 </div>	
 				<p style="float:left;clear:left;">
