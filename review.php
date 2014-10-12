@@ -325,8 +325,8 @@ foreach ($reviews as $review) {
 			var request = {f: 'loadFile', params:  ['<?php echo $courseid; ?>', '<?php echo $assignid; ?>', '<?php echo $subID; ?>', id]};
 			alert(JSON.stringify(request));
 			$.post("api.php", JSON.stringify(request), function( filecode ) {
-				alert(filecode);
-				$( "#assignment_code" ).html( filecode );
+				alert(filecode.r);
+				$( "#assignment_code" ).html( filecode.r );
 				$( "#file_heading" ).html( id );
 				// remove previous annotations and add the new ones
 				$('#reviews').html('');
@@ -385,7 +385,7 @@ foreach ($reviews as $review) {
 			<h1>Assignment <?php echo intval($assignid); ?></h1>
 			<div class="col-md-12">
 				<h2 id="file_heading"><?php if (count($filesArray) > 0) echo $filesArray[0]; ?></h2>
-				<h3 id="student_heading"></h3>
+				<h3>Student <span id="student_heading"></span></h3>
 				<div id="studentReviews" class="list-group" style="float:right"></div>
 				<div id="innercontainer">
                     <pre id='assignment_code' style="float:left"><?php
