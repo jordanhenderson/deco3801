@@ -8,7 +8,7 @@ $crs = new PCRHandler();
 $subID = '2';
 // Get the owner of the submission
 $owner = $crs->getSubmissionOwner($subID);
-echo $owner . "::";
+echo "<pre>" . print_r($owner) . "::";
 // Check who is accessing the page (submission owner or reviewer)
 if ($_SESSION['user_id'] == 2) {
 	// Load all reviews made for the submission for viewing
@@ -26,14 +26,14 @@ foreach ($reviews as $review) {
 	 * review matches the current submission
 	 */
 	$row = $review->getRow();
-	echo $row;
-	if ($row->SubmissionID == '2') {
+	print_r($row);
+	if ($row->SubmissionID == 2) {
 		array_push($annotations, $row);
 	}
 }
 
 echo "::" . $_SESSION['user_id'];
-echo "::" . $_SESSION['userfullname'];
+echo "::" . $_SESSION['userfullname'] . "</pre>";
 ?>
 <!DOCTYPE html>
 <html lang="en">
