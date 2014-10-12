@@ -322,7 +322,7 @@ foreach ($reviews as $review) {
 			$('a.active').removeClass('active');
 			$('#' + id.split('.')[0]).addClass('active');
 			//Loads the selected file into the main content area using AJAX
-			var request = {f: 'loadFile', params:  [<?php echo $courseid; ?>, <?php echo $assignid; ?>, <?php echo $subID; ?>, id]};
+			var request = {f: 'loadFile', params:  ['<?php echo $courseid; ?>', '<?php echo $assignid; ?>', '<?php echo $subID; ?>', id]};
 			alert(JSON.stringify(request));
 			$.post("api.php", JSON.stringify(request), function( filecode ) {
 				alert(filecode);
