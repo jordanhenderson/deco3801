@@ -135,11 +135,15 @@ foreach ($reviews as $review) {
 		function ownerSetup() {
 			var counts = {};
 			alert('owner runs');
+			var first = 0;
 			for (var i = 0; i < annotations.length; i++) {
 				counts[annotations[i].ReviewerID] = 1 + (counts[annotations[i].ReviewerID] || 0);
 			}
 			for (var key in counts) {
-				alert(key);
+				if (first == 0) {
+					first = 1;
+					$('#student_heading').html(key);
+				}
 				$('#studentReviews').append('<a href="#" class="reviewedBy" onclick="changeReviewer(' + key + ')">Student: ' + key + '</a>');
 			}
 		}
@@ -381,7 +385,7 @@ foreach ($reviews as $review) {
 			<h1>Assignment 99 Submission</h1>
 			<div class="col-md-12">
 				<h2 id="file_heading">assign1_additional.cpp</h2>
-				<h3 id="student_heading">7</h3>
+				<h3 id="student_heading"></h3>
 				<div id="innercontainer">
                     <pre id='assignment_code' style="float:left"><?php
                     /*

@@ -80,6 +80,17 @@ textarea#content, textarea#comment {
         float:right;
         margin: 3px;
     }
+	.reviewedBy{
+		padding: 10px;
+		background: #2a6496;
+		color: #fff;
+		border-radius: 10px;
+		margin-right: 5px;
+	}
+	.reviewedBy:hover{
+		text-decoration: none;
+		color: #fff;
+	}
     .reviewContainer textarea {
         resize: none;
         margin-top:10px;
