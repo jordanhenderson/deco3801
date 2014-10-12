@@ -150,6 +150,7 @@ function formatDBtime($dbtime) {
 						if (!$asg['ReviewsAllocated'] && $CurrentTime > $DueTime) {
 							// Reviews have not been distributed to students. Do so now.
 							include 'assignReviews.php';
+							$asg_obj->setReviewsAllocated();
 						}
 						
 						if (!$admin) { // student

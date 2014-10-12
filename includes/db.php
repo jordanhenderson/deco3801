@@ -346,6 +346,14 @@ class Assignment extends PCRObject {
 		$sth->execute(array($this->getID(), $studentid));
 		return new Submission($sth->fetch(PDO::FETCH_ASSOC));
 	}
+	
+	/**
+	 * Sets the assignments 'ReviewsAllocated' variable to 1 (true)
+	 */
+	public function setReviewsAllocated() {
+		$this->row["ReviewsAllocated"] = "1";
+		$this->commit();
+	}
 }
 
 /**
