@@ -143,7 +143,9 @@ function formatDBtime($dbtime) {
 						$ReviewsDue = (int) date_format($date, 'U');
 						
 						// Both variables used later.
+						echo 'start';
 						$reviewsTodo = $asg->getUnreviewedSubmissions($_SESSION['user_id']);
+						echo 'finish';
 						$unreviewedSubs = array_merge($unreviewedSubs, $reviewsTodo);
 						
 						// Check if assignment needs to have reviews distributed.
