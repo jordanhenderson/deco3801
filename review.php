@@ -323,7 +323,9 @@ foreach ($reviews as $review) {
 			$('#' + id.split('.')[0]).addClass('active');
 			//Loads the selected file into the main content area using AJAX
 			var request = {f: 'loadFile', params:  [<?php echo $courseid; ?>, <?php echo $assignid; ?>, <?php echo $subID; ?>, id]};
+			alert(JSON.stringify(request));
 			$.post("api.php", JSON.stringify(request), function( filecode ) {
+				alert(filecode);
 				$( "#assignment_code" ).html( filecode );
 				$( "#file_heading" ).html( id );
 				// remove previous annotations and add the new ones

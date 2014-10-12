@@ -241,7 +241,7 @@ class PCRHandler {
 	
 	/*
      * Retrieves the file from the server and returns it to the calling page i.e. 
-     *review_dev.php. 
+     * review_dev.php. 
 	 */
 	public function loadFile($courseID, $assignID, $subID, $fileName) {
 		$assignment = "/var/www/upload/course_$courseID/assign_$assignID/submissions/$subID/" . $fileName;
