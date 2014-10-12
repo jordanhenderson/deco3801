@@ -268,11 +268,12 @@ foreach ($reviews as $review) {
 		 * This will definitely change to become simpler
 		 */
 		function saveReviews() {
-            //alert(JSON.stringify(annotations));
+            alert(JSON.stringify(annotations));
 			//AJAX call to store the review in the database
 			var request = {f: 'saveReviews', params:  [JSON.stringify(annotations)]};
-			$.post("api.php", JSON.stringify(request), function() {
+			$.post("api.php", JSON.stringify(request), function(retval) {
 				alert("Your comments have been saved for later!");
+				alert(retval);
                 for (var i=0; i < annotations.length; i++) {
                     if(annotations[i].status == 'd') {
                         annotations.splice(i, 1);
