@@ -409,8 +409,7 @@ class Submission extends PCRObject {
 	 */
 	public function getOwner() {
 		$sth = $this->db->prepare("SELECT StudentID FROM Submission WHERE SubmissionID = ?;");
-		// TODO: Fix hardcoded SubmissionID value
-		$sth->execute(array('2'));
+		$sth->execute($this->getID());
 		return $sth->fetch(PDO::FETCH_ASSOC)['StudentID'];
 	}
 
@@ -536,8 +535,6 @@ class Submission extends PCRObject {
 	 * @return the review that was added
 	 */
 	public function addReview($annotationText, $stnid, $startIndex, $startLine, $fileName, $text) {
-		// $this->getID() is returning empty
-		// TODO: Fix hardcoded value
 		echo $annotationText . "::" . $stnid . "::" . $startIndex . "::" . $startLine . "::" . $fileName . "::" . $text . "--";
 		// Need to check if the review already exists and update if that's the case
 		$review = new Review(array("SubmissionID"=>$this->getID(),
