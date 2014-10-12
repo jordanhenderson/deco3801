@@ -16,17 +16,15 @@ if (intval($assignid) == 0) {
 $submission = $crs->getSubmission($subID);
 $owner = $submission->getOwner();
 $isOwner = 0;
-echo "User:" . $_SESSION['user_id'] . "=" . $owner[0]["StudentID"];
+
 // Check who is accessing the page (submission owner or reviewer)
 if (intval($_SESSION['user_id']) == intval($owner[0]["StudentID"])) {
 	// Load all reviews made for the submission for viewing
 	$reviews = $crs->getReviews($subID);
-	echo "show all::";
 	$isOwner = 1;
 } else {
 	// Load only the reviews for the current reviewer
 	$reviews = $crs->getStudent()->getStudentsReviews();
-	echo "For specific student::";
 }
 // hardcoding 2 for the time being
 
@@ -37,10 +35,7 @@ foreach ($reviews as $review) {
 	 * review matches the current submission
 	 */
 	$row = $review->getRow();
-	echo "O";
-	echo $row["SubmissionID"] . "=" . $subID;
 	if ($row["SubmissionID"] == $subID) {
-		echo "M";
 		array_push($annotations, $row);
 	}
 }
@@ -327,11 +322,8 @@ foreach ($reviews as $review) {
 			$('a.active').removeClass('active');
 			$('#' + id.split('.')[0]).addClass('active');
 			//Loads the selected file into the main content area using AJAX
-			$.ajax({
-			  url: "load_dev.php?filename="+id,
-			  type: "POST"
-			})
-			  .done(function( filecode ) {
+			var request = {f: 'loadFile', params:  [<?php echo $courseid; ?>, <?php echo $assignid; ?>, <?php echo $subID ?>;, id]};
+			$.post("api.php", JSON.stringify(request), function( filecode ) {
 				$( "#assignment_code" ).html( filecode );
 				$( "#file_heading" ).html( id );
 				// remove previous annotations and add the new ones

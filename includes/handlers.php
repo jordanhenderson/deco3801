@@ -230,8 +230,6 @@ class PCRHandler {
 			$assignmentrow["DueTime"] = $DueTime;
 		$assignment->commit();
 		return $assignment;
-		
-
 	}	
 	/**
 	 * Delete an assignment.
@@ -239,6 +237,20 @@ class PCRHandler {
 	public function deleteAssignment($AssignmentID) {
 		$assignment = new Assignment(array("AssignmentID"=>$AssignmentID));
 		$assignment->delete();
+	}
+	
+	/*
+     * Retrieves the file from the server and returns it to the calling page i.e. 
+     *review_dev.php. 
+	 */
+	public function loadFile($courseID, $assignID, $subID, $fileName) {
+		$assignment = "/var/www/upload/course_$courseID/assign_$assignID/submissions/$subID/" . $fileName;
+		$handle = fopen($assignment, "r");
+		$contents = fread($handle, filesize($assignment));
+		$contents = str_replace('<', '&lt;', $contents);
+		$contents = str_replace('>', '&gt;', $contents);
+		fclose($handle);
+		return $contents;
 	}
 }
 
