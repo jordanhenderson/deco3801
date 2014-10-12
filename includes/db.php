@@ -414,8 +414,8 @@ class Submission extends PCRObject {
 	}
 
 	/**
-	 * getOwner returns the owner of the submission
-	 * @return the id of the owner
+	 * getResults returns the testing results of the submission
+	 * @return the result of the tests
 	 */
 	public function getResults() {
 		$arr = array();
@@ -424,6 +424,7 @@ class Submission extends PCRObject {
 		while ($file_row = $sth->fetch(PDO::FETCH_ASSOC)) {
 			array_push($arr, $file_row);
 		}
+		echo "db " . $arr;
 		return $arr;
 	}
 	
