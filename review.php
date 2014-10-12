@@ -9,15 +9,14 @@ $subID = $_GET['subid'];
 // Get the owner of the submission
 $submission = $crs->getSubmission($subID);
 $owner = $submission->getOwner();
-echo "<pre>" . print_r($owner) . "</pre>";
 $isOwner = 0;
+echo "User:" . $_SESSION['user_id'];
 // Check who is accessing the page (submission owner or reviewer)
-if ($_SESSION['user_id'] == $owner[0]->StudentID) {
+if (intval($_SESSION['user_id']) == intval($owner[0]->StudentID)) {
 	// Load all reviews made for the submission for viewing
 	$reviews = $crs->getReviews($subID);
 	echo "show all::";
 	$isOwner = 1;
-	echo "owner set::";
 } else {
 	// Load only the reviews for the current reviewer
 	$reviews = $crs->getStudent()->getStudentsReviews();
