@@ -136,7 +136,7 @@ foreach ($reviews as $review) {
 			var counts = {};
 			alert('owner runs');
 			for (var i = 0; i < annotations.length; i++) {
-				counts[annotations[i].StudentID] = 1 + (counts[annotations[i].StudentID] || 0);
+				counts[annotations[i].ReviewerID] = 1 + (counts[annotations[i].ReviewerID] || 0);
 			}
 			for (var key in counts) {
 				alert(key);
