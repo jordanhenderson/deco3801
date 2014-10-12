@@ -9,16 +9,15 @@ $subID = '2';
 // Get the owner of the submission
 $submission = $crs->getSubmission($subID);
 $owner = $submission->getOwner();
-echo "<pre>";
+$isOwner = 0;
 // Check who is accessing the page (submission owner or reviewer)
 if ($_SESSION['user_id'] == $owner[0]->StudentID) {
 	// Load all reviews made for the submission for viewing
-	$reviews = $crs->getReviews('2');
-	echo "aaaaalll";
+	$reviews = $crs->getReviews($subID);
+	$isOwner = 1;
 } else {
 	// Load only the reviews for the current reviewer
 	$reviews = $crs->getStudent()->getReviews();
-	echo "revieewwer";
 }
 // hardcoding 2 for the time being
 
@@ -29,15 +28,10 @@ foreach ($reviews as $review) {
 	 * review matches the current submission
 	 */
 	$row = $review->getRow();
-
-	echo $row["SubmissionID"] . "++";
-	if ($row["SubmissionID"] == '00002') {
+	if (intval($row["SubmissionID"]) == intval($subID)) {
 		array_push($annotations, $row);
 	}
 }
-
-echo "::" . $_SESSION['user_id'];
-echo "::" . $_SESSION['userfullname'] . "</pre>";
 ?>
 <!DOCTYPE html>
 <html lang="en">
@@ -68,6 +62,7 @@ echo "::" . $_SESSION['userfullname'] . "</pre>";
 	<script>
 		var annotations = [];
         var annotations = <?php echo json_encode($annotations); ?>;
+		var isOwner;
         var edit = -1;
 		var selected;
 		var prevReview = [];
@@ -126,6 +121,20 @@ echo "::" . $_SESSION['userfullname'] . "</pre>";
             reviewContainerOriginalDisplay(id);
 			edit = -1;
         }
+		
+		/**
+		 *
+		 *
+		 */
+		function ownerSetup() {
+			var counts = {};
+			for (var i = 0; i < annotations.length; i++) {
+				counts[annotations[i].StudentID] = 1 + (counts[annotations[i].StudentID] || 0);
+			}
+			for (var key in counts) {
+				$('#studentReviews').append('<a href="#" class="reviewedBy">' + key + '</a>');
+			}
+		}
         
 		/**
 		 *
@@ -134,32 +143,46 @@ echo "::" . $_SESSION['userfullname'] . "</pre>";
         function getComments() {
             var innerContents = $('#assignment_code').html();
             var wordArray = innerContents.split('\n');
-            for(var i=0; i < annotations.length; i++) {
+			
+			for(var i=0; i < annotations.length; i++) {
 				// add status to mark as already in database
 				annotations[i].status = 'o';
 				// hard coding ReviewerID to be 2 for the time being
 				// && annotations[i].ReviewerID == '2'
-                if (annotations[i].fileName == $( "#file_heading" ).html() ) {
-                    var index = parseInt(annotations[i].startIndex);
-                    var line = parseInt(annotations[i].startLine);
-                    var text = annotations[i].text;
-                    var numLines = (text.match(/\n/g) || []).length;
-                    var endLine = line + numLines;
-                    var spanString = '<span style="background-color:#ffff7b" class="highlighted" id="span' + count + '">';
-                    var endIndex = index + text.length + spanString.length;
-                    if (numLines > 0) {
-                        var textArr = text.split('\n');
-                        endIndex = textArr[textArr.length-1].length;
-                    }
-                    wordArray[line] = wordArray[line].slice(0,index) + spanString + wordArray[line].slice(index,wordArray[line].length);
-                    wordArray[endLine] = wordArray[endLine].slice(0,endIndex) + "</span>" + wordArray[endLine].slice(endIndex, wordArray[endLine].length); 
-                    $('#reviews').append('<div id="review' + count + '" class="reviewContainer"><div id="reviewControls' + count + '"><a class="delete_btn" href="#" onclick="clearReview(' + count + ')" role="button" id="delete' + count + '"></a><a class="edit_btn" href="#" onclick="editAnnotation(' + count + ')" role="button" id="edit' + count + '"></a></div><br><textarea class="reviewContent" rows="2" cols="32" id="textarea' + count + '" readonly="true">'+ annotations[i].Comments + '</textarea></br><a class="cancel_btn" href="#" onclick="cancelEdit(' + count + ')" role="button" id="cancel' + count + '" style="display:none;">Cancel</a><a class="save_btn" href="#" onclick="getContents(' + count + ')" role="button" id="save' + count + '" style="display:none">Save</a></div>');
-                    count = count + 1;
-                }
+				
+				//var arr = [{"ReviewerID":'2'}, {"ReviewerID":'2'}, {"ReviewerID":'3'}, {"ReviewerID":'1'}, {"ReviewerID":'3'}, {"ReviewerID":'3'}, {"ReviewerID":'3'}, {"ReviewerID":'1'}];
+				if (isOwner == 0) {
+					if (annotations[i].fileName == $( "#file_heading" ).html() ) {
+						wordArray = reviewPopulate(wordArray);
+					}
+				} else {
+					if (annotations[i].fileName == $().html( "#file_heading" ) && annotations[i].ReviewerID == ) {
+					
+					}
+				}
             }
             $('#assignment_code').html(wordArray.join('\n'));
         }
         
+		function reviewPopulate(wordArray) {
+			var index = parseInt(annotations[i].startIndex);
+			var line = parseInt(annotations[i].startLine);
+			var text = annotations[i].text;
+			var numLines = (text.match(/\n/g) || []).length;
+			var endLine = line + numLines;
+			var spanString = '<span style="background-color:#ffff7b" class="highlighted" id="span' + count + '">';
+			var endIndex = index + text.length + spanString.length;
+			if (numLines > 0) {
+				var textArr = text.split('\n');
+				endIndex = textArr[textArr.length-1].length;
+			}
+			wordArray[line] = wordArray[line].slice(0,index) + spanString + wordArray[line].slice(index,wordArray[line].length);
+			wordArray[endLine] = wordArray[endLine].slice(0,endIndex) + "</span>" + wordArray[endLine].slice(endIndex, wordArray[endLine].length); 
+			$('#reviews').append('<div id="review' + count + '" class="reviewContainer"><div id="reviewControls' + count + '"><a class="delete_btn" href="#" onclick="clearReview(' + count + ')" role="button" id="delete' + count + '"></a><a class="edit_btn" href="#" onclick="editAnnotation(' + count + ')" role="button" id="edit' + count + '"></a></div><br><textarea class="reviewContent" rows="2" cols="32" id="textarea' + count + '" readonly="true">'+ annotations[i].Comments + '</textarea></br><a class="cancel_btn" href="#" onclick="cancelEdit(' + count + ')" role="button" id="cancel' + count + '" style="display:none;">Cancel</a><a class="save_btn" href="#" onclick="getContents(' + count + ')" role="button" id="save' + count + '" style="display:none">Save</a></div>');
+			count = count + 1;
+			return wordArray;
+		}
+		
 		/**
 		 * Gets the contents of the review when they click
 		 * the save button in the review box and stores it in an array
@@ -302,6 +325,7 @@ echo "::" . $_SESSION['userfullname'] . "</pre>";
 	
 	<div class="container">
 		<div class="col-xs-6 col-sm-3 sidebar-offcanvas" id="sidebar">
+		
 			<div class="list-group">
 			<?php
                 /*
@@ -353,7 +377,10 @@ echo "::" . $_SESSION['userfullname'] . "</pre>";
                         fclose($handle);
                     }
                 ?></pre>
-				<div id="reviews" style="float:right"></div>
+				<div id="studentReviews" class="list-group" style="float:right">
+		
+				</div>
+				<div id="reviews" style="clear:right"></div>
                 </div>	
 				<p style="float:left;clear:left;">
 					<a class="btn btn-primary" href="reviewhub.php" role="button">Submit</a>
@@ -378,6 +405,10 @@ echo "::" . $_SESSION['userfullname'] . "</pre>";
 		}
 		
 		$(document).ready(function() {
+			isOwner = <?php echo $isOwner;?>;
+			if(isOwner == 1) {
+				ownerSetup();
+			}
 			getComments();
 			setupHighlighter();
 		});
