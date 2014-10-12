@@ -325,7 +325,7 @@ foreach ($reviews as $review) {
 			var request = {f: 'loadFile', params:  ['<?php echo $courseid; ?>', '<?php echo $assignid; ?>', '<?php echo $subID; ?>', id]};
 			alert(JSON.stringify(request));
 			$.post("api.php", JSON.stringify(request), function( filecode ) {
-				alert(filecode.r);
+				alert(filecode);
 				$( "#assignment_code" ).html( filecode.r );
 				$( "#file_heading" ).html( id );
 				// remove previous annotations and add the new ones
