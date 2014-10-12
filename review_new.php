@@ -11,15 +11,17 @@ $submission = $crs->getSubmission($subID);
 $owner = $submission->getOwner();
 echo "<pre>";
 foreach ($owner as $val) {
-	echo "" . print_r($val->getRow()) . "::";
+	echo "..." . print_r($val->getRow()) . "::";
 }
 // Check who is accessing the page (submission owner or reviewer)
-if ($_SESSION['user_id'] == 2) {
+if (intval($_SESSION['user_id']) == 2) {
 	// Load all reviews made for the submission for viewing
 	$reviews = $crs->getReviews('2');
+	echo ".....all....";
 } else {
 	// Load only the reviews for the current reviewer
 	$reviews = $crs->getStudent()->getReviews();
+	echo "####student####";
 }
 // hardcoding 2 for the time being
 
@@ -30,7 +32,7 @@ foreach ($reviews as $review) {
 	 * review matches the current submission
 	 */
 	$row = $review->getRow();
-	print_r(intval($row->SubmissionID));
+	echo "??" . print_r(intval($row->SubmissionID)) . "??";
 	if (intval($row->SubmissionID) == 2) {
 		array_push($annotations, $row);
 	}
