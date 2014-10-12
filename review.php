@@ -29,6 +29,7 @@ foreach ($reviews as $review) {
 	 */
 	$row = $review->getRow();
 	if ($row["SubmissionID"] == $subID) {
+		echo "M";
 		array_push($annotations, $row);
 	}
 }
@@ -128,10 +129,12 @@ foreach ($reviews as $review) {
 		 */
 		function ownerSetup() {
 			var counts = {};
+			alert('owner runs');
 			for (var i = 0; i < annotations.length; i++) {
 				counts[annotations[i].StudentID] = 1 + (counts[annotations[i].StudentID] || 0);
 			}
 			for (var key in counts) {
+				alert(key);
 				$('#studentReviews').append('<a href="#" class="reviewedBy">' + key + '</a>');
 			}
 		}
@@ -378,10 +381,8 @@ foreach ($reviews as $review) {
                         fclose($handle);
                     }
                 ?></pre>
-				<div id="studentReviews" class="list-group" style="float:right">
-		
-				</div>
-				<div id="reviews" style="clear:right"></div>
+				<div id="studentReviews" class="list-group" style="float:right"></div>
+				<div id="reviews" style="clear:right; float:right;"></div>
                 </div>	
 				<p style="float:left;clear:left;">
 					<a class="btn btn-primary" href="reviewhub.php" role="button">Submit</a>
