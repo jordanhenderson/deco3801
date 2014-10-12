@@ -135,7 +135,6 @@ foreach ($reviews as $review) {
 		 */
 		function ownerSetup() {
 			var counts = {};
-			alert('owner runs');
 			var first = 0;
 			for (var i = 0; i < annotations.length; i++) {
 				counts[annotations[i].ReviewerID] = 1 + (counts[annotations[i].ReviewerID] || 0);
@@ -271,7 +270,7 @@ foreach ($reviews as $review) {
 		 * This will definitely change to become simpler
 		 */
 		function saveReviews() {
-            alert(JSON.stringify(annotations));
+            //alert(JSON.stringify(annotations));
 			//AJAX call to store the review in the database
 			var request = {f: 'saveReviews', params:  [JSON.stringify(annotations)]};
 			$.post("api.php", JSON.stringify(request), function() {
@@ -326,7 +325,8 @@ foreach ($reviews as $review) {
 			alert(JSON.stringify(request));
 			$.post("api.php", JSON.stringify(request), function( filecode ) {
 				alert(filecode);
-				$( "#assignment_code" ).html( filecode.r );
+				var contentObj = $.parseJSON(filecode);
+				$( "#assignment_code" ).html( contentObj.r );
 				$( "#file_heading" ).html( id );
 				// remove previous annotations and add the new ones
 				$('#reviews').html('');
