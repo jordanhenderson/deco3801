@@ -14,10 +14,13 @@ $isOwner = 0;
 if ($_SESSION['user_id'] == $owner[0]->StudentID) {
 	// Load all reviews made for the submission for viewing
 	$reviews = $crs->getReviews($subID);
+	echo "show all::";
 	$isOwner = 1;
+	echo "owner set::"
 } else {
 	// Load only the reviews for the current reviewer
-	$reviews = $crs->getStudent()->getReviews();
+	$reviews = $crs->getStudent()->getStudentsReviews();
+	echo "For specific student::";
 }
 // hardcoding 2 for the time being
 
@@ -28,6 +31,8 @@ foreach ($reviews as $review) {
 	 * review matches the current submission
 	 */
 	$row = $review->getRow();
+	echo "O";
+	echo $row["SubmissionID"] . "=" . $subID;
 	if ($row["SubmissionID"] == $subID) {
 		echo "M";
 		array_push($annotations, $row);
