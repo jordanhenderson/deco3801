@@ -4,7 +4,7 @@ require_once 'includes/handlers.php';
 //Initialise the PCRHandler
 $crs = new PCRHandler();
 // Get the submissionID from the url
-$subID = intval($_GET['subid']);
+$subID = $_GET['subid'];
 //$subID = '2';
 // Get the owner of the submission
 $submission = $crs->getSubmission($subID);
@@ -28,7 +28,7 @@ foreach ($reviews as $review) {
 	 * review matches the current submission
 	 */
 	$row = $review->getRow();
-	if (intval($row["SubmissionID"]) == intval($subID)) {
+	if ($row["SubmissionID"] == $subID) {
 		array_push($annotations, $row);
 	}
 }
@@ -62,7 +62,7 @@ foreach ($reviews as $review) {
 	<script>
 		var annotations = [];
         var annotations = <?php echo json_encode($annotations); ?>;
-		var isOwner;
+		var isOwner = <?php echo $isOwner;?>;
         var edit = -1;
 		var selected;
 		var prevReview = [];
@@ -406,7 +406,6 @@ foreach ($reviews as $review) {
 		}
 		
 		$(document).ready(function() {
-			isOwner = <?php echo $isOwner;?>;
 			if(isOwner == 1) {
 				ownerSetup();
 			}
