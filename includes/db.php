@@ -424,7 +424,6 @@ class Submission extends PCRObject {
 		while ($file_row = $sth->fetch(PDO::FETCH_ASSOC)) {
 			array_push($arr, $file_row);
 		}
-		echo "db " . $arr;
 		return $arr;
 	}
 	

@@ -85,14 +85,9 @@ function formatDBtime($dbtime) {
 							<td>'.formatDBtime($asg['DueTime']).'</td>';
 							echo '
 							<td>'.formatDBtime($asg['ReviewsDue']).'</td>';
-							
-							$query = $this->db->prepare(
-								"SELECT Results FROM Submissions WHERE StudentID = $_SESSION['user_id'] AND AssignmentID = $asg['AssignmentID'] LIMIT 1;");
-							$query->execute(array($this->id));
-							$row = $query->fetch(PDO::FETCH_ASSOC);
 
 							echo "
-							<td>$row['Results']</td>";
+							<td>[results]</td>";
 							?>
 
 						</tr>
