@@ -153,18 +153,18 @@ foreach ($reviews as $review) {
 				//var arr = [{"ReviewerID":'2'}, {"ReviewerID":'2'}, {"ReviewerID":'3'}, {"ReviewerID":'1'}, {"ReviewerID":'3'}, {"ReviewerID":'3'}, {"ReviewerID":'3'}, {"ReviewerID":'1'}];
 				if (isOwner == 0) {
 					if (annotations[i].fileName == $( "#file_heading" ).html() ) {
-						wordArray = reviewPopulate(wordArray);
+						wordArray = reviewPopulate(wordArray, i);
 					}
 				} else {
 					if (annotations[i].fileName == $("#file_heading").html() && annotations[i].ReviewerID == $("#student_heading").html()) {
-						wordArray = reviewPopulate(wordArray);
+						wordArray = reviewPopulate(wordArray, i);
 					}
 				}
             }
             $('#assignment_code').html(wordArray.join('\n'));
         }
         
-		function reviewPopulate(wordArray) {
+		function reviewPopulate(wordArray, i) {
 			var index = parseInt(annotations[i].startIndex);
 			var line = parseInt(annotations[i].startLine);
 			var text = annotations[i].text;
