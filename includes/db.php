@@ -540,7 +540,7 @@ class Submission extends PCRObject {
 		// TODO: Fix hardcoded value
 		echo $annotationText . "::" . $stnid . "::" . $startIndex . "::" . $startLine . "::" . $fileName . "::" . $text . "--";
 		// Need to check if the review already exists and update if that's the case
-		$review = new Review(array("SubmissionID"=>'2',
+		$review = new Review(array("SubmissionID"=>$this->getID(),
 								"Comments"=>$annotationText,
 								"ReviewerID"=>$stnid,
 								"startIndex"=>$startIndex,
