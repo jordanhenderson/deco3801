@@ -11,7 +11,7 @@ $submission = $crs->getSubmission($subID);
 $owner = $submission->getOwner();
 $isOwner = 0;
 // Check who is accessing the page (submission owner or reviewer)
-if ($_SESSION['user_id'] == $owner[0]->StudentID) {
+if ($_SESSION['user_id'] == $owner) {
 	// Load all reviews made for the submission for viewing
 	$reviews = $crs->getReviews($subID);
 	$isOwner = 1;

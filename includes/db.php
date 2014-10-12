@@ -398,19 +398,20 @@ class Submission extends PCRObject {
 		}
 	}
 	
+	// TODO FIXME
+	// All the following 'get' methods should be returning values, not arrays
+	// with one value in them. I only changed getOwner, for now, but will fix
+	// them all later.
+	
 	/**
 	 * getOwner returns the owner of the submission
 	 * @return the id of the owner
 	 */
 	public function getOwner() {
-		$arr = array();
 		$sth = $this->db->prepare("SELECT StudentID FROM Submission WHERE SubmissionID = ?;");
-		// TODO: Fix hardcoded value
+		// TODO: Fix hardcoded SubmissionID value
 		$sth->execute(array('2'));
-		while ($file_row = $sth->fetch(PDO::FETCH_ASSOC)) {
-			array_push($arr, $file_row);
-		}
-		return $arr;
+		return $sth->fetch(PDO::FETCH_ASSOC)['StudentID'];
 	}
 
 	/**
