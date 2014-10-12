@@ -147,8 +147,9 @@ function formatDBtime($dbtime) {
 						$unreviewedSubs = array_merge($unreviewedSubs, $reviewsTodo);
 						
 						// Check if assignment needs to have reviews distributed.
-						if (!$asg['ReviewsAllocated'] && $CurrentTime > $DueTime) {
+						if ($asg['ReviewsAllocated'] != 0 && $CurrentTime > $DueTime) {
 							// Reviews have not been distributed to students. Do so now.
+							include 'assignReviews.php';
 						}
 						
 						if (!$admin) { // student
