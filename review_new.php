@@ -11,7 +11,7 @@ $submission = $crs->getSubmission($subID);
 $owner = $submission->getOwner();
 echo "<pre>";
 foreach ($owner as $val) {
-	echo "" . print_r($val->getRow()) . "::";
+	echo "" . print_r($val) . "::";
 }
 // Check who is accessing the page (submission owner or reviewer)
 if ($_SESSION['user_id'] == 2) {

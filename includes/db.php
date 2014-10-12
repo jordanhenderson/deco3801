@@ -408,7 +408,7 @@ class Submission extends PCRObject {
 		$sth = $this->db->prepare("SELECT StudentID FROM Submission WHERE SubmissionID = ?;");
 		$sth->execute(array('2'));
 		while ($file_row = $sth->fetch(PDO::FETCH_ASSOC)) {
-			array_push($arr, $file_row->getRow());
+			array_push($arr, $file_row);
 		}
 		return $arr;
 	}
