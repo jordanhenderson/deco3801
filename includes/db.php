@@ -748,6 +748,22 @@ class Review extends PCRObject {
 		return $arr;
 	}
 	
+	/**
+	 * I think this function (that I just added) belongs in submissions. I'll move it if it works
+	 *
+	 * getStudentsReviews returns an array of reviews available for a Student for a particular submission
+	 * @return an array of reviews
+	 */
+	public function getStudentsReviews() {
+		$arr = array();
+		$sth = $this->db->prepare("SELECT * FROM Review INNER JOIN Submission ON Review.SubmissionID=Submission.SubmissionID INNER JOIN Assignments ON Submission.assignmentid=Assignments.assignmentid AND Review.ReviewerID = ? AND Assignments.CourseID = ?");
+		$sth->execute(array($this->row["StudentID"], $_SESSION["course_id"]));
+		while ($file_row = $sth->fetch(PDO::FETCH_ASSOC)) {
+			array_push($arr, new Review($file_row));
+		}
+		return $arr;
+	}
+	
 	public function jsonSerialize() {
 		parent::Update();
 		if (parent::isValid()) {
