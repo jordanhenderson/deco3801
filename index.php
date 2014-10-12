@@ -129,6 +129,10 @@ function formatDBtime($dbtime) {
 							continue;
 						}
 						
+						// Both variables used later.
+						$reviewsTodo = $asg->getUnreviewedSubmissions($_SESSION['user_id']);
+						$unreviewedSubs = array_merge($unreviewedSubs, $reviewsTodo);
+						
 						$asg = &$asg->getRow();
 						
 						// Convert and store the dates from the DB as Unix timestamps.
@@ -142,14 +146,8 @@ function formatDBtime($dbtime) {
 						$date = date_create_from_format('Y-m-d G:i:s', $asg['ReviewsDue']);
 						$ReviewsDue = (int) date_format($date, 'U');
 						
-						// Both variables used later.
-						echo 'start';
-						$reviewsTodo = $asg->getUnreviewedSubmissions($_SESSION['user_id']);
-						echo 'finish';
-						$unreviewedSubs = array_merge($unreviewedSubs, $reviewsTodo);
-						
 						// Check if assignment needs to have reviews distributed.
-						if ($asg['ReviewsAllocated'] != 0 && $CurrentTime > $DueTime) {
+						if ($asg['ReviewsAllocated'] && $CurrentTime > $DueTime) {
 							// Reviews have not been distributed to students. Do so now.
 							include 'assignReviews.php';
 						}
