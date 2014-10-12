@@ -106,6 +106,15 @@ class PCRHandler {
 	}
 	
 	/**
+	 * getSubmissionForReviewing returns a submission with the provided id.
+	 * @param id the submission id.
+	 * @return the submission object
+	 */
+	public function getSubmissionForReviewing($id) {
+		return new Submission(array("SubmissionID"=>$id));
+	}
+	
+	/**
 	 * getStudent returns the current Student.
 	 * @return the Student
 	 */

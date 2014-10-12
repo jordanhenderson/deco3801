@@ -7,7 +7,7 @@ $crs = new PCRHandler();
 $subID = $_GET['subid'];
 $courseid = $_SESSION['course_id'];
 // This currently returns an empty value
-$assignid = $crs->getSubmission($subID)->getAssignmentID();
+$assignid = $crs->getSubmissionForReviewing($subID)->getAssignmentID();
 // TODO: Fix hardcoded value
 if (intval($assignid) == 0) {
 	echo ":(";
@@ -15,7 +15,7 @@ if (intval($assignid) == 0) {
 }
 //$subID = '2';
 // Get the owner of the submission
-$owner = $crs->getSubmission($subID)->getOwner();
+$owner = $crs->getSubmissionForReviewing($subID)->getOwner();
 $isOwner = 0;
 
 // Check who is accessing the page (submission owner or reviewer)
