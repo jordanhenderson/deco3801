@@ -222,7 +222,6 @@ class PCRHandler {
 		if ($submission->isValid()) {
 			$submission->uploadArchive();
 			$submission->addFiles();
-			$submission->testSubmission();
 		}
 	}
 	
@@ -234,7 +233,6 @@ class PCRHandler {
 		if ($submission->isValid()) {
 			$submission->uploadRepo($repo_url, $username, $password);
 			$submission->addFiles();
-			$submission->testSubmission();
 		}
 	}
 	

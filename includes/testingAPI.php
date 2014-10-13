@@ -50,23 +50,13 @@ public class functionalTestAPI {
 }
 
 public class javaTesting {
-	private $source_directory;
-	private $test_class_path;
-	private $test_class_name;
-	
-	public function __construct($source_directory, $test_class_path, $test_class_name) {
-		$this->source_directory = $source_directory;
-		$this->test_class_path = $test_class_path;
-		$this->test_class_name = $test_class_name;
-	}
-
 	/**
 	* This function takes a directory containing java source files and compiles them.
 	* It will return true if the compilation was successful, false otherwise.
 	* 
 	*/
-	public static function compile() {
-		$scriptOutput = shell_exec("javac " . $this->source_directory . "*.java");
+	public static function compile($source_directory) {
+		$scriptOutput = shell_exec("javac " . $source_directory . "*.java");
 
 		echo "=== Compilation output ===\n" . $scriptOutput . "=======================\n";
 	}
@@ -78,8 +68,8 @@ public class javaTesting {
 	*
 	* e.g. $failedTests[0] == "test_name:expected_result:actual_result"
 	*/
-	public static function runJUnitTest() {
-		$scriptOutput = shell_exec("cd " . $this->test_class_path . " && java " . $this->test_class_name;
+	public static function runJUnitTest($test_class_path, $test_class) {
+		$scriptOutput = shell_exec("cd " . $test_class_path . " && java " . $test_class);
 
 		echo "=== Execution output ===\n" . $scriptOutput . "=======================\n";
 
@@ -109,14 +99,6 @@ public class javaTesting {
 	
 
 public class bashTesting {
-	public $test_file_location;
-	public $assignment_file_location;
-
-	public function __construct($test_file_location, $assignment_file_location) {
-		$this->test_file_location = $test_file_location;
-		$this->assignment_file_location = $assignment_file_location;
-	}
-
 	/**
 	* This function will run the given bash script on the server, then return an 
 	* array of values indicating whether the test with that index succeeded 
@@ -131,9 +113,9 @@ public class bashTesting {
 	* 
 	* Returns null if there were no test results
 	*/
-	public static function execute() {
+	public static function execute($script_path) {
 		// Execute student assignment
-		$scriptOutput = shell_exec($this->test_file_location);
+		$scriptOutput = shell_exec($script_path);
 		
 		// Check for newline at the end, remove if present
 		if (substr($scriptOutput, -1) == "\n") {

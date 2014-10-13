@@ -19,10 +19,10 @@ functionalTestAPI::dbUpdateTestResults(00001, $output);
 
 
 echo "compiling java files" . PHP_EOL;
-javaTesting::compile("../../upload/");
+functionalTestAPI::compileJavaSubmission("../../upload/");
 
 echo "running junit tests..." . PHP_EOL;
-$output = javaTesting::runJUnitTest("../../upload/", "TestRunner");
+$output = functionalTestAPI::runJUnitTestFile("../../upload/", "TestRunner");
 
 foreach ($output as $value) {
 	echo $value . PHP_EOL;
