@@ -91,10 +91,14 @@ foreach ($reviews as $review) {
             for(var i=0; i < annotations.length; i++) {
                 if(annotations[i].Comments == comment) {
                     // Check if the review hasn't been saved to the database
-                    if (annotations[i].status != 'o') {
+                    if (annotations[i].status == 'n') {
                         annotations.splice(i, 1);
                         break;
                     }
+					// Check if the deleted comment has been edited
+					if (annotations[i].status == 'e') {
+						annotations[i].Comments = annotations[i].prevComment;
+					}
                     // if it has then mark it for deletion
                     annotations[i].status = 'd';
                     break;
@@ -175,6 +179,7 @@ foreach ($reviews as $review) {
 				} else {
 					if (annotations[i].fileName == $("#file_heading").html() && annotations[i].ReviewerID == $("#student_heading").html()) {
 						wordArray = reviewPopulate(wordArray, i);
+						$("#reviewControls" + (count-1)).hide();
 					}
 				}
             }
@@ -221,6 +226,7 @@ foreach ($reviews as $review) {
                     annotations[edit].prevComment = annotations[edit].Comments;
                 }
                 annotations[edit].Comments = comment;
+				// If the comment was already in the database, mark it as edited
                 if (annotations[edit].status == 'o') {
                     annotations[edit].status = 'e';
                 }
@@ -239,6 +245,7 @@ foreach ($reviews as $review) {
 					break;
 				}
 			}
+			// Push the new comment into the array
             annotations.push({"Comments":comment, "text":selected, "status":'n', "startLine":startLine, "startIndex":startIndex, "fileName":$( "#file_heading" ).html(), "SubmissionID":<?php echo $subID;?>});
             count = count + 1;
             setupHighlighter();
@@ -418,7 +425,10 @@ foreach ($reviews as $review) {
 				ownerSetup();
 			}
 			getComments();
-			setupHighlighter();
+			// don't setup the highlighter for the owner
+			if (isOwner == 0) {
+				setupHighlighter();
+			}
 		});
     </script>
 	<!-- Bootstrap Core JavaScript -->
