@@ -134,6 +134,7 @@ foreach ($reviews as $review) {
 		 *
 		 */
 		function ownerSetup() {
+			$('#student_heading').show();
 			var counts = {};
 			var first = 0;
 			for (var i = 0; i < annotations.length; i++) {
@@ -142,7 +143,7 @@ foreach ($reviews as $review) {
 			for (var key in counts) {
 				if (first == 0) {
 					first = 1;
-					$('#student_heading').html(key);
+					$('#student_heading_span').html(key);
 				}
 				$('#studentReviews').append('<a href="#" class="reviewedBy" onclick="changeReviewer(' + key + ')">Student: ' + key + '</a>');
 			}
@@ -153,8 +154,10 @@ foreach ($reviews as $review) {
 		 *
 		 */
 		function changeReviewer(id) {
-			$('#student_heading').html(id);
+			$('#student_heading_span').html(id);
+			setupHighlighter();
 			$('#assignment_code').getHighlighter().removeHighlights();
+			$('#assignment_code').getHighlighter().destroy();
 			count = 0;
 			$('#reviews').html('');
 			getComments();
@@ -177,7 +180,7 @@ foreach ($reviews as $review) {
 						wordArray = reviewPopulate(wordArray, i);
 					}
 				} else {
-					if (annotations[i].fileName == $("#file_heading").html() && annotations[i].ReviewerID == $("#student_heading").html()) {
+					if (annotations[i].fileName == $("#file_heading").html() && annotations[i].ReviewerID == $("#student_heading_span").html()) {
 						wordArray = reviewPopulate(wordArray, i);
 						$("#reviewControls" + (count-1)).hide();
 					}
@@ -380,7 +383,7 @@ foreach ($reviews as $review) {
 			<h1>Assignment <?php echo intval($assignid); ?></h1>
 			<div class="col-md-12">
 				<h2 id="file_heading"><?php if (count($filesArray) > 0) echo $filesArray[0]; ?></h2>
-				<h3>Student <span id="student_heading"></span></h3>
+				<h3 id="student_heading" style="display:none">Student <span id="student_heading_span"></span></h3>
 				<div id="studentReviews" class="list-group" style="float:right"></div>
 				<div id="innercontainer">
                     <pre id='assignment_code' style="float:left"><?php

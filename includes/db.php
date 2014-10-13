@@ -515,9 +515,8 @@ class Submission extends PCRObject {
 	public function getReviews() {
 		$arr = array();
 		$sth = $this->db->prepare("SELECT * FROM Review WHERE SubmissionID = ?;");
-		//$sth->execute(array($this->getID()));
-        // TODO: Fix hardcoded value
-        $sth->execute(array('2'));
+		// TODO: Fix hardcoded value
+        $sth->execute(array($this->getID()));
 		while ($file_row = $sth->fetch(PDO::FETCH_ASSOC)) {
 			array_push($arr, new Review($file_row));
 		}
@@ -530,9 +529,9 @@ class Submission extends PCRObject {
 		// Delete that review
 		$arr = array();
 		$sth = $this->db->prepare("SELECT ReviewID FROM Review WHERE SubmissionID = ? AND Comments = '" . $comment . "';");
-		//$sth->execute(array($this->getID()));
+		$sth->execute(array($this->getID()));
 		// TODO: Fix hardcoded value
-		$sth->execute(array('2'));
+		//$sth->execute(array('2'));
 		$file_row = $sth->fetch(PDO::FETCH_ASSOC);
 		$review = new Review($file_row);
 		$review->delete();
@@ -563,9 +562,9 @@ class Submission extends PCRObject {
 	public function editReview($prevComment, $annotationText) {
 		$arr = array();
 		$sth = $this->db->prepare("SELECT ReviewID FROM Review WHERE SubmissionID = ? AND Comments = '" . $prevComment . "';");
-		//$sth->execute(array($this->getID()));
+		$sth->execute(array($this->getID()));
 		// TODO: Fix hardcoded value
-		$sth->execute(array('2'));
+		//$sth->execute(array('2'));
 		$file_row = $sth->fetch(PDO::FETCH_ASSOC);
 		$file_row["Comments"] = $annotationText;
 		$review = new Review($file_row);
