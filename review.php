@@ -27,11 +27,12 @@ $annotations = array();
 foreach ($reviews as $review) {
 	/*
 	 * push review into the array if the submission id of the 
-	 * review matches the current submission
+	 * review matches the current submission. Also mark as a
+	 * review that is already in the database.
 	 */
 	$row = $review->getRow();
 	if ($row["SubmissionID"] == $subID) {
-		array_push($row, "status"=>'o');
+		$row["status"]='o';
 		array_push($annotations, $row);
 	}
 }
