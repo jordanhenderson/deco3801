@@ -31,6 +31,7 @@ foreach ($reviews as $review) {
 	 */
 	$row = $review->getRow();
 	if ($row["SubmissionID"] == $subID) {
+		array_push($row, "status"=>'o');
 		array_push($annotations, $row);
 	}
 }
@@ -173,7 +174,7 @@ foreach ($reviews as $review) {
 			
 			for(var i=0; i < annotations.length; i++) {
 				// add status to mark as already in database
-				annotations[i].status = 'o';
+				//annotations[i].status = 'o';
 				
 				if (isOwner == 0) {
 					if (annotations[i].fileName == $( "#file_heading" ).html() ) {
