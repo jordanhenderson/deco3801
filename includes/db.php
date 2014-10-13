@@ -354,6 +354,16 @@ class Assignment extends PCRObject {
 		$this->row["ReviewsAllocated"] = "1";
 		$this->commit();
 	}
+	
+	/**
+	 * Returns the Assignment Name for a given AssignmentID
+	 * @return the assignment name
+	 */
+	 public function getAssignmentName() {
+		$sth = $this->db->prepare("SELECT AssignmentName FROM Assignments WHERE AssignmentID = ?;");
+		$sth->execute(array($this->getID()));
+		return $sth->fetch(PDO::FETCH_ASSOC)['AssignmentName'];
+	 }
 }
 
 /**
