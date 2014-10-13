@@ -4,6 +4,7 @@
  * Add your custom database connection string and parameters to the constructor.
  */
 require_once "config.php";
+require_once "testingAPI.php"
 class Database {
 	private $db;
 	/**
@@ -391,6 +392,7 @@ class File extends PCRObject  {
  */
 class Submission extends PCRObject {
 	private $storage_dir;
+
 	public function __construct($data) {
 		parent::__construct("SubmissionID", "Submission", $data);
 		$id = $this->getID();
@@ -570,6 +572,36 @@ class Submission extends PCRObject {
 		$review = new Review($file_row);
 		$review->commit();
 		return $review;
+	}
+
+	public function testSubmission() {
+		// Get assignment type
+		$assignment_type = $this->db->prepare("SELECT Language FROM Assignment WHERE AssignmentID = ?);");
+		$assignment_type->execute(array($this->getID()));
+		$assignment_type = $assignment_type->fetch(PDO::FETCH_ASSOC)['Language'];
+
+		// Get test files location
+		$test_file_location = $this->db->prepare("SELECT TestFiles FROM Assignment WHERE AssignmentID = ?;");
+		$test_file_location->execute(array($this->getID()));
+		$test_file_location = $test_file_location->fetch(PDO::FETCH_ASSOC)['TestFiles'];
+
+		// Get assignment files location
+		// 		Maybe not... see $storage_dir in this class
+
+		// Run appropriate tests
+		switch ($assignment_type) {
+			case 'bash':
+				$tester = new bashTesting($test_file_location, $this->storage_dir);
+				$tester.execute();
+
+				break;
+			case 'java':
+				$tester = new javaTesting($this->storage_dir, $test_class_path, $test_class_name;
+				$tester.compile();
+				$tester.runJUnitTest();
+
+				break;
+		}
 	}
 	
 	/**
