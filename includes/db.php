@@ -4,7 +4,7 @@
  * Add your custom database connection string and parameters to the constructor.
  */
 require_once "config.php";
-require_once "testingAPI.php";
+require_once "testingAPI.php"
 class Database {
 	private $db;
 	/**
