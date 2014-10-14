@@ -222,8 +222,6 @@ class PCRHandler {
 		if ($submission->isValid()) {
 			$submission->uploadArchive();
 			$submission->addFiles();
-			// TODO Uncomment when ready for testing
-			//$submission->testSubmission();
 		}
 	}
 	
@@ -235,8 +233,6 @@ class PCRHandler {
 		if ($submission->isValid()) {
 			$submission->uploadRepo($repo_url, $username, $password);
 			$submission->addFiles();
-			// TODO Uncomment when ready for testing
-			//$submission->testSubmission();
 		}
 	}
 	
