@@ -3,7 +3,11 @@
  * Database contains a base database (PDO) and prepared query wrapper.
  * Add your custom database connection string and parameters to the constructor.
  */
+error_reporting(E_ALL);
+
 require_once "config.php";
+include "testingAPI.php";
+
 class Database {
 	private $db;
 	/**
@@ -438,13 +442,9 @@ class Submission extends PCRObject {
 	 * @return the result of the tests
 	 */
 	public function getResults() {
-		$arr = array();
 		$sth = $this->db->prepare("SELECT Results FROM Submission WHERE SubmissionID = ?;");
-		$sth->execute(array('1'));
-		while ($file_row = $sth->fetch(PDO::FETCH_ASSOC)) {
-			array_push($arr, $file_row);
-		}
-		return $arr;
+		$sth->execute(array($this->getID()));
+		return $sth->fetch(PDO::FETCH_ASSOC)['Results'];
 	}
 	
 	/**
@@ -582,6 +582,42 @@ class Submission extends PCRObject {
 		$review = new Review($file_row);
 		$review->commit();
 		return $review;
+	}
+
+	public function testSubmission() {
+		// Get assignment type
+		$assignment_type = $this->db->prepare("SELECT Language FROM Assignment WHERE AssignmentID = ?);");
+		$assignment_type->execute(array($assignmentid));
+		$assignment_type = $assignment_type->fetch(PDO::FETCH_ASSOC)['Language'];
+
+		// Get test files location
+		$test_file_location = $this->db->prepare("SELECT TestFiles FROM Assignment WHERE AssignmentID = ?;");
+		$test_file_location->execute(array($assignmentid));
+		$test_file_location = $test_file_location->fetch(PDO::FETCH_ASSOC)['TestFiles'];
+
+		// Run appropriate tests
+		switch ($assignment_type) {
+			case 'bash':
+				$tester = new bashTesting($test_file_location, $this->storage_dir);
+				$tester.execute();
+
+				// Update results in database
+
+				break;
+			case 'java':
+				// Get assignment files location
+				$assignment_file = $this->db->prepare("SELECT FileName FROM Files WHERE SubmissionID = ?;");
+				$assignment_file->execute(array($this->getID()));
+				$assignment_file = $assignment_file->fetch(PDO::FETCH_ASSOC)['FileName'];
+
+				$tester = new javaTesting($this->storage_dir, $this->storage_dir, $assignment_file);
+				$tester.compile();
+				$tester.runJUnitTest();
+
+				// Update results in database
+				
+				break;
+		}
 	}
 	
 	/**

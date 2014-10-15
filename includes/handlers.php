@@ -1,4 +1,6 @@
 <?php
+error_reporting(E_ALL);
+
 if (session_id() == "") {
 	session_start(); // start session if not already started
 }
@@ -224,6 +226,8 @@ class PCRHandler {
 		if ($submission->isValid()) {
 			$submission->uploadArchive();
 			$submission->addFiles();
+			// TODO Uncomment when ready for testing
+			//$submission->testSubmission();
 		}
 	}
 	
@@ -235,6 +239,8 @@ class PCRHandler {
 		if ($submission->isValid()) {
 			$submission->uploadRepo($repo_url, $username, $password);
 			$submission->addFiles();
+			// TODO Uncomment when ready for testing
+			//$submission->testSubmission();
 		}
 	}
 	

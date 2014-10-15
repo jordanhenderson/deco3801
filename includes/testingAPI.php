@@ -1,14 +1,14 @@
 <?php
 error_reporting(E_ALL);
 
-public class functionalTestAPI {
+/*public class functionalTestAPI {
 	/**
 	* This function will update the given test results for the database submission entry.
 	* It will return true if the data is inserted successfully, false otherwise
 	* 
 	* $testResults must be an array with each element containing the value 
 	* "pass" or "fail"
-	*/
+	*
 	public static function dbUpdateTestResults($submissionID, $testResults) {
 		$dbString = "";
 
@@ -37,7 +37,7 @@ public class functionalTestAPI {
 	* 
 	* This function will return an array with each element containing the value 
 	* "pass" or "fail"
-	*/
+	*
 	public static function dbRetrieveTestResults($submissionID) {
 		if ($db->query("SELECT Results FROM Submission WHERE SubmissionID='$submissionID'") != false) {
 			echo "Test data retrieved successfully\n";
@@ -45,7 +45,7 @@ public class functionalTestAPI {
 			echo "Error retrieving test results from database\n";
 		}
 	}
-}
+}*/
 
 public class javaTesting {
 	private $source_directory;
