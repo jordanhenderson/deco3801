@@ -1,6 +1,5 @@
 <?php
 error_reporting(E_ALL);
-echo "testingAPI";
 /*public class functionalTestAPI {
 	/**
 	* This function will update the given test results for the database submission entry.

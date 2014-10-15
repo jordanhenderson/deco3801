@@ -1,5 +1,4 @@
 <?php
-error_reporting(E_ALL);
 
 if (session_id() == "") {
 	session_start(); // start session if not already started

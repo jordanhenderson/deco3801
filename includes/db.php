@@ -3,9 +3,6 @@
  * Database contains a base database (PDO) and prepared query wrapper.
  * Add your custom database connection string and parameters to the constructor.
  */
-error_reporting(E_ALL);
-
-echo "db";
 
 require_once "config.php";
 include "testingAPI.php";
