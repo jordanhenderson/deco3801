@@ -356,7 +356,9 @@ foreach ($reviews as $review) {
 		
 			<div class="list-group">
 			<?php
-                // Handles the retrieval of files from the server for the first load
+				/*NOTE: Please keep everything in here for reasons
+                 * Handles the retrieval of files from the server for the first load
+				 */
                 $dir = "/var/www/upload/course_$courseid/assign_$assignid/submissions/$subID/";
                 $filesArray = array();
                 // Open a directory, and read its contents
@@ -382,7 +384,7 @@ foreach ($reviews as $review) {
 			</div>
 		</div>
 		<div class="col-md-9">
-			<h1>Assignment <?php echo intval($assignid); ?></h1>
+			<h1><?php echo $crs->getAssignment($assignid)->getAssignmentName(); ?></h1>
 			<div class="col-md-12">
 				<h2 id="file_heading"><?php if (count($filesArray) > 0) echo $filesArray[0]; ?></h2>
 				<h3 id="student_heading" style="display:none">Student <span id="student_heading_span"></span></h3>
@@ -392,13 +394,6 @@ foreach ($reviews as $review) {
                     //Loads the first file in the file tree if its not empty
                     if (count($filesArray) > 0) {
 						echo $crs->loadFile($courseid, $assignid, $subID, $filesArray[0]);
-                        /*$assignment = "/var/www/upload/course_$courseid/assign_$assignid/submissions/$subID/" . $filesArray[0];
-                        $handle = fopen($assignment, "r");
-                        $contents = fread($handle, filesize($assignment));
-                        $contents = str_replace('<', '&lt;', $contents);
-                        $contents = str_replace('>', '&gt;', $contents);
-                        echo $contents;
-                        fclose($handle);*/
                     }
                 ?></pre>
 				<div id="reviews" style="clear:right; float:right;"></div>
