@@ -77,7 +77,7 @@ class javaTesting {
 	* e.g. $failedTests[0] == "test_name:expected_result:actual_result"
 	*/
 	public static function runJUnitTest() {
-		$scriptOutput = shell_exec("cd " . $this->test_class_path . " && java " . $this->test_class_name;
+		$scriptOutput = shell_exec("cd " . $this->test_class_path . " && java " . $this->test_class_name);
 
 		echo "=== Execution output ===\n" . $scriptOutput . "=======================\n";
 
