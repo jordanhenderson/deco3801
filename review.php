@@ -359,8 +359,7 @@ foreach ($reviews as $review) {
 				/*NOTE: Please keep everything in here for reasons
                  * Handles the retrieval of files from the server for the first load
 				 */
-                $dir =  __DIR__ . "storage/course_$courseid/assign_$assignid/submissions/$subID/";
-				echo $dir;
+                $dir =  __DIR__ . "/storage/course_$courseid/assign_$assignid/submissions/$subID/";
                 $filesArray = array();
                 // Open a directory, and read its contents
                 if (is_dir($dir)){
