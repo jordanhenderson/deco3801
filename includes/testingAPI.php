@@ -1,6 +1,6 @@
 <?php
 error_reporting(E_ALL);
-
+echo "testingAPI";
 /*public class functionalTestAPI {
 	/**
 	* This function will update the given test results for the database submission entry.
@@ -47,7 +47,7 @@ error_reporting(E_ALL);
 	}
 }*/
 
-public class javaTesting {
+class javaTesting {
 	private $source_directory;
 	private $test_class_path;
 	private $test_class_name;
@@ -104,7 +104,7 @@ public class javaTesting {
 	}
 }
 
-public class bashTesting {
+class bashTesting {
 	public $test_file_location;
 	public $assignment_file_location;
 
