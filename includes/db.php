@@ -60,10 +60,6 @@ abstract class PCRObject implements JsonSerializable {
 	 */
 	protected $uptodate;
 	/**
-	 * forceCreate specifies if a row with the provided ID does not already exist.
-	 */
-	protected $forceCreate;
-	/**
 	 * PCRObject($id_field, $table, $data, $forceCreate)
 	 * @param id_field: The ID field of the database table.
 	 * @param table: The name of the database table.
@@ -71,16 +67,15 @@ abstract class PCRObject implements JsonSerializable {
 	 * @param forceCreate: Should a new row be auto-created if an ID is 
 	 *		  provided and a matching row is not found.
 	 */
-	protected function __construct($id_field, $table, $data, $forceCreate = 0) {
+	protected function __construct($id_field, $table, $data) {
 		$this->db = $GLOBALS["db"];
 		$this->table = $table;
 		$this->id_field = $id_field;
 		$this->uptodate = 0;
-		$this->forceCreate = $forceCreate;
 		if (is_array($data)) {
 			$this->row = $data;
 			if (isset($data[$id_field]) && $data[$id_field] != null) {
-				$this->id = $data[$id_field];
+				$this->Update();
 			}
 		}
 	}
@@ -94,8 +89,7 @@ abstract class PCRObject implements JsonSerializable {
 		/* Update the row to match the latest set of data. */
 		$update = "UPDATE $this->table SET ";
 		foreach ($row as $key=>$value) {
-			if ($key != $this->id_field)
-				$update .= "$key = :$key,";
+			$update .= "$key = :$key,";
 		}
 		$update = rtrim($update, ",");
 		$update .= " WHERE $this->id_field = :$this->id_field;";
@@ -129,9 +123,18 @@ abstract class PCRObject implements JsonSerializable {
 		//Execute the statement
 		try {
 			$sth = $this->db->prepare("INSERT INTO $this->table ($cols) VALUES ($vals);");
+		
 			$sth->execute($this->row);
-
-			$this->id = $this->row[$this->id_field] = $this->db->lastInsertId();
+			$id = $this->db->lastInsertId();
+			$reqid = $this->row[$this->id_field];
+			//Update the item's ID
+			if(isset($reqid) && $id != $reqid) {
+				$sth = $this->db->prepare("UPDATE $this->table SET $this->id_field = ? WHERE $this->id_field = ?;");
+				$sth->execute(array($reqid, $id));
+				$this->id = $reqid;
+			} else {
+				$this->id = $id;
+			}
 		} catch (PDOException $e) {
 			//An error occured while inserting.
 			return;
@@ -156,30 +159,29 @@ abstract class PCRObject implements JsonSerializable {
 			
 			//Guarantee the id field has been provided.
 			$row = null;
-			if (!isset($this->id)) {
+			$id = isset($this->id) ? $this->id : (isset($this->row[$this->id_field]) ? $this->row[$this->id_field] : null);
+			if ($id == null) {
 				//Insert a new row.
 				$this->row[$this->id_field] = "NULL";
 			} else {
 				//Select an existing row - this may succeed or fail.
-				$sth->execute(array($this->id));
+				$sth->execute(array($id));
 				$row = $sth->fetch(PDO::FETCH_ASSOC);
-				if (!$row && !$this->forceCreate) {
-					$this->row = null;
-					return;
+			}
+			
+			if ($row != null) {
+				//Compare the associative arrays, update the row if necessary ($this->row overrides old data)
+				foreach ($this->row as $key => $value) {
+					if($row[$key] !== $value) {
+						$this->updateRow($this->row);
+						break;
+					}
 				}
+				//The object is now valid and up to date.
+				$this->id = $id;
+				$this->row = $row;
+				$this->uptodate = 1;
 			}
-			
-			//The provided ID did not return a row.
-			if (!$row) {
-				$this->insertRow();
-				//Populate the freshly inserted row by calling Update again.
-				//Only recurse once to prevent a loop - this might not be necessary.
-				if (!$recursed) $this->Update(1);
-				return;
-			}
-			
-			$this->row = $row;
-			$this->uptodate = 1;
 		}
 	}
 	
@@ -230,7 +232,7 @@ abstract class PCRObject implements JsonSerializable {
 		if ($this->id != null) {
 			$this->updateRow($this->row);
 		} else {
-			$this->Update();
+			$this->insertRow();
 		}
 	}
 }
@@ -399,10 +401,10 @@ class Submission extends PCRObject {
 			$courseid = $_SESSION["course_id"];
 			
 			$assignmentid = $this->row["AssignmentID"];
-			$this->storage_dir = "/var/www/upload/course_$courseid/assign_$assignmentid/submissions/$id/";
-			// if (!file_exists($this->storage_dir)) {
-			// 	mkdir($this->storage_dir, 0700, true);
-			// }
+			$this->storage_dir = __DIR__ . "storage/course_$courseid/assign_$assignmentid/submissions/$id/";
+			if (!file_exists($this->storage_dir)) {
+			 	mkdir($this->storage_dir, 0700, true);
+			 }
 		}
 	}
 	
@@ -597,7 +599,7 @@ class Submission extends PCRObject {
  */
 class Course extends PCRObject {
 	public function __construct($data) {
-		parent::__construct("CourseID", "Course", $data, 1);
+		parent::__construct("CourseID", "Course", $data);
 	}
 	
 	/**
@@ -751,7 +753,7 @@ class Question extends PCRObject {
  */	
 class Review extends PCRObject {
 	public function __construct($data) {
-		parent::__construct("ReviewID", "Review", $data, 1);
+		parent::__construct("ReviewID", "Review", $data);
 	}
 	
 	/**

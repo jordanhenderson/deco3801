@@ -30,7 +30,10 @@ class PCRHandler {
 	 * @return the course
 	 */
 	public function getCourse() {
-		return new Course(array("CourseID"=>$_SESSION['course_id']));
+		$crs = new Course(array("CourseID"=>$_SESSION['course_id']));
+		if(!$crs->isValid()) 
+			$crs->commit();
+		return $crs;
 	}
 	
 	/**
@@ -214,11 +217,10 @@ class PCRHandler {
     }
 	
 	/**
-	 * uploadArchive uploads an archive to a submission
+	 * uploadArchive uploads an archive to an assignment
 	 */
-	public function uploadArchive() {
-		$submission_id = isset($_POST["submission_id"]) ? $_POST["submission_id"] : null;
-		$submission = new Submission(array("SubmissionID"=>$submission_id));
+	public function uploadArchive($assignment_id) {
+		$submission = new Submission(array("AssignmentID"=>$assignment_id, "StudentID"=>$_SESSION['user_id']));
 		if ($submission->isValid()) {
 			$submission->uploadArchive();
 			$submission->addFiles();
@@ -226,10 +228,10 @@ class PCRHandler {
 	}
 	
 	/**
-	 * uploadRepo uploads a repository to a submission
+	 * uploadRepo uploads a repository to an assignment
 	 */
-	public function uploadRepo($submission_id, $repo_url, $username, $password) {
-		$submission = new Submission(array("SubmissionID"=>$submission_id));
+	public function uploadRepo($assignment_id, $repo_url, $username, $password) {
+		$submission = new Submission(array("AssignmentID"=>$assignment_id, "StudentID"=>$_SESSION['user_id']));
 		if ($submission->isValid()) {
 			$submission->uploadRepo($repo_url, $username, $password);
 			$submission->addFiles();
@@ -240,15 +242,14 @@ class PCRHandler {
 	 * Create a new assignment.
 	 */
 	public function changeAssignment($AssignmentID, $AssignmentName, $ReviewsNeeded, $ReviewsDue, $weight, $OpenTime, $DueTime){
-		$assignment = new Assignment(array("AssignmentID" => $AssignmentID));
-			$assignmentrow = &$assignment->getRow();
-			$assignmentrow["AssignmentName"] = $AssignmentName;
-			$assignmentrow["CourseID"] = $_SESSION['course_id'];
-			$assignmentrow["ReviewsNeeded"] = $ReviewsNeeded;
-			$assignmentrow["ReviewsDue"] = $ReviewsDue;
-			$assignmentrow["Weight"] = $weight;
-			$assignmentrow["OpenTime"] = $OpenTime;
-			$assignmentrow["DueTime"] = $DueTime;
+		$assignment = new Assignment(array("AssignmentID" => $AssignmentID,
+										   "AssignmentName" => $AssignmentName,
+										   "CourseID" => $_SESSION['course_id'],
+										   "ReviewsNeeded" => $ReviewsNeeded,
+										   "ReviewsDue" => $ReviewsDue,
+										   "Weight" => $weight,
+										   "OpenTime" => $OpenTime,
+										   "DueTime" => $DueTime));
 		$assignment->commit();
 		return $assignment;
 	}	
@@ -265,7 +266,7 @@ class PCRHandler {
      * review_dev.php. 
 	 */
 	public function loadFile($courseID, $assignID, $subID, $fileName) {
-		$assignment = "/var/www/upload/course_$courseID/assign_$assignID/submissions/$subID/" . $fileName;
+		$assignment = "storage/course_$courseID/assign_$assignID/submissions/$subID/" . $fileName;
 		$handle = fopen($assignment, "r");
 		$contents = fread($handle, filesize($assignment));
 		$contents = str_replace('<', '&lt;', $contents);
