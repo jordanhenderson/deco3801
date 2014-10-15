@@ -5,6 +5,8 @@
  */
 error_reporting(E_ALL);
 
+echo "db";
+
 require_once "config.php";
 include "testingAPI.php";
 

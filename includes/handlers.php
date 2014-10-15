@@ -9,6 +9,7 @@ if (!isset($_SESSION['user_id'])) {
 	exit(); 
 }
 
+echo "handler";
 require_once("db.php");
 
 /**
