@@ -1,0 +1,35 @@
+<?php
+session_start();
+$_SESSION['user_id'] = "0";
+
+require_once('config.php');
+require_once('includes/handlers.php');
+
+class SubmissionTest extends PHPUnit_Framework_TestCase {
+	public function testSubmission() {
+		$_SESSION['course_id'] = "0";
+		$handler = new PCRHandler();
+		$course = $handler->getCourse();
+		//Create an assignment
+		$assignment = $handler->changeAssignment("0", "Test Assignment", "0", "0", "0", "0", "0");
+		
+		$this->assertNotNull($assignment);
+		$this->assertEquals($assignment->isValid(), true);
+		
+		//Fake file upload by populating $_FILES
+		$_FILES["file"]["name"] = "test.zip";
+		$_FILES["file"]["error"] = 0;
+		$_FILES["file"]["tmp_name"] = "tests/test.zip";
+		//Create a submission
+		$subm = $handler->uploadArchive($assignment->getID());
+		$this->assertNotNull($subm);
+		$this->assertEquals($subm->isValid(), true);
+		
+		//Try uploading a repo submission with no host (should return null)
+		$this->assertNull($handler->uploadRepo($assignment->getID(), "", "", ""));
+		
+		//Clean up the assignment 
+		$assignment->delete();
+	}
+
+}

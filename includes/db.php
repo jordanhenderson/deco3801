@@ -96,10 +96,10 @@ abstract class PCRObject implements JsonSerializable {
 		}
 		$update = rtrim($update, ",");
 		$update .= " WHERE $this->id_field = :$this->id_field;";
-
 		try {
 			$sth = $this->db->prepare($update);
-			$sth->execute($this->row);
+			$sth->execute($row);
+			$this->row = $row;
 		} catch(PDOException $e) {
 			return;
 		}
@@ -126,12 +126,11 @@ abstract class PCRObject implements JsonSerializable {
 		//Execute the statement
 		try {
 			$sth = $this->db->prepare("INSERT INTO $this->table ($cols) VALUES ($vals);");
-		
 			$sth->execute($this->row);
 			$id = $this->db->lastInsertId();
-			$reqid = $this->row[$this->id_field];
+			$reqid = isset($this->row[$this->id_field]) ? $this->row[$this->id_field] : null;
 			//Update the item's ID
-			if(isset($reqid) && $id != $reqid) {
+			if($reqid != null && $id != $reqid) {
 				$sth = $this->db->prepare("UPDATE $this->table SET $this->id_field = ? WHERE $this->id_field = ?;");
 				$sth->execute(array($reqid, $id));
 				$this->id = $reqid;
@@ -155,7 +154,7 @@ abstract class PCRObject implements JsonSerializable {
 	 * Note: This function may fail if a new row is being inserted without
 	 * valid constraints.
 	 */
-	public function Update($recursed=0) {
+	public function Update($recursed = false) {
 		if (!$this->uptodate) {
 			//Populate the PCRObject.
 			$sth = $this->db->prepare("SELECT * FROM $this->table WHERE $this->id_field = ?;");
@@ -165,26 +164,33 @@ abstract class PCRObject implements JsonSerializable {
 			$id = isset($this->id) ? $this->id : (isset($this->row[$this->id_field]) ? $this->row[$this->id_field] : null);
 			if ($id == null) {
 				//Insert a new row.
-				$this->row[$this->id_field] = "NULL";
+				$this->insertRow();
+				//Repopulate the row with default values.
+				if(!$recursed) $this->Update(true);
 			} else {
 				//Select an existing row - this may succeed or fail.
 				$sth->execute(array($id));
 				$row = $sth->fetch(PDO::FETCH_ASSOC);
+				
+				if($row) {
+					$changed = false;
+					foreach ($this->row as $key => $value) {
+						if($row[$key] !== $value) {
+							$row[$key] = $value;
+							$changed = true;
+						}
+					}
+					if($changed) $this->updateRow($row);
+				}
+				else {
+					$this->insertRow();
+				}
+				
+				$this->id = $id;
 			}
 			
-			if ($row != null) {
-				//Compare the associative arrays, update the row if necessary ($this->row overrides old data)
-				foreach ($this->row as $key => $value) {
-					if($row[$key] !== $value) {
-						$this->updateRow($this->row);
-						break;
-					}
-				}
-				//The object is now valid and up to date.
-				$this->id = $id;
-				$this->row = $row;
-				$this->uptodate = 1;
-			}
+			//In any case, we have the latest object now.
+			$this->uptodate = 1;
 		}
 	}
 	
@@ -218,10 +224,15 @@ abstract class PCRObject implements JsonSerializable {
 		return $this->row;
 	}
 
+	protected function Cleanup() {
+		
+	}
+	
 	/**
 	 * Delete the object within the database.
 	 */
 	public function delete() {
+		$this->Cleanup();
 		if ($this->isValid()) {
 			$this->db->query("DELETE FROM $this->table WHERE $this->id_field = $this->id;");
 			$this->id = null;
@@ -284,6 +295,28 @@ class PCRBuilder {
 class Assignment extends PCRObject {
 	public function __construct($data) {
 		parent::__construct("AssignmentID", "Assignments", $data);
+	}
+	
+	public function delete() {
+		//Clean up all assignment files
+		$id = $this->getID();
+		$courseid = $_SESSION["course_id"];
+		$dir = __DIR__ . "/../storage/course_$courseid/assign_$id/";
+		$it = new RecursiveDirectoryIterator($dir, RecursiveDirectoryIterator::SKIP_DOTS);
+		$files = new RecursiveIteratorIterator($it,
+					 RecursiveIteratorIterator::CHILD_FIRST);
+		foreach($files as $file) {
+			if ($file->getFilename() === '.' || $file->getFilename() === '..') {
+				continue;
+			}
+			if ($file->isDir()){
+				rmdir($file->getRealPath());
+			} else {
+				unlink($file->getRealPath());
+			}
+		}
+		rmdir($dir);
+		parent::delete();
 	}
 	
 	public function jsonSerialize() {
@@ -414,11 +447,15 @@ class Submission extends PCRObject {
 			$courseid = $_SESSION["course_id"];
 			
 			$assignmentid = $this->row["AssignmentID"];
-			$this->storage_dir = __DIR__ . "/storage/course_$courseid/assign_$assignmentid/submissions/$id/";
+			$this->storage_dir = __DIR__ . "/../storage/course_$courseid/assign_$assignmentid/submissions/$id/";
 			if (!file_exists($this->storage_dir)) {
-			 	mkdir($this->storage_dir, 0700, true);
-			 }
+			 	mkdir($this->storage_dir, 0755, true);
+			}
 		}
+	}
+	
+	public function getStorageDir() {
+		return $this->storage_dir;
 	}
 	
 	// TODO FIXME
@@ -463,8 +500,10 @@ class Submission extends PCRObject {
 	/**
 	 * addFiles iterates over the submissions' directory, recursively adding all
 	 * files within as new database objects.
+	 * @return amount of files added to submission
 	 */
 	public function addFiles() {
+		$count = 0;
 		$iterator = new RecursiveIteratorIterator(
 					new RecursiveDirectoryIterator($this->storage_dir), 
 						RecursiveIteratorIterator::SELF_FIRST );
@@ -474,47 +513,14 @@ class Submission extends PCRObject {
 				if (strpos($path, ".git") === false) {
 					$f = new File(array("SubmissionID"=>$this->getID(), 
 										"FileName"=>$iterator->getSubPathName()));
-					$f->Update();
+					$count++;
+					
 				}
 			}
 		}
-	}
-	
-	/**
-	 * This function can only be called from a file uploader script (passing 
-	 * a file within the global $_FILES array).
-	 * The provided archive will be extracted to the submission storage directory.
-	 */
-	public function uploadArchive() {
-		if ($_FILES["file"]["error"] == 0) {
-			$id = $this->getID();
-			$file = $this->storage_dir . $_FILES["file"]["name"];
-			move_uploaded_file($_FILES["file"]["tmp_name"], $file);
-			$zip = new ZipArchive;
-			
-			//Get the current path of the zip archive, open it.
-			$path = pathinfo(realpath($file), PATHINFO_DIRNAME);
-			$r = $zip->open($file);
-			
-			//Extract the zip archive to the assignment directory.
-			if ($r === TRUE) {
-				$zip->extractTo($path);
-				$zip->close();
-				unlink($file);
-			}
-		}
+		return $count;
 	}
 
-	/**
-	 * Check out a git repository to the assignment submission directory.
-	 * @param repo_url the repository repo_url
-	 * @param username the repository username
-	 * @param password the repository password
-	 */
-	public function uploadRepo($repo_url, $username, $password) {
-		$id = $this->getID();
-		exec("cd $this->storage_dir && git clone https://$username:$password@$repo_url .");
-	}
 	
 	/**
 	 * NOTE

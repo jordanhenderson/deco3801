@@ -224,11 +224,39 @@ class PCRHandler {
 	public function uploadArchive($assignment_id) {
 		$submission = new Submission(array("AssignmentID"=>$assignment_id, "StudentID"=>$_SESSION['user_id']));
 		if ($submission->isValid()) {
-			$submission->uploadArchive();
-			$submission->addFiles();
+			if(!isset($_FILES["file"]) || $_FILES["file"]["error"] != 0) {
+				$submission->delete();
+				return;
+			}
+			
+			$file = $submission->getStorageDir() . $_FILES["file"]["name"];
+			
+			if(is_uploaded_file($_FILES["file"]["tmp_name"]))
+				move_uploaded_file($_FILES["file"]["tmp_name"], $file);
+			else
+				copy($_FILES["file"]["tmp_name"], $file);
+
+			$zip = new ZipArchive;
+			
+			//Get the current path of the zip archive, open it.
+			$path = pathinfo(realpath($file), PATHINFO_DIRNAME);
+			$r = $zip->open($file);
+			
+			//Extract the zip archive to the assignment directory.
+			if ($r === TRUE) {
+				$zip->extractTo($path);
+				$zip->close();
+				unlink($file);
+			}
+			
+			if($submission->addFiles() == 0) {
+				$submission->delete();
+				return;
+			}
 			// TODO Uncomment when ready for testing
 			//$submission->testSubmission();
 		}
+		return $submission;
 	}
 	
 	/**
@@ -237,11 +265,17 @@ class PCRHandler {
 	public function uploadRepo($assignment_id, $repo_url, $username, $password) {
 		$submission = new Submission(array("AssignmentID"=>$assignment_id, "StudentID"=>$_SESSION['user_id']));
 		if ($submission->isValid()) {
-			$submission->uploadRepo($repo_url, $username, $password);
-			$submission->addFiles();
+			$dir = $submission->getStorageDir();
+			exec("cd $dir && git clone https://$username:$password@$repo_url .");
+			if($submission->addFiles() == 0) {
+				//No files, failed?
+				$submission->delete();
+				return;
+			}
 			// TODO Uncomment when ready for testing
 			//$submission->testSubmission();
 		}
+		return $submission;
 	}
 	
 	/**
