@@ -360,7 +360,6 @@ foreach ($reviews as $review) {
                  * Handles the retrieval of files from the server for the first load
 				 */
                 $dir =  __DIR__ . "/includes/storage/course_$courseid/assign_$assignid/submissions/$subID/";
-				echo $dir;
                 $filesArray = array();
                 // Open a directory, and read its contents
                 if (is_dir($dir)){
