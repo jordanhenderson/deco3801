@@ -267,6 +267,7 @@ class PCRHandler {
 	 */
 	public function loadFile($courseID, $assignID, $subID, $fileName) {
 		$assignment =  __DIR__ . "/storage/course_$courseID/assign_$assignID/submissions/$subID/" . $fileName;
+		echo $assignment;
 		$handle = fopen($assignment, "r");
 		$contents = fread($handle, filesize($assignment));
 		$contents = str_replace('<', '&lt;', $contents);

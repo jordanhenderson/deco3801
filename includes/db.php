@@ -789,7 +789,7 @@ class Review extends PCRObject {
 	public function getStudentsReviews() {
 		$arr = array();
 		$sth = $this->db->prepare("SELECT * FROM Review INNER JOIN Submission ON Review.SubmissionID=Submission.SubmissionID INNER JOIN Assignments ON Submission.assignmentid=Assignments.assignmentid AND Review.ReviewerID = ? AND Assignments.CourseID = ?");
-		$sth->execute(array($this->row["StudentID"], $_SESSION["course_id"]));
+		$sth->execute(array($_SESSION["user_id"], $_SESSION["course_id"]));
 		while ($file_row = $sth->fetch(PDO::FETCH_ASSOC)) {
 			array_push($arr, new Review($file_row));
 		}
