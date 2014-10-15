@@ -181,6 +181,7 @@ abstract class PCRObject implements JsonSerializable {
 						}
 					}
 					if($changed) $this->updateRow($row);
+					else $this->row = $row;
 				}
 				else {
 					$this->insertRow();
@@ -352,6 +353,7 @@ class Assignment extends PCRObject {
 		$sth = $this->db->prepare("SELECT * FROM Submission WHERE SubmissionID IN (SELECT Review.SubmissionID FROM Review INNER JOIN (SELECT max(ReviewID) AS ID, SubmissionID FROM Review GROUP BY SubmissionID) ID ON ID.ID = Review.ReviewID AND ReviewerID = ? AND Submitted = 0)");
 		//AND AssignmentID = ?
 		$sth->execute(array($studentid));
+		
 		while ($file_row = $sth->fetch(PDO::FETCH_ASSOC)) {
 			array_push($arr, new Submission($file_row));
 		}
