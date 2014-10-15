@@ -1,8 +1,8 @@
-<?php
+ <?php
 require_once('includes/handlers.php');
 
 $handler = new PCRHandler();
-$handler->uploadArchive($_POST["assignment_id"]);
+$handler->uploadRepo($_POST["assignment_id"], $_POST["url"], $_POST["user"], $_POST["pass"]);
 
 header("Location: submit.php");
 ?>

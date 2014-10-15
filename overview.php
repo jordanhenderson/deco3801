@@ -156,7 +156,15 @@ function formatDBtime($dbtime) {
 				</table>';
 					}
 				} else { // STUDENT
+					?>
+						<a href="submit.php?assid=<?php echo $_REQUEST['assid']; ?>">
+						<span class="btn btn-default btn-primary">
+							New Submission
+						</span>
+						</a>
 					
+					
+					<?php
 				}
 				?>
 

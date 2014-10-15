@@ -33,8 +33,9 @@ require_once('includes/handlers.php');
 			<div class="panel-body">
 			<div class="col-sm-6">
 			<h2>File Submission</h1>
-			<p>Upload your assignment using the file submission method.<br>File types supported: .zip, .rar</p>
+			<p>Upload your assignment using the file submission method.<br>File types supported: .zip</p>
 			<form action="upload.php" method="post" enctype="multipart/form-data">
+				<input type="hidden" name="assignment_id" value="<?php echo $_GET['assid']; ?>">
 			<span class="btn btn-default btn-file">
 			    Browse <input type="file" name="file" id="file">
 			</span>
@@ -46,6 +47,8 @@ require_once('includes/handlers.php');
 				<h1>Repository Submission</h1>
 				<p>Upload your assignment using the repository submission method (GIT or SVN).
 				</p>
+				<form action="submit_repo.php" method="post">
+					<input type="hidden" name="assignment_id" value="<?php echo $_GET['assid']; ?>">
 				<div class="form-group">
 				<label for="repotype">Repository Type</label>
 				<select class="form-control" name="repotype" id="repotype">
@@ -53,6 +56,7 @@ require_once('includes/handlers.php');
 				    <option value="svn">SVN</option>
 				</select>
 				<div>
+				
 				<div class="form-group">
 					<label for="url">URL:</label>
 					<input class="form-control" type="text" id="url" name="url">
@@ -65,6 +69,10 @@ require_once('includes/handlers.php');
 					<label for="url">Password:</label>
 					<input class="form-control" type="text" id="pass" name="pass">
 				</div>
+				<div class="form-group">
+					<input class="btn btn-default btn-primary" type="submit" id="submit">
+				</div>
+				</form>
 			</div>
 			</div>
 		</div>
@@ -99,5 +107,6 @@ require_once('includes/handlers.php');
 
 	<!-- Bootstrap Core JavaScript -->
 	<script src="js/bootstrap.min.js"></script>
+	
 </body>
 </html>
