@@ -104,8 +104,8 @@ class javaTesting {
 }
 
 class bashTesting {
-	public $test_file_location;
-	public $assignment_file_location;
+	private $test_file_location;
+	private $assignment_file_location;
 
 	public function __construct($test_file_location, $assignment_file_location) {
 		$this->test_file_location = $test_file_location;
@@ -128,7 +128,7 @@ class bashTesting {
 	*/
 	public static function execute() {
 		// Execute student assignment
-		$scriptOutput = shell_exec($this->test_file_location);
+		$scriptOutput = shell_exec($this->test_file_location . " " . $this->assignment_file_location);
 		
 		// Check for newline at the end, remove if present
 		if (substr($scriptOutput, -1) == "\n") {

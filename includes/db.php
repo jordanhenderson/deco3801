@@ -582,8 +582,6 @@ class Submission extends PCRObject {
 		$arr = array();
 		$sth = $this->db->prepare("SELECT ReviewID FROM Review WHERE SubmissionID = ? AND Comments = '" . $prevComment . "';");
 		$sth->execute(array($this->getID()));
-		// TODO: Fix hardcoded value
-		//$sth->execute(array('2'));
 		$file_row = $sth->fetch(PDO::FETCH_ASSOC);
 		$file_row["Comments"] = $annotationText;
 		$review = new Review($file_row);
@@ -605,10 +603,15 @@ class Submission extends PCRObject {
 		// Run appropriate tests
 		switch ($assignment_type) {
 			case 'bash':
-				$tester = new bashTesting($test_file_location, $this->storage_dir);
-				$tester.execute();
+				// TODO remove hardcoding filename 
+				$tester = new bashTesting($test_file_location, $this->storage_dir . "tester.sh");
+				$results = $tester.execute();
 
-				// Update results in database
+				if ($results = "1:pass;2:fail;3:pass;4:pass") {
+					// Update results in database
+					$this->row["Results"] = "pass";
+					$this->commit();
+				}
 
 				break;
 			case 'java':
@@ -622,6 +625,8 @@ class Submission extends PCRObject {
 				$tester.runJUnitTest();
 
 				// Update results in database
+				$this->row["Results"] = "pass";
+				$this->commit();
 				
 				break;
 		}
