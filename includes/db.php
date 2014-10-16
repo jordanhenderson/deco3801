@@ -848,7 +848,7 @@ class Review extends PCRObject {
 	 */
 	public function getFeedback() {
 		$arr = array();
-		$sth = $this->db->prepare("SELECT * FROM Review INNER JOIN Submission ON Review.SubmissionID=Submission.SubmissionID INNER JOIN Assignments ON Submission.assignmentid=Assignments.assignmentid AND Assignments.ReviewsDue < ? AND Review.ReviewerID = ? AND Assignments.CourseID = ? GROUP BY Review.SubmissionID");
+		$sth = $this->db->prepare("SELECT * FROM Review INNER JOIN Submission ON Review.SubmissionID=Submission.SubmissionID INNER JOIN Assignments ON Submission.assignmentid=Assignments.assignmentid AND Assignments.ReviewsDue < ? AND Submission.StudentID = ? AND Assignments.CourseID = ? GROUP BY Review.SubmissionID");
 		$sth->execute(array(date("Y-m-d H:i:s"), $_SESSION["user_id"], $_SESSION["course_id"]));
 		while ($file_row = $sth->fetch(PDO::FETCH_ASSOC)) {
 			array_push($arr, new Review($file_row));
