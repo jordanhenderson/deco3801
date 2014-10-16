@@ -611,22 +611,20 @@ class Submission extends PCRObject {
 				$tester = new bashTesting($test_file_location, $this->storage_dir . "tester.sh");
 				$results = $tester.execute();
 
-				if ($results = "1:pass;2:fail;3:pass;4:pass") {
-					// Update results in database
-					$dbString = "";
+				// Update results in database
+				$dbString = "";
 
-					// Test resuts must be in string format to store in database
-					foreach ($testResults as $value) {
-						$dbString = $dbString . "," . $value;
-					}
-
-					$dbString = substr($dbString, 1);
-
-					echo "dbString:" . $dbString;
-
-					$this->row["Results"] = $dbString;
-					$this->commit();
+				// Test resuts must be in string format to store in database
+				foreach ($testResults as $value) {
+					$dbString = $dbString . "," . $value;
 				}
+
+				$dbString = substr($dbString, 1);
+
+				echo "dbString:" . $dbString;
+
+				$this->row["Results"] = $dbString;
+				$this->commit();
 
 				break;
 			case 'java':
