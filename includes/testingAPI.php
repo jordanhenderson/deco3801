@@ -129,6 +129,8 @@ class bashTesting {
 	public static function execute() {
 		// Execute student assignment
 		$scriptOutput = shell_exec($this->test_file_location . " " . $this->assignment_file_location);
+
+		echo "Script output: " . $scriptOutput . PHP_EOL;
 		
 		// Check for newline at the end, remove if present
 		if (substr($scriptOutput, -1) == "\n") {
