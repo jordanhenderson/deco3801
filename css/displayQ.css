@@ -1,0 +1,47 @@
+textarea#content, textarea#comment {
+	float: left;
+	padding: 20px 20px 20px 20px;
+	border-style: none; 
+    border-color: Transparent; 
+    overflow: auto; 
+    background-color:	#E8E8E8;
+}
+.row{
+
+}
+
+ #buttons {
+  	float:right;
+  }
+
+.name{
+	 font:bold 12px Verdana, Tahoma, "Nimbus Sans L", arial, sans-serif;
+	 background-color:	#CFCFCF;
+	 padding: 10px 20px 20px 10px;
+	 height:30px;
+	 color:#0000AB;
+	 border: 1px outset #CFCFCF ;
+	 border-top-right-radius: .8em;
+	 border-top-left-radius: .8em;
+	 border:3px outset transparent;
+
+}
+.comment{
+  font:normal 12px Verdana, Tahoma, "Nimbus Sans L", arial, sans-serif;
+  background-color:	#E8E8E8;
+ padding: 20px 20px 20px 20px;
+  height:auto;
+  border-bottom-right-radius: .8em;
+  border-bottom-left-radius: .8em;
+}
+
+table{
+	width:100%;
+}	
+.date{
+	float:right;
+}
+.content{
+	margin:auto;
+	width:80%;
+}

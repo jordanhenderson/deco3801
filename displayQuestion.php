@@ -14,7 +14,7 @@ $crs = new PCRHandler();
 	<meta name="viewport" content="width=device-width, initial-scale=1">
 
 	<title>Question</title>
-
+	<script src="ckeditor/ckeditor.js"></script>
 	<!-- Bootstrap Core CSS -->
 	<link href="css/bootstrap.min.css" rel="stylesheet">
 	
@@ -26,10 +26,14 @@ $crs = new PCRHandler();
 
 	<!-- Custom CSS -->
 	<link href="css/main.css" rel="stylesheet">
+	<link href="css/displayQ.css" rel="stylesheet">
 </head>
 <body>
 	<?php 
+	$count = 0;
+
 	function seconds2human($s) {
+		$str = " ";
 	$m = floor(($s%3600)/60);
 	//$m = round(($ss%3600)/60, 0.1);
 	$h = floor(($s%86400)/3600);
@@ -42,6 +46,7 @@ $crs = new PCRHandler();
 	}
 	return "$str$m mins";
 }
+
 	include 'header.php'; 
 	//Get contents and data of each question based on the ID
 	$question = $crs->getQuestion($id);
@@ -59,8 +64,9 @@ $crs = new PCRHandler();
 	$daysago = seconds2human($CurrentTime - $OpenTime);
 	?>
 	<div class="container">
+		<div class="content">
 		<h1><?php 
-		echo $title; 
+		
 		if ($status == "1") {
 			echo '<a class="btn btn-xl btn-success btn-block" role="button" disabled="disabled">Resolved</a></td></tr>';
 			}
@@ -68,42 +74,8 @@ $crs = new PCRHandler();
 				//Place holder not sure what for just yet
 			}
 
-		?></h1>
-			<div class="row">
-				<div class="col-md-6">
-					<div class="form-group">
-						<label for="specfiles"></label>
-						<textarea name="content" readonly="readonly" rows="5" cols="110" id="content"><?php echo $questionRow['Content']; ?></textarea>
-					</div>
-				</div>
-				<div class="row">
-				<div class="col-md-6">
-					<label for="open">Asked On</label>
-					<input size="24" type="text" readonly="readonly" value= "<?php echo $daysago; echo ' by '.$questionRow['StudentName']; ?>" class="form-control form_datetime" id="open" name="open">
-				</div>
-			</div>
-
-			</div>
-			<br>
-			<label for="open">Replies</label>
-			<br>
-			<div class="row">	
-
-				<div class="col-md-6">
-					<?php
-					foreach ($comments as $comment){
-						$commentRow = &$comment->getRow();
-						//Display each comment as readonly for specific question
-						echo "
-						<tr class='unresolved'>
-						<td></td>
-						<td><textarea name='comment' readonly='readonly' rows='5' cols='80' id='comment'>$commentRow[StudentName] Says: $commentRow[Content]</textarea></td>
-						<td></td>";
-					} ?>
-				</div>
-			<div align="center">
-				<?php
-					echo "<a class='btn btn-xl btn-warning' href='addComment.php?QuestionID=$questionRow[QuestionID]' role='button'>Reply</a>";
+				echo $title;
+			    echo "<div id = buttons>";
 				//If an admin is viewing, gives ability to delete a question
 				if ($_SESSION['admin']) {
 					echo "
@@ -121,9 +93,53 @@ $crs = new PCRHandler();
 						<input type='submit' class='btn btn-xl btn-danger' id='MarkResolved' name='markResolved' value='Mark Resolved'>
 					";
 				}	
-				?>
+				echo "</div>"
+
+		?></h1>
+			<div class="row">
+					<div class="form-group">
+						<label for="specfiles"></label>
+						<?php echo "	
+						<div class='name'>$questionRow[StudentName]<div class='date'>".$daysago." ago</div></div>
+						<div class='comment'><td>$questionRow[Content]</div>";
+						 ?>
+				</div>
+				
+
 			</div>
+			<br>
+			<label for="open">Answers</label>
+			<br>
+			<div class="row">	
+
+					<?php
+					foreach ($comments as $comment){
+						$commentRow = &$comment->getRow();
+						//Set time ago for each individual comment post
+						$timeasked = $commentRow['postdate'];
+						$CurrentTime = time();
+						$date = date_create_from_format('Y-m-d G:i:s', $timeasked);
+						$OpenTime = (int) date_format($date, 'U');
+						$daysago = seconds2human($CurrentTime - $OpenTime);
+						//Display each comment as readonly for specific question
+						echo "	
+						<div class='name'>$commentRow[StudentName]<div class='date'>".$daysago." ago</div></div>
+						<div class='comment'><td>$commentRow[Content]</div><br>";
+					} ?>
+	<div align="center">
+			<form name="cF" id="cF" action="api.php" method="post" data-function="addComment">
+			<br>
+				<div class='name'>Post a Quick Reply</div>
+				<textarea class="form-control" name="comment" rows="5"  id="content"></textarea>
+				<input class="btn btn-primary" type="submit" value="Post Reply"></a>
+				<script>
+                // Replace the <textarea id="editor1"> with a CKEditor
+                // instance, using default configuration.
+                CKEDITOR.replace('comment');
+            </script>
 		</div>
+		
+		</form>
 	</div>
 
 	<!-- jQuery Version 1.11.0 -->
@@ -141,6 +157,9 @@ $crs = new PCRHandler();
 	<script type="text/javascript">
 		$(function() {
 			$(":submit").click(function() {
+				for ( instance in CKEDITOR.instances ) {
+            CKEDITOR.instances[instance].updateElement();
+        }
 				var func = $(this).attr("name");
 				var request = {f: func, params:  ['<?php echo $_GET['id']; ?>']};
 				$.post("api.php", JSON.stringify(request), function() {
@@ -159,6 +178,34 @@ $crs = new PCRHandler();
 echo "<script type='text/javascript'>alert('$message');</script>";
 		}
 	?>
+		<script type="text/javascript">
+		$(function() {
+			$('#cF').submit(function() {
+				var form = $(this);
+				//Use the action= property for ajax submission
+				var fullname = '<?php echo $_SESSION['userfullname'];?>'
+				var stnid = '<?php echo $_SESSION['user_id'];?>'
+				var url = form.attr('action');
+				//I changed this and now it works, before it was GETTING some other question ID for some reason
+				var Qid = '<?php echo $_GET['id'];?>'
+				var func = form.data('function');
+				var request = {f: func, params: [Qid, stnid, fullname, $("#content").val()]};
+				//Post the serialized form.
+				$.post(url, JSON.stringify(request), function(data) {
+					//Handle submission.
+					document.location.href = "displayQuestion.php?id=<?php echo $id; ?>";
+				});
+				
+				
+				return false;
+			});
+		});
+	</script>
+	<script type="text/javascript">
+		window.onload = function () {
+			$('.selectpicker').selectpicker();
+		}
+	</script>
 </body>
 
 </html>

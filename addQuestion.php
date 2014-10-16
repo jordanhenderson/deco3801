@@ -14,7 +14,7 @@ $date = date('m/d/Y h:i:s a', time());
 	<meta name="viewport" content="width=device-width, initial-scale=1">
 
 	<title>New Question</title>
-
+	<script src="ckeditor/ckeditor.js"></script>
 	<!-- Bootstrap Core CSS -->
 	<link href="css/bootstrap.min.css" rel="stylesheet">
 	
@@ -23,6 +23,7 @@ $date = date('m/d/Y h:i:s a', time());
 
 	<!-- Custom CSS -->
 	<link href="css/main.css" rel="stylesheet">
+	<link href="css/displayQ.css" rel="stylesheet">
 </head>
 
 <body>
@@ -31,19 +32,17 @@ $date = date('m/d/Y h:i:s a', time());
 	<div class="container">
 		<h1>Ask a New Question</h1>
 		<form name="qF" id="qF" method="post" action="api.php" data-function="storeNewQuestion">
-			<div class="row">
-				<div class="col-md-6">
+
 					<label for="title">Question Title</label>
 					<input class="form-control" name="question" type="text" id="QTitle">
-				</div>
-			</div>
+
 			<br>
-			<div class="row">
-				<div class="col-md-6">
 					<label for="content">Question Content</label>
 					<textarea class="form-control" style="resize: vertical;" name="QContent" rows="15" id="QContent"></textarea>
-				</div>
-			</div>
+					<script>
+				 CKEDITOR.replace('QContent');
+				 </script>
+
 			<br>
 			<div align="center">
 				<input class="btn btn-primary" type="submit" value="Submit" name="submit">
@@ -78,6 +77,9 @@ $date = date('m/d/Y h:i:s a', time());
 		$(function() {
 			$('#qF').submit(function() {
 				var form = $(this);
+				for ( instance in CKEDITOR.instances ) {
+            CKEDITOR.instances[instance].updateElement();
+        		}
 				var fullname = '<?php echo $_SESSION['userfullname'];?>'
 				var stnid = '<?php echo $_SESSION['user_id'];?>'
 				//Use the action= property for ajax submission
