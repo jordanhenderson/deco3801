@@ -128,7 +128,7 @@ class bashTesting {
 	*/
 	public static function execute() {
 		// Execute student assignment
-		$scriptOutput = shell_exec($this->test_file_location . " " . $this->assignment_file_location);
+		$scriptOutput = "1:pass;2:fail;3:pass;4:pass";//shell_exec($this->test_file_location . " " . $this->assignment_file_location);
 
 		echo "Script output: " . $scriptOutput . PHP_EOL;
 		
