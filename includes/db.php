@@ -610,12 +610,13 @@ class Submission extends PCRObject {
 				// TODO remove hardcoding filename 
 				$tester = new bashTesting($test_file_location, $this->storage_dir . "tester.sh");
 				$results = $tester.execute();
+				$results = explode(";", $results);
 
 				// Update results in database
 				$dbString = "";
 
 				// Test resuts must be in string format to store in database
-				foreach ($testResults as $value) {
+				foreach ($results as $value) {
 					$dbString = $dbString . "," . $value;
 				}
 
