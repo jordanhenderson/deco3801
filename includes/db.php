@@ -6,7 +6,7 @@
 
 require_once "config.php";
 include "testingAPI.php";
-
+date_default_timezone_set('Australia/Brisbane');
 class Database {
 	private $db;
 	/**
@@ -820,14 +820,26 @@ class Review extends PCRObject {
 	 */
 	public function getReviews() {
 		$arr = array();
-		$sth = $this->db->prepare("SELECT * FROM Review INNER JOIN Submission ON Review.SubmissionID=Submission.SubmissionID INNER JOIN Assignments ON Submission.assignmentid=Assignments.assignmentid AND Review.ReviewerID = ? AND Assignments.CourseID = ? GROUP BY Review.SubmissionID");
-		$sth->execute(array($this->row["StudentID"], $_SESSION["course_id"]));
+		$sth = $this->db->prepare("SELECT * FROM Review INNER JOIN Submission ON Review.SubmissionID=Submission.SubmissionID INNER JOIN Assignments ON Submission.assignmentid=Assignments.assignmentid AND Assignments.ReviewsDue >= ? AND Review.ReviewerID = ? AND Assignments.CourseID = ? GROUP BY Review.SubmissionID");
+		$sth->execute(array(date("Y-m-d H:i:s"), $_SESSION["user_id"], $_SESSION["course_id"]));
 		while ($file_row = $sth->fetch(PDO::FETCH_ASSOC)) {
 			array_push($arr, new Review($file_row));
 		}
 		return $arr;
 	}
-	
+	/**
+	 * getReviews returns an array of reviews available for a Student in a course
+	 * @return an array of reviews
+	 */
+	public function getFeedback() {
+		$arr = array();
+		$sth = $this->db->prepare("SELECT * FROM Review INNER JOIN Submission ON Review.SubmissionID=Submission.SubmissionID INNER JOIN Assignments ON Submission.assignmentid=Assignments.assignmentid AND Assignments.ReviewsDue < ? AND Review.ReviewerID = ? AND Assignments.CourseID = ? GROUP BY Review.SubmissionID");
+		$sth->execute(array(date("Y-m-d H:i:s"), $_SESSION["user_id"], $_SESSION["course_id"]));
+		while ($file_row = $sth->fetch(PDO::FETCH_ASSOC)) {
+			array_push($arr, new Review($file_row));
+		}
+		return $arr;
+	}
 	/**
 	 * I think this function (that I just added) belongs in submissions. I'll move it if it works
 	 *
