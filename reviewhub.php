@@ -45,7 +45,6 @@ $crs = new PCRHandler();
 							<tr>
 								<th>Assignment Name</th>
 								<th>Due Date</th>
-								<th>Submitted (Y/N)</th>
 								<th></th>
 							</tr>
 						</thead>
@@ -53,12 +52,6 @@ $crs = new PCRHandler();
 							// print table contents
 							foreach ($reviews as $rev) {
 								$rev = &$rev->getRow();
-								if ($rev['Submitted'] == 0) {
-									$Completed = "N";
-								} else {
-									$Completed = "Y";
-								}
-								
 								$submission = new Submission(array("SubmissionID"=>$rev["SubmissionID"]));
 								$submission = &$submission->getRow();
 								$Assignment = new Assignment(array("AssignmentID" => $submission['AssignmentID']));
@@ -66,7 +59,6 @@ $crs = new PCRHandler();
 								echo "<tr>
 								<td>$Assignment[AssignmentName]</td>
 								<td>$Assignment[ReviewsDue]</td>
-								<td>$Completed</td>
 								<td><a class='btn btn-xs btn-info' href='review.php?subid=$submission[SubmissionID]' role='button'>Mark</a></td>
 								<tr>";
 							}
@@ -75,7 +67,41 @@ $crs = new PCRHandler();
 				}
 			?>
 		</div>
+		<div class="col-lg-12">
+			<h2>Feedback On Assignments</h2>
+<?php
+				$reviews = $crs->getStudent()->getFeedback();
 
+				if (empty($reviews)) { // No assignments
+					echo "There are no Reviews to display.";
+				} else {
+					// print table head
+					echo '
+					<table class="table">
+						<thead>
+							<tr>
+								<th>Assignment Name</th>
+								<th></th>
+							</tr>
+						</thead>
+						<tbody>';
+							// print table contents
+							foreach ($reviews as $rev) {
+								$rev = &$rev->getRow();						
+								$submission = new Submission(array("SubmissionID"=>$rev["SubmissionID"]));
+								$submission = &$submission->getRow();
+								$Assignment = new Assignment(array("AssignmentID" => $submission['AssignmentID']));
+								$Assignment = &$Assignment->getRow();
+								echo "<tr>
+								<td>$Assignment[AssignmentName]</td>
+								<td><a class='btn btn-xs btn-info' href='review.php?subid=$submission[SubmissionID]' role='button'>View</a></td>
+								<tr>";
+							}
+						echo '</tbody>
+					</table>';
+				}
+			?>
+		</div>
 	<!-- jQuery Version 1.11.0 -->
 	<script src="js/jquery-1.11.0.js"></script>
 	
