@@ -595,10 +595,14 @@ class Submission extends PCRObject {
 		$assignment_type->execute(array($assignmentid));
 		$assignment_type = $assignment_type->fetch(PDO::FETCH_ASSOC)['Language'];
 
+		echo "Assignment type: " . $assignment_type . PHP_EOL;
+
 		// Get test files location
 		$test_file_location = $this->db->prepare("SELECT TestFiles FROM Assignment WHERE AssignmentID = ?;");
 		$test_file_location->execute(array($assignmentid));
 		$test_file_location = $test_file_location->fetch(PDO::FETCH_ASSOC)['TestFiles'];
+
+		echo "Test file location: " . $test_file_location . PHP_EOL;
 
 		// Run appropriate tests
 		switch ($assignment_type) {
@@ -609,7 +613,18 @@ class Submission extends PCRObject {
 
 				if ($results = "1:pass;2:fail;3:pass;4:pass") {
 					// Update results in database
-					$this->row["Results"] = "pass";
+					$dbString = "";
+
+					// Test resuts must be in string format to store in database
+					foreach ($testResults as $value) {
+						$dbString = $dbString . "," . $value;
+					}
+
+					$dbString = substr($dbString, 1);
+
+					echo "dbString:" . $dbString;
+
+					$this->row["Results"] = $dbString;
 					$this->commit();
 				}
 
