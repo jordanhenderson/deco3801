@@ -10,7 +10,7 @@ $crs = new PCRHandler();
 
 if (isset($_REQUEST['assid'])) {
 	$assignment = $crs->getAssignment($_REQUEST['assid']);
-	$submission = $crs->getSubmission($_REQUEST['assid']);
+	
 	if ($assignment->isValid()) {
 		$asg = &$assignment->getRow();
 		if ($asg['CourseID'] != $_SESSION['course_id']) {
@@ -29,11 +29,9 @@ function formatDBtime($dbtime) {
 }
 
 function printResults() {
-	echo "1";
+	$submission = $crs->getSubmission($_REQUEST['assid']);
 	$sub = &$submission->getRow();
-	echo "2";
 	$results = $sub['Results'];	
-	echo "3";
 
 	echo $results . PHP_EOL;
 
