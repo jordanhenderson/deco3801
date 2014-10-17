@@ -217,6 +217,11 @@ foreach ($reviews as $review) {
 		 */
         function getContents(id) {
             var comment = $('#textarea'+id).val();
+			// Checking for an invalid comment
+			if (comment.trim() == "") {
+				alert("Please enter a valid comment");
+				return;
+			}
             // add code to make sure the comment is unique
             for(var i=0; i < annotations.length; i++) {
                 if (comment == annotations[i].comment) {
@@ -275,12 +280,10 @@ foreach ($reviews as $review) {
 		 * This will definitely change to become simpler
 		 */
 		function saveReviews() {
-            alert(JSON.stringify(annotations));
 			//AJAX call to store the review in the database
 			var request = {f: 'saveReviews', params:  [JSON.stringify(annotations)]};
 			$.post("api.php", JSON.stringify(request), function(retval) {
-				alert("Your comments have been saved for later!");
-				alert(retval);
+				alert("Your comments have been saved!");
                 for (var i=0; i < annotations.length; i++) {
                     if(annotations[i].status == 'd') {
                         annotations.splice(i, 1);
@@ -292,14 +295,6 @@ foreach ($reviews as $review) {
 			});
         }
 		
-		/**
-		 * Placeholder for submitting reviews function
-		 *
-		 */
-		function submitReviews() {
-		
-		}
-        
         /**
          * Function to mark a comment as being modified.
          * Code is nearly identical to delete, so will integrate
@@ -399,7 +394,6 @@ foreach ($reviews as $review) {
 				<div id="reviews" style="clear:right; float:right;"></div>
                 </div>	
 				<p style="float:left;clear:left;">
-					<a class="btn btn-primary" href="reviewhub.php" role="button">Submit</a>
 					<a class="btn btn-info" href="#" onclick="saveReviews()" role="button">Save</a>
 					<a class="btn btn-warning" href="reviewhub.php" role="button">Close</a>
 				</p>
