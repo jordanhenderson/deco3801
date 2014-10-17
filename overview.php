@@ -29,7 +29,8 @@ function formatDBtime($dbtime) {
 }
 
 function printResults() {
-	$results = $submission->getResults();
+	$sub = &$submission->getRow();
+	$results = $sub["Results"];	
 
 	echo $results . PHP_EOL;
 
