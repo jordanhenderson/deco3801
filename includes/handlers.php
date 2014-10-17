@@ -221,7 +221,7 @@ class PCRHandler {
 	 * uploadArchive uploads an archive to an assignment
 	 */
 	public function uploadArchive($assignment_id) {
-		$submission = new Submission(array("AssignmentID"=>$assignment_id, "StudentID"=>$_SESSION['user_id']));
+		$submission = new Submission(array("AssignmentID"=>$assignment_id, "StudentID"=>$_SESSION['user_id'], "Results" => ""));
 		if ($submission->isValid()) {
 			if(!isset($_FILES["file"]) || $_FILES["file"]["error"] != 0) {
 				$submission->delete();
