@@ -254,8 +254,9 @@ class PCRHandler {
 			}
 
 			$assignment = new Assignment(array("AssignmentID"=>$assignment_id));
-			$assignment_type = $assignment->row["Language"];
-			$test_file_location = $assignment->row["TestFiles"];
+			$assign = &$assignment->getRow();
+			$assignment_type = $assign["Language"];
+			$test_file_location = $assign["TestFiles"];
 			$submission->testSubmission($assignment_type, $test_file_location);
 		}
 		return $submission;
