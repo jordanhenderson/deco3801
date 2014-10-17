@@ -593,60 +593,60 @@ class Submission extends PCRObject {
 		return $review;
 	}
 
-	public function testSubmission() {
+public function testSubmission() {
 		// Get assignment type
-		$assignment_type = $this->db->prepare("SELECT Language FROM Assignment WHERE AssignmentID = ?);");
-		$assignment_type->execute(array($assignmentid));
-		$assignment_type = $assignment_type->fetch(PDO::FETCH_ASSOC)['Language'];
+		// $assignment_type = $this->db->prepare("SELECT Language FROM Assignment WHERE AssignmentID = ?;");
+		// $assignment_type->execute(array($assignmentid));
+		// $assignment_type = $assignment_type->fetch(PDO::FETCH_ASSOC);
+		//echo "Assignment type: " . $assignment_type . PHP_EOL;
 
-		echo "Assignment type: " . $assignment_type . PHP_EOL;
+		// // Get test files location
+		// $test_file_location = $this->db->prepare("SELECT TestFiles FROM Assignment WHERE AssignmentID = ?");
+		// $test_file_location->execute(array('00001'));
+		// $test_file_location = $test_file_location->fetch(PDO::FETCH_ASSOC)['TestFiles'];
 
-		// Get test files location
-		$test_file_location = $this->db->prepare("SELECT TestFiles FROM Assignment WHERE AssignmentID = ?;");
-		$test_file_location->execute(array($assignmentid));
-		$test_file_location = $test_file_location->fetch(PDO::FETCH_ASSOC)['TestFiles'];
-
-		echo "Test file location: " . $test_file_location . PHP_EOL;
-
+		//echo "Test file location: " . $test_file_location . PHP_EOL;
+		$assignment_type='bash';
+		$test_file_location = '';
 		// Run appropriate tests
 		switch ($assignment_type) {
 			case 'bash':
 				// TODO remove hardcoding filename 
-				$tester = new bashTesting($test_file_location, $this->storage_dir . "tester.sh");
-				$results = $tester.execute();
+				// $tester = new bashTesting($test_file_location, $this->storage_dir . "tester.sh");
+				// $results = $tester.execute();
+				$results ="1:pass;2:fail;3:pass;4:pass";
 				$results = explode(";", $results);
-
-				// Update results in database
+				echo $results;
+				// // Update results in database
 				$dbString = "";
 
 				// Test resuts must be in string format to store in database
 				foreach ($results as $value) {
-					$dbString = $dbString . "," . $value;
+					$dbString = $dbString . ", " . $value;
 				}
 
-				$dbString = substr($dbString, 1);
+				// $dbString = substr($dbString, 1);
 
-				echo "dbString:" . $dbString;
+				// echo "dbString:" . $dbString;
 
 				$this->row["Results"] = $dbString;
 				$this->commit();
-
 				break;
-			case 'java':
-				// Get assignment files location
-				$assignment_file = $this->db->prepare("SELECT FileName FROM Files WHERE SubmissionID = ?;");
-				$assignment_file->execute(array($this->getID()));
-				$assignment_file = $assignment_file->fetch(PDO::FETCH_ASSOC)['FileName'];
+			// case 'java':
+			// 	// Get assignment files location
+			// 	$assignment_file = $this->db->prepare("SELECT FileName FROM Files WHERE SubmissionID = ?;");
+			// 	$assignment_file->execute(array($this->getID()));
+			// 	$assignment_file = $assignment_file->fetch(PDO::FETCH_ASSOC)['FileName'];
 
-				$tester = new javaTesting($this->storage_dir, $this->storage_dir, $assignment_file);
-				$tester.compile();
-				$tester.runJUnitTest();
+			// 	$tester = new javaTesting($this->storage_dir, $this->storage_dir, $assignment_file);
+			// 	$tester.compile();
+			// 	$tester.runJUnitTest();
 
-				// Update results in database
-				$this->row["Results"] = "pass";
-				$this->commit();
+			// 	// Update results in database
+			// 	$this->row["Results"] = "pass";
+			// 	$this->commit();
 				
-				break;
+			// 	break;
 		}
 	}
 	
