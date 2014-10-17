@@ -597,7 +597,7 @@ class Submission extends PCRObject {
 
 	public function testSubmission($assignment_type, $test_file_location) {
 		// Run appropriate tests
-		$this->row["Results"] = $assignment_type . " " . $test_file_location;
+		$this->row["Results"] = "Type:" . $assignment_type . " Loc:" . $test_file_location;
 		$this->commit();
 		return;
 
