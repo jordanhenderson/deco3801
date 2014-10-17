@@ -546,6 +546,20 @@ class Submission extends PCRObject {
 		return $arr;
 	}
 	
+	/**
+	 * getStudentsReviews returns an array of reviews available for a Student for a particular submission
+	 * @return an array of reviews
+	 */
+	public function getStudentsReviews() {
+		$arr = array();
+		$sth = $this->db->prepare("SELECT * FROM Review WHERE ReviewerID = ? AND SubmissionID = ?");
+		$sth->execute(array($_SESSION["user_id"], $this->getID()));
+		while ($file_row = $sth->fetch(PDO::FETCH_ASSOC)) {
+			array_push($arr, new Review($file_row));
+		}
+		return $arr;
+	}
+	
 	public function removeReview($comment) {
 		// get the id of the review associated with $comment and the submission id
 		// Create a new review out of it
@@ -841,22 +855,6 @@ class Review extends PCRObject {
 		$arr = array();
 		$sth = $this->db->prepare("SELECT * FROM Review INNER JOIN Submission ON Review.SubmissionID=Submission.SubmissionID INNER JOIN Assignments ON Submission.assignmentid=Assignments.assignmentid AND Assignments.ReviewsDue < ? AND Submission.StudentID = ? AND Assignments.CourseID = ? GROUP BY Review.SubmissionID");
 		$sth->execute(array(date("Y-m-d H:i:s"), $_SESSION["user_id"], $_SESSION["course_id"]));
-		while ($file_row = $sth->fetch(PDO::FETCH_ASSOC)) {
-			array_push($arr, new Review($file_row));
-		}
-		return $arr;
-	}
-
-	/**
-	 * I think this function (that I just added) belongs in submissions. I'll move it if it works
-	 *
-	 * getStudentsReviews returns an array of reviews available for a Student for a particular submission
-	 * @return an array of reviews
-	 */
-	public function getStudentsReviews() {
-		$arr = array();
-		$sth = $this->db->prepare("SELECT * FROM Review INNER JOIN Submission ON Review.SubmissionID=Submission.SubmissionID INNER JOIN Assignments ON Submission.assignmentid=Assignments.assignmentid AND Review.ReviewerID = ? AND Assignments.CourseID = ?");
-		$sth->execute(array($_SESSION["user_id"], $_SESSION["course_id"]));
 		while ($file_row = $sth->fetch(PDO::FETCH_ASSOC)) {
 			array_push($arr, new Review($file_row));
 		}

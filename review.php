@@ -20,7 +20,7 @@ if (intval($_SESSION['user_id']) == intval($owner)) {
 	$isOwner = 1;
 } else {
 	// Load only the reviews for the current reviewer
-	$reviews = $crs->getStudent()->getStudentsReviews();
+	$reviews = $crs->getSubmissionForReviewing($subID)->getStudentsReviews();
 }
 
 $annotations = array();
