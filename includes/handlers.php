@@ -253,7 +253,7 @@ class PCRHandler {
 				return;
 			}
 			// TODO Uncomment when ready for testing
-			$submission->testSubmission();
+			//$submission->testSubmission();
 		}
 		return $submission;
 	}
