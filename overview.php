@@ -31,9 +31,7 @@ function formatDBtime($dbtime) {
 function printResults($handler) {
 	$submission = $handler->getSubmission($_REQUEST['assid']);
 	$sub = &$submission->getRow();
-	$results = $sub['Results'];	
-
-	echo $results . PHP_EOL;
+	$results = $sub['Results'];
 
 	$passed = substr_count($results, 'pass');
 	$failed = substr_count($results, 'fail');
