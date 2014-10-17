@@ -346,15 +346,16 @@ class Assignment extends PCRObject {
 	}
 	
 	/**
-	 * getUnreviewedSubmissions returns the submissions that have not been
-	 * reviewed by a given student (and that were assigned to them).
+	 * getUnmarkedSubmissions returns the submissions that have not been
+	 * reviewed by a given student, for a given assignment (and that were
+	 * assigned to them).
+	 * 
 	 * @return an array of Submission objects.
 	 */
-	public function getUnreviewedSubmissions($studentid) {
+	public function getUnmarkedSubmissions($studentid) {
 		$arr = array();
-		$sth = $this->db->prepare("SELECT * FROM Submission WHERE SubmissionID IN (SELECT Review.SubmissionID FROM Review INNER JOIN (SELECT max(ReviewID) AS ID, SubmissionID FROM Review GROUP BY SubmissionID) ID ON ID.ID = Review.ReviewID AND ReviewerID = ? AND Submitted = 0)");
-		//AND AssignmentID = ?
-		$sth->execute(array($studentid));
+		$sth = $this->db->prepare("SELECT * FROM Submission WHERE SubmissionID IN (SELECT Review.SubmissionID FROM Review WHERE ReviewerID = ? AND Submitted = 0) AND AssignmentID = ?;");
+		$sth->execute(array($studentid, $this->getID()));
 		
 		while ($file_row = $sth->fetch(PDO::FETCH_ASSOC)) {
 			array_push($arr, new Submission($file_row));
@@ -363,17 +364,18 @@ class Assignment extends PCRObject {
 	}
 	
 	/**
-	 * getSubmittedReviews returns the reviews that have been submitted for a
-	 * given submission.
-	 * @return an array of Review objects.
+	 * getMarkedSubmissions returns the submissions for a given student, for a
+	 * given assignment, that have already been reviewed.
+	 * 
+	 * @return an array of Submission objects.
 	 */
-	public function getSubmittedReviews() {
+	public function getMarkedSubmissions($studentid) {
 		$arr = array();
-		$sth = $this->db->prepare("SELECT * FROM Review INNER JOIN (SELECT max(ReviewID) AS ID, SubmissionID FROM Review GROUP BY SubmissionID) ID ON ID.ID = Review.ReviewID AND ReviewerID = ? AND Submitted = 1");
-		// AND AssignmentID = ?
-		$sth->execute(array($studentid));
+		$sth = $this->db->prepare("SELECT * FROM Submission WHERE SubmissionID IN (SELECT Review.SubmissionID FROM Review WHERE Submitted = 1 GROUP BY SubmissionID) AND AssignmentID = ? AND StudentID = ?;");
+		$sth->execute(array($this->getID(), $studentid));
+		
 		while ($file_row = $sth->fetch(PDO::FETCH_ASSOC)) {
-			array_push($arr, new Review($file_row));
+			array_push($arr, new Submission($file_row));
 		}
 		return $arr;
 	}
@@ -843,6 +845,7 @@ class Review extends PCRObject {
 		}
 		return $arr;
 	}
+
 	/**
 	 * getReviews returns an array of reviews available for a Student in a course
 	 * @return an array of reviews
@@ -856,6 +859,7 @@ class Review extends PCRObject {
 		}
 		return $arr;
 	}
+
 	/**
 	 * I think this function (that I just added) belongs in submissions. I'll move it if it works
 	 *

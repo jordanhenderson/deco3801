@@ -103,7 +103,7 @@ function formatDBtime($dbtime) {
 		<div class="col-lg-12">
 			<h2>Assignments</h2>
 			<?php
-				$unreviewedSubs = array();
+				$unmarkedSubs = array();
 				
 				$assignments = $crs->getCourse()->getAssignments();
 				if (empty($assignments)) { // No assignments
@@ -130,8 +130,8 @@ function formatDBtime($dbtime) {
 						}
 						
 						// Both variables used later.
-						$reviewsTodo = $asg_obj->getUnreviewedSubmissions($_SESSION['user_id']);
-						$unreviewedSubs = array_merge($unreviewedSubs, $reviewsTodo);
+						$reviewsTodo = $asg_obj->getUnmarkedSubmissions($_SESSION['user_id']);
+						$unmarkedSubs = array_merge($unmarkedSubs, $reviewsTodo);
 						
 						$asg = &$asg_obj->getRow();
 						
@@ -244,9 +244,9 @@ function formatDBtime($dbtime) {
 				// teacher still has the option to review submissions. Count ALL submissions.
 				echo '<p>There are currently '.'TODO'.' student submitted assignments that have not recieved a teacher review. If no teacher input is required, then these can be dismissed at any time, either individually or per assignment.</p>
 			<p><a class="btn btn-info" href="reviewhub.php" role="button">Review Assignments &raquo;</a></p>';
-			} else if (count($unreviewedSubs) > 0) { // reviews need marking
+			} else if (count($unmarkedSubs) > 0) { // reviews need marking
 				//TODO ^ Actually decide this at some point
-				echo '<p>There are '.count($unreviewedSubs).' submissions ready for reviewing. Please take the time to assist your peers by offering suggestions and improvements.</p>
+				echo '<p>There are '.count($unmarkedSubs).' submissions ready for reviewing. Please take the time to assist your peers by offering suggestions and improvements.</p>
 			<p><a class="btn btn-warning" href="reviewhub.php" role="button">Start Now &raquo;</a></p>';
 			} else { // no reviews to mark
 				echo '<p>All your assigned submissions to date have already been reviewed. However, if you would like to further assist your peers, consider stopping by the Help Center to answer some of your peers\' questions.</p>
