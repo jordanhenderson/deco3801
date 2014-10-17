@@ -10,6 +10,7 @@ $crs = new PCRHandler();
 
 if (isset($_REQUEST['assid'])) {
 	$assignment = $crs->getAssignment($_REQUEST['assid']);
+	$submission = $crs->getSubmission($_REQUEST['assid']);
 	if ($assignment->isValid()) {
 		$asg = &$assignment->getRow();
 		if ($asg['CourseID'] != $_SESSION['course_id']) {
@@ -25,6 +26,22 @@ if (isset($_REQUEST['assid'])) {
 function formatDBtime($dbtime) {
 	$date = date_create_from_format('Y-m-d G:i:s', $dbtime);
 	return date_format($date, 'j M \'y, g:ia'); // e.g: 6 Feb '14, 8:30pm
+}
+
+function printResults() {
+	$results = $submission->getResults();
+
+	echo $results . PHP_EOL;
+
+	$passed = substr_count($results, 'pass');
+	$failed = substr_count($results, 'fail');
+	$numTests = $passed+$failed;
+	$percentage = ($passed/$numTests)*100;
+	echo "$passed/$numTests tests passed";
+	echo "
+    <div style='width:100%; background-color:white; height:auto; border:1px solid #000;'>
+    	<div style='width:".$percentage."%; background-color:green; height:10px;'></div>
+	</div>";
 }
 
 ?>
@@ -85,8 +102,9 @@ function formatDBtime($dbtime) {
 							echo '
 							<td>'.formatDBtime($asg['ReviewsDue']).'</td>';
 
-							echo "
-							<td>[results]</td>";
+							echo '<td>';
+							printResults();
+							echo '</td>';
 							?>
 
 						</tr>

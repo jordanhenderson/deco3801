@@ -486,9 +486,7 @@ class Submission extends PCRObject {
 	 * @return the result of the tests
 	 */
 	public function getResults() {
-		$sth = $this->db->prepare("SELECT Results FROM Submission WHERE SubmissionID = ?;");
-		$sth->execute(array($this->getID()));
-		return $sth->fetch(PDO::FETCH_ASSOC)['Results'];
+		return $this->row["Results"];
 	}
 	
 	/**
