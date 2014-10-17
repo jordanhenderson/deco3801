@@ -252,8 +252,11 @@ class PCRHandler {
 				$submission->delete();
 				return;
 			}
-			// TODO Uncomment when ready for testing
-			$submission->testSubmission();
+
+			$assignment = new Assignment(array("AssignmentID"=>$assignment_id));
+			$assignment_type = $assignment->row["Language"];
+			$test_file_location = $assignment->row["TestFiles"];
+			$submission->testSubmission($assignment_type, $test_file_location);
 		}
 		return $submission;
 	}

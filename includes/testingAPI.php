@@ -1,50 +1,5 @@
 <?php
 error_reporting(E_ALL);
-/*public class functionalTestAPI {
-	/**
-	* This function will update the given test results for the database submission entry.
-	* It will return true if the data is inserted successfully, false otherwise
-	* 
-	* $testResults must be an array with each element containing the value 
-	* "pass" or "fail"
-	*
-	public static function dbUpdateTestResults($submissionID, $testResults) {
-		$dbString = "";
-
-		// Test resuts must be in string format to store in database
-		foreach ($testResults as $value) {
-			$dbString = $dbString . "," . $value;
-		}
-
-		$dbString = substr($dbString, 1);
-
-		echo "dbString:" . $dbString;
-
-		$db = new Database();
-
-		if ($db->query("UPDATE Submission SET Results='$dbString' WHERE SubmissionID='$submissionID'") != false) {
-			echo "Test data inserted successfully\n";
-			return true;
-		} else {
-			echo "Error entering test results into database\n";
-			return false;
-		}
-	}
-
-	/**
-	* This function will retrieve the test results for submission from the database.
-	* 
-	* This function will return an array with each element containing the value 
-	* "pass" or "fail"
-	*
-	public static function dbRetrieveTestResults($submissionID) {
-		if ($db->query("SELECT Results FROM Submission WHERE SubmissionID='$submissionID'") != false) {
-			echo "Test data retrieved successfully\n";
-		} else {
-			echo "Error retrieving test results from database\n";
-		}
-	}
-}*/
 
 class javaTesting {
 	private $source_directory;
@@ -124,13 +79,19 @@ class bashTesting {
 	* Script output format should be "test_number:pass/fail" without quotes, 
 	* separated by semi-colons. e.g. "1:pass;2:fail;3:pass"
 	* 
+	* Script should have an exit code of 0, indicating success. Any other 
+	* exit code will be interpreted as a failure and not release any
+	* of the results.
+	*
+	* Script should have global executable permissions to ensure
+	* it can run
+	* 
 	* Returns null if there were no test results
 	*/
-	public static function execute() {
+	public function execute() {
 		// Execute student assignment
-		$scriptOutput = "1:pass;2:fail;3:pass;4:pass";//shell_exec($this->test_file_location . " " . $this->assignment_file_location);
-
-		echo "Script output: " . $scriptOutput . PHP_EOL;
+		$scriptOutput = shell_exec("bash " . $this->test_file_location . " " . $this->assignment_file_location);
+		//echo(shell_exec("echo $?"));
 		
 		// Check for newline at the end, remove if present
 		if (substr($scriptOutput, -1) == "\n") {
