@@ -28,8 +28,8 @@ function formatDBtime($dbtime) {
 	return date_format($date, 'j M \'y, g:ia'); // e.g: 6 Feb '14, 8:30pm
 }
 
-function printResults() {
-	$submission = $crs->getSubmission($_REQUEST['assid']);
+function printResults($handler) {
+	$submission = $handler->getSubmission($_REQUEST['assid']);
 	$sub = &$submission->getRow();
 	$results = $sub['Results'];	
 
@@ -105,7 +105,7 @@ function printResults() {
 							<td>'.formatDBtime($asg['ReviewsDue']).'</td>';
 
 							echo '<td>';
-							printResults();
+							printResults($crs);
 							echo '</td>';
 							?>
 
