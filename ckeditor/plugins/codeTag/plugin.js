@@ -9,7 +9,7 @@ CKEDITOR.plugins.add( 'codeTag', {
     editor.ui.addButton( 'Code', {
       label: 'Wrap code',
       command: 'wrapCode',
-      toolbar: 'insert'
+      toolbar: 'document'
     });
   }
 });

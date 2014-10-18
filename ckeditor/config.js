@@ -11,8 +11,6 @@ CKEDITOR.editorConfig = function( config ) {
 	config.extraPlugins = 'codeTag';
 	// The toolbar groups arrangement, optimized for two toolbar rows.
 	config.toolbarGroups = [
-		{ name: 'insert' },
-		{ name: 'forms' },
 		{ name: 'tools' },
 		{ name: 'document',	   groups: [ 'mode', 'document', 'doctools' ] },
 		{ name: 'basicstyles', groups: [ 'basicstyles', 'cleanup' ] },
