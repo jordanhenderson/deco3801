@@ -264,11 +264,6 @@ function formatDBtime($dbtime) {
 			<p><a class="btn btn-info" href="reviewhub.php" role="button">Review Feedback &raquo;</a></p>';
 			} else if (mt_rand(0, 1)) { // feedback received
 				// TODO ^ Actually decide this at some point
-				echo '<p>You have recieved feedback from your assignment submission. Please take the time to check over the advice offered by your peers.</p>';
-				//Don't want to print the button if it already exists
-				/*if(count($unmarkedSubs) == 0) {
-					echo '<p><a class="btn btn-success" href="reviewhub.php" role="button">Check it out &raquo;</a></p>';
-				}*/
 				echo '<p>You have recieved feedback from your assignment submission. Please take the time to check over the advice offered by your peers.</p>
 			<p><a class="btn btn-success" href="reviewhub.php" role="button">Check it out &raquo;</a></p>';
 			} else { // no feedback
