@@ -327,11 +327,11 @@ foreach ($reviews as $review) {
 				var contentObj = $.parseJSON(filecode);
 				// reset count
 				// want to destroy and recreate to update the id (count)
+				count = 0;
 				if ($('#assignment_code').getHighlighter() !== undefined) {
 					$('#assignment_code').getHighlighter().destroy();
 				}
 				setupHighlighter();
-				count = 0;
 				$( "#assignment_code" ).html( contentObj.r );
 				$( "#file_heading" ).html( id );
 				// remove previous annotations and add the new ones
