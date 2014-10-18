@@ -203,7 +203,7 @@ function formatDBtime($dbtime) {
 						
 						// Status
 						if ($admin) {
-							echo 'None';
+							echo '-';
 						} else if ($SubmitTime == 0 && $CurrentTime < $DueTime) { // Not Submitted
 							echo 'Not Submitted.';
 						} else if ($SubmitTime == 0) { // Overdue
@@ -214,7 +214,9 @@ function formatDBtime($dbtime) {
 							echo 'Submitted late.';
 						}
 						
-						if ($CurrentTime <= $DueTime) { // Peer review not open
+						if ($admin) {
+							// Nothing to see here.
+						} else if ($CurrentTime <= $DueTime) { // Peer review not open
 							echo '<br>Peer Reviews Not Open.';
 						} else if (count($reviewsTodo) == 0) { // Peer review complete
 							echo '<br>Peer Reviews Complete.';
@@ -245,7 +247,6 @@ function formatDBtime($dbtime) {
 				echo '<p>There are currently '.'TODO'.' student submitted assignments that have not recieved a teacher review. If no teacher input is required, then these can be dismissed at any time, either individually or per assignment.</p>
 			<p><a class="btn btn-info" href="reviewhub.php" role="button">Review Assignments &raquo;</a></p>';
 			} else if (count($unmarkedSubs) > 0) { // reviews need marking
-				//TODO ^ Actually decide this at some point
 				echo '<p>There are '.count($unmarkedSubs).' submissions ready for reviewing. Please take the time to assist your peers by offering suggestions and improvements.</p>
 			<p><a class="btn btn-warning" href="reviewhub.php" role="button">Start Now &raquo;</a></p>';
 			} else { // no reviews to mark
