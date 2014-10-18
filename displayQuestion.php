@@ -20,7 +20,6 @@ $crs = new PCRHandler();
 	
 	<!-- Bootstrap Select CSS -->
 	<link href="css/bootstrap-select.min.css" rel="stylesheet">
-	
 	<!-- Bootstrap datetimepicker CSS -->
 	<link href="css/bootstrap-datetimepicker.min.css" rel="stylesheet">
 
@@ -73,9 +72,7 @@ $crs = new PCRHandler();
 			else {
 				//Place holder not sure what for just yet
 			}
-
-				echo $title;
-			    echo "<div id = buttons>";
+				echo "<div id = buttons>";
 				//If an admin is viewing, gives ability to delete a question
 				if ($_SESSION['admin']) {
 					echo "
@@ -85,7 +82,7 @@ $crs = new PCRHandler();
 				//If status is resolved, then display mark unresolved vice-versa below
 				if($status == "1"){
 					echo "
-					<input type='submit' class='btn btn-xl btn-danger' id='MarkUnresolved' name='markUnresolved' value='Mark Unresolved'>
+					<input type='submit'  class='btn btn-xl btn-danger' id='MarkUnresolved' name='markUnresolved' value='Mark Unresolved'>
 					";
 				}
 				else {
@@ -93,7 +90,8 @@ $crs = new PCRHandler();
 						<input type='submit' class='btn btn-xl btn-danger' id='MarkResolved' name='markResolved' value='Mark Resolved'>
 					";
 				}	
-				echo "</div>"
+				echo "</div>";
+				echo "<div id = title>".$title."</div>";
 
 		?></h1>
 			<div class="row">

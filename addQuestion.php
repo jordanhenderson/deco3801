@@ -34,7 +34,7 @@ $date = date('m/d/Y h:i:s a', time());
 		<form name="qF" id="qF" method="post" action="api.php" data-function="storeNewQuestion">
 
 					<label for="title">Question Title</label>
-					<input class="form-control" name="question" type="text" id="QTitle">
+					<input class="form-control" name="question" type="text" id="QTitle" maxlength="75">
 
 			<br>
 					<label for="content">Question Content</label>

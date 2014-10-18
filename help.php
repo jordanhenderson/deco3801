@@ -13,7 +13,7 @@ if (!$admin && (!isset($_SESSION['helpenabled']) || !$_SESSION['helpenabled'])) 
 	exit("Help has not enabled by the administrator of this course.");
 }
 
-$crs = new PCRHandler();
+	$crs = new PCRHandler();
 ?>
 <!DOCTYPE html>
 <html lang="en">	
@@ -22,7 +22,7 @@ $crs = new PCRHandler();
 	<meta charset="utf-8">
 	<meta name="viewport" content="width=device-width, initial-scale=1">
 	
-	<title>Help Center</title>
+	<title>Help Centre</title>
 	
 	<!-- Bootstrap Core CSS -->
 	<link href="css/bootstrap.min.css" rel="stylesheet">
@@ -33,18 +33,18 @@ $crs = new PCRHandler();
 	<!-- Custom CSS -->
 	<link href="css/main.css" rel="stylesheet">
 	<link href="css/help.css" rel="stylesheet">
-
+	
 </head>
 
 <body>	
 <?php include 'header.php'; 
 
 	function seconds2human($s) {
+		$str = " ";
 	$m = floor(($s%3600)/60);
 	//$m = round(($ss%3600)/60, 0.1);
 	$h = floor(($s%86400)/3600);
 	$d = floor($s/86400);
-	$str = ""; //do i need this? <- yes you do
 	if ($d) {
 		$str .= "$d days, ";
 	}
@@ -53,35 +53,43 @@ $crs = new PCRHandler();
 	}
 	return "$str$m mins";
 }
+$helpstatus = $_SESSION['helpenabled'];
 ?>
 	
 	<div class="container">
+		
 		<h1>Help Centre</h1>
 		<div class="col-lg-12">
 			<?php
-				if ($admin) { // Help centre options
-					echo '
-			<h2>Enable/Disable Help Centre for Students</h2>
-			<form>
-				<select class="selectpicker" data-width="110px">
-					<option>Enabled</option>
-					<option>Disabled</option>
-				</select>
-			</form>';
+				//if the help centre isn't on give the admin the option to turn it on
+				if ($admin && (isset($_SESSION['helpenabled']) && $_SESSION['helpenabled'] == 0)) {
+
+					echo "
+					<input type='submit' class='btn btn-xl btn-success' id='TurnHelpCentreOn' name='toggleHelp' value='Turn Help Centre On'>
+					";
+					echo "<br></br>";
+					echo "The help centre is currently disabled for students";
+					
 				}
-				
+				//If the help centre is on give admin the option to turn it off
+				if ($admin && (isset($_SESSION['helpenabled']) && $_SESSION['helpenabled'] == 1)){
+					echo "
+					<input type='submit' class='btn btn-xl btn-success' id='TurnHelpCentreOff' name='toggleHelp' value='Turn Help Centre Off'>
+					";
+				}
 				//Get all the questions from the DB to display in the centre
 				$questions = $crs->getCourse()->getHelpCentreQuestions();
 				
-				if (empty($questions)) {
-					echo '<p>No questions</p>';
-				} else {
+				
 			?>
 			<h2>Questions</h2>
 			<a class="btn btn-xl btn-default" href="addQuestion.php" role="button">Ask a Question</a>
-			<!-- This will filter your own questions at some point -->
-			<a class="btn btn-xl btn-success" href="#" role="button">My Questions</a>
 			<br><br>
+			<?php 
+			if (empty($questions)) {
+					echo '<p>Currently there are no questions here, why not try asking one!</p>';
+				} else {
+					?>
 			<table class="table">
 				<thead >
 					<tr class = 'columns'>
@@ -115,12 +123,12 @@ $crs = new PCRHandler();
 								$CurrentTime = time();
 								$date = date_create_from_format('Y-m-d G:i:s', $last['postdate']);
 								$OpenTime = (int) date_format($date, 'U');
-								$daysago = $CurrentTime - $OpenTime;
+								$daysago = seconds2human($CurrentTime - $OpenTime);
 								/*
 								Show the last post time + student who posted it
 								Subject to change in regards to "hours ago" format
 								*/
-								echo substr($last['Content'], 0, 28).'<br>'.seconds2human($daysago)." ago by ".$last['StudentName'];
+								echo substr($last['Content'], 0, 28).'<br>'.$daysago." ago by ".$last['StudentName'];
 							}
 						}
 						echo "</td>";
@@ -147,10 +155,22 @@ $('.unresolved').on("click", function () {
     var href = $(this).data('href');
         document.location = href;
 });
+
 </script>
 	<!-- Bootstrap Core JavaScript -->
 	<script src="js/bootstrap.min.js"></script>
-	
+	<script type="text/javascript">
+		$(function() {
+			$(":submit").click(function() {
+				var func = $(this).attr("name");
+				var status = "<?php echo $helpstatus; ?>";
+				var request = {f: func, params: [status]};
+				$.post("api.php", JSON.stringify(request), function() {
+					window.location.replace("index.php");
+				});
+			});
+		});
+	</script>
 	<!-- Bootstrap Select JavaScript -->
 	<script src="js/bootstrap-select.min.js"></script>
 	
@@ -159,5 +179,6 @@ $('.unresolved').on("click", function () {
 			$('.selectpicker').selectpicker();
 		}
 	</script>
+
 </body>
 </html>
