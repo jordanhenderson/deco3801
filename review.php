@@ -328,15 +328,15 @@ foreach ($reviews as $review) {
 				// reset count
 				// want to destroy and recreate to update the id (count)
 				count = 0;
-				if ($('#assignment_code').getHighlighter() !== undefined) {
-					$('#assignment_code').getHighlighter().destroy();
-				}
-				setupHighlighter();
 				$( "#assignment_code" ).html( contentObj.r );
 				$( "#file_heading" ).html( id );
 				// remove previous annotations and add the new ones
 				$('#reviews').html('');
 				getComments();
+				if ($('#assignment_code').getHighlighter() !== undefined) {
+					$('#assignment_code').getHighlighter().destroy();
+				}
+				setupHighlighter();
 			});	  
             
 		}
