@@ -326,6 +326,11 @@ foreach ($reviews as $review) {
 			$.post("api.php", JSON.stringify(request), function( filecode ) {
 				var contentObj = $.parseJSON(filecode);
 				// reset count
+				// want to destroy and recreate to update the id (count)
+				if ($('#assignment_code').getHighlighter() !== undefined) {
+					$('#assignment_code').getHighlighter().destroy();
+				}
+				setupHighlighter();
 				count = 0;
 				$( "#assignment_code" ).html( contentObj.r );
 				$( "#file_heading" ).html( id );
