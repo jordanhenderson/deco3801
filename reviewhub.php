@@ -95,20 +95,21 @@ $crs = new PCRHandler();
 					</tr>
 				</thead>
 				<tbody>';
-					// print table contents
-					foreach ($markedSubs as $sub) {
-						$sub = &$sub->getRow();
-						$asg = new Assignment(array("AssignmentID" => $sub['AssignmentID']));
-						$asg = &$asg->getRow();
-						echo "
+				// print table contents
+				foreach ($markedSubs as $sub) {
+					$sub = &$sub->getRow();
+					$asg = new Assignment(array("AssignmentID" => $sub['AssignmentID']));
+					$asg = &$asg->getRow();
+					echo "
 					<tr>
 						<td>$asg[AssignmentName]</td>
 						<td><a class='btn btn-xs btn-info' href='review.php?subid=$sub[SubmissionID]' role='button'>View</a></td>
 					<tr>";
-					}
+				}
 				echo '
 				</tbody>
 			</table>';
+			}
 		} else { // Admin
 			echo 'Admin!';
 		}
