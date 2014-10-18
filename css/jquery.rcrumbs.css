@@ -7,6 +7,7 @@ html {
   font-size: 14px;
   line-height: 18px;
   white-space: nowrap;
+  margin-top:20px;
 }
 .rcrumbs > ul {
   padding: 0;
@@ -14,10 +15,10 @@ html {
 }
 .rcrumbs > ul > li {
   overflow: hidden;
-  display: none;
+  display: none !important;
 }
 .rcrumbs > ul > li.show {
-  display: inline-block;
+  display: inline-block !important;
 }
 .rcrumbs > ul > li.ellipsis {
   text-overflow: ellipsis;

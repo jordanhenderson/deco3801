@@ -356,6 +356,8 @@ foreach ($reviews as $review) {
 
 <body>
 	<?php include 'header.php'; ?>
+	
+	<div class="container">
 	<div class="rcrumbs" id="breadcrumbs">
         <ul>
             <li><a href="http://deco3801-14.uqcloud.net">Home</a><span class="divider">></span></li>
@@ -363,7 +365,6 @@ foreach ($reviews as $review) {
             <li><a href="#">Assignment Reviews</a><span class="divider">></span></li>
         </ul>
     </div>
-	<div class="container">
 		<div class="col-xs-6 col-sm-3 sidebar-offcanvas" id="sidebar">
 		
 			<div class="list-group">
