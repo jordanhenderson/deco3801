@@ -23,11 +23,7 @@ require_once('includes/handlers.php');
 	<link rel="stylesheet" type="text/css" href="css/jquery.rcrumbs.css">
 	<script src="js/jquery-1.11.0.js"></script>
 	<script src="js/jquery.rcrumbs.js"></script>
-	<script>
-		$(document).ready(function() {
-			$("#breadcrumbs").rcrumbs();
-		});
-	</script>
+	
 </head>
 
 <body>
@@ -62,7 +58,7 @@ require_once('includes/handlers.php');
 			</div>
 			<div class="col-sm-6">
 				<h1>Repository Submission</h1>
-				<p>Upload your assignment using the repository submission method (GIT or SVN).
+				<p>Upload your assignment using the repository submission method (GIT).
 				</p>
 				<form action="submit_repo.php" method="post">
 					<input type="hidden" name="assignment_id" value="<?php echo $_GET['assid']; ?>">
@@ -70,7 +66,6 @@ require_once('includes/handlers.php');
 				<label for="repotype">Repository Type</label>
 				<select class="form-control" name="repotype" id="repotype">
 				    <option value="git">Git</option>
-				    <option value="svn">SVN</option>
 				</select>
 				<div>
 				
@@ -119,11 +114,15 @@ require_once('includes/handlers.php');
 ?>
 	
 	</div>
-	<!-- jQuery Version 1.11.0 -->
-	<script src="js/jquery-1.11.0.js"></script>
 
 	<!-- Bootstrap Core JavaScript -->
 	<script src="js/bootstrap.min.js"></script>
+	
+	<script>
+		$(document).ready(function() {
+			$("#breadcrumbs").rcrumbs();
+		});
+	</script>
 	
 </body>
 </html>

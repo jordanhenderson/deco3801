@@ -62,12 +62,24 @@ function printResults($handler) {
 	
 	<!-- Custom CSS -->
 	<link href="css/main.css" rel="stylesheet">
+	
+	<!-- Breadcrumbs -->
+	<!-- jQuery -->
+	<link rel="stylesheet" type="text/css" href="css/jquery.rcrumbs.css">
+	<script src="js/jquery-1.11.0.js"></script>
+	<script src="js/jquery.rcrumbs.js"></script>
 </head>
 
 <body>
 	<?php include 'header.php'; ?>
 	
 	<div class="container">
+		<div class="rcrumbs" id="breadcrumbs">
+			<ul>
+				<li><a href="http://deco3801-14.uqcloud.net">Home</a><span class="divider">></span></li>
+				<li><a href="#">Assignment Overview</a><span class="divider"></span></li>
+			</ul>
+		</div> 
 		<h1><?php echo $asg['AssignmentName']; ?> Overview</h1>
 		<div class="row">
 			<div class="col-md-12">
@@ -195,13 +207,16 @@ function printResults($handler) {
 		</div>
 	</div>
 
-	<!-- jQuery Version 1.11.0 -->
-	<script src="js/jquery-1.11.0.js"></script>
 
 	<!-- Bootstrap Core JavaScript -->
 	<script src="js/bootstrap.min.js"></script>
 
 	<!-- Bootstrap datetimepicker JavaScript -->
 	<script src="js/bootstrap-datetimepicker.min.js"></script>
+		<script>
+		$(document).ready(function() {
+			$("#breadcrumbs").rcrumbs();
+		});
+	</script>
 </body>
 </html>
