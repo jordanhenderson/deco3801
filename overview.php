@@ -147,17 +147,21 @@ function printResults($handler) {
 							if (!$sub->isValid()) {
 								continue;
 							}
+							// getStudentsReviews at some point? Might be difficult.
+							// This way we won't flood the screen with 500 comments
+							// we'll just have 1 link for every student who made a
+							// review.
 							$reviews = $sub->getReviews();
 							$sub = &$sub->getRow();
 							
 							echo "
 						<tr>
-							<td>TODO: $sub[StudentID]</td>
+							<td>Student #$sub[StudentID]</td>
 							<td>$sub[Results]</td>
 							<td>$sub[SubmitTime]</td>
 							<td>";
 							
-							if (empty($submissions)) { // No submissions
+							if (empty($reviews)) { // No reviews
 								echo "No reviews.";
 							} else {
 								foreach ($reviews as $rev) {
