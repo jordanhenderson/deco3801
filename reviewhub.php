@@ -1,6 +1,16 @@
 <?php
+
 require_once 'includes/handlers.php';
+
 $crs = new PCRHandler();
+
+// Pull admin from session var to local var for easier/faster calling
+if (isset($_SESSION['admin']) && $_SESSION['admin']) {
+	$admin = true;
+} else {
+	$admin = false;
+}
+
 ?>
 <!DOCTYPE html>
 <html lang="en">
