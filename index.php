@@ -250,8 +250,8 @@ function formatDBtime($dbtime) {
 			if ($admin) {
 				// teacher still has the option to review submissions. Count ALL submissions.
 				// teacher still gets to see feedback. Count ALL feedback.
-				echo '<p>There are currently '.'TODO'.' student submitted assignments that have not recieved a teacher review. If no teacher input is required, then these can be dismissed at any time, either individually or per assignment.</p>
-			<p>There are currently '.'3'.' pieces of student submitted feedback that have not recieved a teacher review. If no teacher input is required, then these can be dismissed at any time, either individually or per assignment.</p>
+				echo '<p>There are currently '.'TODO'.' student submitted assignments that have not received a teacher review. If no teacher input is required, then these can be dismissed at any time, either individually or per assignment.</p>
+			<p>There are currently '.'3'.' pieces of student submitted feedback that have not received a teacher review. If no teacher input is required, then these can be dismissed at any time, either individually or per assignment.</p>
 			<p><a class="btn btn-info" href="reviewhub.php" role="button">Review Assignments &raquo;</a></p>';
 			} else if (count($unmarkedSubs) > 0) { // reviews need marking
 				echo '<p>There are '.count($unmarkedSubs).' submissions ready for reviewing. Please take the time to assist your peers by offering suggestions and improvements.</p>
@@ -263,7 +263,7 @@ function formatDBtime($dbtime) {
 			
 			if (mt_rand(0, 1)) { // feedback received
 				// TODO ^ Actually decide this at some point
-				echo '<p>You have recieved feedback from your assignment submission. Please take the time to check over the advice offered by your peers.</p>';
+				echo '<p>You have received feedback from your assignment submission. Please take the time to check over the advice offered by your peers.</p>';
 				//Don't want to print the button if it already exists
 				if(count($unmarkedSubs) == 0) {
 					echo '<p><a class="btn btn-success" href="reviewhub.php" role="button">Check it out &raquo;</a></p>';
