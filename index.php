@@ -40,7 +40,6 @@ if ($context->valid) { // Redirect from Moodle, reload data, in case different c
 	exit(); // User didn't come from Moodle, and isn't authenticated.
 }
 
-
 require_once 'includes/handlers.php';
 $crs = new PCRHandler();
 

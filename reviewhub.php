@@ -32,7 +32,8 @@ $crs = new PCRHandler();
 					if (!$asg->isValid()) {
 						continue;
 					}
-					array_merge($unmarkedSubmissions, $asg->getUnmarkedSubmissions($_SESSION['user_id']));
+					$temp = $asg->getUnmarkedSubmissions($_SESSION['user_id']);
+					array_merge($unmarkedSubmissions, $temp);
 				}
 				
 				if (empty($unmarkedSubmissions)) { // No submissions to mark
@@ -76,7 +77,8 @@ $crs = new PCRHandler();
 					if (!$asg->isValid()) {
 						continue;
 					}
-					array_merge($markedSubmissions, $asg->getMarkedSubmissions($_SESSION['user_id']));
+					$temp = $asg->getMarkedSubmissions($_SESSION['user_id']);
+					array_merge($markedSubmissions, $temp);
 				}
 				
 				if (empty($markedSubmissions)) { // No submissions recieved
