@@ -17,13 +17,28 @@ require_once('includes/handlers.php');
 
 	<!-- Custom CSS -->
 	<link href="css/main.css" rel="stylesheet">
+	
+	<!-- Breadcrumbs -->
+	<link rel="stylesheet" type="text/css" href="css/jquery.rcrumbs.css">
+	<script src="js/jquery.rcrumbs.js"></script>
+	<script>
+		$(document).ready(function() {
+			$("#breadcrumbs").rcrumbs();
+		});
+	</script>
 </head>
 
 <body>
 	<?php include 'header.php'; ?>
 	
 	<div class="container">
-	      
+		<div class="rcrumbs" id="breadcrumbs">
+			<ul>
+				<li><a href="http://deco3801-14.uqcloud.net">Home</a><span class="divider">></span></li>
+				<li><a href="http://deco3801-14.uqcloud.net/overview.php?assid=<?php echo $_GET['assid']; ?>">Assignment Overview</a><span class="divider">></span></li>
+				<li><a href="#">Assignment Submission</a><span class="divider"></span></li>
+			</ul>
+		</div>    
 		<h1>Assignment 99 Submission</h1>
 		<div class="col-sm-12">
 		<div class="panel panel-default">
