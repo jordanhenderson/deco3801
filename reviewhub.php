@@ -26,17 +26,17 @@ $crs = new PCRHandler();
 		<div class="col-lg-12">
 			<h2>Assignments to Review</h2>
 <?php
-				$unmarkedSubmissions = array();
+				$unmarkedSubs = array();
 				$assignments = $crs->getCourse()->getAssignments();
 				foreach ($assignments as $asg) {
 					if (!$asg->isValid()) {
 						continue;
 					}
 					$temp = $asg->getUnmarkedSubmissions($_SESSION['user_id']);
-					array_merge($unmarkedSubmissions, $temp);
+					$unmarkedSubs = array_merge($unmarkedSubs, $temp);
 				}
 				
-				if (empty($unmarkedSubmissions)) { // No submissions to mark
+				if (empty($unmarkedSubs)) { // No submissions to mark
 					echo "All of the assignments designated to you have been reviewed. Consider stopping by the Help Center to answer some of your peers' questions.";
 				} else {
 					// print table head
@@ -51,7 +51,7 @@ $crs = new PCRHandler();
 						</thead>
 						<tbody>';
 							// print table contents
-							foreach ($unmarkedSubmissions as $sub) {
+							foreach ($unmarkedSubs as $sub) {
 								$sub = &$sub->getRow();
 								$asg = new Assignment(array("AssignmentID" => $sub['AssignmentID']));
 								$asg = &$asg->getRow();
@@ -71,17 +71,17 @@ $crs = new PCRHandler();
 		<div class="col-lg-12">
 			<h2>Feedback On Assignments</h2>
 <?php
-				$markedSubmissions = array();
+				$markedSubs = array();
 				$assignments = $crs->getCourse()->getAssignments();
 				foreach ($assignments as $asg) {
 					if (!$asg->isValid()) {
 						continue;
 					}
 					$temp = $asg->getMarkedSubmissions($_SESSION['user_id']);
-					array_merge($markedSubmissions, $temp);
+					array_merge($markedSubs, $temp);
 				}
 				
-				if (empty($markedSubmissions)) { // No submissions recieved
+				if (empty($markedSubs)) { // No submissions recieved
 					echo "There is currently no feedback available for any of your submissions.";
 				} else {
 					// print table head
@@ -95,7 +95,7 @@ $crs = new PCRHandler();
 						</thead>
 						<tbody>';
 							// print table contents
-							foreach ($markedSubmissions as $sub) {
+							foreach ($markedSubs as $sub) {
 								$sub = &$sub->getRow();
 								$asg = new Assignment(array("AssignmentID" => $sub['AssignmentID']));
 								$asg = &$asg->getRow();
