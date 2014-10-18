@@ -265,7 +265,7 @@ function formatDBtime($dbtime) {
 				// TODO ^ Actually decide this at some point
 				echo '<p>You have recieved feedback from your assignment submission. Please take the time to check over the advice offered by your peers.</p>';
 				//Don't want to print the button if it already exists
-				if(count($unmarkedSubs) = 0) {
+				if(count($unmarkedSubs) == 0) {
 					echo '<p><a class="btn btn-success" href="reviewhub.php" role="button">Check it out &raquo;</a></p>';
 				}
 			} else { // no feedback
