@@ -1,4 +1,4 @@
-﻿/**
+/**
  * @license Copyright (c) 2003-2014, CKSource - Frederico Knabben. All rights reserved.
  * For licensing, see LICENSE.md or http://ckeditor.com/license
  */
@@ -60,9 +60,9 @@ var CKBUILDER_CONFIG = {
 		'filebrowser' : 1,
 		'floatingspace' : 1,
 		'format' : 1,
-		'horizontalrule' : 1,
+		'horizontalrule' : 0,
 		'htmlwriter' : 1,
-		'image' : 1,
+		'image' : 0,
 		'indentlist' : 1,
 		'link' : 1,
 		'list' : 1,
@@ -78,7 +78,7 @@ var CKBUILDER_CONFIG = {
 		'specialchar' : 1,
 		'stylescombo' : 1,
 		'tab' : 1,
-		'table' : 1,
+		'table' : 0,
 		'tabletools' : 1,
 		'toolbar' : 1,
 		'undo' : 1,
