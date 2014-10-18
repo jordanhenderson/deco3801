@@ -62,6 +62,10 @@ foreach ($reviews as $review) {
 	<!-- JQuery text highlighter library -->
 	<script type="text/javascript" src="js/jquery.textHighlighter.js"></script>
 	
+	<!-- Breadcrumbs -->
+	<link rel="stylesheet" type="text/css" href="jquery.rcrumbs.css">
+	<script src="jquery.rcrumbs.js"></script>
+	
 
 	<script>
 		// GLOBALS
@@ -352,7 +356,13 @@ foreach ($reviews as $review) {
 
 <body>
 	<?php include 'header.php'; ?>
-	
+	<div class="rcrumbs" id="breadcrumbs">
+        <ul>
+            <li><a href="http://deco3801-14.uqcloud.net">Home</a><span class="divider">></span></li>
+            <li><a href="http://deco3801-14.uqcloud.net/reviewhub.php">Review Hub</a><span class="divider">></span></li>
+            <li><a href="#">Assignment Reviews</a><span class="divider">></span></li>
+        </ul>
+    </div>
 	<div class="container">
 		<div class="col-xs-6 col-sm-3 sidebar-offcanvas" id="sidebar">
 		
@@ -422,6 +432,7 @@ foreach ($reviews as $review) {
 		}
 		
 		$(document).ready(function() {
+			$("#breadcrumbs").rcrumbs();
 			if(isOwner == 1) {
 				ownerSetup();
 			}
