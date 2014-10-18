@@ -7,7 +7,7 @@ CKEDITOR.editorConfig = function( config ) {
 	// Define changes to default configuration here.
 	// For complete reference see:
 	// http://docs.ckeditor.com/#!/api/CKEDITOR.config
-
+    config.extraPlugins = 'codeTag';
 	// The toolbar groups arrangement, optimized for a single toolbar row.
 	config.toolbarGroups = [
 		{ name: 'document',	   groups: [ 'mode', 'document', 'doctools' ] },
@@ -22,7 +22,8 @@ CKEDITOR.editorConfig = function( config ) {
 		{ name: 'colors' },
 		{ name: 'tools' },
 		{ name: 'others' },
-		{ name: 'about' }
+		{ name: 'about' },
+        { name: 'codeTag' },
 	];
 
 	// The default plugins included in the basic setup define some buttons that
