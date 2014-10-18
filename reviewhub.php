@@ -57,6 +57,7 @@ if (isset($_SESSION['admin']) && $_SESSION['admin']) {
 				<thead>
 					<tr>
 						<th>Assignment Name</th>
+						<th>Student ID #</th>
 						<th>Due Date</th>
 						<th></th>
 					</tr>
@@ -70,6 +71,7 @@ if (isset($_SESSION['admin']) && $_SESSION['admin']) {
 					echo "
 					<tr>
 						<td>$asg[AssignmentName]</td>
+						<td>$asg[StudentID]</td>
 						<td>$asg[ReviewsDue]</td>
 						<td><a class='btn btn-xs btn-info' href='review.php?subid=$sub[SubmissionID]' role='button'>Mark</a></td>
 					<tr>";
@@ -89,7 +91,7 @@ if (isset($_SESSION['admin']) && $_SESSION['admin']) {
 					continue;
 				}
 				$temp = $asg->getMarkedSubmissions($_SESSION['user_id']);
-				array_merge($markedSubs, $temp);
+				$markedSubs = array_merge($markedSubs, $temp);
 			}
 			
 			if (empty($markedSubs)) { // No submissions recieved
