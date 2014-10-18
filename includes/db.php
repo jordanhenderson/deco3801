@@ -59,6 +59,7 @@ abstract class PCRObject implements JsonSerializable {
 	protected $id_field; //the field (column name) of the object's ID column (in which $id is stored)
 	protected $table; //table is the name of the table which stores the object
 	protected $row; //row holds the object
+	protected $autocreate; //create the row if it doesn't exist
 	/**
 	 * uptodate determines if the object has been populated by a row.
 	 * This allows set operations to occur without first retrieving data.
@@ -72,11 +73,12 @@ abstract class PCRObject implements JsonSerializable {
 	 * @param forceCreate: Should a new row be auto-created if an ID is 
 	 *		  provided and a matching row is not found.
 	 */
-	protected function __construct($id_field, $table, $data) {
+	protected function __construct($id_field, $table, $data, $autocreate) {
 		$this->db = $GLOBALS["db"];
 		$this->table = $table;
 		$this->id_field = $id_field;
 		$this->uptodate = 0;
+		$this->autocreate = $autocreate;
 		if (is_array($data)) {
 			$this->row = $data;
 			if (isset($data[$id_field]) && $data[$id_field] != null) {
@@ -112,8 +114,6 @@ abstract class PCRObject implements JsonSerializable {
 	* After calling this function, the object is considered synchronised
 	*/
 	private function insertRow() {
-		//Insert a new row.
-		$field_count = sizeof($this->row);
 		//Generate a prepared insert statement.
 		$cols = "";
 		$vals = "";
@@ -144,6 +144,31 @@ abstract class PCRObject implements JsonSerializable {
 			return;
 		}
 	}
+
+	/**
+	 * Searches for a matching object given known fields.
+	*/
+	private function searchRow() {
+		$search = "SELECT * FROM $this->table WHERE ";
+		
+		foreach ($this->row as $key=>$value) {
+			$search .= " $key = :$key AND";
+		}
+		
+		$search = rtrim($search, "AND") . ";";
+		try {
+			$sth = $this->db->prepare($search);
+			$sth->execute($this->row);
+			$row = $sth->fetch(PDO::FETCH_ASSOC);
+			if($row) {
+				$this->row = $row;
+				$this->uptodate = 1;
+				$this->id = $row[$this->id_field];
+			}
+		} catch (PDOException $ex) {
+			
+		}
+	}
 	
 	/**
 	 * Update()
@@ -164,13 +189,17 @@ abstract class PCRObject implements JsonSerializable {
 			//Guarantee the id field has been provided.
 			$row = null;
 			$id = isset($this->id) ? $this->id : (isset($this->row[$this->id_field]) ? $this->row[$this->id_field] : null);
-			if ($id == null) {
+			if ($this->autocreate && $id == null) {
 				//Insert a new row.
 				$this->insertRow();
 				//Repopulate the row with default values.
 				if(!$recursed) $this->Update(true);
+				$this->uptodate = 1;
+			} else if ( $this->autocreate == false ) {
+				//Autocreate not enabled, search for an existing row using what values we have.
+				$this->searchRow();
 			} else {
-				//Select an existing row - this may succeed or fail.
+				//Select an existing row matching the ID - this may succeed or fail.
 				$sth->execute(array($id));
 				$row = $sth->fetch(PDO::FETCH_ASSOC);
 				
@@ -190,10 +219,8 @@ abstract class PCRObject implements JsonSerializable {
 				}
 				
 				$this->id = $id;
+				$this->uptodate = 1;
 			}
-			
-			//In any case, we have the latest object now.
-			$this->uptodate = 1;
 		}
 	}
 	
@@ -209,8 +236,6 @@ abstract class PCRObject implements JsonSerializable {
 	/**
 	 * isValid returns if the object is valid.
 	 * An object is valid if an appropriate entry exists within the database.
-	 * If forceCreate is not specified and no ID exists within the database, the provided
-	 * object may have been created to access a specific entry (which does not exist)
 	 * @return if the object is currently valid.
 	 */
 	public function isValid() {
@@ -228,7 +253,7 @@ abstract class PCRObject implements JsonSerializable {
 	}
 
 	protected function Cleanup() {
-		
+		//override this function to provide custom cleanup logic.
 	}
 	
 	/**
@@ -298,8 +323,8 @@ class PCRBuilder {
  * (tinyint(1))		ReviewsAllocated
  */
 class Assignment extends PCRObject {
-	public function __construct($data) {
-		parent::__construct("AssignmentID", "Assignments", $data);
+	public function __construct($data, $autocreate = true) {
+		parent::__construct("AssignmentID", "Assignments", $data, $autocreate);
 	}
 	
 	public function delete() {
@@ -422,8 +447,8 @@ class Assignment extends PCRObject {
  * (text)			FileName
  */
 class File extends PCRObject  {
-	public function __construct($data) {
-		parent::__construct("FileID", "Files", $data);
+	public function __construct($data, $autocreate = true) {
+		parent::__construct("FileID", "Files", $autocreate);
 	}
 	
 	public function jsonSerialize() {
@@ -447,8 +472,8 @@ class File extends PCRObject  {
  */
 class Submission extends PCRObject {
 	private $storage_dir;
-	public function __construct($data) {
-		parent::__construct("SubmissionID", "Submission", $data);
+	public function __construct($data, $autocreate = true) {
+		parent::__construct("SubmissionID", "Submission", $data, $autocreate);
 		$id = $this->getID();
 		
 		if ($this->isValid()) {
@@ -675,8 +700,8 @@ class Submission extends PCRObject {
  * (int_8)			HelpEnabled
  */
 class Course extends PCRObject {
-	public function __construct($data) {
-		parent::__construct("CourseID", "Course", $data);
+	public function __construct($data, $autocreate = true) {
+		parent::__construct("CourseID", "Course", $data, $autocreate);
 	}
 	
 	/**
@@ -739,8 +764,8 @@ class Course extends PCRObject {
  * (int_8)			Status
  */
 class Question extends PCRObject {
-	public function __construct($data) {
-		parent::__construct("QuestionID", "Question", $data);
+	public function __construct($data, $autocreate = true) {
+		parent::__construct("QuestionID", "Question", $data, $autocreate);
 	}
 	
 	/**
@@ -829,8 +854,8 @@ class Question extends PCRObject {
  * text				text
  */	
 class Review extends PCRObject {
-	public function __construct($data) {
-		parent::__construct("ReviewID", "Review", $data);
+	public function __construct($data, $autocreate = true) {
+		parent::__construct("ReviewID", "Review", $data, $autocreate);
 	}
 	
 	/**
@@ -882,8 +907,8 @@ class Review extends PCRObject {
  * (timestamp)		postdate
  */	
 class Comment extends PCRObject {
-	public function __construct($data) {
-		parent::__construct("CommentID", "Comment", $data);
+	public function __construct($data, $autocreate = true) {
+		parent::__construct("CommentID", "Comment", $data, $autocreate);
 	}
 	
 	public function jsonSerialize() {

@@ -138,6 +138,13 @@ if (isset($_GET['assid'])) {
 					<input class="form-control" id="Weight" min="1" max="100" name="Weight" type="number" <?php echo 'value="'.$asg['Weight'].'"'; ?>>
 				</div>
 			</div>
+			<div class="row">
+				<div class="col-md-6">
+					<label for="ResubmitAllowed">Resubmission Allowed?</label>
+					<input  id="ResubmitAllowed" type="checkbox" value="1" <?php if($asg['ResubmitAllowed'] == "1") echo "checked"; ?>>
+					<p class="help-block">Toggle the above to prevent or allow students to make multiple assignment submission attempts.</p>
+				</div>
+			</div>
 			<div align="center">
 				<?php
 				if ($new) {
@@ -176,7 +183,7 @@ if (isset($_GET['assid'])) {
 			$("#ReviewsDue").val(<?php echo "'$asg[ReviewsDue]'"; ?>);
 			$("#Weight").val(<?php echo "'$asg[Weight]'"; ?>);
 			$("#ReviewsNeeded").val(<?php echo "'$asg[ReviewsNeeded]'"; ?>);
-			
+			$("#ResubmitAllowed").val(<?php echo "'$asg[ResubmitAllowed]'"; ?>);
 			$("#TestFiles").replaceWith($("#TestFiles").clone());
 		});
 		
@@ -194,7 +201,8 @@ if (isset($_GET['assid'])) {
 						$("#ReviewsDue").val(),
 						$("#Weight").val(),
 						$("#OpenTime").val(),
-						$("#DueTime").val()
+						$("#DueTime").val(),
+						$("#ResubmitAllowed").is(":checked") ? 1 : 0
 					];
 				    break;
 				  case "deleteAssignment":

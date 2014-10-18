@@ -11,7 +11,7 @@ class SubmissionTest extends PHPUnit_Framework_TestCase {
 		$handler = new PCRHandler();
 		$course = $handler->getCourse();
 		//Create an assignment
-		$assignment = $handler->changeAssignment("0", "Test Assignment", "0", "0", "0", "0", "0");
+		$assignment = $handler->changeAssignment("0", "Test Assignment", "0", "0", "0", "0", "0", "0");
 		
 		$this->assertNotNull($assignment);
 		$this->assertEquals($assignment->isValid(), true);
