@@ -76,21 +76,21 @@ function printResults($handler) {
 					<thead>
 						<tr>
 							<th>Assignment Name</th>
-							<th>Course</th>
 							<th>Weight</th>
 							<th>Reviews/Student</th>
 							<th>Open Date</th>
 							<th>Due Date</th>
 							<th>Reviews Due</th>
-							<th>Test Results</th>
+							<?php if (!$admin) {
+							echo '
+							<th>Test Results</th>';
+							} ?>
 						</tr>
 					</thead>
 					<tbody>
 						<tr>
 							<?php
 							echo "<td>$asg[AssignmentName]</td>";
-							echo "
-							<td>$_SESSION[course_code]</td>";
 							echo "
 							<td>$asg[Weight]%</td>";
 							echo "
@@ -101,10 +101,12 @@ function printResults($handler) {
 							<td>'.formatDBtime($asg['DueTime']).'</td>';
 							echo '
 							<td>'.formatDBtime($asg['ReviewsDue']).'</td>';
-
-							echo '<td>';
-							printResults($crs);
-							echo '</td>';
+							
+							if (!$admin) {
+								echo '<td>';
+								printResults($crs);
+								echo '</td>';
+							}
 							?>
 
 						</tr>
@@ -145,17 +147,21 @@ function printResults($handler) {
 							if (!$sub->isValid()) {
 								continue;
 							}
+							// getStudentsReviews at some point? Might be difficult.
+							// This way we won't flood the screen with 500 comments
+							// we'll just have 1 link for every student who made a
+							// review.
 							$reviews = $sub->getReviews();
 							$sub = &$sub->getRow();
 							
 							echo "
 						<tr>
-							<td>TODO: $sub[StudentID]</td>
+							<td>Student #$sub[StudentID]</td>
 							<td>$sub[Results]</td>
 							<td>$sub[SubmitTime]</td>
 							<td>";
 							
-							if (empty($submissions)) { // No submissions
+							if (empty($reviews)) { // No reviews
 								echo "No reviews.";
 							} else {
 								foreach ($reviews as $rev) {
@@ -180,7 +186,6 @@ function printResults($handler) {
 							New Submission
 						</span>
 						</a>
-					
 					
 					<?php
 				}

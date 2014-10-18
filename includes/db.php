@@ -448,7 +448,7 @@ class Assignment extends PCRObject {
  */
 class File extends PCRObject  {
 	public function __construct($data, $autocreate = true) {
-		parent::__construct("FileID", "Files", $autocreate);
+		parent::__construct("FileID", "Files", $data, $autocreate);
 	}
 	
 	public function jsonSerialize() {
@@ -551,7 +551,6 @@ class Submission extends PCRObject {
 		}
 		return $count;
 	}
-
 	
 	/**
 	 * NOTE
@@ -563,8 +562,7 @@ class Submission extends PCRObject {
 	public function getReviews() {
 		$arr = array();
 		$sth = $this->db->prepare("SELECT * FROM Review WHERE SubmissionID = ?;");
-		// TODO: Fix hardcoded value
-        $sth->execute(array($this->getID()));
+		$sth->execute(array($this->getID()));
 		while ($file_row = $sth->fetch(PDO::FETCH_ASSOC)) {
 			array_push($arr, new Review($file_row));
 		}
@@ -572,13 +570,14 @@ class Submission extends PCRObject {
 	}
 	
 	/**
-	 * getStudentsReviews returns an array of reviews available for a Student for a particular submission
+	 * getStudentsReviews returns the reviews for this submission, for a
+	 * particular student.
 	 * @return an array of reviews
 	 */
-	public function getStudentsReviews() {
+	public function getStudentsReviews($stnid) {
 		$arr = array();
 		$sth = $this->db->prepare("SELECT * FROM Review WHERE ReviewerID = ? AND SubmissionID = ?");
-		$sth->execute(array($_SESSION["user_id"], $this->getID()));
+		$sth->execute(array($stnid, $this->getID()));
 		while ($file_row = $sth->fetch(PDO::FETCH_ASSOC)) {
 			array_push($arr, new Review($file_row));
 		}

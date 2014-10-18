@@ -45,3 +45,8 @@ table{
 	margin:auto;
 	width:80%;
 }
+#title{
+	font-size:20px;
+	width:600px;
+	padding-bottom:25px;
+}

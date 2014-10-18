@@ -67,6 +67,22 @@ class PCRHandler {
 		$questionRow["Status"] = "0";
 		$question->commit();
 	}
+	/**
+	 * Marks the question specified by id as unresolved.
+	 * @param status of the help centre currently
+	 */
+	public function toggleHelp($status) {
+		$crs = new Course(array("CourseID"=>$_SESSION['course_id']));
+		$help = &$crs->getRow();
+		if($status == 0){
+		$help['HelpEnabled'] = "1";
+		$crs->commit();
+		}
+		else {
+		$help['HelpEnabled'] = "0";
+		$crs->commit();
+		}
+	}
 	
 	/**
 	 * storeNewQuestion adds a new question to a course.
