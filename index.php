@@ -239,19 +239,11 @@ function formatDBtime($dbtime) {
 
 		</div>
 		<div class="col-md-6">
-			<h2>Code Review and Feedback</h2>
+			<h2>Code Review</h2>
 			<?php
-			/**
-			*
-			* I think this should be tidied up a bit. Since people can see everything on the review hub page maybe even delete if blocks and
-			* put 'All of your assigned submissions and feedback may be found here', then on the review hub page if there are no
-			* reviews assigned then put message suggesting to go to the help center
-			*/
 			if ($admin) {
 				// teacher still has the option to review submissions. Count ALL submissions.
-				// teacher still gets to see feedback. Count ALL feedback.
 				echo '<p>There are currently '.'TODO'.' student submitted assignments that have not recieved a teacher review. If no teacher input is required, then these can be dismissed at any time, either individually or per assignment.</p>
-			<p>There are currently '.'3'.' pieces of student submitted feedback that have not recieved a teacher review. If no teacher input is required, then these can be dismissed at any time, either individually or per assignment.</p>
 			<p><a class="btn btn-info" href="reviewhub.php" role="button">Review Assignments &raquo;</a></p>';
 			} else if (count($unmarkedSubs) > 0) { // reviews need marking
 				echo '<p>There are '.count($unmarkedSubs).' submissions ready for reviewing. Please take the time to assist your peers by offering suggestions and improvements.</p>
@@ -260,14 +252,25 @@ function formatDBtime($dbtime) {
 				echo '<p>All your assigned submissions to date have already been reviewed. However, if you would like to further assist your peers, consider stopping by the Help Center to answer some of your peers\' questions.</p>
 			<p><a class="btn btn-info" href="help.php" role="button">Help Center &raquo;</a></p>';
 			}
-			
-			if (mt_rand(0, 1)) { // feedback received
+			?>
+
+		</div>
+		<div class="col-md-6">
+			<h2>Feedback</h2>
+			<?php
+			if ($admin) {
+				// teacher still gets to see feedback. Count ALL feedback.
+				echo '<p>There are currently '.'3'.' pieces of student submitted feedback that have not recieved a teacher review. If no teacher input is required, then these can be dismissed at any time, either individually or per assignment.</p>
+			<p><a class="btn btn-info" href="reviewhub.php" role="button">Review Feedback &raquo;</a></p>';
+			} else if (mt_rand(0, 1)) { // feedback received
 				// TODO ^ Actually decide this at some point
 				echo '<p>You have recieved feedback from your assignment submission. Please take the time to check over the advice offered by your peers.</p>';
 				//Don't want to print the button if it already exists
 				/*if(count($unmarkedSubs) == 0) {
 					echo '<p><a class="btn btn-success" href="reviewhub.php" role="button">Check it out &raquo;</a></p>';
 				}*/
+				echo '<p>You have recieved feedback from your assignment submission. Please take the time to check over the advice offered by your peers.</p>
+			<p><a class="btn btn-success" href="reviewhub.php" role="button">Check it out &raquo;</a></p>';
 			} else { // no feedback
 				echo '<p>You have already viewed the feedback from all of your assignment submissions. Consider checking it over again to make the most of the advice.</p>
 			<p><a class="btn btn-info" href="reviewhub.php" role="button">Check it out &raquo;</a></p>';
