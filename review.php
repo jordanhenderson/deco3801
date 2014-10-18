@@ -63,8 +63,8 @@ foreach ($reviews as $review) {
 	<script type="text/javascript" src="js/jquery.textHighlighter.js"></script>
 	
 	<!-- Breadcrumbs -->
-	<link rel="stylesheet" type="text/css" href="jquery.rcrumbs.css">
-	<script src="jquery.rcrumbs.js"></script>
+	<link rel="stylesheet" type="text/css" href="css/jquery.rcrumbs.css">
+	<script src="js/jquery.rcrumbs.js"></script>
 	
 
 	<script>
