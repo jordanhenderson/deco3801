@@ -131,7 +131,7 @@ class PCRHandler {
 	 * @return the submission object
 	 */
 	public function getSubmissionForReviewing($id) {
-		return new Submission(array("SubmissionID"=>$id));
+		return new Submission(array("SubmissionID"=>$id), false);
 	}
 	
 	/**
@@ -181,7 +181,7 @@ class PCRHandler {
 	 */
 	public function removeReview($comment, $id) {
         // get submission
-        $submission = new Submission(array("SubmissionID"=>$id));
+        $submission = new Submission(array("SubmissionID"=>$id), false);
         // call delete review for that submission
         return $submission->removeReview($comment);
 	}
@@ -191,7 +191,7 @@ class PCRHandler {
      * @param submission id, comment and previous comment of the review to edit
      */
     public function editReview($prevComment, $annotationText, $id) {
-        $submission = new Submission(array("SubmissionID"=>$id));
+        $submission = new Submission(array("SubmissionID"=>$id), false);
         return $submission->editReview($prevComment, $annotationText);
     }
     
@@ -202,7 +202,7 @@ class PCRHandler {
 	 */
 	public function addReview($review) {
         // Get the submission for the student you are submitting a review for
-        $submission = new Submission(array("SubmissionID"=>$review->SubmissionID));
+        $submission = new Submission(array("SubmissionID"=>$review->SubmissionID), false);
         // Then add the review to the database
         return $submission->addReview($review->Comments, $_SESSION['user_id'], 
 						$review->startIndex, $review->startLine, 
@@ -216,7 +216,7 @@ class PCRHandler {
      */
     public function getReviews($id) {
         // Get submission
-        $submission = new Submission(array("SubmissionID"=>$id));
+        $submission = new Submission(array("SubmissionID"=>$id), false);
         // Get reviews for that submission
         return $submission->getReviews();
     }
