@@ -248,8 +248,8 @@ foreach ($reviews as $review) {
 			var startIndex;
 			var startLine;
 			for (var i = 0; i < wordArray.length; i++) {
-				// Find the line the comment starts on
-				startIndex = wordArray[i].indexOf('id="span' + id + '"');
+				// Find the line the comment starts on and allow for the 6 characters ('<span  ')
+				startIndex = wordArray[i].indexOf('id="span' + id + '"') - 6;
 				if (startIndex >= 0) {
 					startLine = i;
 					break;
@@ -288,7 +288,7 @@ foreach ($reviews as $review) {
                     if(annotations[i].status == 'd') {
                         annotations.splice(i, 1);
                     } else {
-                        annotations[i].status = '';
+                        annotations[i].status = 'o';
                         annotations[i].prevComment = undefined;
                     }
                 }
