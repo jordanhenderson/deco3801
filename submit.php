@@ -2,6 +2,10 @@
 
 require_once('includes/handlers.php');
 
+$crs = new PCRHandler();
+
+$assignid = $_GET['assid'];
+
 ?>
 <!DOCTYPE html>
 <html lang="en">
@@ -33,11 +37,11 @@ require_once('includes/handlers.php');
 		<div class="rcrumbs" id="breadcrumbs">
 			<ul>
 				<li><a href="http://deco3801-14.uqcloud.net">Home</a><span class="divider">></span></li>
-				<li><a href="http://deco3801-14.uqcloud.net/overview.php?assid=<?php echo $_GET['assid']; ?>">Assignment Overview</a><span class="divider">></span></li>
+				<li><a href="http://deco3801-14.uqcloud.net/overview.php?assid=<?php echo $assignid; ?>">Assignment Overview</a><span class="divider">></span></li>
 				<li><a href="#">Assignment Submission</a><span class="divider"></span></li>
 			</ul>
 		</div>    
-		<h1>Assignment 99 Submission</h1>
+		<h1><?php echo $crs->getAssignment($assignid)->getAssignmentName(); ?></h1>
 		<div class="col-sm-12">
 		<div class="panel panel-default">
 			<div class="panel-heading">
