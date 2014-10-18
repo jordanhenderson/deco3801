@@ -26,12 +26,24 @@ if (isset($_SESSION['admin']) && $_SESSION['admin']) {
 	
 	<!-- Custom CSS -->
 	<link href="css/main.css" rel="stylesheet">
+	
+	<!-- Breadcrumbs -->
+	<!-- jQuery -->
+	<link rel="stylesheet" type="text/css" href="css/jquery.rcrumbs.css">
+	<script src="js/jquery-1.11.0.js"></script>
+	<script src="js/jquery.rcrumbs.js"></script>
 </head>
 
 <body>
 	<?php include 'header.php'; ?>
 	
 	<div class="container">
+		<div class="rcrumbs" id="breadcrumbs">
+			<ul>
+				<li><a href="http://deco3801-14.uqcloud.net">Home</a><span class="divider">></span></li>
+				<li><a href="#">Review Hub</a><span class="divider"></span></li>
+			</ul>
+		</div> 
 		<h1>Review Hub</h1>
 		<div class="col-lg-12">
 		<?php
@@ -127,10 +139,14 @@ if (isset($_SESSION['admin']) && $_SESSION['admin']) {
 		}
 		?>
 		</div>
-	<!-- jQuery Version 1.11.0 -->
-	<script src="js/jquery-1.11.0.js"></script>
 	
 	<!-- Bootstrap Core JavaScript -->
 	<script src="js/bootstrap.min.js"></script>
+	
+	<script>
+		$(document).ready(function() {
+			$("#breadcrumbs").rcrumbs();
+		});
+	</script>
 </body>
 </html>

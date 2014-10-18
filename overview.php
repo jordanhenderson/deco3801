@@ -213,7 +213,7 @@ function printResults($handler) {
 
 	<!-- Bootstrap datetimepicker JavaScript -->
 	<script src="js/bootstrap-datetimepicker.min.js"></script>
-		<script>
+	<script>
 		$(document).ready(function() {
 			$("#breadcrumbs").rcrumbs();
 		});
