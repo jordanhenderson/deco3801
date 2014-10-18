@@ -19,7 +19,9 @@ require_once('includes/handlers.php');
 	<link href="css/main.css" rel="stylesheet">
 	
 	<!-- Breadcrumbs -->
+	<!-- jQuery -->
 	<link rel="stylesheet" type="text/css" href="css/jquery.rcrumbs.css">
+	<script src="js/jquery-1.11.0.js"></script>
 	<script src="js/jquery.rcrumbs.js"></script>
 	<script>
 		$(document).ready(function() {
