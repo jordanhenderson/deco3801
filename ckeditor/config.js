@@ -14,7 +14,6 @@ CKEDITOR.editorConfig = function( config ) {
 		{ name: 'forms' },
 		{ name: 'tools' },
 		{ name: 'document',	   groups: [ 'mode', 'document', 'doctools' ] },
-		'/',
 		{ name: 'basicstyles', groups: [ 'basicstyles', 'cleanup' ] },
 		{ name: 'styles' },
 		{ name: 'colors' },
