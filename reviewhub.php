@@ -71,7 +71,7 @@ if (isset($_SESSION['admin']) && $_SESSION['admin']) {
 					echo "
 					<tr>
 						<td>$asg[AssignmentName]</td>
-						<td>$asg[StudentID]</td>
+						<td>$sub[StudentID]</td>
 						<td>$asg[ReviewsDue]</td>
 						<td><a class='btn btn-xs btn-info' href='review.php?subid=$sub[SubmissionID]' role='button'>Mark</a></td>
 					<tr>";
