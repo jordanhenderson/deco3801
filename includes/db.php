@@ -512,9 +512,8 @@ class Submission extends PCRObject {
 	private $storage_dir;
 	public function __construct($data, $autocreate = true) {
 		parent::__construct("SubmissionID", "Submission", $data, $autocreate);
-		$id = "";
-		$id .= $this->getID();
 		
+		$id = ''.$this->getID();
 		while (strlen($id) < 5) {
 			$id = '0'.$id;
 		}
