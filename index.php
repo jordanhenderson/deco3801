@@ -243,15 +243,14 @@ function formatDBtime($dbtime) {
 			<?php
 			/**
 			*
-			* I think this should be tidied up a bit. Since people can see everything on the review hub page maybe even delete if blocks and
-			* put 'All of your assigned submissions and feedback may be found here', then on the review hub page if there are no
-			* reviews assigned then put message suggesting to go to the help center
+			* I was thinking maybe we could move some of this stuff over to the review hub page instead and just keep it simple for the
+			* home page. So, for instance, have the option to further assist your peers via the help center appear on the review hub page
+			* when there are no reviews assigned? Not sure if this makes more sense or not, feel free to delete what I have done :)
 			*/
+			/*
 			if ($admin) {
 				// teacher still has the option to review submissions. Count ALL submissions.
-				// teacher still gets to see feedback. Count ALL feedback.
-				echo '<p>There are currently '.'TODO'.' student submitted assignments that have not received a teacher review. If no teacher input is required, then these can be dismissed at any time, either individually or per assignment.</p>
-			<p>There are currently '.'3'.' pieces of student submitted feedback that have not received a teacher review. If no teacher input is required, then these can be dismissed at any time, either individually or per assignment.</p>
+				echo '<p>There are currently '.'TODO'.' student submitted assignments that have not recieved a teacher review. If no teacher input is required, then these can be dismissed at any time, either individually or per assignment.</p>
 			<p><a class="btn btn-info" href="reviewhub.php" role="button">Review Assignments &raquo;</a></p>';
 			} else if (count($unmarkedSubs) > 0) { // reviews need marking
 				echo '<p>There are '.count($unmarkedSubs).' submissions ready for reviewing. Please take the time to assist your peers by offering suggestions and improvements.</p>
@@ -261,19 +260,37 @@ function formatDBtime($dbtime) {
 			<p><a class="btn btn-info" href="help.php" role="button">Help Center &raquo;</a></p>';
 			}
 			
-			if (mt_rand(0, 1)) { // feedback received
+			
+			if ($admin) {
+				// teacher still gets to see feedback. Count ALL feedback.
+				echo '<p>There are currently '.'3'.' pieces of student submitted feedback that have not recieved a teacher review. If no teacher input is required, then these can be dismissed at any time, either individually or per assignment.</p>
+			<p><a class="btn btn-info" href="reviewhub.php" role="button">Review Feedback &raquo;</a></p>';
+			} else if (mt_rand(0, 1)) { // feedback received
 				// TODO ^ Actually decide this at some point
-				echo '<p>You have received feedback from your assignment submission. Please take the time to check over the advice offered by your peers.</p>';
-				//Don't want to print the button if it already exists
-				if(count($unmarkedSubs) == 0) {
-					echo '<p><a class="btn btn-success" href="reviewhub.php" role="button">Check it out &raquo;</a></p>';
-				}
+				echo '<p>You have recieved feedback from your assignment submission. Please take the time to check over the advice offered by your peers.</p>
+			<p><a class="btn btn-success" href="reviewhub.php" role="button">Check it out &raquo;</a></p>';
 			} else { // no feedback
 				echo '<p>You have already viewed the feedback from all of your assignment submissions. Consider checking it over again to make the most of the advice.</p>
 			<p><a class="btn btn-info" href="reviewhub.php" role="button">Check it out &raquo;</a></p>';
 			}
 			?>
-
+			*/
+			if ($admin) {
+				//Add more to the message once we actually have stuff for admins on the reviewhub page
+				echo '<p>All of your students reviews for each submission can be found here. TODO: Explain what admin for review hub is</p>
+			<p><a class="btn btn-info" href="reviewhub.php" role="button">Review Assignments &raquo;</a></p>';
+			} else{ 
+				echo '<p>All of your assigned submissions and feedback can be found here. Please take the time to assist your peers by offering suggestions and improvements as well as check over the advice your peers have offered you.</p>
+			<p><a class="btn btn-warning" href="reviewhub.php" role="button">Start Now &raquo;</a></p>';
+			} 
+			?>
+		</div>
+		<div class="col-md-6">
+			<h2>Help Centre</h2>
+			<?php
+				echo '<p>If you would like to further assist students, please consider stopping by the Help Centre. Here you can find questions by students about assignments and you can even post a question of your own for help.</p>
+			<p><a class="btn btn-info" href="help.php" role="button">Help Center &raquo;</a></p>';
+			?>
 		</div>
 	</div>
 
