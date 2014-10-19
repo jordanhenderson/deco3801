@@ -1,5 +1,5 @@
 <?php
-
+$timezone = date_default_timezone_set('Australia/Brisbane');
 require_once 'includes/handlers.php';
 // Pull admin from session var to local var for easier/faster calling
 if (isset($_SESSION['admin']) && $_SESSION['admin']) {
@@ -116,7 +116,7 @@ $helpstatus = $_SESSION['helpenabled'];
 							if(!$last->isValid()) continue;
 							//Display last posts individually
 							$last = &$last->getRow();
-							if (!isset($last['postdate'])) {
+							if (!isset($last['StudentName'])) {
 								echo 'No postdate specified';
 							}
 							else {
@@ -128,12 +128,12 @@ $helpstatus = $_SESSION['helpenabled'];
 								Show the last post time + student who posted it
 								Subject to change in regards to "hours ago" format
 								*/
-								echo substr($last['Content'], 0, 28).'<br>'.$daysago." ago by ".$last['StudentName'];
+								echo $daysago." ago by ".$last['StudentName'];
 							}
 						}
 						echo "</td>";
 						echo "<td>$questionRow[StudentName]</td>
-						<td>";
+						<td class='status'>";
 						//If status == 1, question is resolved
 						if ($questionRow['Status'] == 1) {
 							echo '<a class="btn btn-xl btn-success btn-block" role="button" disabled="disabled">Resolved</a></td></tr>';
