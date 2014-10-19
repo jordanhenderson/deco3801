@@ -2,14 +2,11 @@
 
 require_once 'includes/handlers.php';
 
-$crs = new PCRHandler();
-
-// Pull admin from session var to local var for easier/faster calling
 if (isset($_SESSION['admin']) && $_SESSION['admin']) {
-	$admin = true;
-} else {
-	$admin = false;
+	exit(); // Admin has no reason to use this page.
 }
+
+$crs = new PCRHandler();
 
 ?>
 <!DOCTYPE html>
@@ -43,28 +40,28 @@ if (isset($_SESSION['admin']) && $_SESSION['admin']) {
 				<li><a href="http://deco3801-14.uqcloud.net">Home</a><span class="divider">></span></li>
 				<li><a href="#">Review Hub</a><span class="divider"></span></li>
 			</ul>
-		</div> 
+		</div>
 		<h1>Review Hub</h1>
 		<div class="col-lg-12">
 		<?php
-		if (!$admin) { // Student
-			echo '<h2>Assignments to Review</h2>';
-			$unmarkedSubs = array();
-			$assignments = $crs->getCourse()->getAssignments();
-			foreach ($assignments as $asg) {
-				if (!$asg->isValid()) {
-					continue;
-				}
-				$temp = $asg->getUnmarkedSubmissions($_SESSION['user_id']);
-				$unmarkedSubs = array_merge($unmarkedSubs, $temp);
+		
+		$assignments = $crs->getCourse()->getAssignments();
+		
+		echo '<h2>Assignments to Review</h2>';
+		$unmarkedSubs = array();
+		foreach ($assignments as $asg) {
+			if (!$asg->isValid()) {
+				continue;
 			}
-			
-			if (empty($unmarkedSubs)) { // No submissions to mark
-				echo '
+			$unmarkedSubs = array_merge($unmarkedSubs, $asg->getUnmarkedSubmissions($_SESSION['user_id']));
+		}
+		
+		if (empty($unmarkedSubs)) { // No submissions to mark
+			echo '
 			All of the assignments designated to you have been reviewed. Consider stopping by the Help Center to answer some of your peers\' questions.';
-			} else {
-				// print table head
-				echo '
+		} else {
+			// print table head
+			echo '
 			<table class="table">
 				<thead>
 					<tr>
@@ -75,42 +72,41 @@ if (isset($_SESSION['admin']) && $_SESSION['admin']) {
 					</tr>
 				</thead>
 				<tbody>';
-				// print table contents
-				foreach ($unmarkedSubs as $sub) {
-					$sub = &$sub->getRow();
-					$asg = new Assignment(array("AssignmentID" => $sub['AssignmentID']));
-					$asg = &$asg->getRow();
-					echo "
+			// print table contents
+			foreach ($unmarkedSubs as $sub) {
+				$sub = &$sub->getRow();
+				$asg = new Assignment(array("AssignmentID" => $sub['AssignmentID']));
+				$asg = &$asg->getRow();
+				echo "
 					<tr>
 						<td>$asg[AssignmentName]</td>
 						<td>$sub[StudentID]</td>
 						<td>$asg[ReviewsDue]</td>
 						<td><a class='btn btn-xs btn-info' href='review.php?subid=$sub[SubmissionID]' role='button'>Mark</a></td>
 					<tr>";
-				}
-				echo '
-				</tbody>
-			</table>';
 			}
 			echo '
+				</tbody>
+			</table>';
+		}
+		echo '
 		</div>
 		<div class="col-lg-12">
-			<h2>Feedback On Assignments</h2>';
-			$markedSubs = array();
-			$assignments = $crs->getCourse()->getAssignments();
-			foreach ($assignments as $asg) {
-				if (!$asg->isValid()) {
-					continue;
-				}
-				$temp = $asg->getMarkedSubmissions($_SESSION['user_id']);
-				$markedSubs = array_merge($markedSubs, $temp);
+			<h2>Assignments with Feedback</h2>';
+		$markedSubs = array();
+		$assignments = $crs->getCourse()->getAssignments();
+		foreach ($assignments as $asg) {
+			if (!$asg->isValid()) {
+				continue;
 			}
-			
-			if (empty($markedSubs)) { // No submissions recieved
-				echo "There is currently no feedback available for any of your submissions.";
-			} else {
-				// print table head
-				echo '
+			$markedSubs = array_merge($markedSubs, $asg->getMarkedSubmissions($_SESSION['user_id']));
+		}
+		
+		if (empty($markedSubs)) { // No submissions recieved
+			echo "There is currently no feedback available for any of your submissions.";
+		} else {
+			// print table head
+			echo '
 			<table class="table">
 				<thead>
 					<tr>
@@ -119,23 +115,20 @@ if (isset($_SESSION['admin']) && $_SESSION['admin']) {
 					</tr>
 				</thead>
 				<tbody>';
-				// print table contents
-				foreach ($markedSubs as $sub) {
-					$sub = &$sub->getRow();
-					$asg = new Assignment(array("AssignmentID" => $sub['AssignmentID']));
-					$asg = &$asg->getRow();
-					echo "
+			// print table contents
+			foreach ($markedSubs as $sub) {
+				$sub = &$sub->getRow();
+				$asg = new Assignment(array("AssignmentID" => $sub['AssignmentID']));
+				$asg = &$asg->getRow();
+				echo "
 					<tr>
 						<td>$asg[AssignmentName]</td>
 						<td><a class='btn btn-xs btn-info' href='review.php?subid=$sub[SubmissionID]' role='button'>View</a></td>
 					<tr>";
-				}
-				echo '
+			}
+			echo '
 				</tbody>
 			</table>';
-			}
-		} else { // Admin
-			echo 'Admin!';
 		}
 		?>
 		</div>

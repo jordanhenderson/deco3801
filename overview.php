@@ -194,25 +194,22 @@ function printResults($handler) {
 					$submission = $assignment->getSubmission($_SESSION['user_id']);
 					if($submission->isValid()) {
 						$srow = $submission->getRow();
-						?>
-							<span>Your last submission was made on: <?php echo $srow["SubmitTime"] ?></span>
-						<?php
+						echo "<span>Your last submission was made on: $srow[SubmitTime]</span>";
 					} else {
-						?>
-							<span>You have not yet made a submission for this assignment. <?php if(!$assignment->canResubmit()) { ?><br>You may <strong>not</strong> make multiple submissions on this assignment - please ensure your assignment is correct before attempting to submit.<?php } ?></span>
-						<?php
+						echo '<span>You have not yet made a submission for this assignment.';
+						
+						if (!$assignment->canResubmit()) {
+							echo '<br>You may <strong>not</strong> make multiple submissions on this assignment - please ensure your assignment is correct before attempting to submit.';
+						}
+						echo '</span>';
 					}
 					
-					if($submission->isValid() && $assignment->canResubmit() || !$submission->isValid()) {
+					if ($submission->isValid() && $assignment->canResubmit() || !$submission->isValid()) {
 					?>
-						
-						<br>
-						<a href="submit.php?assid=<?php echo $_REQUEST['assid']; ?>">
-						<span class="btn btn-default btn-primary">
-							New Submission
-						</span>
-						</a>
-					
+				<br>
+				<a href="submit.php?assid=<?php echo $_REQUEST['assid']; ?>">
+					<span class="btn btn-default btn-primary">New Submission</span>
+				</a>
 					<?php
 					}
 				}
@@ -221,11 +218,10 @@ function printResults($handler) {
 			</div>
 		</div>
 	</div>
-
-
+	
 	<!-- Bootstrap Core JavaScript -->
 	<script src="js/bootstrap.min.js"></script>
-
+	
 	<!-- Bootstrap datetimepicker JavaScript -->
 	<script src="js/bootstrap-datetimepicker.min.js"></script>
 	<script>

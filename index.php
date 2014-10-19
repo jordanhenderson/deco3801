@@ -54,7 +54,6 @@ if (isset($_SESSION['admin']) && $_SESSION['admin']) {
 
 function seconds2human($s) {
 	$m = floor(($s%3600)/60);
-	//$m = round(($ss%3600)/60, 0.1);
 	$h = floor(($s%86400)/3600);
 	$d = floor($s/86400);
 	$str = "";
@@ -96,7 +95,7 @@ function formatDBtime($dbtime) {
 </head>
 
 <body>
-	<?php include 'header.php'; ?>
+	<?php echo "<!-- User ID: $_SESSION[user_id] -->\n"; include 'header.php'; ?>
 	
 	<div class="container">
 		<h1>Peer Code Review Home Page</h1>
@@ -150,11 +149,12 @@ function formatDBtime($dbtime) {
 							$asg_obj->setReviewsAllocated();
 						}
 						
+						$SubmitTime = 0;
 						if (!$admin) { // student
 							$sub = $crs->getSubmission($asg['AssignmentID']);
 							if ($sub->isValid()) {
-								$subRow = &$sub->getRow();
-								$date = date_create_from_format('Y-m-d G:i:s', $subRow['SubmitTime']);
+								$sub = &$sub->getRow();
+								$date = date_create_from_format('Y-m-d G:i:s', $sub['SubmitTime']);
 								$SubmitTime = (int) date_format($date, 'U');
 							}
 						}

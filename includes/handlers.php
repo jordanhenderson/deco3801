@@ -141,6 +141,7 @@ class PCRHandler {
 	public function getStudent() {
 		return new Review(array("StudentID"=>$_SESSION['user_id']));
 	}
+	
 	/**
 	 * getQuestion returns a question using the provided id.
 	 * @param id the question ID

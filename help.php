@@ -34,6 +34,11 @@ if (!$admin && (!isset($_SESSION['helpenabled']) || !$_SESSION['helpenabled'])) 
 	<link href="css/main.css" rel="stylesheet">
 	<link href="css/help.css" rel="stylesheet">
 	
+	<!-- Breadcrumbs -->
+	<!-- jQuery -->
+	<link rel="stylesheet" type="text/css" href="css/jquery.rcrumbs.css">
+	<script src="js/jquery-1.11.0.js"></script>
+	<script src="js/jquery.rcrumbs.js"></script>
 </head>
 
 <body>	
@@ -42,7 +47,6 @@ if (!$admin && (!isset($_SESSION['helpenabled']) || !$_SESSION['helpenabled'])) 
 	function seconds2human($s) {
 		$str = " ";
 	$m = floor(($s%3600)/60);
-	//$m = round(($ss%3600)/60, 0.1);
 	$h = floor(($s%86400)/3600);
 	$d = floor($s/86400);
 	if ($d) {
@@ -57,6 +61,12 @@ $helpstatus = $_SESSION['helpenabled'];
 ?>
 	
 	<div class="container">
+		<div class="rcrumbs" id="breadcrumbs">
+			<ul>
+				<li><a href="http://deco3801-14.uqcloud.net">Home</a><span class="divider">></span></li>
+				<li><a href="#">Help Centre</a><span class="divider"></span></li>
+			</ul>
+		</div>
 		
 		<h1>Help Centre</h1>
 		<div class="col-lg-12">
@@ -149,8 +159,6 @@ $helpstatus = $_SESSION['helpenabled'];
 		</div>
 	</div>
 	
-	<!-- jQuery Version 1.11.0 -->
-	<script src="js/jquery-1.11.0.js"></script>
 	<script>
 $('.unresolved').on("click", function () {
     var href = $(this).data('href');
@@ -180,6 +188,11 @@ $('.unresolved').on("click", function () {
 			$('.selectpicker').selectpicker();
 		}
 	</script>
-
+	
+	<script>
+		$(document).ready(function() {
+			$("#breadcrumbs").rcrumbs();
+		});
+	</script>
 </body>
 </html>

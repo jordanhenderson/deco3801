@@ -285,7 +285,7 @@ foreach ($reviews as $review) {
 		 */
 		function saveReviews() {
 			//AJAX call to store the review in the database
-			var request = {f: 'saveReviews', params:  [JSON.stringify(annotations)]};
+			var request = {f: 'saveReviews', params: [JSON.stringify(annotations)]};
 			$.post("api.php", JSON.stringify(request), function(retval) {
 				alert("Your comments have been saved!");
 				for (var i=0; i < annotations.length; i++) {
@@ -304,7 +304,7 @@ foreach ($reviews as $review) {
 		 * Though only a single row needs it to be set to 1, I'm doing them all.
 		 */
 		function submitReviews() {
-			var request = {f: 'submitReviews', params:  [JSON.stringify(annotations)]};
+			var request = {f: 'submitReviews', params: [JSON.stringify(annotations)]};
 			$.post("api.php", JSON.stringify(request), function(retval) {
 				alert("Your comments have been submitted!");
 				for (var i=0; i < annotations.length; i++) {
@@ -339,7 +339,6 @@ foreach ($reviews as $review) {
 		
 		/**
 		 * Handles when someone clicks on the file tree
-		 *
 		 */
 		function handleSwap(id) {
 			$('a.active').removeClass('active');

@@ -16,13 +16,14 @@ require_once('includes/handlers.php');
 				<ul class="nav navbar-nav">
 					<li><a href="index.php">Home Page</a></li>
 					<?php
-						// Display the help center bar only if help is enaled.
+						// Display the help center bar only if help is enabled or admin user.
 						if ((isset($_SESSION['helpenabled']) && $_SESSION['helpenabled']) || $_SESSION['admin']) {
 							echo '<li><a href="help.php">Help Centre</a></li>';
 						}
+						if (!$_SESSION['admin']) {
+							echo '<li><a href="reviewhub.php">Review Hub</a></li>';
+						}
 					?>
-
-					<li><a href="reviewhub.php">Review Hub</a></li>
 				</ul>
 			</div>
 		</div>
