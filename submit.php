@@ -6,6 +6,15 @@ $crs = new PCRHandler();
 
 $assignid = $_GET['assid'];
 
+$assignment = new Assignment(array("AssignmentID"=>$assignid));
+$submission = new Submission(array("AssignmentID"=>$assignid, "StudentID"=>$_SESSION['user_id']), false);
+
+if(!$assignment->isValid() || !$assignment->canResubmit() && $submission->isValid()) {
+	header("Location: index.php");
+	exit();
+}
+
+
 ?>
 <!DOCTYPE html>
 <html lang="en">

@@ -237,6 +237,15 @@ class PCRHandler {
 	 * uploadArchive uploads an archive to an assignment
 	 */
 	public function uploadArchive($assignment_id) {
+		$assignment = new Assignment(array("AssignmentID"=>$assignment_id));
+		if(!$assignment->isValid()) return;
+		
+		//Look for an existing submission - return if resubmission not allowed.
+		$oldsubmission = $assignment->getSubmission($_SESSION['user_id']);
+		if(!$assignment->canResubmit() && $oldsubmission->isValid()) return;
+		
+		$oldsubmission->delete();
+		
 		$submission = new Submission(array("AssignmentID"=>$assignment_id, "StudentID"=>$_SESSION['user_id'], "Results" => ""));
 		if ($submission->isValid()) {
 			if(!isset($_FILES["file"]) || $_FILES["file"]["error"] != 0) {
@@ -282,6 +291,15 @@ class PCRHandler {
 	 * uploadRepo uploads a repository to an assignment
 	 */
 	public function uploadRepo($assignment_id, $repo_url, $username, $password) {
+		$assignment = new Assignment(array("AssignmentID"=>$assignment_id));
+		if(!$assignment->isValid()) return;
+		
+		//Look for an existing submission - return if resubmission not allowed.
+		$oldsubmission = $assignment->getSubmission($_SESSION['user_id']);
+		if(!$assignment->canResubmit() && $oldsubmission->isValid()) return;
+		
+		$oldsubmission->delete();
+		
 		$submission = new Submission(array("AssignmentID"=>$assignment_id, "StudentID"=>$_SESSION['user_id']));
 		if ($submission->isValid()) {
 			$dir = $submission->getStorageDir();

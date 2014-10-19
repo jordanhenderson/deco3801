@@ -356,6 +356,10 @@ class Assignment extends PCRObject {
 		}
 	}
 	
+	public function canResubmit() {
+		return $this->row["ResubmitAllowed"] == "1" ? true : false;
+	}
+	
 	/**
 	 * Returns an array of all the submissions from this assignment.
 	 * 
@@ -412,10 +416,8 @@ class Assignment extends PCRObject {
 	 * @return an array of Submission objects.
 	 */
 	public function getSubmission($studentid) {
-		$arr = array();
-		$sth = $this->db->prepare("SELECT * FROM Submission WHERE AssignmentID = ? AND StudentID = ?;");
-		$sth->execute(array($this->getID(), $studentid));
-		return new Submission($sth->fetch(PDO::FETCH_ASSOC));
+		return new Submission(array("AssignmentID"=>$this->getID(), 
+									"StudentID"=>$studentid), false);
 	}
 	
 	/**

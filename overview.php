@@ -133,7 +133,6 @@ function printResults($handler) {
 		</div>
 		<div class="row">
 			<div class="col-md-12">
-				<h2>Submissions</h2>
 				<?php
 				
 				if ($admin) { // ADMIN
@@ -192,7 +191,22 @@ function printResults($handler) {
 				</table>';
 					}
 				} else { // STUDENT
+					$submission = $assignment->getSubmission($_SESSION['user_id']);
+					if($submission->isValid()) {
+						$srow = $submission->getRow();
+						?>
+							<span>Your last submission was made on: <?php echo $srow["SubmitTime"] ?></span>
+						<?php
+					} else {
+						?>
+							<span>You have not yet made a submission for this assignment. <?php if(!$assignment->canResubmit()) { ?><br>You may <strong>not</strong> make multiple submissions on this assignment - please ensure your assignment is correct before attempting to submit.<?php } ?></span>
+						<?php
+					}
+					
+					if($submission->isValid() && $assignment->canResubmit() || !$submission->isValid()) {
 					?>
+						
+						<br>
 						<a href="submit.php?assid=<?php echo $_REQUEST['assid']; ?>">
 						<span class="btn btn-default btn-primary">
 							New Submission
@@ -200,6 +214,7 @@ function printResults($handler) {
 						</a>
 					
 					<?php
+					}
 				}
 				?>
 
