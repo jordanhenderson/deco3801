@@ -57,6 +57,9 @@ if(!$assignment->isValid() || !$assignment->canResubmit() && $submission->isVali
 			Assignment Submission
 			</div>
 			<div class="panel-body">
+				<div class="col-sm-12">
+		<p class="text-center"><strong>By submitting an assignment using this page you must understand and comply with your institutions misconduct and plagiarism policies.</strong></p>
+	      </div>
 			<div class="col-sm-6">
 			<h2>File Submission</h1>
 			<p>Upload your assignment using the file submission method.<br>File types supported: .zip</p>
@@ -65,7 +68,7 @@ if(!$assignment->isValid() || !$assignment->canResubmit() && $submission->isVali
 			<span class="btn btn-default btn-file">
 			    Browse <input type="file" name="file" id="file">
 			</span>
-			<button type="submit" value="Submit" class="btn btn-success">Submit</button>
+			<button type="submit" value="Submit" class="btn btn-default btn-primary">Submit</button>
 			</form>
 			
 			</div>
@@ -100,31 +103,11 @@ if(!$assignment->isValid() || !$assignment->canResubmit() && $submission->isVali
 				</form>
 			</div>
 			</div>
+			
 		</div>
+		
 	      </div>
 	</div>
-<?php
-/*
-
-		<div class="col-lg-12">
-			<h2>Test Result</h2>
-			<p>Test results are currently unavailable. Please first submit your code, then check back in a few minutes for results.</p>
-			<p>Test results are currently unavailable. Please check back in a few minutes for results.</p>
-		</div>
-		<div class="col-lg-12">
-			<h2>Code Review</h2>
-			<p>There are submissions ready for reviewing. Please take the time to assist your peers by offering suggestions and improvements.</p>
-			<p><a class="btn btn-default" href="#" role="button">Start Now &raquo;</a></p>
-			<p>The code reviewing requirements for this assessment been met. If you still want to help, consider taking a look at the <a href="#">help center</a>.</p>
-		</div>
-		<div class="col-lg-12">
-			<h2>Feedback</h2>
-			<p>You have recieved feedback from your Assignment 1 submission. Please take the time to carefully consider the advice offered by your peers.</p>
-			<p><a class="btn btn-default" href="#" role="button">Check it out &raquo;</a></p>
-		</div>
-	</div>
-	* */
-?>
 	
 	</div>
 
