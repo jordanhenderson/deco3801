@@ -363,11 +363,11 @@ class Assignment extends PCRObject {
 		$it = new RecursiveDirectoryIterator($dir, RecursiveDirectoryIterator::SKIP_DOTS);
 		$files = new RecursiveIteratorIterator($it,
 					 RecursiveIteratorIterator::CHILD_FIRST);
-		foreach($files as $file) {
+		foreach ($files as $file) {
 			if ($file->getFilename() === '.' || $file->getFilename() === '..') {
 				continue;
 			}
-			if ($file->isDir()){
+			if ($file->isDir()) {
 				rmdir($file->getRealPath());
 			} else {
 				unlink($file->getRealPath());
@@ -484,7 +484,7 @@ class Assignment extends PCRObject {
  * (uint_16)		SubmissionID
  * (text)			FileName
  */
-class File extends PCRObject  {
+class File extends PCRObject {
 	public function __construct($data, $autocreate = true) {
 		parent::__construct("FileID", "Files", $data, $autocreate);
 	}

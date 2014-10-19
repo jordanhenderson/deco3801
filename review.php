@@ -383,10 +383,10 @@ foreach ($reviews as $review) {
 				$dir =  __DIR__ . "/storage/course_$courseid/assign_$assignid/submissions/$subID/";
 				$filesArray = array();
 				// Open a directory, and read its contents
-				if (is_dir($dir)){
-					if ($dh = opendir($dir)){
-						while (($file = readdir($dh)) !== false){
-							if ($file != "." && $file != ".."){
+				if (is_dir($dir)) {
+					if ($dh = opendir($dir)) {
+						while (($file = readdir($dh)) !== false) {
+							if ($file != "." && $file != "..") {
 								array_push($filesArray, $file);
 							}
 						}
@@ -411,7 +411,7 @@ foreach ($reviews as $review) {
 				<h3 id="student_heading" style="display:none">Student <span id="student_heading_span"></span></h3>
 				<div id="studentReviews" class="list-group" style="float:right"></div>
 				<div id="innercontainer">
-					<pre id='assignment_code' style="float:left"><?php
+					<pre id='assignment_code' style="float: left; min-width: 600px"><?php
 					//Loads the first file in the file tree if its not empty
 					if (count($filesArray) > 0) {
 						echo $crs->loadFile($courseid, $assignid, $subID, $filesArray[0]);
