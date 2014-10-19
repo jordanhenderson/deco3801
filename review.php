@@ -45,8 +45,8 @@ foreach ($reviews as $review) {
 	<meta name="viewport" content="width=device-width, initial-scale=1">
 
 	<title>Review - PCR</title>
-    
-    <!-- jQuery -->
+	
+	<!-- jQuery -->
 	<script src="js/jquery-1.11.0.js"></script>
 	
 	<!-- Bootstrap Core CSS -->
@@ -54,8 +54,8 @@ foreach ($reviews as $review) {
 
 	<!-- Custom CSS -->
 	<link href="css/main.css" rel="stylesheet">
-    
-    <!-- Highlighter JS -->
+	
+	<!-- Highlighter JS -->
 	<link rel="stylesheet" href="http://cdnjs.cloudflare.com/ajax/libs/highlight.js/8.1/styles/default.min.css">
 	<script src="http://cdnjs.cloudflare.com/ajax/libs/highlight.js/8.1/highlight.min.js"></script>
 	<script>hljs.initHighlightingOnLoad();</script>
@@ -70,9 +70,9 @@ foreach ($reviews as $review) {
 	<script>
 		// GLOBALS
 		var annotations = [];
-        var annotations = <?php echo json_encode($annotations); ?>;
+		var annotations = <?php echo json_encode($annotations); ?>;
 		var isOwner = <?php echo $isOwner;?>;
-        var edit = -1;
+		var edit = -1;
 		var selected;
 		var prevReview = [];
 		var count = 0;
@@ -87,53 +87,53 @@ foreach ($reviews as $review) {
 		}
 		
 		/**
-        * Run when the user clicks the x button in the annotation window
-        * Finds the corresponding annotation and deletes it from the array
-        * using the array splice method
-        */
-        function clearReview(id) {
-            //fix when reviewnum sorted
-            var comment = $('#textarea' + id).val();
-            for(var i=0; i < annotations.length; i++) {
-                if(annotations[i].Comments == comment) {
-                    // Check if the review hasn't been saved to the database
-                    if (annotations[i].status == 'n') {
-                        annotations.splice(i, 1);
-                        break;
-                    }
+		* Run when the user clicks the x button in the annotation window
+		* Finds the corresponding annotation and deletes it from the array
+		* using the array splice method
+		*/
+		function clearReview(id) {
+			//fix when reviewnum sorted
+			var comment = $('#textarea' + id).val();
+			for (var i=0; i < annotations.length; i++) {
+				if (annotations[i].Comments == comment) {
+					// Check if the review hasn't been saved to the database
+					if (annotations[i].status == 'n') {
+						annotations.splice(i, 1);
+						break;
+					}
 					// Check if the deleted comment has been edited
 					if (annotations[i].status == 'e') {
 						annotations[i].Comments = annotations[i].prevComment;
 					}
-                    // if it has then mark it for deletion
-                    annotations[i].status = 'd';
-                    break;
-                }
-            }
+					// if it has then mark it for deletion
+					annotations[i].status = 'd';
+					break;
+				}
+			}
 			// This is the last review created, so decrement count
-            if (id == count-1) {
-                count = count - 1;
-            }
+			if (id == count-1) {
+				count = count - 1;
+			}
 			// want to destroy and recreate to update the id (count)
-            if ($('#assignment_code').getHighlighter() !== undefined) {
-                $('#assignment_code').getHighlighter().destroy();
-            }
-            setupHighlighter();
-            $('#review' + id).remove();
+			if ($('#assignment_code').getHighlighter() !== undefined) {
+				$('#assignment_code').getHighlighter().destroy();
+			}
+			setupHighlighter();
+			$('#review' + id).remove();
 			// remove the highlight
-            $('#assignment_code').getHighlighter().removeHighlights($('#span' + id));
-        }
-        
+			$('#assignment_code').getHighlighter().removeHighlights($('#span' + id));
+		}
+		
 		/**
 		 *
 		 *
 		 */
-        function cancelEdit(id) {
-            $('#textarea' + id).val(prevReview[id]);
-            // show/hide things
-            reviewContainerOriginalDisplay(id);
+		function cancelEdit(id) {
+			$('#textarea' + id).val(prevReview[id]);
+			// show/hide things
+			reviewContainerOriginalDisplay(id);
 			edit = -1;
-        }
+		}
 		
 		/**
 		 *
@@ -173,11 +173,11 @@ foreach ($reviews as $review) {
 		 *
 		 *
 		 */
-        function getComments() {
-            var innerContents = $('#assignment_code').html();
-            var wordArray = innerContents.split('\n');
+		function getComments() {
+			var innerContents = $('#assignment_code').html();
+			var wordArray = innerContents.split('\n');
 			
-			for(var i=0; i < annotations.length; i++) {
+			for (var i=0; i < annotations.length; i++) {
 				// add status to mark as already in database
 				//annotations[i].status = 'o';
 				
@@ -191,10 +191,10 @@ foreach ($reviews as $review) {
 						$("#reviewControls" + (count-1)).hide();
 					}
 				}
-            }
-            $('#assignment_code').html(wordArray.join('\n'));
-        }
-        
+			}
+			$('#assignment_code').html(wordArray.join('\n'));
+		}
+		
 		function reviewPopulate(wordArray, i) {
 			var index = parseInt(annotations[i].startIndex);
 			var line = parseInt(annotations[i].startLine);
@@ -219,34 +219,34 @@ foreach ($reviews as $review) {
 		 * the save button in the review box and stores it in an array
 		 * to push into the database later
 		 */
-        function getContents(id) {
-            var comment = $('#textarea'+id).val();
+		function getContents(id) {
+			var comment = $('#textarea'+id).val();
 			// Checking for an invalid comment
 			if (comment.trim() == "") {
 				alert("Please enter a valid comment");
 				return;
 			}
-            // add code to make sure the comment is unique
-            for(var i=0; i < annotations.length; i++) {
-                if (comment == annotations[i].comment) {
-                    alert("Your comment matches another comment, please don't take other peoples comments");
-                    return;
-                }
-            }
+			// add code to make sure the comment is unique
+			for (var i=0; i < annotations.length; i++) {
+				if (comment == annotations[i].comment) {
+					alert("Your comment matches another comment, please don't take other peoples comments");
+					return;
+				}
+			}
 			$('#cancel' + id).attr('onclick', 'cancelEdit(' + id + ')');
 			reviewContainerOriginalDisplay(id);
-            if (edit >= 0) {
-                if (annotations[edit].prevComment === undefined) {
-                    annotations[edit].prevComment = annotations[edit].Comments;
-                }
-                annotations[edit].Comments = comment;
+			if (edit >= 0) {
+				if (annotations[edit].prevComment === undefined) {
+					annotations[edit].prevComment = annotations[edit].Comments;
+				}
+				annotations[edit].Comments = comment;
 				// If the comment was already in the database, mark it as edited
-                if (annotations[edit].status == 'o') {
-                    annotations[edit].status = 'e';
-                }
-                edit = -1;
-                return;
-            }
+				if (annotations[edit].status == 'o') {
+					annotations[edit].status = 'e';
+				}
+				edit = -1;
+				return;
+			}
 			var innerContents = $('#assignment_code').html();
 			var wordArray = innerContents.split('\n');
 			var startIndex;
@@ -260,23 +260,23 @@ foreach ($reviews as $review) {
 				}
 			}
 			// Push the new comment into the array
-            annotations.push({"Comments":comment, "text":selected, "status":'n', "startLine":startLine, "startIndex":startIndex, "fileName":$( "#file_heading" ).html(), "SubmissionID":<?php echo $subID;?>});
-            count = count + 1;
-            setupHighlighter();
-        }
-        
+			annotations.push({"Comments":comment, "text":selected, "status":'n', "startLine":startLine, "startIndex":startIndex, "fileName":$( "#file_heading" ).html(), "SubmissionID":<?php echo $subID;?>});
+			count = count + 1;
+			setupHighlighter();
+		}
+		
 		/**
 		 *
 		 *
 		 */
 		function reviewContainerOriginalDisplay(id) {
 			$('#textarea'+id).attr('readonly', true);
-            $('#save' + id).hide();
-            $('#cancel' + id).hide();
-            $('#reviewControls' + id).show();
+			$('#save' + id).hide();
+			$('#cancel' + id).hide();
+			$('#reviewControls' + id).show();
 		}
 		
-        /**
+		/**
 		 * Gets the reviews from the array and loops through to get
 		 * the positions. These arrays are then sent via POST
 		 * to get saved in the database.
@@ -288,35 +288,54 @@ foreach ($reviews as $review) {
 			var request = {f: 'saveReviews', params:  [JSON.stringify(annotations)]};
 			$.post("api.php", JSON.stringify(request), function(retval) {
 				alert("Your comments have been saved!");
-                for (var i=0; i < annotations.length; i++) {
-                    if(annotations[i].status == 'd') {
-                        annotations.splice(i, 1);
-                    } else {
-                        annotations[i].status = 'o';
-                        annotations[i].prevComment = undefined;
-                    }
-                }
+				for (var i=0; i < annotations.length; i++) {
+					if (annotations[i].status == 'd') {
+						annotations.splice(i, 1);
+					} else {
+						annotations[i].status = 'o';
+						annotations[i].prevComment = undefined;
+					}
+				}
 			});
-        }
+		}
 		
-        /**
-         * Function to mark a comment as being modified.
-         * Code is nearly identical to delete, so will integrate
-         */
-        function editAnnotation(id) {
-            var comment = $('#textarea' + id).val();
-            prevReview[id] = comment;
-            $('#textarea' + id).attr('readonly', false);
-            $('#reviewControls' + id).hide();
-            $('#save' + id).show();
-            $('#cancel' + id).show();
-            for(var i=0; i < annotations.length; i++) {
-                if(annotations[i].Comments == comment) {
-                    edit = i;
-                    break;
-                }
-            }
-        }
+		/**
+		 * Saves and submits reviews, by setting each row's "Submitted" to 1.
+		 * Though only a single row needs it to be set to 1, I'm doing them all.
+		 */
+		function submitReviews() {
+			var request = {f: 'submitReviews', params:  [JSON.stringify(annotations)]};
+			$.post("api.php", JSON.stringify(request), function(retval) {
+				alert("Your comments have been submitted!");
+				for (var i=0; i < annotations.length; i++) {
+					if (annotations[i].status == 'd') {
+						annotations.splice(i, 1);
+					} else {
+						annotations[i].status = 'o';
+						annotations[i].prevComment = undefined;
+					}
+				}
+			});
+		}
+		
+		/**
+		 * Function to mark a comment as being modified.
+		 * Code is nearly identical to delete, so will integrate
+		 */
+		function editAnnotation(id) {
+			var comment = $('#textarea' + id).val();
+			prevReview[id] = comment;
+			$('#textarea' + id).attr('readonly', false);
+			$('#reviewControls' + id).hide();
+			$('#save' + id).show();
+			$('#cancel' + id).show();
+			for (var i=0; i < annotations.length; i++) {
+				if (annotations[i].Comments == comment) {
+					edit = i;
+					break;
+				}
+			}
+		}
 		
 		/**
 		 * Handles when someone clicks on the file tree
@@ -342,16 +361,9 @@ foreach ($reviews as $review) {
 				}
 				setupHighlighter();
 			});	  
-            
+			
 		}
 	</script>
-	
-	<!-- HTML5 Shim and Respond.js IE8 support of HTML5 elements and media queries -->
-	<!-- WARNING: Respond.js doesn't work if you view the page via file:// -->
-	<!--[if lt IE 9]>
-		<script src="https://oss.maxcdn.com/libs/html5shiv/3.7.0/html5shiv.js"></script>
-		<script src="https://oss.maxcdn.com/libs/respond.js/1.4.2/respond.min.js"></script>
-	<![endif]-->
 </head>
 
 <body>
@@ -369,31 +381,32 @@ foreach ($reviews as $review) {
 		
 			<div class="list-group">
 			<?php
-				/*NOTE: Please keep everything in here for reasons
-                 * Handles the retrieval of files from the server for the first load
+				/**
+				 * NOTE: Please keep everything in here for reasons
+				 * Handles the retrieval of files from the server for the first load
 				 */
-                $dir =  __DIR__ . "/includes/storage/course_$courseid/assign_$assignid/submissions/$subID/";
-                $filesArray = array();
-                // Open a directory, and read its contents
-                if (is_dir($dir)){
-                    if ($dh = opendir($dir)){
-                        while (($file = readdir($dh)) !== false){
-                            if ($file != "." && $file != ".."){
-                                array_push($filesArray, $file);
-                            }
-                        }
-                        closedir($dh);
-                    }
-                }
-                // Loop through the directory contents to make the file tree
-                foreach ($filesArray as $name) {
-                    if ($name === $filesArray[0]) {
-                        echo "<a href='#' id='" . explode('.', $name)[0] . "' class='list-group-item active' onclick='handleSwap(\"" . $name . "\");'>" . $name . "</a>";
-                        continue;
-                    }
-                    echo "<a href='#' id='" . explode('.', $name)[0] . "' class='list-group-item' onclick='handleSwap(\"" . $name . "\");'>" . $name . "</a>";
-                }
-            ?>
+				$dir =  __DIR__ . "/includes/storage/course_$courseid/assign_$assignid/submissions/$subID/";
+				$filesArray = array();
+				// Open a directory, and read its contents
+				if (is_dir($dir)){
+					if ($dh = opendir($dir)){
+						while (($file = readdir($dh)) !== false){
+							if ($file != "." && $file != ".."){
+								array_push($filesArray, $file);
+							}
+						}
+						closedir($dh);
+					}
+				}
+				// Loop through the directory contents to make the file tree
+				foreach ($filesArray as $name) {
+					if ($name === $filesArray[0]) {
+						echo "<a href='#' id='" . explode('.', $name)[0] . "' class='list-group-item active' onclick='handleSwap(\"" . $name . "\");'>" . $name . "</a>";
+						continue;
+					}
+					echo "<a href='#' id='" . explode('.', $name)[0] . "' class='list-group-item' onclick='handleSwap(\"" . $name . "\");'>" . $name . "</a>";
+				}
+			?>
 			</div>
 		</div>
 		<div class="col-md-9">
@@ -403,16 +416,17 @@ foreach ($reviews as $review) {
 				<h3 id="student_heading" style="display:none">Student <span id="student_heading_span"></span></h3>
 				<div id="studentReviews" class="list-group" style="float:right"></div>
 				<div id="innercontainer">
-                    <pre id='assignment_code' style="float:left"><?php
-                    //Loads the first file in the file tree if its not empty
-                    if (count($filesArray) > 0) {
+					<pre id='assignment_code' style="float:left"><?php
+					//Loads the first file in the file tree if its not empty
+					if (count($filesArray) > 0) {
 						echo $crs->loadFile($courseid, $assignid, $subID, $filesArray[0]);
-                    }
-                ?></pre>
+					}
+				?></pre>
 				<div id="reviews" style="clear:right; float:right;"></div>
-                </div>	
+				</div>	
 				<p style="float:left;clear:left;">
 					<a class="btn btn-info" href="#" onclick="saveReviews()" role="button">Save</a>
+					<a class="btn btn-primary" href="reviewhub.php" onclick="submitReviews()" role="button">Submit</a>
 					<a class="btn btn-warning" href="reviewhub.php" role="button">Close</a>
 				</p>
 			</div>
@@ -434,7 +448,7 @@ foreach ($reviews as $review) {
 		
 		$(document).ready(function() {
 			$("#breadcrumbs").rcrumbs();
-			if(isOwner == 1) {
+			if (isOwner == 1) {
 				ownerSetup();
 			}
 			getComments();
@@ -443,7 +457,7 @@ foreach ($reviews as $review) {
 				setupHighlighter();
 			}
 		});
-    </script>
+	</script>
 	<!-- Bootstrap Core JavaScript -->
 	<script src="js/bootstrap.min.js"></script>
 </body>

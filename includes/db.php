@@ -413,8 +413,13 @@ class Assignment extends PCRObject {
 	 */
 	public function getUnmarkedSubmissions($studentid) {
 		$arr = array();
-		$sth = $this->db->prepare("SELECT * FROM Submission WHERE SubmissionID IN (SELECT Review.SubmissionID FROM Review WHERE ReviewerID = ? AND Submitted = 0) AND AssignmentID = ?;");
-		$sth->execute(array($studentid, $this->getID()));
+		$sth = $this->db->prepare("SELECT * FROM Submission WHERE
+			SubmissionID IN
+				(SELECT Review.SubmissionID FROM Review WHERE ReviewerID = ? AND Submitted = 0) AND
+			SubmissionID NOT IN
+				(SELECT Review.SubmissionID FROM Review WHERE ReviewerID = ? AND Submitted = 1) AND
+			AssignmentID = ?;");
+		$sth->execute(array($studentid, $studentid, $this->getID()));
 		
 		while ($file_row = $sth->fetch(PDO::FETCH_ASSOC)) {
 			array_push($arr, new Submission($file_row));
@@ -430,7 +435,10 @@ class Assignment extends PCRObject {
 	 */
 	public function getMarkedSubmissions($studentid) {
 		$arr = array();
-		$sth = $this->db->prepare("SELECT * FROM Submission WHERE SubmissionID IN (SELECT Review.SubmissionID FROM Review WHERE Submitted = 1 GROUP BY SubmissionID) AND AssignmentID = ? AND StudentID = ?;");
+		$sth = $this->db->prepare("SELECT * FROM Submission WHERE
+			SubmissionID IN
+				(SELECT Review.SubmissionID FROM Review WHERE Submitted = 1 GROUP BY SubmissionID) AND
+			AssignmentID = ? AND StudentID = ?;");
 		$sth->execute(array($this->getID(), $studentid));
 		
 		while ($file_row = $sth->fetch(PDO::FETCH_ASSOC)) {
@@ -632,7 +640,7 @@ class Submission extends PCRObject {
 	 * addReview adds a review to the database
 	 * @return the review that was added
 	 */
-	public function addReview($annotationText, $stnid, $startIndex, $startLine, $fileName, $text) {
+	public function addReview($annotationText, $stnid, $startIndex, $startLine, $fileName, $text, $submitted) {
 		echo $annotationText . "::" . $stnid . "::" . $startIndex . "::" . $startLine . "::" . $fileName . "::" . $text . "--";
 		// Need to check if the review already exists and update if that's the case
 		$review = new Review(array("SubmissionID"=>$this->getID(),
@@ -641,7 +649,8 @@ class Submission extends PCRObject {
 								"startIndex"=>$startIndex,
 								"startLine"=>$startLine,
 								"fileName"=>$fileName,
-								"text"=>$text));
+								"text"=>$text,
+								"Submitted"=>$submitted));
 		$review->commit();
 		return $review;
 	}
@@ -650,12 +659,13 @@ class Submission extends PCRObject {
 	 * editReview edits one of the reviews in the database
 	 * @return the edited review
 	 */
-	public function editReview($prevComment, $annotationText) {
+	public function editReview($prevComment, $annotationText, $submitted) {
 		$arr = array();
 		$sth = $this->db->prepare("SELECT ReviewID FROM Review WHERE SubmissionID = ? AND Comments = '" . $prevComment . "';");
 		$sth->execute(array($this->getID()));
 		$file_row = $sth->fetch(PDO::FETCH_ASSOC);
-		$file_row["Comments"] = $annotationText;
+		$file_row['Comments'] = $annotationText;
+		$file_row['Submitted'] = $submitted;
 		$review = new Review($file_row);
 		$review->commit();
 		return $review;
