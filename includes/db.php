@@ -315,16 +315,44 @@ class PCRBuilder {
  * (uint_8)			Weight
  * (uint_8)			SubmissionMethod
  * (uint_8)			ReviewsNeeded
- * (text)			TestFiles
  * (timestamp)		OpenTime
  * (timestamp)		DueTime
  * (timestamp)		ReviewsDue
  * (text)			Language
  * (tinyint(1))		ReviewsAllocated
+ * (tinyint(1))		ResubmitAllowed
  */
 class Assignment extends PCRObject {
+	private $ass_dir;
 	public function __construct($data, $autocreate = true) {
 		parent::__construct("AssignmentID", "Assignments", $data, $autocreate);
+		$courseid = $_SESSION["course_id"];
+		$assignid = $this->getID();
+		$this->ass_dir = __DIR__ . "/../storage/course_$courseid/assign_$assignid/";
+		if(!file_exists($this->ass_dir)) {
+			mkdir($this->ass_dir, 0755, true);
+			mkdir($this->ass_dir . "test", 0755, true);
+			mkdir($this->ass_dir . "submissions", 0755, true);
+		}
+	}
+	
+	public function getDir() {
+		return $this->ass_dir;
+	}
+	
+	public function cleanTest() {
+		$dir = $this->ass_dir . "/test/";
+		if(file_exists($dir)) {
+				if (PHP_OS === 'Windows')
+				{
+					exec("rd /s /q {$dir}/*");
+				}
+				else
+				{
+					exec("rm -rf {$dir}/*");
+				}
+			mkdir($dir, 0755, true);
+		}
 	}
 	
 	public function delete() {
@@ -667,7 +695,7 @@ class Submission extends PCRObject {
 
 				// Update results in database
 				$this->row["Results"] = "pass";
-				$this->commit();
+				$this->commit(); 
 				
 				break;
 			default:

@@ -105,24 +105,6 @@ if (isset($_GET['assid'])) {
 				</div>
 			</div>
 			<br>
-			<div class="row">
-				<div class="col-md-12">
-					<div class="form-group">
-						<label for="TestFiles">Unit Testing Files TODO TODO</label>
-						<p id="TestFilesStatus">Currently Uploaded: 
-						<?php
-						if (!$new) {
-							echo $asg['TestFiles'];
-						} else {
-							echo 'No File Uploaded';
-						}
-						?>
-						</p>
-						<input id="TestFiles" name="TestFiles" type="file">
-						<p class="help-block">Please zip test file(s). The file executed when testing must be named "runtest".</p>
-					</div>
-				</div>
-			</div>
 			<br>
 			<div class="row">
 				<div class="col-md-6">
@@ -145,23 +127,47 @@ if (isset($_GET['assid'])) {
 					<p class="help-block">Toggle the above to prevent or allow students to make multiple assignment submission attempts.</p>
 				</div>
 			</div>
-			<div align="center">
+			<div class="row">
+				<div class="col-md-6">
+					<label for="NumberTests">Number of Tests</label>
+					<input class="form-control" id="NumberTests" type="number" min="0" max="255" value="<?php echo $asg['NumberTests']; ?>">
+					<p class="help-block">Enter the number of tests run by the test script provided below.</p>
+				</div>
+			</div>
+		</form>
+		<form enctype="multipart/form-data" action="uploadTest.php" method="POST">
+		<div class="row">
+				<div class="col-md-12">
+					<div class="form-group">
+						<label for="file">Unit Testing Files</label><br>
+						
+							<input type="hidden" name="assignment_id" value="<?php echo $_GET['assid']; ?>">
+							<span class="btn btn-default btn-file">
+								Browse <input type="file" name="file" id="file">
+							</span>
+							<input class="btn btn-default btn-primary" type="submit" value="Submit" />
+						
+						<p class="help-block">Please zip test file(s). The file executed when testing must be named "runtest".</p>
+					</div>
+				</div>
+			</div>
+		</form>
+		<div align="center">
 				<?php
 				if ($new) {
 					echo '
-				<input type="submit" class="btn btn-primary" href="index.php" id="assignmentchange" name="changeAssignment" value="Create"></input>';
+				<input type="submit" class="btn btn-primary" href="index.php" class="assignmentchange" name="changeAssignment" value="Create"></input>';
 				} else {
 					echo '
-				<input type="submit" class="btn btn-primary" href="overview.php?assid='.$assid.'" id="assignmentchange" name="changeAssignment" value="Update"></input>		
-				<input type="submit" class="btn btn-danger" href="index.php" id="assignmentchange" name="deleteAssignment" value="Delete"></input>';
+				<input type="submit" class="btn btn-primary" href="overview.php?assid='.$assid.'" class="assignmentchange" name="changeAssignment" value="Update"></input>		
+				<input type="submit" class="btn btn-danger" href="index.php" class="assignmentchange" name="deleteAssignment" value="Delete"></input>';
 				}
 				echo '
 				<input type="submit" class="btn btn-warning" id="reset" value="Reset"></input>
-				<input type="submit" class="btn btn-default" href="overview.php?assid='.$assid.'" value="Cancel"></input>';
+				<a href="overview.php?assid='.$assid.'"><input type="submit" class="btn btn-default" value="Cancel"></input></a>';
 				?>
 				<br><br><br>
 			</div>
-		</form>
 	</div>
 
 	<!-- jQuery Version 1.11.0 -->
@@ -184,13 +190,13 @@ if (isset($_GET['assid'])) {
 			$("#Weight").val(<?php echo "'$asg[Weight]'"; ?>);
 			$("#ReviewsNeeded").val(<?php echo "'$asg[ReviewsNeeded]'"; ?>);
 			$("#ResubmitAllowed").val(<?php echo "'$asg[ResubmitAllowed]'"; ?>);
-			$("#TestFiles").replaceWith($("#TestFiles").clone());
+			$("#NumberTests").val(<?php echo "'$asg[NumberTests]'"; ?>);
 		});
 		
 		$(".form_datetime").datetimepicker({
 			format: 'yyyy-mm-dd hh:ii:ss'
 		});
-		$(":submit").click(function() {
+		$(".assignmentchange").click(function() {
 				var func = $(this).attr("name");
 				switch (func) {
 				  case "changeAssignment":
@@ -202,7 +208,8 @@ if (isset($_GET['assid'])) {
 						$("#Weight").val(),
 						$("#OpenTime").val(),
 						$("#DueTime").val(),
-						$("#ResubmitAllowed").is(":checked") ? 1 : 0
+						$("#ResubmitAllowed").is(":checked") ? 1 : 0,
+						$("#NumberTests").val()
 					];
 				    break;
 				  case "deleteAssignment":

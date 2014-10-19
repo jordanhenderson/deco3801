@@ -234,6 +234,40 @@ class PCRHandler {
     }
 	
 	/**
+	 * uploadTest uploads tests for an assignment.
+	*/
+	public function uploadTest($assignment_id) {
+		$assignment = new Assignment(array("AssignmentID"=>$assignment_id));
+		if(!$assignment->isValid()) return;
+		if(!isset($_FILES["file"]) || $_FILES["file"]["error"] != 0) {
+			return;
+		}
+		
+		//Clear existing test files
+		$assignment->cleanTest();
+		
+		$file = $assignment->getDir() . "/test/" . $_FILES["file"]["name"];
+		
+		if(is_uploaded_file($_FILES["file"]["tmp_name"]))
+			move_uploaded_file($_FILES["file"]["tmp_name"], $file);
+		else
+			copy($_FILES["file"]["tmp_name"], $file);
+
+		$zip = new ZipArchive;
+		
+		//Get the current path of the zip archive, open it.
+		$path = pathinfo(realpath($file), PATHINFO_DIRNAME);
+		$r = $zip->open($file);
+		
+		//Extract the zip archive to the assignment directory.
+		if ($r === TRUE) {
+			$zip->extractTo($path);
+			$zip->close();
+			unlink($file);
+		}
+	}
+	
+	/**
 	 * uploadArchive uploads an archive to an assignment
 	 */
 	public function uploadArchive($assignment_id) {
@@ -278,10 +312,9 @@ class PCRHandler {
 				return;
 			}
 
-			$assignment = new Assignment(array("AssignmentID"=>$assignment_id));
 			$assign = &$assignment->getRow();
 			$assignment_type = $assign["Language"];
-			$test_file_location = $assign["TestFiles"];
+			$test_file_location = $assign->getDir() . "test/";
 			$submission->testSubmission($assignment_type, $test_file_location);
 		}
 		return $submission;
@@ -318,7 +351,7 @@ class PCRHandler {
 	/**
 	 * Create a new assignment.
 	 */
-	public function changeAssignment($AssignmentID, $AssignmentName, $ReviewsNeeded, $ReviewsDue, $weight, $OpenTime, $DueTime, $ResubmitAllowed){
+	public function changeAssignment($AssignmentID, $AssignmentName, $ReviewsNeeded, $ReviewsDue, $weight, $OpenTime, $DueTime, $ResubmitAllowed, $NumberTests){
 		$assignment = new Assignment(array("AssignmentID" => $AssignmentID,
 										   "AssignmentName" => $AssignmentName,
 										   "CourseID" => $_SESSION['course_id'],
@@ -327,7 +360,8 @@ class PCRHandler {
 										   "Weight" => $weight,
 										   "OpenTime" => $OpenTime,
 										   "DueTime" => $DueTime,
-										   "ResubmitAllowed" => $ResubmitAllowed));
+										   "ResubmitAllowed" => $ResubmitAllowed, 
+										   "NumberTests" => $NumberTests));
 		$assignment->commit();
 		return $assignment;
 	}	

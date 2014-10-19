@@ -29,13 +29,13 @@ function formatDBtime($dbtime) {
 }
 
 function printResults($handler) {
+	global $asg;
 	$submission = $handler->getSubmission($_REQUEST['assid']);
 	$sub = &$submission->getRow();
 	$results = $sub['Results'];
 
 	$passed = substr_count($results, 'pass');
-	$failed = substr_count($results, 'fail');
-	$numTests = $passed+$failed;
+	$numTests = $asg["NumberTests"];
 	$percentage = ($passed/$numTests)*100;
 	echo "$passed/$numTests tests passed";
 	echo "
