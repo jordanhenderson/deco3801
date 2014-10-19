@@ -411,7 +411,7 @@ foreach ($reviews as $review) {
 				<h3 id="student_heading" style="display:none">Student <span id="student_heading_span"></span></h3>
 				<div id="studentReviews" class="list-group" style="float:right"></div>
 				<div id="innercontainer">
-					<pre id='assignment_code' style="float: left; min-width: 600px"><?php
+					<pre id='assignment_code' style="float: left; min-width: 450px; max-width: 550px"><?php
 					//Loads the first file in the file tree if its not empty
 					if (count($filesArray) > 0) {
 						echo $crs->loadFile($courseid, $assignid, $subID, $filesArray[0]);
