@@ -189,6 +189,8 @@ class PCRHandler {
 				$this->editReview($review->prevComment, $review->Comments, $review->SubmissionID, 1);
 			} elseif ($review->status == 'n') {
 				$this->addReview($review, 1);
+			} elseif ($review->status == 'o') {
+				$this->editReview($review->Comments, $review->Comments, $review->SubmissionID, 1);
 			}
 		}
 	}
