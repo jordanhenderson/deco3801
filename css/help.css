@@ -9,12 +9,18 @@
 }
 .table{
 	padding-top:30px;
+    table-layout: fixed;
+    white-space: -moz-pre-wrap !important;  
+    white-space: pre-wrap;       
+    word-wrap: break-word;     
+    word-break: break-all;
+    white-space: normal;
 }
 tr:nth-child(even) {
     background: #F1F1F1;
 }
 tr {
-	  background-color:#fff;
+	background-color:#fff;
     border-width:1px;
     border-style:solid;
     border-bottom-color:#aaa;
@@ -24,4 +30,7 @@ tr {
     border-radius:3px;
     -moz-border-radius:3px;
     -webkit-border-radius:3px
+}
+.status{
+   margin:auto;
 }
