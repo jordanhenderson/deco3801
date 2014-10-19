@@ -15,6 +15,7 @@ $crs = new PCRHandler();
 
 	<title>Question</title>
 	<script src="ckeditor/ckeditor.js"></script>
+	<script>CKEDITOR.timestamp='ABCD';</script>
 	<!-- Bootstrap Core CSS -->
 	<link href="css/bootstrap.min.css" rel="stylesheet">
 	

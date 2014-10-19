@@ -8,7 +8,7 @@ CKEDITOR.editorConfig = function( config ) {
 	// For complete reference see:
 	// http://docs.ckeditor.com/#!/api/CKEDITOR.config
 	config.removePlugins = 'image,horizontalrule,table,tabletools';
-	config.extraPlugins = 'codeTag';
+	config.extraPlugins = 'pre';
 	// The toolbar groups arrangement, optimized for two toolbar rows.
 	config.toolbarGroups = [
 		{ name: 'insert' },
@@ -18,7 +18,6 @@ CKEDITOR.editorConfig = function( config ) {
 		{ name: 'basicstyles', groups: [ 'basicstyles', 'cleanup' ] },
 		{ name: 'styles' },
 		{ name: 'colors' },
-		{ name: 'codeTag' },
 	];
 
 	// Remove some buttons provided by the standard plugins, which are
