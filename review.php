@@ -380,7 +380,7 @@ foreach ($reviews as $review) {
 		
 			<div class="list-group">
 			<?php
-				$dir =  __DIR__ . "storage/course_$courseid/assign_$assignid/submissions/$subID/";
+				$dir =  __DIR__ . "/storage/course_$courseid/assign_$assignid/submissions/$subID/";
 				$filesArray = array();
 				// Open a directory, and read its contents
 				if (is_dir($dir)){

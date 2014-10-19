@@ -522,7 +522,7 @@ class Submission extends PCRObject {
 			$courseid = $_SESSION["course_id"];
 			
 			$assignmentid = $this->row["AssignmentID"];
-			$this->storage_dir = __DIR__ . "/../storage/course_$courseid/assign_$assignmentid/submissions/$id/";
+			$this->storage_dir = __DIR__ . "../storage/course_$courseid/assign_$assignmentid/submissions/$id/";
 			if (!file_exists($this->storage_dir)) {
 			 	mkdir($this->storage_dir, 0755, true);
 			}
