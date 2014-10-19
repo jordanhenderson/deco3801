@@ -27,7 +27,8 @@ $date = date('m/d/Y h:i:s a', time());
 </head>
 
 <body>
-	<?php include 'header.php';?>
+	<?php include 'header.php';
+echo date("D M d, Y G:i a");?>
 	
 	<div class="container">
 		<h1>Ask a New Question</h1>

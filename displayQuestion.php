@@ -66,7 +66,7 @@ $crs = new PCRHandler();
 	<div class="container">
 		<div class="content">
 		<h1><?php 
-		
+		echo date("D M d, Y G:i a");
 		if ($status == "1") {
 			echo '<a class="btn btn-xl btn-success btn-block" role="button" disabled="disabled">Resolved</a></td></tr>';
 			}

@@ -61,6 +61,7 @@ $helpstatus = $_SESSION['helpenabled'];
 		<h1>Help Centre</h1>
 		<div class="col-lg-12">
 			<?php
+			echo date("D M d, Y G:i a");
 				//if the help centre isn't on give the admin the option to turn it on
 				if ($admin && (isset($_SESSION['helpenabled']) && $_SESSION['helpenabled'] == 0)) {
 
