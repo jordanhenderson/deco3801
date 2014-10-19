@@ -128,7 +128,7 @@ $helpstatus = $_SESSION['helpenabled'];
 								Show the last post time + student who posted it
 								Subject to change in regards to "hours ago" format
 								*/
-								echo $daysago." ago by ".$last['StudentName'];
+								echo  $daysago." ago by <strong><br>".$last['StudentName']."</strong>";
 							}
 						}
 						echo "</td>";
