@@ -3,7 +3,7 @@
 session_start();
 
 $timezone = date_default_timezone_set('Australia/Brisbane');
-$date = date('m/d/Y h:i:s a', time());
+$date = date('Y/m/d h:i:s a', time());
 
 ?>
 <!DOCTYPE html>
@@ -28,7 +28,6 @@ $date = date('m/d/Y h:i:s a', time());
 
 <body>
 	<?php include 'header.php';
-echo date("D M d, Y G:i a");?>
 	
 	<div class="container">
 		<h1>Ask a New Question</h1>
@@ -83,10 +82,11 @@ echo date("D M d, Y G:i a");?>
         		}
 				var fullname = '<?php echo $_SESSION['userfullname'];?>'
 				var stnid = '<?php echo $_SESSION['user_id'];?>'
+				var postdate ='<?php echo $date ?>';
 				//Use the action= property for ajax submission
 				var url = form.attr('action');
 				var func = form.data('function');
-				var request = {f: func, params: [$("#QTitle").val(), $("#QContent").val(), stnid, fullname]};
+				var request = {f: func, params: [$("#QTitle").val(), $("#QContent").val(), stnid, fullname, postdate]};
 				
 				//Post the serialized form.
 				$.post(url, JSON.stringify(request), function(data) {

@@ -91,11 +91,12 @@ class PCRHandler {
 	 * @param stnid the student ID
 	 * @param fullname full name of the student
 	 */
-	public function storeNewQuestion($title, $content, $stnid, $fullname){
+	public function storeNewQuestion($title, $content, $stnid, $fullname, $postdate){
 		$question = new Question(array(
 									"StudentID" => $stnid,
 									"CourseID" => $_SESSION["course_id"],
 									"StudentName" => $fullname,
+									"Opendate" => $postdate,
 									"Title" => $title,
 									"Content" => $content,
 									"Status" => "0"
