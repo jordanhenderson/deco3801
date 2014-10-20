@@ -3,7 +3,7 @@
 require_once 'includes/handlers.php';
 
 if (isset($_SESSION['admin']) && $_SESSION['admin']) {
-	exit(); // Admin has no reason to use this page.
+	header('Location: /index.php); // Admin has no reason to use this page.
 }
 
 $crs = new PCRHandler();
