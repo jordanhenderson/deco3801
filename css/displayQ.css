@@ -33,6 +33,13 @@ textarea#content, textarea#comment {
   height:auto;
   border-bottom-right-radius: .8em;
   border-bottom-left-radius: .8em;
+  white-space: -moz-pre-wrap !important;  
+white-space: -pre-wrap;      
+white-space: -o-pre-wrap;    
+white-space: pre-wrap;       
+word-wrap: break-word;       
+word-break: break-all;
+white-space: normal;
 }
 
 table{
