@@ -163,9 +163,13 @@ $crs = new PCRHandler();
 				for ( instance in CKEDITOR.instances ) {
            				 CKEDITOR.instances[instance].updateElement();
        		 	}
-       		 	//var content = ;
-       		 	
-				if(document.forms["cF"]["comment"].value.trim() == "" || document.forms["cF"]["comment"].value == null){
+       		 	var content = document.forms["cF"]["comment"].value;
+       		 	var stripped = $("#content").val().replace(/&nbsp;/g, " ");
+
+       		 	stripped = stripped.replace("<p>", "");
+       		 	stripped = stripped.replace("</p>", "");
+
+				if(stripped.replace(/\s/g,"") == ""|| stripped == null){
 					document.getElementById("errorc").innerHTML = "*You need to have some content for your comment"
 					return false;
 				}
