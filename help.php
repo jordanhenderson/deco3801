@@ -122,24 +122,19 @@ $helpstatus = $_SESSION['helpenabled'];
 						<tr class='unresolved' data-href='displayQuestion.php?id=$questionRow[QuestionID]'>
 						<td ><a href='displayQuestion.php?id=$questionRow[QuestionID]'>$questionRow[Title]</a></td>
 						<td>";
+						if(empty($lastpost)){
+							echo 'No answers yet';
+						}
 						foreach ($lastpost as $last) {
 							if(!$last->isValid()) continue;
 							//Display last posts individually
 							$last = &$last->getRow();
-							if (!isset($last['StudentName'])) {
-								echo 'No postdate specified';
-							}
-							else {
 								$CurrentTime = time();
 								$date = date_create_from_format('Y-m-d G:i:s', $last['postdate']);
 								$OpenTime = (int) date_format($date, 'U');
 								$daysago = seconds2human($CurrentTime - $OpenTime);
-								/*
-								Show the last post time + student who posted it
-								Subject to change in regards to "hours ago" format
-								*/
+
 								echo  $daysago." ago by <strong><br>".$last['StudentName']."</strong>";
-							}
 						}
 						echo "</td>";
 						echo "<td>$questionRow[StudentName]</td>
