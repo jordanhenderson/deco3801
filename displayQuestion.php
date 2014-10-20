@@ -130,10 +130,10 @@ $crs = new PCRHandler();
 			<br>
 				<div class='name'>Post a Quick Reply</div>
 				<textarea class="form-control" name="comment" rows="5"  id="content"></textarea>
-				<input type='submit' class='btn btn-primary' id='addComment' name='addComment' value='Post Reply'>
+				<?php echo
+				"<input type='submit' class='btn btn-primary' id='addComment' name='addComment' value='Post Reply'>"
+				?>
 				<script>
-                // Replace the <textarea id="editor1"> with a CKEditor
-                // instance, using default configuration.
                 CKEDITOR.replace('comment');
             </script>
 		</div>
