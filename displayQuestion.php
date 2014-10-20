@@ -126,7 +126,7 @@ $crs = new PCRHandler();
 						<div class='comment'><td>$commentRow[Content]</div><br>";
 					} ?>
 	<div align="center">
-			<form name="cF" id="cF" action="api.php" method="post" data-function="addComment">
+			<form name="cF" id="cF" action="api.php" method="post">
 			<br>
 				<div class='name'>Post a Quick Reply</div>
 				<textarea class="form-control" name="comment" rows="5"  id="content"></textarea>
@@ -169,13 +169,11 @@ $crs = new PCRHandler();
 					document.getElementById("errorc").innerHTML = "*You need to have some content for your comment"
 					return false;
 				}
-				var form = $('#cF');
 				var date = '<?php echo date("Y-m-d  H:i:s", time()); ?>';
                     alert(date);
 				//Use the action= property for ajax submission
 				var fullname = '<?php echo $_SESSION['userfullname'];?>';
 				var stnid = '<?php echo $_SESSION['user_id'];?>';
-				var url = form.attr('action');
 				//I changed this and now it works, before it was GETTING some other question ID for some reason
 				var Qid = '<?php echo $_GET['id'];?>';
 				var request = {f: func, params: [Qid, stnid, fullname, $("#content").val(), date]};
