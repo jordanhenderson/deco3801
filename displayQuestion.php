@@ -162,11 +162,11 @@ $crs = new PCRHandler();
 				for ( instance in CKEDITOR.instances ) {
            				 CKEDITOR.instances[instance].updateElement();
        		 	}
-       		 	var content = document.forms["cF"]["comment"].value;
+       		 	/*var content = document.forms["cF"]["comment"].value;
 				if(content.trim() == "" || content == null){
 					document.getElementById("errorc").innerHTML = "*You need to have some content for your comment"
 					return false;
-				}
+				}*/
 				var date = '<?php echo date("Y-m-d  H:i:s", time()); ?>';
 				//Use the action= property for ajax submission
 				var fullname = '<?php echo $_SESSION['userfullname'];?>';
@@ -174,7 +174,6 @@ $crs = new PCRHandler();
 				//I changed this and now it works, before it was GETTING some other question ID for some reason
 				var Qid = '<?php echo $_GET['id'];?>';
 				var request = {f: func, params: [Qid, stnid, fullname, $("#content").val(), date]};
-				alert(JSON.stringify(request));
 				}
 				else {
 					var request = {f: func, params:  ['<?php echo $_GET['id']; ?>']};
