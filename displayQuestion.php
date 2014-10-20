@@ -134,7 +134,7 @@ $crs = new PCRHandler();
 				"<input type='submit' class='btn btn-primary' id='addComment' name='addComment' value='Post Reply'>"
 				?>
 				<script>
-                //CKEDITOR.replace('comment');
+                CKEDITOR.replace('comment');
             </script>
 		</div>
 		
@@ -159,9 +159,9 @@ $crs = new PCRHandler();
 				
 				var func = $(this).attr("name");
 				if(func == "addComment"){
-				//for ( instance in CKEDITOR.instances ) {
-           			//	 CKEDITOR.instances[instance].updateElement();
-       		 	//}
+				for ( instance in CKEDITOR.instances ) {
+           				 CKEDITOR.instances[instance].updateElement();
+       		 	}
        		 	/*var content = document.forms["cF"]["comment"].value;
 				if(content.trim() == "" || content == null){
 					document.getElementById("errorc").innerHTML = "*You need to have some content for your comment"
