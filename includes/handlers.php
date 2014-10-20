@@ -440,10 +440,10 @@ class PCRBackend {
 					$response = call_user_func_array(array($this->handler, $method), $params);
 			}
 			if ($response) return json_encode(array("r"=> $response));
-			else return "{$repsonse}";
+			else return "{}";
 		} catch(Exception $e) {
 			error_log($e);
-			return "{logged and error}";
+			return "{}";
 		}
 	}
 }
