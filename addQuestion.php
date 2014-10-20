@@ -88,7 +88,7 @@ $date = date("Y-m-d  H:i:s", time());
 					document.getElementById("errorq").innerHTML = "*You need to have a title for your question"
 					return false;
 				}
-				else if(content == "" || content == null){
+				else if(content.trim() == "" || content == null){
 					document.getElementById("errorc").innerHTML = "*You need to have some content for your question"
 					return false;
 				}
