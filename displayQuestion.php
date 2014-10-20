@@ -184,6 +184,7 @@ $crs = new PCRHandler();
 					if(func == "markResolved" || func == "markUnresolved" || func == "addComment") location.reload(); 
 					else window.location.replace("help.php");
 				});
+				return false;
 			});
 		});
 	</script>
