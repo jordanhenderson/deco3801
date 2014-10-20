@@ -156,7 +156,7 @@ class PCRHandler {
 	 */
 	public function addComment($question_id, $studentid, $fullname, $content, $date) {
 		$question = PCRHandler::getQuestion($question_id);
-		return $question->addComment($studentid, $fullname, $content, $date);
+		$question->addComment($studentid, $fullname, $content, $date);
 	}
 	
 	/**
