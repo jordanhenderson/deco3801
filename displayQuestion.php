@@ -129,7 +129,7 @@ $crs = new PCRHandler();
 			<form name="cF" id="cF" action="api.php" method="post">
 			<br>
 				<div class='name'>Post a Quick Reply</div>
-				<textarea class="form-control" name="comment" rows="5"  id="content"></textarea>
+				<textarea class="form-control" name="comment" rows="5" id="content"></textarea>
 				<?php echo
 				"<input type='submit' class='btn btn-primary' id='addComment' name='addComment' value='Post Reply'>"
 				?>
@@ -158,9 +158,8 @@ $crs = new PCRHandler();
 			$(":submit").click(function() {
 				
 				var func = $(this).attr("name");
-
+				alert(func);
 				if(func == "addComment"){
-                        alert(funct);
 				for ( instance in CKEDITOR.instances ) {
            				 CKEDITOR.instances[instance].updateElement();
        		 	}
