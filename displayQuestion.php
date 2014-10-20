@@ -162,11 +162,11 @@ $crs = new PCRHandler();
 				for ( instance in CKEDITOR.instances ) {
            				 CKEDITOR.instances[instance].updateElement();
        		 	}
-       		 	var content = document.forms["cF"]["comment"].value;
+       		 	/*var content = document.forms["cF"]["comment"].value;
 				if(content.trim() == "" || content == null){
 					document.getElementById("errorc").innerHTML = "*You need to have some content for your comment"
 					return false;
-				}
+				}*/
 				var date = '<?php echo date("Y-m-d  H:i:s", time()); ?>';
 				//Use the action= property for ajax submission
 				var fullname = '<?php echo $_SESSION['userfullname'];?>';
