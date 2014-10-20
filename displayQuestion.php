@@ -161,7 +161,7 @@ $crs = new PCRHandler();
 				var func = $(this).attr("name");
 				var request = {f: func, params:  ['<?php echo $_GET['id']; ?>']};
 				$.post("api.php", JSON.stringify(request), function() {
-					if(func == "markResolved" || func == "markUnresolved" || "addComment") location.reload(); 
+					if(func == "markResolved" || func == "markUnresolved" || func == "addComment") location.reload(); 
 					else window.location.replace("help.php");
 				});
 			});
