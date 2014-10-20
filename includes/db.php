@@ -870,12 +870,13 @@ class Question extends PCRObject {
 	 * @param content the content of the question
 	 * @return the newly created Comment object
 	 */
-	public function addComment($stnid, $fullname, $content) {
+	public function addComment($stnid, $fullname, $content, $date) {
 		$comment = new Comment(array(
 									"StudentID" => $stnid, 
 									"QuestionID" => $this->getID(),
 									"StudentName" => $fullname,
 									"Content" => $content,
+									"postdate" => $date
 								));
 		$comment->commit();
 		return $comment;
