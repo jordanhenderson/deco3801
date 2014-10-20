@@ -2,7 +2,7 @@
 require_once 'includes/handlers.php';
 
 $timezone = date_default_timezone_set('Australia/Brisbane');
-$date = date('m/d/Y h:i:s a', time());
+$date = date("Y-m-d  H:i:s", time());
 $id = $_GET['id'];
 $crs = new PCRHandler();
 ?>
