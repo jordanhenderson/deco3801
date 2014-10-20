@@ -154,15 +154,36 @@ $crs = new PCRHandler();
 		if($question->isValid()) {
 	?>
 	<script type="text/javascript">
-		$(function() {
+	$(function() {
 			$(":submit").click(function() {
-				for ( instance in CKEDITOR.instances ) {
-            CKEDITOR.instances[instance].updateElement();
-        }
+				
 				var func = $(this).attr("name");
-				var request = {f: func, params:  ['<?php echo $_GET['id']; ?>']};
+
+				if(func == "addComment"){
+				for ( instance in CKEDITOR.instances ) {
+           				 CKEDITOR.instances[instance].updateElement();
+       		 	}
+       		 	var content = document.forms["cF"]["comment"].value;
+				if(content == "" || content == null){
+					document.getElementById("errorc").innerHTML = "*You need to have some content for your comment"
+					return false;
+				}
+				var form = $('#cF');
+				var date = '<?php echo date("Y-m-d  H:i:s", time()); ?>';
+				//Use the action= property for ajax submission
+				var fullname = '<?php echo $_SESSION['userfullname'];?>';
+				var stnid = '<?php echo $_SESSION['user_id'];?>';
+				var url = form.attr('action');
+				//I changed this and now it works, before it was GETTING some other question ID for some reason
+				var Qid = '<?php echo $_GET['id'];?>'
+				var request = {f: func, params: [Qid, stnid, fullname, $("#content").val(), date]};
+				}
+				else {
+					var request = {f: func, params:  ['<?php echo $_GET['id']; ?>']};
+				}
+				
 				$.post("api.php", JSON.stringify(request), function() {
-					if(func == "markResolved" || func == "markUnresolved" || func == "addComment") location.reload(); 
+					if(func == "markResolved" || func == "markUnresolved" || func == 'addComment') location.reload(); 
 					else window.location.replace("help.php");
 				});
 			});
@@ -178,7 +199,7 @@ echo "<script type='text/javascript'>alert('$message');</script>";
 		}
 	?>
 		<script type="text/javascript">
-		$(function() {
+		/*$(function() {
 			$('#cF').submit(function() {
 				var form = $(this);
 				var date = '<?php echo date("Y-m-d  H:i:s", time()); ?>';
@@ -199,7 +220,7 @@ echo "<script type='text/javascript'>alert('$message');</script>";
 				
 				return false;
 			});
-		});
+		});*/
 	</script>
 	<script type="text/javascript">
 		window.onload = function () {
