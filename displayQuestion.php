@@ -180,7 +180,7 @@ $crs = new PCRHandler();
 				}
 				
 				$.post("api.php", JSON.stringify(request), function() {
-					if(func == "markResolved" || func == "markUnresolved" || func == 'addComment') location.reload(); 
+					if(func == "markResolved" || func == "markUnresolved" || func == "addComment") location.reload(); 
 					else window.location.replace("help.php");
 				});
 			});
