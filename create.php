@@ -24,7 +24,7 @@ if (isset($_GET['assid'])) {
 	$new = true;
 	$assignment = new PCRBuilder("Assignments");
 	$asg = &$assignment->getRow();
-	$assid ='';
+	$assid = '';
 }
 
 ?>
@@ -163,8 +163,14 @@ if (isset($_GET['assid'])) {
 				<input type="submit" class="btn btn-danger" href="index.php" class="assignmentchange" name="deleteAssignment" value="Delete"></input>';
 				}
 				echo '
-				<input type="submit" class="btn btn-warning" id="reset" value="Reset"></input>
+				<input type="submit" class="btn btn-warning" id="reset" value="Reset"></input>';
+				if ($new) {
+					echo '
+				<a href="index.php"><input type="submit" class="btn btn-default" value="Cancel"></input></a>';
+				} else {
+					echo '
 				<a href="overview.php?assid='.$assid.'"><input type="submit" class="btn btn-default" value="Cancel"></input></a>';
+				}
 				?>
 				<br><br><br>
 			</div>
