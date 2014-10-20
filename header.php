@@ -20,7 +20,7 @@ require_once('includes/handlers.php');
 						if ((isset($_SESSION['helpenabled']) && $_SESSION['helpenabled']) || $_SESSION['admin']) {
 							echo '<li><a href="help.php">Help Centre</a></li>';
 						}
-						if (!$_SESSION['admin']) {
+						if (!isset($_SESSION['admin'])) {
 							echo '<li><a href="reviewhub.php">Review Hub</a></li>';
 						}
 					?>

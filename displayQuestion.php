@@ -75,7 +75,7 @@ $crs = new PCRHandler();
 			}
 				echo "<div id = buttons>";
 				//If an admin is viewing, gives ability to delete a question
-				if ($_SESSION['admin']) {
+				if (isset($_SESSION['admin'])) {
 					echo "
 					<input type='submit' class='btn btn-xl btn-danger' id='RemoveQuestion' name='removeQuestion' value='Remove Question'>
 					";
