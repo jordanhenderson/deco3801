@@ -4,6 +4,8 @@ require_once 'includes/handlers.php';
 
 if (isset($_SESSION['admin']) && $_SESSION['admin']) {
 	$admin = true;
+} else {
+	$admin = false;
 }
 
 $crs = new PCRHandler();
@@ -31,8 +33,13 @@ function formatDBtime($dbtime) {
 function printResults($handler) {
 	global $asg;
 	$submission = $handler->getSubmission($_REQUEST['assid']);
+	
 	$sub = &$submission->getRow();
-	$results = $sub['Results'];
+	if($submission->isValid()) {
+		$results = $sub['Results'];
+	} else {
+		$results = "";
+	}
 
 	$passed = substr_count($results, 'pass');
 	$numTests = $asg["NumberTests"];
