@@ -162,7 +162,8 @@ $crs = new PCRHandler();
 				for ( instance in CKEDITOR.instances ) {
            				 CKEDITOR.instances[instance].updateElement();
        		 	}
-       		 	/*var content = document.forms["cF"]["comment"].value;
+       		 	var content = document.forms["cF"]["comment"].value;
+       		 	/*
 				if(content.trim() == "" || content == null){
 					document.getElementById("errorc").innerHTML = "*You need to have some content for your comment"
 					return false;
