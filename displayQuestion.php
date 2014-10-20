@@ -130,7 +130,7 @@ $crs = new PCRHandler();
 			<br>
 				<div class='name'>Post a Quick Reply</div>
 				<textarea class="form-control" name="comment" rows="5"  id="content"></textarea>
-				<input class="btn btn-primary" type="submit" value="Post Reply"></a>
+				<input type='submit' class='btn btn-primary' id='addComment' name='addComment' value='Post Reply'>
 				<script>
                 // Replace the <textarea id="editor1"> with a CKEditor
                 // instance, using default configuration.
@@ -164,7 +164,7 @@ $crs = new PCRHandler();
            				 CKEDITOR.instances[instance].updateElement();
        		 	}
        		 	var content = document.forms["cF"]["comment"].value;
-				if(content == "" || content == null){
+				if(content.trim() == "" || content == null){
 					document.getElementById("errorc").innerHTML = "*You need to have some content for your comment"
 					return false;
 				}
