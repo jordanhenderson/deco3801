@@ -158,7 +158,6 @@ $crs = new PCRHandler();
 			$(":submit").click(function() {
 				
 				var func = $(this).attr("name");
-				var request = {f : func, params: []};
 				if(func == "addComment"){
 				for ( instance in CKEDITOR.instances ) {
            				 CKEDITOR.instances[instance].updateElement();
@@ -168,16 +167,16 @@ $crs = new PCRHandler();
 					document.getElementById("errorc").innerHTML = "*You need to have some content for your comment"
 					return false;
 				}*/
-
 				var date = '<?php echo date("Y-m-d  H:i:s", time()); ?>';
+				//Use the action= property for ajax submission
 				var fullname = '<?php echo $_SESSION['userfullname'];?>';
 				var stnid = '<?php echo $_SESSION['user_id'];?>';
+				//I changed this and now it works, before it was GETTING some other question ID for some reason
 				var Qid = '<?php echo $_GET['id'];?>';
-
-				request = {f: func, params: [Qid, stnid, fullname, $("#content").val(), date]};
+				var request = {f: func, params: [Qid, stnid, fullname, $("#content").val(), date]};
 				}
 				else {
-					request = {f: func, params:  ['<?php echo $_GET['id']; ?>']};
+					var request = {f: func, params:  ['<?php echo $_GET['id']; ?>']};
 				}
 				
 				$.post("api.php", JSON.stringify(request), function() {
