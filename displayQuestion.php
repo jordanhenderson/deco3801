@@ -174,6 +174,7 @@ $crs = new PCRHandler();
 				//I changed this and now it works, before it was GETTING some other question ID for some reason
 				var Qid = '<?php echo $_GET['id'];?>';
 				var request = {f: func, params: [Qid, stnid, fullname, $("#content").val(), date]};
+				alert(JSON.stringify(request));
 				}
 				else {
 					var request = {f: func, params:  ['<?php echo $_GET['id']; ?>']};
