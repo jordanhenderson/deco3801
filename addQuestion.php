@@ -35,10 +35,12 @@ $date = date("Y-m-d  H:i:s", time());
 
 					<label for="title">Question Title</label>
 					<input class="form-control" name="question" type="text" id="QTitle" maxlength="75">
+             <div id = "errorq"></div>
 
 			<br>
 					<label for="content">Question Content</label>
 					<textarea class="form-control" style="resize: vertical;" name="QContent" rows="15" id="QContent"></textarea>
+            <div id = "errorc"></div>
 					<script>
 				 CKEDITOR.replace('QContent');
 				 </script>
@@ -76,10 +78,20 @@ $date = date("Y-m-d  H:i:s", time());
 	<script>
 		$(function() {
 			$('#qF').submit(function() {
-				var form = $(this);
-				for ( instance in CKEDITOR.instances ) {
-            CKEDITOR.instances[instance].updateElement();
+                for ( instance in CKEDITOR.instances ) {
+            		CKEDITOR.instances[instance].updateElement();
         		}
+				var question = document.forms["qF"]["question"].value;
+				var content = document.forms["qF"]["QContent"].value;
+				if(question.trim() == "" || question == null){
+					document.getElementById("errorq").innerHTML = "*You need to have a title for your question"
+					return false;
+				}
+				else if(content == "" || content == null){
+					document.getElementById("errorc").innerHTML = "*You need to have some content for your question"
+					return false;
+				}
+				var form = $(this);
 				var fullname = '<?php echo $_SESSION['userfullname'];?>'
 				var stnid = '<?php echo $_SESSION['user_id'];?>'
 				var postdate ='<?php echo $date ?>';
