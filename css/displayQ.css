@@ -26,6 +26,9 @@ textarea#content, textarea#comment {
 	 border:3px outset transparent;
 
 }
+.delete{
+	float:right;
+}
 .comment{
   font:normal 12px Verdana, Tahoma, "Nimbus Sans L", arial, sans-serif;
   background-color:	#E8E8E8;
@@ -33,13 +36,13 @@ textarea#content, textarea#comment {
   height:auto;
   border-bottom-right-radius: .8em;
   border-bottom-left-radius: .8em;
-  white-space: -moz-pre-wrap !important;  
-white-space: -pre-wrap;      
-white-space: -o-pre-wrap;    
-white-space: pre-wrap;       
-word-wrap: break-word;       
-word-break: break-all;
-white-space: normal;
+  white-space: -moz-pre-wrap !important;  /* Mozilla, since 1999 */
+		white-space: -pre-wrap;      /* Opera 4-6 */
+		white-space: -o-pre-wrap;    /* Opera 7 */
+		white-space: pre-wrap;       /* css-3 */
+		word-wrap: break-word;       /* Internet Explorer 5.5+ */
+		word-break: break-all;
+		white-space: normal;
 }
 
 table{
@@ -57,10 +60,10 @@ table{
 	width:600px;
 	padding-bottom:25px;
 	white-space: -moz-pre-wrap !important;  /* Mozilla, since 1999 */
-white-space: -pre-wrap;      /* Opera 4-6 */
-white-space: -o-pre-wrap;    /* Opera 7 */
-white-space: pre-wrap;       /* css-3 */
-word-wrap: break-word;       /* Internet Explorer 5.5+ */
-word-break: break-all;
-white-space: normal;
+		white-space: -pre-wrap;      /* Opera 4-6 */
+		white-space: -o-pre-wrap;    /* Opera 7 */
+		white-space: pre-wrap;       /* css-3 */
+		word-wrap: break-word;       /* Internet Explorer 5.5+ */
+		word-break: break-all;
+		white-space: normal;
 }

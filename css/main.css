@@ -11,9 +11,7 @@ input[type=number]::-webkit-outer-spin-button {
 td {
 	vertical-align: middle !important;
 }
-#errorq, #errorc{
-	color:red;
-}
+
 textarea#content, textarea#comment {
 	float: left;
 	margin-left: 12px;
@@ -27,7 +25,10 @@ textarea#content, textarea#comment {
 	box-shadow: 1px 1px 5px rgba(0,0,0,.2);
 	margin-top: 20px;
 }
+#errorq, #errorc{
+	color:red;
 
+}
 #sidebar {
 	padding-top: 135px;
 }
