@@ -3,7 +3,7 @@
 session_start();
 
 $timezone = date_default_timezone_set('Australia/Brisbane');
-$date = date('Y/m/d h:i:s a', time());
+$date = date("Y-m-d  H:i:s", time());
 
 ?>
 <!DOCTYPE html>
