@@ -24,6 +24,7 @@ $date = date("Y-m-d  H:i:s", time());
 	<!-- Custom CSS -->
 	<link href="css/main.css" rel="stylesheet">
 	<link href="css/displayQ.css" rel="stylesheet">
+	<link href="css/error.css" rel="stylesheet">
 </head>
 
 <body>

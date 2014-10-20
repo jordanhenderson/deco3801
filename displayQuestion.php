@@ -27,6 +27,7 @@ $crs = new PCRHandler();
 	<!-- Custom CSS -->
 	<link href="css/main.css" rel="stylesheet">
 	<link href="css/displayQ.css" rel="stylesheet">
+	<link href="css/error.css" rel="stylesheet">
 </head>
 <body>
 	<?php 
