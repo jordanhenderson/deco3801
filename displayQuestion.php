@@ -205,7 +205,7 @@ $crs = new PCRHandler();
 				else {
 					var request = {f: func, params:  ['<?php echo $_GET['id']; ?>']};
 				}
-				
+				alert(JSON.Stringify(request));
 				$.post("api.php", JSON.stringify(request), function() {
 					if(func == "markResolved" || func == "markUnresolved" || func == "addComment"|| func == "deleteComment") location.reload(); 
 					else window.location.replace("help.php");
