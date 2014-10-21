@@ -169,15 +169,17 @@ $crs = new PCRHandler();
 				
 				var func = $(this).attr("name");
 				if(func == "deleteComment"){
-					var id = $(this).attr("id");
-					alert(id);
+					var commentid = $(this).attr("id");
 					var res = confirm("Are you sure you want to remove this comment?");
 					if(res){
-						var request = {f : func, params: [id]};
+						var request = {f : func, params: [commentid]};
 					}
 					else {
 						return false;
 					}
+				}
+				else {
+					var request = {f: func, params:  ['<?php echo $_GET['id']; ?>']};
 				}
 				if(func == "addComment"){
 				for ( instance in CKEDITOR.instances ) {
@@ -201,10 +203,6 @@ $crs = new PCRHandler();
 				var Qid = '<?php echo $_GET['id'];?>';
 				var request = {f: func, params: [Qid, stnid, fullname, $("#content").val(), date]};
 				}
-				else {
-					var request = {f: func, params:  ['<?php echo $_GET['id']; ?>']};
-				}
-				alert(JSON.stringify(request));
 				$.post("api.php", JSON.stringify(request), function() {
 					if(func == "markResolved" || func == "markUnresolved" || func == "addComment"|| func == "deleteComment") location.reload(); 
 					else window.location.replace("help.php");
