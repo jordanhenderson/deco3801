@@ -169,12 +169,11 @@ $crs = new PCRHandler();
 				
 				var func = $(this).attr("name");
 				if(func == "deleteComment"){
-					var id = this.id;
+					var id = $(this).attr("id");
 					alert(id);
 					var res = confirm("Are you sure you want to remove this comment?");
 					if(res){
 						var request = {f : func, params: [id]};
-						 alert(JSON.stringify(request));
 					}
 					else {
 						return false;
