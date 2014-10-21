@@ -219,7 +219,7 @@ if (isset($_GET['assid'])) {
 					];
 				    break;
 				  case "deleteAssignment":
-				  	var funcparams = [ <?php echo '"'.$assid.'"'; ?>];
+				  	var funcparams = [<?php echo '"'.$assid.'"'; ?>];
 					break;
 				}
 				var request = {f: func, params: funcparams};

@@ -382,20 +382,23 @@ class PCRHandler {
 	/**
 	 * Create a new assignment.
 	 */
-	public function changeAssignment($AssignmentID, $AssignmentName, $ReviewsNeeded, $ReviewsDue, $weight, $OpenTime, $DueTime, $ResubmitAllowed, $NumberTests){
-		$assignment = new Assignment(array("AssignmentID" => $AssignmentID,
-										   "AssignmentName" => $AssignmentName,
+	public function changeAssignment($AssignmentID, $AssignmentName, $ReviewsNeeded, $ReviewsDue, $weight, $OpenTime, $DueTime, $ResubmitAllowed, $NumberTests) {
+		$assignment = new Assignment(array("AssignmentName" => $AssignmentName,
 										   "CourseID" => $_SESSION['course_id'],
 										   "ReviewsNeeded" => $ReviewsNeeded,
 										   "ReviewsDue" => $ReviewsDue,
 										   "Weight" => $weight,
 										   "OpenTime" => $OpenTime,
 										   "DueTime" => $DueTime,
-										   "ResubmitAllowed" => $ResubmitAllowed, 
+										   "ResubmitAllowed" => $ResubmitAllowed,
 										   "NumberTests" => $NumberTests));
+		if ($AssignmentID != "") {
+			$assignment["AssignmentID"] = $AssignmentID;
+		}
 		$assignment->commit();
 		return $assignment;
-	}	
+	}
+	
 	/**
 	 * Delete an assignment.
 	 */
@@ -409,6 +412,7 @@ class PCRHandler {
 	 * review_dev.php. 
 	 */
 	public function loadFile($courseID, $assignID, $subID, $fileName) {
+		// TODO - Make sure numbers here are in format "00001", not just "1"
 		$assignment =  __DIR__ . "/../storage/course_$courseID/assign_$assignID/submissions/$subID/" . $fileName;
 		$handle = fopen($assignment, "r");
 		$contents = fread($handle, filesize($assignment));
