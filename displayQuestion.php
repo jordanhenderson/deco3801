@@ -124,7 +124,7 @@ $crs = new PCRHandler();
 						//Display each comment as readonly for specific question
 					if($_SESSION['user_id'] == $commentRow['StudentID']){
 						echo "	
-						<div class='name'>$commentRow[StudentName]<div class='date'>".$daysago." ago</div></div>
+						<div class='name'>$commentRow[StudentName] $commentRow[CommentID]<div class='date'>".$daysago." ago</div></div>
 						<div class='comment'><div class='delete'><input type='submit' class='btn btn-danger btn-xs' id='$commentRow[CommentID]' name='deleteComment' 
 						value='Delete Comment'></div><td>$commentRow[Content]</div><br>";
 					}
@@ -170,6 +170,7 @@ $crs = new PCRHandler();
 				var func = $(this).attr("name");
 				if(func == "deleteComment"){
 					var id = this.id;
+					alert(id);
 					var res = confirm("Are you sure you want to remove this comment?");
 					if(res){
 						var request = {f : func, params: [id]};
