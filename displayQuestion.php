@@ -174,7 +174,7 @@ $crs = new PCRHandler();
 					var res = confirm("Are you sure you want to remove this comment?");
 					if(res){
 						var request = {f : func, params: [id]};
-						 alert(JSON.Stringify(request));
+						 alert(JSON.stringify(request));
 					}
 					else {
 						return false;
