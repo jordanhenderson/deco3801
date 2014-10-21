@@ -120,10 +120,19 @@ $crs = new PCRHandler();
 						$date = date_create_from_format('Y-m-d G:i:s', $timeasked);
 						$OpenTime = (int) date_format($date, 'U');
 						$daysago = seconds2human($CurrentTime - $OpenTime);
+						
 						//Display each comment as readonly for specific question
+					if($_SESSION['user_id'] == $commentRow['StudentID']){
 						echo "	
 						<div class='name'>$commentRow[StudentName]<div class='date'>".$daysago." ago</div></div>
-						<div class='comment'><td>$commentRow[Content]</div><br>";
+						<div class='comment'><div class='delete'><input type='submit' class='btn btn-danger btn-xs' id='$commentRow[CommentID]' name='deleteComment' 
+						value='Delete Comment'></div><td>$commentRow[Content]</div><br>";
+					}
+					else {
+						echo "	
+						<div class='name'>$commentRow[StudentName]<div class='date'>".$daysago." ago</div></div>
+						<div class='comment'><div class='delete'></div><td>$commentRow[Content]</div><br>";
+					}
 					} ?>
 	<div align="center">
 			<form name="cF" id="cF" action="api.php" method="post">
@@ -159,6 +168,16 @@ $crs = new PCRHandler();
 			$(":submit").click(function() {
 				
 				var func = $(this).attr("name");
+				if(func == "deleteComment"){
+					var id = this.id;
+					var res = confirm("Are you sure you want to remove this comment?");
+					if(res){
+						var request = {f : func, params: [id]};
+					}
+					else {
+						return false;
+					}
+				}
 				if(func == "addComment"){
 				for ( instance in CKEDITOR.instances ) {
            				 CKEDITOR.instances[instance].updateElement();
@@ -186,7 +205,7 @@ $crs = new PCRHandler();
 				}
 				
 				$.post("api.php", JSON.stringify(request), function() {
-					if(func == "markResolved" || func == "markUnresolved" || func == "addComment") location.reload(); 
+					if(func == "markResolved" || func == "markUnresolved" || func == "addComment"|| func == "deleteComment") location.reload(); 
 					else window.location.replace("help.php");
 				});
 				return false;

@@ -45,6 +45,15 @@ class PCRHandler {
 		$question = new Question(array("QuestionID"=>$id));
 		$question->delete();
 	}
+
+	/**
+	 * Removes a comment with the given id from the database.
+	 * @param id of the comment to remove
+	 */
+	public function deleteComment($id){
+		$comment = new Comment(array("CommentID"=>$id));
+        $comment->delete();
+	}
 	
 	/**
 	 * Marks the question specified by id as resolved.
