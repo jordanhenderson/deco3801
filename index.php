@@ -199,24 +199,26 @@ function formatDBtime($dbtime) {
 						<td>";
 						
 						// Status
-						if ($admin) {
-							echo '-';
+						if ($SubmitTime == 0 && $CurrentTime < $OpenTime) { // Not Open
+							echo 'Not open for submission.';
+						} else if ($admin) {
+							echo 'Open for submission.'; // Open (admin only)
 						} else if ($SubmitTime == 0 && $CurrentTime < $DueTime) { // Not Submitted
-							echo 'Not Submitted.';
+							echo 'Not submitted.';
 						} else if ($SubmitTime == 0) { // Overdue
 							echo 'Overdue.';
 						} else if ($SubmitTime <= $DueTime) { // Submitted on time
 							echo 'Submitted.';
-						} else { // Submitted late
+						} else { // Submitted late (Shouldn't be possible)
 							echo 'Submitted late.';
 						}
 						
-						if ($admin) {
+						if ($admin || $CurrentTime < $OpenTime) {
 							// Nothing to see here.
 						} else if ($CurrentTime <= $DueTime) { // Peer review not open
-							echo '<br>Peer Reviews Not Open.';
+							echo '<br>Peer reviews not open.';
 						} else if (count($reviewsTodo) == 0) { // Peer review complete
-							echo '<br>Peer Reviews Complete.';
+							echo '<br>Peer reviews complete.';
 						} else { // Peer review incomplete
 							echo '<br>'.count($reviewsTodo).' Peer Reviews Incomplete.';
 						}

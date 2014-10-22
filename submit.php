@@ -9,11 +9,19 @@ $assignid = $_GET['assid'];
 $assignment = new Assignment(array("AssignmentID"=>$assignid));
 $submission = new Submission(array("AssignmentID"=>$assignid, "StudentID"=>$_SESSION['user_id']), false);
 
-if(!$assignment->isValid() || !$assignment->canResubmit() && $submission->isValid()) {
+$asg = $assignment->getRow();
+// Get times
+$CurrentTime = time();
+$date = date_create_from_format('Y-m-d G:i:s', $asg['OpenTime']);
+$OpenTime = (int) date_format($date, 'U');
+$date = date_create_from_format('Y-m-d G:i:s', $asg['DueTime']);
+$DueTime = (int) date_format($date, 'U');
+
+if ($CurrentTime <= $DueTime && $CurrentTime >= $OpenTime &&
+	($submission->isValid() && $assignment->canResubmit() || !$submission->isValid())) {
 	header("Location: index.php");
 	exit();
 }
-
 
 ?>
 <!DOCTYPE html>

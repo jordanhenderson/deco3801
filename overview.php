@@ -25,14 +25,6 @@ if (isset($_REQUEST['assid'])) {
 	exit("No Assignment Specified For Overview.");
 }
 
-$CurrentTime = time();
-
-$date = date_create_from_format('Y-m-d G:i:s', $asg['OpenTime']);
-$OpenTime = (int) date_format($date, 'U');
-
-$date = date_create_from_format('Y-m-d G:i:s', $asg['DueTime']);
-$DueTime = (int) date_format($date, 'U');
-
 function formatDBtime($dbtime) {
 	$date = date_create_from_format('Y-m-d G:i:s', $dbtime);
 	return date_format($date, 'j M \'y, g:ia'); // e.g: 6 Feb '14, 8:30pm
@@ -206,6 +198,13 @@ function printResults($handler) {
 				</table>';
 					}
 				} else { // STUDENT
+					// Get times
+					$CurrentTime = time();
+					$date = date_create_from_format('Y-m-d G:i:s', $asg['OpenTime']);
+					$OpenTime = (int) date_format($date, 'U');
+					$date = date_create_from_format('Y-m-d G:i:s', $asg['DueTime']);
+					$DueTime = (int) date_format($date, 'U');
+					
 					$submission = $assignment->getSubmission($_SESSION['user_id']);
 					if ($submission->isValid()) {
 						$srow = $submission->getRow();
@@ -218,9 +217,11 @@ function printResults($handler) {
 						echo '<span>You have not yet made a submission for this assignment.';
 						if (!$assignment->canResubmit()) {
 							echo '<br>You may <strong>not</strong> make multiple submissions on this assignment - please ensure your assignment is correct before attempting to submit.';
+						} else {
+							echo '<br>You may make multiple submissions.';
 						}
-						echo '</span>';
 					}
+					echo '</span>';
 					if ($CurrentTime <= $DueTime && $CurrentTime >= $OpenTime &&
 						($submission->isValid() && $assignment->canResubmit() || !$submission->isValid())) {
 					?>
