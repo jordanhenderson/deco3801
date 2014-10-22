@@ -17,8 +17,7 @@ $OpenTime = (int) date_format($date, 'U');
 $date = date_create_from_format('Y-m-d G:i:s', $asg['DueTime']);
 $DueTime = (int) date_format($date, 'U');
 
-if ($CurrentTime <= $DueTime && $CurrentTime >= $OpenTime &&
-	($submission->isValid() && $assignment->canResubmit() || !$submission->isValid())) {
+if ($CurrentTime > $DueTime || $CurrentTime < $OpenTime || !$assignment->isValid() || !$assignment->canResubmit() && $submission->isValid()) {
 	header("Location: index.php");
 	exit();
 }
