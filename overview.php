@@ -40,10 +40,17 @@ function printResults($handler) {
 	} else {
 		$results = "";
 	}
+	
+	global $assignment;
+	$percentage = $passed = $numTests = 0;
+	if($assignment->isValid()) {
+	    $numTests = $asg["NumberTests"];
+	    if((int)$numTests > 0) {
+		$passed = substr_count($results, 'pass');
+		$percentage = ($passed/$numTests)*100;
+	    }
+	}
 
-	$passed = substr_count($results, 'pass');
-	$numTests = $asg["NumberTests"];
-	$percentage = ($passed/$numTests)*100;
 	echo "$passed/$numTests tests passed";
 	echo "
     <div style='width:100%; background-color:white; height:auto; border:1px solid #000;'>

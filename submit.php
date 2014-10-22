@@ -93,7 +93,7 @@ if ($CurrentTime > $DueTime || $CurrentTime < $OpenTime || !$assignment->isValid
 				<div>
 				
 				<div class="form-group">
-					<label for="url">URL:</label>
+					<label for="url">URL: (no "https://")</label>
 					<input class="form-control" type="text" id="url" name="url">
 				</div>
 				<div class="form-group">
@@ -102,7 +102,7 @@ if ($CurrentTime > $DueTime || $CurrentTime < $OpenTime || !$assignment->isValid
 				</div>
 				<div class="form-group">
 					<label for="url">Password:</label>
-					<input class="form-control" type="text" id="pass" name="pass">
+					<input class="form-control" type="password" id="pass" name="pass">
 				</div>
 				<div class="form-group">
 					<input class="btn btn-default btn-primary" type="submit" id="submit">

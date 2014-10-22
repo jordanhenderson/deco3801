@@ -308,10 +308,10 @@ class PCRHandler {
 		//Look for an existing submission - return if resubmission not allowed.
 		$oldsubmission = $assignment->getSubmission($_SESSION['user_id']);
 		if(!$assignment->canResubmit() && $oldsubmission->isValid()) return;
-		
 		$oldsubmission->delete();
 		
 		$submission = new Submission(array("AssignmentID"=>$assignment_id, "StudentID"=>$_SESSION['user_id'], "Results" => ""));
+		
 		if ($submission->isValid()) {
 			if(!isset($_FILES["file"]) || $_FILES["file"]["error"] != 0) {
 				$submission->delete();
@@ -345,8 +345,9 @@ class PCRHandler {
 
 			$assign = &$assignment->getRow();
 			$assignment_type = $assign["Language"];
-			$test_file_location = $assign->getDir() . "test/";
+			$test_file_location = $assignment->getDir() . "test/";
 			$submission->testSubmission($assignment_type, $test_file_location);
+					
 		}
 		return $submission;
 	}
@@ -366,15 +367,17 @@ class PCRHandler {
 		
 		$submission = new Submission(array("AssignmentID"=>$assignment_id, "StudentID"=>$_SESSION['user_id']));
 		if ($submission->isValid()) {
+		
 			$dir = $submission->getStorageDir();
 			exec("cd $dir && git clone https://$username:$password@$repo_url .");
+			
 			if($submission->addFiles() == 0) {
 				//No files, failed?
 				$submission->delete();
 				return;
 			}
 			// TODO Uncomment when ready for testing
-			//$submission->testSubmission();
+			$submission->testSubmission();
 		}
 		return $submission;
 	}
