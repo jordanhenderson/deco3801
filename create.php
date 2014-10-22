@@ -24,7 +24,7 @@ if (isset($_GET['assid'])) {
 	$new = true;
 	$assignment = new PCRBuilder("Assignments");
 	$asg = &$assignment->getRow();
-	$assid = '';
+	$assid = -1;
 }
 
 ?>
@@ -140,7 +140,6 @@ if (isset($_GET['assid'])) {
 				<div class="col-md-12">
 					<div class="form-group">
 						<label for="file">Unit Testing Files</label><br>
-						
 							<input type="hidden" name="assignment_id" value="<?php echo $_GET['assid']; ?>">
 							<span class="btn btn-default btn-file">
 								Browse <input type="file" name="file" id="file">
@@ -202,31 +201,32 @@ if (isset($_GET['assid'])) {
 		$(".form_datetime").datetimepicker({
 			format: 'yyyy-mm-dd hh:ii:ss'
 		});
+		
 		$(".assignmentchange").click(function() {
-				var func = $(this).attr("name");
-				switch (func) {
-				  case "changeAssignment":
-					var funcparams = [
-						<?php echo '"'.$assid.'"'; ?>,
-						$("#AssignmentName").val(),
-						$("#ReviewsNeeded").val(),
-						$("#ReviewsDue").val(),
-						$("#Weight").val(),
-						$("#OpenTime").val(),
-						$("#DueTime").val(),
-						$("#ResubmitAllowed").is(":checked") ? 1 : 0,
-						$("#NumberTests").val()
-					];
-				    break;
-				  case "deleteAssignment":
-				  	var funcparams = [<?php echo '"'.$assid.'"'; ?>];
-					break;
-				}
-				var request = {f: func, params: funcparams};
-				$.post("api.php", JSON.stringify(request), function() {
-					window.location.replace("index.php")
-				});
+			var func = $(this).attr("name");
+			switch (func) {
+			  case "changeAssignment":
+				var funcparams = [
+					<?php echo '"'.$assid.'"'; ?>,
+					$("#AssignmentName").val(),
+					$("#ReviewsNeeded").val(),
+					$("#ReviewsDue").val(),
+					$("#Weight").val(),
+					$("#OpenTime").val(),
+					$("#DueTime").val(),
+					$("#ResubmitAllowed").is(":checked") ? 1 : 0,
+					$("#NumberTests").val()
+				];
+			    break;
+			  case "deleteAssignment":
+			  	var funcparams = [<?php echo '"'.$assid.'"'; ?>];
+				break;
+			}
+			var request = {f: func, params: funcparams};
+			$.post("api.php", JSON.stringify(request), function() {
+				window.location.replace("index.php")
 			});
+		});
 	</script> 
 </body>
 </html>

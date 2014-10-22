@@ -392,7 +392,7 @@ class PCRHandler {
 										   "DueTime" => $DueTime,
 										   "ResubmitAllowed" => $ResubmitAllowed,
 										   "NumberTests" => $NumberTests));
-		if ($AssignmentID != "") {
+		if ($AssignmentID != -1) {
 			$assignment["AssignmentID"] = $AssignmentID;
 		}
 		$assignment->commit();
@@ -449,11 +449,15 @@ class PCRBackend {
 				$fct = new ReflectionMethod($this->handler, $method);
 				
 				$params = isset($this->request["params"]) ? $this->request["params"] : array();
-				if ($fct->getNumberOfRequiredParameters() == count($params))
+				if ($fct->getNumberOfRequiredParameters() == count($params)) {
 					$response = call_user_func_array(array($this->handler, $method), $params);
+				}
 			}
-			if ($response) return json_encode(array("r"=> $response));
-			else return "{}";
+			if ($response) {
+				return json_encode(array("r"=> $response));
+			} else {
+				return "{}";
+			}
 		} catch(Exception $e) {
 			error_log($e);
 			return "{}";
