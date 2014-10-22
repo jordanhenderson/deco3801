@@ -26,7 +26,7 @@ $isOwner = 0;
 // Check who is accessing the page (submission owner or reviewer)
 if (intval($_SESSION['user_id']) == intval($owner)) {
 	// Load all submitted reviews made for the submission for viewing
-	$reviews = $submission->getReviews(1); // submitted == 1
+	$reviews = $submission->getConditionalReviews(1); // submitted == 1
 	$isOwner = 1;
 } else {
 	// Load only the reviews for the current reviewer

@@ -617,7 +617,7 @@ class Submission extends PCRObject {
 	 * variable dictates whether they are only submitted, or unsubmitted ones.
 	 * @return an array of reviews
 	 */
-	public function getReviews($submitted) {
+	public function getConditionalReviews($submitted) {
 		$arr = array();
 		$sth = $this->db->prepare("SELECT * FROM Review WHERE SubmissionID = ? AND Submitted = ?;");
 		$sth->execute(array($this->getID(), $submitted));
