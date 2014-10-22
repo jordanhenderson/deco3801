@@ -383,7 +383,8 @@ class PCRHandler {
 	 * Create a new assignment.
 	 */
 	public function changeAssignment($AssignmentID, $AssignmentName, $ReviewsNeeded, $ReviewsDue, $weight, $OpenTime, $DueTime, $ResubmitAllowed, $NumberTests) {
-		$assignment = new Assignment(array("AssignmentName" => $AssignmentName,
+		$assignment = new Assignment(array("AssignmentID" => $AssignmentID,
+										   "AssignmentName" => $AssignmentName,
 										   "CourseID" => $_SESSION['course_id'],
 										   "ReviewsNeeded" => $ReviewsNeeded,
 										   "ReviewsDue" => $ReviewsDue,
@@ -392,9 +393,6 @@ class PCRHandler {
 										   "DueTime" => $DueTime,
 										   "ResubmitAllowed" => $ResubmitAllowed,
 										   "NumberTests" => $NumberTests));
-		if ($AssignmentID != "") {
-			$assignment["AssignmentID"] = $AssignmentID;
-		}
 		$assignment->commit();
 		return $assignment;
 	}

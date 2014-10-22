@@ -67,7 +67,7 @@ if (isset($_GET['assid'])) {
 			<div class="row">
 				<div class="col-md-12">
 					<label for="AssignmentName">Assignment Name</label>
-					<input class="form-control" id="AssignmentName" <?php echo 'value="'.$asg['AssignmentName'].'"'; ?> name="AssignmentName" type="text"></input>
+					<input class="form-control" id="AssignmentName" <?php echo 'value="'.$asg['AssignmentName'].'"'; ?> name="AssignmentName" type="text">
 				</div>
 			</div>
 			<br>
@@ -156,11 +156,11 @@ if (isset($_GET['assid'])) {
 				<?php
 				if ($new) {
 					echo '
-				<input type="submit" class="btn btn-primary" href="index.php" class="assignmentchange" name="changeAssignment" value="Create">';
+				<input type="submit" class="btn btn-primary submit" href="index.php" name="changeAssignment" value="Create">';
 				} else {
 					echo '
-				<input type="submit" class="btn btn-primary assignmentchange" name="changeAssignment" value="Update">
-				<input type="submit" class="btn btn-danger assignmentdelete" name="deleteAssignment" value="Delete">';
+				<input type="submit" class="btn btn-primary submit" name="changeAssignment" value="Update">
+				<input type="submit" class="btn btn-danger submit" name="deleteAssignment" value="Delete">';
 				}
 				echo '
 				<input type="submit" class="btn btn-warning" id="reset" value="Reset">';
@@ -203,13 +203,10 @@ if (isset($_GET['assid'])) {
 			format: 'yyyy-mm-dd hh:ii:ss'
 		});
 		
-		$(".assignmentchange").click(function() {
-			alert("1");
+		$(".submit").click(function() {
 			var func = $(this).attr("name");
-			alert("2");
 			switch (func) {
 				case "changeAssignment":
-					alert("3");
 					var funcparams = [
 						<?php echo '"'.$assid.'"'; ?>,
 						$("#AssignmentName").val(),
@@ -226,13 +223,10 @@ if (isset($_GET['assid'])) {
 					var funcparams = [<?php echo '"'.$assid.'"'; ?>];
 					break;
 			}
-			alert("4");
 			var request = {f: func, params: funcparams};
-			alert("5");
 			$.post("api.php", JSON.stringify(request), function() {
 				window.location.replace("index.php");
 			});
-			alert("6");
 		});
 	</script> 
 </body>

@@ -132,7 +132,7 @@ abstract class PCRObject implements JsonSerializable {
 			$id = $this->db->lastInsertId();
 			$reqid = isset($this->row[$this->id_field]) ? $this->row[$this->id_field] : null;
 			//Update the item's ID
-			if($reqid != null && $id != $reqid) {
+			if ($reqid != null && $id != $reqid) {
 				$sth = $this->db->prepare("UPDATE $this->table SET $this->id_field = ? WHERE $this->id_field = ?;");
 				$sth->execute(array($reqid, $id));
 				$this->id = $reqid;
@@ -160,7 +160,7 @@ abstract class PCRObject implements JsonSerializable {
 			$sth = $this->db->prepare($search);
 			$sth->execute($this->row);
 			$row = $sth->fetch(PDO::FETCH_ASSOC);
-			if($row) {
+			if ($row) {
 				$this->row = $row;
 				$this->uptodate = 1;
 				$this->id = $row[$this->id_field];
@@ -193,7 +193,7 @@ abstract class PCRObject implements JsonSerializable {
 				//Insert a new row.
 				$this->insertRow();
 				//Repopulate the row with default values.
-				if(!$recursed) $this->Update(true);
+				if (!$recursed) $this->Update(true);
 				$this->uptodate = 1;
 			} else if ( $this->autocreate == false ) {
 				//Autocreate not enabled, search for an existing row using what values we have.
@@ -203,15 +203,15 @@ abstract class PCRObject implements JsonSerializable {
 				$sth->execute(array($id));
 				$row = $sth->fetch(PDO::FETCH_ASSOC);
 				
-				if($row) {
+				if ($row) {
 					$changed = false;
 					foreach ($this->row as $key => $value) {
-						if($row[$key] !== $value) {
+						if ($row[$key] !== $value) {
 							$row[$key] = $value;
 							$changed = true;
 						}
 					}
-					if($changed) $this->updateRow($row);
+					if ($changed) $this->updateRow($row);
 					else $this->row = $row;
 				}
 				else {
@@ -329,7 +329,7 @@ class Assignment extends PCRObject {
 		$courseid = $_SESSION["course_id"];
 		$assignid = $this->getID();
 		$this->ass_dir = __DIR__ . "/../storage/course_$courseid/assign_$assignid/";
-		if(!file_exists($this->ass_dir)) {
+		if (!file_exists($this->ass_dir)) {
 			mkdir($this->ass_dir, 0755, true);
 			mkdir($this->ass_dir . "test", 0755, true);
 			mkdir($this->ass_dir . "submissions", 0755, true);
@@ -342,13 +342,10 @@ class Assignment extends PCRObject {
 	
 	public function cleanTest() {
 		$dir = $this->ass_dir . "/test/";
-		if(file_exists($dir)) {
-				if (PHP_OS === 'Windows')
-				{
+		if (file_exists($dir)) {
+				if (PHP_OS === 'Windows') {
 					exec("rd /s /q {$dir}/*");
-				}
-				else
-				{
+				} else {
 					exec("rm -rf {$dir}/*");
 				}
 			mkdir($dir, 0755, true);
