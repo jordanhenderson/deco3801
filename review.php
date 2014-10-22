@@ -13,7 +13,7 @@ while (strlen($subID) < 5) {
 $courseid = $_SESSION['course_id'];
 
 // This currently returns an empty value (TODO does it still?)
-$submission = $crs->getSubmissionForReviewing($subID)
+$submission = $crs->getSubmissionForReviewing($subID);
 $assignid = ''.$submission->getAssignmentID();
 while (strlen($assignid) < 5) {
 	$assignid = '0'.$assignid;
