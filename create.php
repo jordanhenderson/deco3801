@@ -203,6 +203,7 @@ if (isset($_GET['assid'])) {
 		});
 		
 		$("#create").click(function() {
+			alert("hey!");
 			var funcparams = [
 				$("#AssignmentName").val(),
 				$("#ReviewsNeeded").val(),
@@ -213,10 +214,13 @@ if (isset($_GET['assid'])) {
 				$("#ResubmitAllowed").is(":checked") ? 1 : 0,
 				$("#NumberTests").val()
 			];
+			alert("listen!");
 			var request = {f: "createAssignment", params: funcparams};
+			alert("hey!");
 			$.post("api.php", JSON.stringify(request), function() {
 				window.location.replace("index.php")
 			});
+			alert("listen!");
 		});
 		
 		$("#update").click(function() {
