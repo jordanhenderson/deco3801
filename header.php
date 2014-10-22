@@ -23,6 +23,7 @@ require_once('includes/handlers.php');
 						if (!isset($_SESSION['admin'])) {
 							echo '<li><a href="reviewhub.php">Review Hub</a></li>';
 						}
+							echo '<li><a href="moodle/moodle/login/logout.php">Logout</a></li>'
 					?>
 				</ul>
 			</div>
