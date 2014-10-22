@@ -380,10 +380,9 @@ class PCRHandler {
 	}
 	
 	/**
-	 * Creates a new assignment, with the provided variables
+	 * Create a new assignment.
 	 */
-	public function createAssignment($AssignmentName, $ReviewsNeeded, $ReviewsDue,
-			$weight, $OpenTime, $DueTime, $ResubmitAllowed, $NumberTests) {
+	public function changeAssignment($AssignmentID, $AssignmentName, $ReviewsNeeded, $ReviewsDue, $weight, $OpenTime, $DueTime, $ResubmitAllowed, $NumberTests) {
 		$assignment = new Assignment(array("AssignmentName" => $AssignmentName,
 										   "CourseID" => $_SESSION['course_id'],
 										   "ReviewsNeeded" => $ReviewsNeeded,
@@ -393,31 +392,15 @@ class PCRHandler {
 										   "DueTime" => $DueTime,
 										   "ResubmitAllowed" => $ResubmitAllowed,
 										   "NumberTests" => $NumberTests));
+		if ($AssignmentID != "") {
+			$assignment["AssignmentID"] = $AssignmentID;
+		}
 		$assignment->commit();
 		return $assignment;
 	}
 	
 	/**
-	 * Update an assignment with the given ID to reflect the provided variables
-	 */
-	public function updateAssignment($AssignmentID, $AssignmentName, $ReviewsNeeded, $ReviewsDue,
-			$weight, $OpenTime, $DueTime, $ResubmitAllowed, $NumberTests) {
-		$assignment = new Assignment(array("AssignmentID" => $AssignmentID,
-										   "AssignmentName" => $AssignmentName,
-										   "CourseID" => $_SESSION['course_id'],
-										   "ReviewsNeeded" => $ReviewsNeeded,
-										   "ReviewsDue" => $ReviewsDue,
-										   "Weight" => $weight,
-										   "OpenTime" => $OpenTime,
-										   "DueTime" => $DueTime,
-										   "ResubmitAllowed" => $ResubmitAllowed,
-										   "NumberTests" => $NumberTests));
-		$assignment->commit();
-		return $assignment;
-	}
-	
-	/**
-	 * Delete an assignment with the given ID
+	 * Delete an assignment.
 	 */
 	public function deleteAssignment($AssignmentID) {
 		$assignment = new Assignment(array("AssignmentID"=>$AssignmentID));
@@ -466,15 +449,11 @@ class PCRBackend {
 				$fct = new ReflectionMethod($this->handler, $method);
 				
 				$params = isset($this->request["params"]) ? $this->request["params"] : array();
-				if ($fct->getNumberOfRequiredParameters() == count($params)) {
+				if ($fct->getNumberOfRequiredParameters() == count($params))
 					$response = call_user_func_array(array($this->handler, $method), $params);
-				}
 			}
-			if ($response) {
-				return json_encode(array("r"=> $response));
-			} else {
-				return "{}";
-			}
+			if ($response) return json_encode(array("r"=> $response));
+			else return "{}";
 		} catch(Exception $e) {
 			error_log($e);
 			return "{}";
