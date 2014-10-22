@@ -25,6 +25,14 @@ if (isset($_REQUEST['assid'])) {
 	exit("No Assignment Specified For Overview.");
 }
 
+$CurrentTime = time();
+
+$date = date_create_from_format('Y-m-d G:i:s', $asg['OpenTime']);
+$OpenTime = (int) date_format($date, 'U');
+
+$date = date_create_from_format('Y-m-d G:i:s', $asg['DueTime']);
+$DueTime = (int) date_format($date, 'U');
+
 function formatDBtime($dbtime) {
 	$date = date_create_from_format('Y-m-d G:i:s', $dbtime);
 	return date_format($date, 'j M \'y, g:ia'); // e.g: 6 Feb '14, 8:30pm
@@ -35,7 +43,7 @@ function printResults($handler) {
 	$submission = $handler->getSubmission($_REQUEST['assid']);
 	
 	$sub = &$submission->getRow();
-	if($submission->isValid()) {
+	if ($submission->isValid()) {
 		$results = $sub['Results'];
 	} else {
 		$results = "";
@@ -187,7 +195,7 @@ function printResults($handler) {
 										continue;
 									}
 									$rev = &$rev->getRow();
-									echo "<a href=\"#\">$rev[Comments] - $rev[text]</a><br>";
+									echo "<a href='#'>$rev[Comments] - $rev[text]</a><br>";
 								}
 							}
 							echo '</td>
@@ -199,19 +207,22 @@ function printResults($handler) {
 					}
 				} else { // STUDENT
 					$submission = $assignment->getSubmission($_SESSION['user_id']);
-					if($submission->isValid()) {
+					if ($submission->isValid()) {
 						$srow = $submission->getRow();
 						echo "<span>Your last submission was made on: $srow[SubmitTime]</span>";
+					} else if ($CurrentTime < $OpenTime) {
+						echo '<span>This assignment is not yet open for submission.';
+					} else if ($CurrentTime > $DueTime) {
+						echo '<span>No submissions may be made past the due date.';
 					} else {
 						echo '<span>You have not yet made a submission for this assignment.';
-						
 						if (!$assignment->canResubmit()) {
 							echo '<br>You may <strong>not</strong> make multiple submissions on this assignment - please ensure your assignment is correct before attempting to submit.';
 						}
 						echo '</span>';
 					}
-					
-					if ($submission->isValid() && $assignment->canResubmit() || !$submission->isValid()) {
+					if ($CurrentTime <= $DueTime && $CurrentTime >= $OpenTime &&
+						($submission->isValid() && $assignment->canResubmit() || !$submission->isValid())) {
 					?>
 				<br>
 				<a href="submit.php?assid=<?php echo $_REQUEST['assid']; ?>">
