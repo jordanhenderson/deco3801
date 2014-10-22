@@ -327,8 +327,11 @@ class Assignment extends PCRObject {
 	public function __construct($data, $autocreate = true) {
 		parent::__construct("AssignmentID", "Assignments", $data, $autocreate);
 		$courseid = $_SESSION["course_id"];
-		$assignid = $this->getID();
-		$this->ass_dir = __DIR__ . "/../storage/course_$courseid/assign_$assignid/";
+		$assignmentid = ''.$this->getID();
+		while (strlen($assignmentid) < 5) {
+			$assignmentid = '0'.$assignmentid;
+		}
+		$this->ass_dir = __DIR__ . "/../storage/course_$courseid/assign_$assignmentid/";
 		if (!file_exists($this->ass_dir)) {
 			mkdir($this->ass_dir, 0755, true);
 			mkdir($this->ass_dir . "test", 0755, true);
@@ -354,9 +357,12 @@ class Assignment extends PCRObject {
 	
 	public function delete() {
 		//Clean up all assignment files
-		$id = $this->getID();
+		$assignmentid = ''.$this->getID();
+		while (strlen($assignmentid) < 5) {
+			$assignmentid = '0'.$assignmentid;
+		}
 		$courseid = $_SESSION["course_id"];
-		$dir = __DIR__ . "/../storage/course_$courseid/assign_$id/";
+		$dir = __DIR__ . "/../storage/course_$courseid/assign_$assignmentid/";
 		$it = new RecursiveDirectoryIterator($dir, RecursiveDirectoryIterator::SKIP_DOTS);
 		$files = new RecursiveIteratorIterator($it,
 					 RecursiveIteratorIterator::CHILD_FIRST);
@@ -465,11 +471,11 @@ class Assignment extends PCRObject {
 	 * Returns the Assignment Name for a given AssignmentID
 	 * @return the assignment name
 	 */
-	 public function getAssignmentName() {
+	public function getAssignmentName() {
 		$sth = $this->db->prepare("SELECT AssignmentName FROM Assignments WHERE AssignmentID = ?;");
 		$sth->execute(array($this->getID()));
 		return $sth->fetch(PDO::FETCH_ASSOC)['AssignmentName'];
-	 }
+	}
 }
 
 /**
@@ -510,18 +516,21 @@ class Submission extends PCRObject {
 	public function __construct($data, $autocreate = true) {
 		parent::__construct("SubmissionID", "Submission", $data, $autocreate);
 		
-		$id = ''.$this->getID();
-		while (strlen($id) < 5) {
-			$id = '0'.$id;
-		}
 		
 		if ($this->isValid()) {
+			$id = ''.$this->getID();
+			while (strlen($id) < 5) {
+				$id = '0'.$id;
+			}
 			$courseid = $_SESSION["course_id"];
 			
-			$assignmentid = $this->row["AssignmentID"];
+			$assignmentid = ''.$this->row["AssignmentID"];
+			while (strlen($assignmentid) < 5) {
+				$assignmentid = '0'.$assignmentid;
+			}
 			$this->storage_dir = __DIR__ . "/../storage/course_$courseid/assign_$assignmentid/submissions/$id/";
 			if (!file_exists($this->storage_dir)) {
-			 	mkdir($this->storage_dir, 0755, true);
+				mkdir($this->storage_dir, 0755, true);
 			}
 		}
 	}

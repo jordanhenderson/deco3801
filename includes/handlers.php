@@ -409,9 +409,16 @@ class PCRHandler {
 	 * Retrieves the file from the server and returns it to the calling page i.e. 
 	 * review_dev.php. 
 	 */
-	public function loadFile($courseID, $assignID, $subID, $fileName) {
-		// TODO - Make sure numbers here are in format "00001", not just "1"
-		$assignment =  __DIR__ . "/../storage/course_$courseID/assign_$assignID/submissions/$subID/" . $fileName;
+	public function loadFile($courseID, $assignmentid, $submissionID, $fileName) {
+		$assignmentid .= ''; // convert to string (just in case)
+		$submissionID .= '';
+		while (strlen($assignmentid) < 5) {
+			$assignmentid = '0'.$assignmentid;
+		}
+		while (strlen($submissionID) < 5) {
+			$submissionID = '0'.$submissionID;
+		}
+		$assignment =  __DIR__ . "/../storage/course_$courseID/assign_$assignmentid/submissions/$submissionID/" . $fileName;
 		$handle = fopen($assignment, "r");
 		$contents = fread($handle, filesize($assignment));
 		$contents = str_replace('<', '&lt;', $contents);

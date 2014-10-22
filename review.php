@@ -3,11 +3,20 @@
 require_once 'includes/handlers.php';
 //Initialise the PCRHandler
 $crs = new PCRHandler();
+
 // Get the submissionID from the url
-$subID = $_GET['subid'];
+$subID = ''.$_GET['subid'];
+while (strlen($subID) < 5) {
+	$subID = '0'.$subID;
+}
+
 $courseid = $_SESSION['course_id'];
-// This currently returns an empty value
-$assignid = $crs->getSubmissionForReviewing($subID)->getAssignmentID();
+
+// This currently returns an empty value (TODO does it still?)
+$assignid = ''.$crs->getSubmissionForReviewing($subID)->getAssignmentID();
+while (strlen($assignid) < 5) {
+	$assignid = '0'.$assignid;
+}
 
 // Get the owner of the submission
 $owner = $crs->getSubmissionForReviewing($subID)->getOwner();
