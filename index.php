@@ -199,7 +199,7 @@ function formatDBtime($dbtime) {
 						<td>";
 						
 						// Status
-						if ($SubmitTime == 0 && $CurrentTime < $OpenTime) { // Not Open
+						if (($SubmitTime == 0 && $CurrentTime < $OpenTime) || ($admin && $CurrentTime < $OpenTime)) { // Not Open
 							echo 'Not open for submission.';
 						} else if ($admin) {
 							echo 'Open for submission.'; // Open (admin only)
@@ -237,27 +237,17 @@ function formatDBtime($dbtime) {
 				}
 			?>
 
-		</div>
+		</div><?php if (!$admin) { // Student only ?>
 		<div class="col-md-6">
 			<h2>Code Review and Feedback</h2>
-			<?php
-			if ($admin) {
-				//Add more to the message once we actually have stuff for admins on the reviewhub page
-				echo '<p>All of your students submissions can be found here, as well as the reviews given by other students for each of those submissions.</p>
-			<p><a class="btn btn-info" href="reviewhub.php" role="button">Review Assignments &raquo;</a></p>';
-			} else{ 
-				echo '<p>All of your assigned submissions and feedback can be found here. Please take the time to assist your peers by offering suggestions and improvements as well as check over the advice your peers have offered you.</p>
-			<p><a class="btn btn-warning" href="reviewhub.php" role="button">Start Now &raquo;</a></p>';
-			}
-			?>
+			<p>All of your assigned submissions and feedback can be found here. Please take the time to assist your peers by offering suggestions and improvements as well as check over the advice your peers have offered you.</p>
+			<p><a class="btn btn-warning" href="reviewhub.php" role="button">Start Now &raquo;</a></p>
 		</div>
 		<div class="col-md-6">
 			<h2>Help Centre</h2>
-			<?php
-				echo '<p>If you would like to further assist students, please consider stopping by the Help Centre. Here you can find questions by students about assignments and you can even post a question of your own for help.</p>
-			<p><a class="btn btn-info" href="help.php" role="button">Help Center &raquo;</a></p>';
-			?>
-		</div>
+			<p>If you would like to further assist students, please consider stopping by the Help Centre. Here you can find questions by students about assignments and you can even post a question of your own for help.</p>
+			<p><a class="btn btn-info" href="help.php" role="button">Help Center &raquo;</a></p>
+		</div><?php } ?>
 	</div>
 
 	<!-- jQuery Version 1.11.0 -->
