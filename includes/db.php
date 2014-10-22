@@ -519,7 +519,7 @@ class Submission extends PCRObject {
 			$courseid = $_SESSION["course_id"];
 			
 			$assignmentid = $this->row["AssignmentID"];
-			$this->storage_dir = __DIR__ . "../storage/course_$courseid/assign_$assignmentid/submissions/$id/";
+			$this->storage_dir = __DIR__ . "/../storage/course_$courseid/assign_$assignmentid/submissions/$id/";
 			if (!file_exists($this->storage_dir)) {
 			 	mkdir($this->storage_dir, 0755, true);
 			}
@@ -529,11 +529,6 @@ class Submission extends PCRObject {
 	public function getStorageDir() {
 		return $this->storage_dir;
 	}
-	
-	// TODO FIXME
-	// All the following 'get' methods should be returning values, not arrays
-	// with one value in them. I only changed getOwner, for now, but will fix
-	// them all later.
 	
 	/**
 	 * getOwner returns the owner of the submission
@@ -630,8 +625,6 @@ class Submission extends PCRObject {
 		$arr = array();
 		$sth = $this->db->prepare("SELECT ReviewID FROM Review WHERE SubmissionID = ? AND Comments = '" . $comment . "';");
 		$sth->execute(array($this->getID()));
-		// TODO: Fix hardcoded value
-		//$sth->execute(array('2'));
 		$file_row = $sth->fetch(PDO::FETCH_ASSOC);
 		$review = new Review($file_row);
 		$review->delete();
