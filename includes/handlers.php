@@ -251,7 +251,7 @@ class PCRHandler {
 		// Get reviews for that submission
 		return $submission->getReviews();
 	}
-
+	
 	/**
 	 * getResults returns an array of all the reviews for a given submission
 	 * @param the submission id

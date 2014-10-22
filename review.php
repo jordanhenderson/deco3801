@@ -13,23 +13,24 @@ while (strlen($subID) < 5) {
 $courseid = $_SESSION['course_id'];
 
 // This currently returns an empty value (TODO does it still?)
-$assignid = ''.$crs->getSubmissionForReviewing($subID)->getAssignmentID();
+$submission = $crs->getSubmissionForReviewing($subID)
+$assignid = ''.$submission->getAssignmentID();
 while (strlen($assignid) < 5) {
 	$assignid = '0'.$assignid;
 }
 
 // Get the owner of the submission
-$owner = $crs->getSubmissionForReviewing($subID)->getOwner();
+$owner = $submission->getOwner();
 $isOwner = 0;
 
 // Check who is accessing the page (submission owner or reviewer)
 if (intval($_SESSION['user_id']) == intval($owner)) {
-	// Load all reviews made for the submission for viewing
-	$reviews = $crs->getReviews($subID);
+	// Load all submitted reviews made for the submission for viewing
+	$reviews = $submission->getReviews(1); // submitted == 1
 	$isOwner = 1;
 } else {
 	// Load only the reviews for the current reviewer
-	$reviews = $crs->getSubmissionForReviewing($subID)->getStudentsReviews($_SESSION['user_id']);
+	$reviews = $submission->getStudentsReviews($_SESSION['user_id']);
 }
 
 $annotations = array();

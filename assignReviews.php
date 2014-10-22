@@ -14,7 +14,7 @@
 			// Make review row for student/submission
 			$index = ($i + $j + 1) % count($submissions);
 			$reviewerID = $submissions[$index]->getOwner();
-			$submissions[$i]->addReview("", $reviewerID, 0, 0, "", "", 0);
+			$submissions[$i]->addReview("http://imgur.com/QsNW6O4", $reviewerID, 0, 0, "", "http://imgur.com/QsNW6O4", 0);
 		}
 	}
 ?>

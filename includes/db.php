@@ -613,6 +613,21 @@ class Submission extends PCRObject {
 	}
 	
 	/**
+	 * getReviews returns an array of reviews for a submission. Submitted
+	 * variable dictates whether they are only submitted, or unsubmitted ones.
+	 * @return an array of reviews
+	 */
+	public function getReviews($submitted) {
+		$arr = array();
+		$sth = $this->db->prepare("SELECT * FROM Review WHERE SubmissionID = ? AND Submitted = ?;");
+		$sth->execute(array($this->getID(), $submitted));
+		while ($file_row = $sth->fetch(PDO::FETCH_ASSOC)) {
+			array_push($arr, new Review($file_row));
+		}
+		return $arr;
+	}
+	
+	/**
 	 * getStudentsReviews returns the reviews for this submission, for a
 	 * particular student.
 	 * @return an array of reviews
