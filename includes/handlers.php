@@ -380,9 +380,10 @@ class PCRHandler {
 	}
 	
 	/**
-	 * Create a new assignment.
+	 * Creates a new assignment, with the provided variables
 	 */
-	public function changeAssignment($AssignmentID, $AssignmentName, $ReviewsNeeded, $ReviewsDue, $weight, $OpenTime, $DueTime, $ResubmitAllowed, $NumberTests) {
+	public function createAssignment($AssignmentName, $ReviewsNeeded, $ReviewsDue,
+			$weight, $OpenTime, $DueTime, $ResubmitAllowed, $NumberTests) {
 		$assignment = new Assignment(array("AssignmentName" => $AssignmentName,
 										   "CourseID" => $_SESSION['course_id'],
 										   "ReviewsNeeded" => $ReviewsNeeded,
@@ -392,15 +393,31 @@ class PCRHandler {
 										   "DueTime" => $DueTime,
 										   "ResubmitAllowed" => $ResubmitAllowed,
 										   "NumberTests" => $NumberTests));
-		if ($AssignmentID != -1) {
-			$assignment["AssignmentID"] = $AssignmentID;
-		}
 		$assignment->commit();
 		return $assignment;
 	}
 	
 	/**
-	 * Delete an assignment.
+	 * Update an assignment with the given ID to reflect the provided variables
+	 */
+	public function updateAssignment($AssignmentID, $AssignmentName, $ReviewsNeeded, $ReviewsDue,
+			$weight, $OpenTime, $DueTime, $ResubmitAllowed, $NumberTests) {
+		$assignment = new Assignment(array("AssignmentID" => $AssignmentID,
+										   "AssignmentName" => $AssignmentName,
+										   "CourseID" => $_SESSION['course_id'],
+										   "ReviewsNeeded" => $ReviewsNeeded,
+										   "ReviewsDue" => $ReviewsDue,
+										   "Weight" => $weight,
+										   "OpenTime" => $OpenTime,
+										   "DueTime" => $DueTime,
+										   "ResubmitAllowed" => $ResubmitAllowed,
+										   "NumberTests" => $NumberTests));
+		$assignment->commit();
+		return $assignment;
+	}
+	
+	/**
+	 * Delete an assignment with the given ID
 	 */
 	public function deleteAssignment($AssignmentID) {
 		$assignment = new Assignment(array("AssignmentID"=>$AssignmentID));
