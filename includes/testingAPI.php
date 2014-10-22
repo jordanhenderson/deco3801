@@ -17,7 +17,7 @@ class javaTesting {
 	* It will return true if the compilation was successful, false otherwise.
 	* 
 	*/
-	public static function compile() {
+	public function compile() {
 		$scriptOutput = shell_exec("javac " . $this->source_directory . " *.java");
 
 		echo "=== Compilation output ===\n" . $scriptOutput . "=======================\n";
@@ -30,7 +30,7 @@ class javaTesting {
 	*
 	* e.g. $failedTests[0] == "test_name:expected_result:actual_result"
 	*/
-	public static function runJUnitTest() {
+	public function runJUnitTest() {
 		$scriptOutput = shell_exec("cd " . $this->test_class_path . " && java " . $this->test_class_name);
 
 		echo "=== Execution output ===\n" . $scriptOutput . "=======================\n";

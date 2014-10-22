@@ -601,7 +601,7 @@ class Submission extends PCRObject {
 	 *
 	 * getReviews returns an array of reviews for a submission.
 	 * @return an array of reviews
-	 */
+	 */ 
 	public function getReviews() {
 		$arr = array();
 		$sth = $this->db->prepare("SELECT * FROM Review WHERE SubmissionID = ?;");
@@ -718,8 +718,8 @@ class Submission extends PCRObject {
 				$assignment_file = $assignment_file->fetch(PDO::FETCH_ASSOC)['FileName'];
 
 				$tester = new javaTesting($this->storage_dir, $this->storage_dir, $assignment_file);
-				$tester.compile();
-				$tester.runJUnitTest();
+				$tester->compile();
+				$tester->runJUnitTest();
 
 				// Update results in database
 				$this->row["Results"] = "pass";
