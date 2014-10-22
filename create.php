@@ -156,20 +156,20 @@ if (isset($_GET['assid'])) {
 				<?php
 				if ($new) {
 					echo '
-				<input type="submit" class="btn btn-primary" href="index.php" class="assignmentchange" name="changeAssignment" value="Create"></input>';
+				<input type="submit" class="btn btn-primary" href="index.php" class="assignmentchange" name="changeAssignment" value="Create">';
 				} else {
 					echo '
-				<input type="submit" class="btn btn-primary" href="overview.php?assid='.$assid.'" class="assignmentchange" name="changeAssignment" value="Update"></input>		
-				<input type="submit" class="btn btn-danger" href="index.php" class="assignmentchange" name="deleteAssignment" value="Delete"></input>';
+				<input type="submit" class="btn btn-primary assignmentchange" name="changeAssignment" value="Update">
+				<input type="submit" class="btn btn-danger assignmentdelete" name="deleteAssignment" value="Delete">';
 				}
 				echo '
-				<input type="submit" class="btn btn-warning" id="reset" value="Reset"></input>';
+				<input type="submit" class="btn btn-warning" id="reset" value="Reset">';
 				if ($new) {
 					echo '
-				<a href="index.php"><input type="submit" class="btn btn-default" value="Cancel"></input></a>';
+				<a href="index.php"><input type="submit" class="btn btn-default" value="Cancel"></a>';
 				} else {
 					echo '
-				<a href="overview.php?assid='.$assid.'"><input type="submit" class="btn btn-default" value="Cancel"></input></a>';
+				<a href="overview.php?assid='.$assid.'"><input type="submit" class="btn btn-default" value="Cancel"></a>';
 				}
 				?>
 				<br><br><br>
@@ -202,10 +202,14 @@ if (isset($_GET['assid'])) {
 		$(".form_datetime").datetimepicker({
 			format: 'yyyy-mm-dd hh:ii:ss'
 		});
+		
 		$(".assignmentchange").click(function() {
-				var func = $(this).attr("name");
-				switch (func) {
-				  case "changeAssignment":
+			alert("1");
+			var func = $(this).attr("name");
+			alert("2");
+			switch (func) {
+				case "changeAssignment":
+					alert("3");
 					var funcparams = [
 						<?php echo '"'.$assid.'"'; ?>,
 						$("#AssignmentName").val(),
@@ -217,16 +221,19 @@ if (isset($_GET['assid'])) {
 						$("#ResubmitAllowed").is(":checked") ? 1 : 0,
 						$("#NumberTests").val()
 					];
-				    break;
-				  case "deleteAssignment":
-				  	var funcparams = [<?php echo '"'.$assid.'"'; ?>];
 					break;
-				}
-				var request = {f: func, params: funcparams};
-				$.post("api.php", JSON.stringify(request), function() {
-					window.location.replace("index.php");
-				});
+				case "deleteAssignment":
+					var funcparams = [<?php echo '"'.$assid.'"'; ?>];
+					break;
+			}
+			alert("4");
+			var request = {f: func, params: funcparams};
+			alert("5");
+			$.post("api.php", JSON.stringify(request), function() {
+				window.location.replace("index.php");
 			});
+			alert("6");
+		});
 	</script> 
 </body>
 </html>
