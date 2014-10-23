@@ -352,9 +352,10 @@ foreach ($reviews as $review) {
 		 * Handles when someone clicks on the file tree
 		 */
 		function handleSwap(id) {
+			alert(id);
 			$('a.active').removeClass('active');
 			if (id.indexOf("/") != -1) {
-				id = id.substring(id.lastIndexOf("/"));
+				id = id.substring(id.lastIndexOf("/") + 1);
 			}
 			var fileName = id.split('.')[0];
 			$('#' + fileName).addClass('active');
@@ -455,6 +456,7 @@ foreach ($reviews as $review) {
 					<pre id='assignment_code' style="float: left; min-width: 450px; max-width: 550px"><?php
 					//Loads the first file in the file tree if its not empty
 					if ($initialFile !== '') {
+						echo $initialFile;
 						echo $crs->loadFile($courseid, $assignid, $subID, $initialFile);
 					}
 				?></pre>
