@@ -376,7 +376,9 @@ foreach ($reviews as $review) {
 				if ($('#assignment_code').getHighlighter() !== undefined) {
 					$('#assignment_code').getHighlighter().destroy();
 				}
-				setupHighlighter();
+				if (!isOwner) {
+					setupHighlighter();
+				}
 			});	  
 			
 		}
@@ -432,11 +434,7 @@ foreach ($reviews as $review) {
 					foreach ($filesArray as $name) {
 						$includesDir = substr_replace($dir . $name, '/includes/..', strlen(''. __DIR__), 0);
 						if ($name === $filesArray[0]) {
-							echo "<li>";
-							echo "<a href='#' id='" . explode('.', $name)[0] . "' class='list-group-item active' onclick='handleSwap(\"" . $includesDir . "\");'>" . $name . "</a>";
-							echo "</li>";
 							$initialFile = $dir . $name;
-							continue;
 						}
 						echo "<li>";
 						echo "<a href='#' id='" . explode('.', $name)[0] . "' class='list-group-item' onclick='handleSwap(\"" . $includesDir . "\");'>" . $name . "</a>";
@@ -458,7 +456,7 @@ foreach ($reviews as $review) {
 					<pre id='assignment_code' style="float: left; min-width: 450px; max-width: 550px"><?php
 					//Loads the first file in the file tree if its not empty
 					if ($initialFile !== '') {
-						echo $crs->loadFile($courseid, $assignid, $subID, $initialFile);
+						echo $crs->loadFile($initialFile);
 					}
 				?></pre>
 				<div id="reviews" style="clear:right; float:right;"></div>
