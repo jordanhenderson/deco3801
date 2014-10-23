@@ -85,9 +85,6 @@ foreach ($reviews as $review) {
 		var selected;
 		var prevReview = [];
 		var count = 0;
-		
-		var initialFile = <?php echo $initialFile ?>;
-		alert(initialFile);
 
 		/**
 		 *
@@ -482,6 +479,9 @@ foreach ($reviews as $review) {
 				id: count
 			});
 		}
+		
+		var initialFile = <?php echo $initialFile ?>;
+		alert(initialFile);
 		
 		$(document).ready(function() {
 			$("#breadcrumbs").rcrumbs();
