@@ -360,7 +360,7 @@ foreach ($reviews as $review) {
 			var fileName = id.split('.')[0];
 			$('#' + fileName).addClass('active');
 			//Loads the selected file into the main content area using AJAX
-			var request = {f: 'loadFile', params:  ['<?php echo $courseid; ?>', '<?php echo $assignid; ?>', '<?php echo $subID; ?>', id]};
+			var request = {f: 'loadFile', params:  [''+id]};
 			$.post("api.php", JSON.stringify(request), function( filecode ) {
 				var contentObj = $.parseJSON(filecode);
 				// reset count
@@ -450,13 +450,12 @@ foreach ($reviews as $review) {
 			<h1><?php echo $crs->getAssignment($assignid)->getAssignmentName(); ?></h1>
 			<div class="col-md-12">
 				<h2 id="file_heading"><?php if ($initialFile !== '') echo explode('.', $initialFile)[0]; ?></h2>
-				<h3 id="student_heading" style="display:none">Student <span id="student_heading_span"></span></h3>
+				<h3 id="student_heading" style="display:none"><?php echo $initialFile; ?> Student <span id="student_heading_span"></span></h3>
 				<div id="studentReviews" class="list-group" style="float:right"></div>
 				<div id="innercontainer">
 					<pre id='assignment_code' style="float: left; min-width: 450px; max-width: 550px"><?php
 					//Loads the first file in the file tree if its not empty
 					if ($initialFile !== '') {
-						echo $initialFile;
 						echo $crs->loadFile($courseid, $assignid, $subID, $initialFile);
 					}
 				?></pre>

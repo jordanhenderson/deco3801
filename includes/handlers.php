@@ -412,16 +412,9 @@ class PCRHandler {
 	 * Retrieves the file from the server and returns it to the calling page i.e. 
 	 * review_dev.php. 
 	 */
-	public function loadFile($courseID, $assignmentid, $submissionID, $fileName) {
-		$assignmentid .= ''; // convert to string (just in case)
-		$submissionID .= '';
-		$fileName .= '';
-		while (strlen($assignmentid) < 5) {
-			$assignmentid = '0'.$assignmentid;
-		}
-		while (strlen($submissionID) < 5) {
-			$submissionID = '0'.$submissionID;
-		}
+	public function loadFile($fileName) {
+		$fileName .= ''; // convert to string (just in case)
+		echo "file is: " . $fileName;
 		//$assignment =  __DIR__ . "/../storage/course_$courseID/assign_$assignmentid/submissions/$submissionID/" . $fileName;
 		$handle = fopen($fileName, "r");
 		$contents = fread($handle, filesize($fileName));
