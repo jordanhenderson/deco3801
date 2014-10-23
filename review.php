@@ -80,13 +80,14 @@ foreach ($reviews as $review) {
 		// GLOBALS
 		var annotations = [];
 		var annotations = <?php echo json_encode($annotations); ?>;
-		var isOwner = <?php echo $isOwner;?>;
-		var initialFile = <?php echo $initialFile;?>;
-		alert(initialFile);
+		var isOwner = <?php echo $isOwner; ?>;
 		var edit = -1;
 		var selected;
 		var prevReview = [];
 		var count = 0;
+		
+		var initialFile = <?php echo $initialFile ?>;
+		alert(initialFile);
 
 		/**
 		 *
