@@ -354,13 +354,14 @@ foreach ($reviews as $review) {
 		function handleSwap(id) {
 			alert(id);
 			$('a.active').removeClass('active');
+			var fileName = '';
 			if (id.indexOf("/") != -1) {
-				id = id.substring(id.lastIndexOf("/") + 1);
+				fileName = id.substring(id.lastIndexOf("/") + 1);
 			}
-			var fileName = id.split('.')[0];
+			var fileName = fileName.split('.')[0];
 			$('#' + fileName).addClass('active');
 			//Loads the selected file into the main content area using AJAX
-			var request = {f: 'loadFile', params:  [''+id]};
+			var request = {f: 'loadFile', params:  ['' + id]};
 			$.post("api.php", JSON.stringify(request), function( filecode ) {
 				alert(filecode);
 				var contentObj = $.parseJSON(filecode);
@@ -432,7 +433,7 @@ foreach ($reviews as $review) {
 						$includesDir = substr_replace($dir . $name, '/includes/..', strlen(''. __DIR__), 0);
 						if ($name === $filesArray[0]) {
 							echo "<li>";
-							echo "<a href='#' id='" . explode('.', $name)[0] . "' class='list-group-item active' onclick='handleSwap(\"" . $includesDir . "\");'>" . $name . "testestest" . "</a>";
+							echo "<a href='#' id='" . explode('.', $name)[0] . "' class='list-group-item active' onclick='handleSwap(\"" . $includesDir . "\");'>" . $name . "</a>";
 							echo "</li>";
 							$initialFile = $dir . $name;
 							continue;

@@ -414,7 +414,6 @@ class PCRHandler {
 	 */
 	public function loadFile($fileName) {
 		$fileName .= ''; // convert to string (just in case)
-		echo "file is: " . $fileName;
 		//$assignment =  __DIR__ . "/../storage/course_$courseID/assign_$assignmentid/submissions/$submissionID/" . $fileName;
 		$handle = fopen($fileName, "r");
 		$contents = fread($handle, filesize($fileName));
