@@ -415,6 +415,7 @@ class PCRHandler {
 	public function loadFile($courseID, $assignmentid, $submissionID, $fileName) {
 		$assignmentid .= ''; // convert to string (just in case)
 		$submissionID .= '';
+		$fileName .= '';
 		while (strlen($assignmentid) < 5) {
 			$assignmentid = '0'.$assignmentid;
 		}
