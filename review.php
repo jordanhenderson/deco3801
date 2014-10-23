@@ -22,7 +22,7 @@ while (strlen($assignid) < 5) {
 // Get the owner of the submission
 $owner = $submission->getOwner();
 $isOwner = 0;
-
+echo "Owner is: " . $owner . " and current user is: " . $_SESSION['user_id'];
 // Check who is accessing the page (submission owner or reviewer)
 if (intval($_SESSION['user_id']) == intval($owner)) {
 	// Load all submitted reviews made for the submission for viewing
@@ -353,7 +353,11 @@ foreach ($reviews as $review) {
 		 */
 		function handleSwap(id) {
 			$('a.active').removeClass('active');
-			$('#' + id.split('.')[0]).addClass('active');
+			if (id.indexOf("/") != -1) {
+				id = id.substring(id.lastIndexOf("/"));
+			}
+			var fileName = id.split('.')[0];
+			$('#' + fileName).addClass('active');
 			//Loads the selected file into the main content area using AJAX
 			var request = {f: 'loadFile', params:  ['<?php echo $courseid; ?>', '<?php echo $assignid; ?>', '<?php echo $subID; ?>', id]};
 			$.post("api.php", JSON.stringify(request), function( filecode ) {
@@ -362,7 +366,7 @@ foreach ($reviews as $review) {
 				// want to destroy and recreate to update the id (count)
 				count = 0;
 				$( "#assignment_code" ).html( contentObj.r );
-				$( "#file_heading" ).html( id );
+				$( "#file_heading" ).html( fileName );
 				// remove previous annotations and add the new ones
 				$('#reviews').html('');
 				getComments();
@@ -423,15 +427,16 @@ foreach ($reviews as $review) {
 				function printPath ($filesArray, $dir) {
 					// Loop through the directory contents to make the file tree
 					foreach ($filesArray as $name) {
+						$includesDir = substr_replace($dir . $name, '/includes/..', strpos($dir, ''. __DIR__), 0);
 						if ($name === $filesArray[0]) {
 							echo "<li>";
-							echo "<a href='#' id='" . explode('.', $name)[0] . "' class='list-group-item active' onclick='handleSwap(\"" . $dir . $name . "\");'>" . $name . "</a>";
+							echo "<a href='#' id='" . explode('.', $name)[0] . "' class='list-group-item active' onclick='handleSwap(\"" . $includesDir . "\");'>" . $name . "</a>";
 							echo "</li>";
 							$initialFile = $dir . $name;
 							continue;
 						}
 						echo "<li>";
-						echo "<a href='#' id='" . explode('.', $name)[0] . "' class='list-group-item' onclick='handleSwap(\"" . $dir . $name . "\");'>" . $name . "</a>";
+						echo "<a href='#' id='" . explode('.', $name)[0] . "' class='list-group-item' onclick='handleSwap(\"" . $includesDir . "\");'>" . $name . "</a>";
 						echo "</li>";
 					}
 				}
@@ -443,7 +448,7 @@ foreach ($reviews as $review) {
 		<div class="col-md-9">
 			<h1><?php echo $crs->getAssignment($assignid)->getAssignmentName(); ?></h1>
 			<div class="col-md-12">
-				<h2 id="file_heading"><?php if (count($filesArray) > 0) echo $filesArray[0]; ?></h2>
+				<h2 id="file_heading"><?php if ($initialFile !== '') echo explode('.', $initialFile)[0]; ?></h2>
 				<h3 id="student_heading" style="display:none">Student <span id="student_heading_span"></span></h3>
 				<div id="studentReviews" class="list-group" style="float:right"></div>
 				<div id="innercontainer">
