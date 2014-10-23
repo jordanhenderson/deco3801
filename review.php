@@ -22,7 +22,6 @@ while (strlen($assignid) < 5) {
 // Get the owner of the submission
 $owner = $submission->getOwner();
 $isOwner = 0;
-echo "Owner is: " . $owner . " and current user is: " . $_SESSION['user_id'];
 // Check who is accessing the page (submission owner or reviewer)
 if (intval($_SESSION['user_id']) == intval($owner)) {
 	// Load all submitted reviews made for the submission for viewing
@@ -82,7 +81,8 @@ foreach ($reviews as $review) {
 		var annotations = [];
 		var annotations = <?php echo json_encode($annotations); ?>;
 		var isOwner = <?php echo $isOwner;?>;
-		alert("isOwner is: " + isOwner);
+		var initialFile = <?php echo $initialFile;?>;
+		alert(initialFile);
 		var edit = -1;
 		var selected;
 		var prevReview = [];
@@ -358,8 +358,7 @@ foreach ($reviews as $review) {
 			if (id.indexOf("/") != -1) {
 				fileName = id.substring(id.lastIndexOf("/") + 1);
 			}
-			var fileName = fileName.split('.')[0];
-			$('#' + fileName).addClass('active');
+			$('#' + fileName.split('.')[0]).addClass('active');
 			//Loads the selected file into the main content area using AJAX
 			var request = {f: 'loadFile', params:  ['' + id]};
 			$.post("api.php", JSON.stringify(request), function( filecode ) {
