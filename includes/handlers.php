@@ -421,9 +421,9 @@ class PCRHandler {
 		while (strlen($submissionID) < 5) {
 			$submissionID = '0'.$submissionID;
 		}
-		$assignment =  __DIR__ . "/../storage/course_$courseID/assign_$assignmentid/submissions/$submissionID/" . $fileName;
-		$handle = fopen($assignment, "r");
-		$contents = fread($handle, filesize($assignment));
+		//$assignment =  __DIR__ . "/../storage/course_$courseID/assign_$assignmentid/submissions/$submissionID/" . $fileName;
+		$handle = fopen($fileName, "r");
+		$contents = fread($handle, filesize($fileName));
 		$contents = str_replace('<', '&lt;', $contents);
 		$contents = str_replace('>', '&gt;', $contents);
 		fclose($handle);

@@ -3,7 +3,7 @@
 require_once 'includes/handlers.php';
 //Initialise the PCRHandler
 $crs = new PCRHandler();
-
+$initialFile = '';
 // Get the submissionID from the url
 $subID = ''.$_GET['subid'];
 while (strlen($subID) < 5) {
@@ -82,6 +82,7 @@ foreach ($reviews as $review) {
 		var annotations = [];
 		var annotations = <?php echo json_encode($annotations); ?>;
 		var isOwner = <?php echo $isOwner;?>;
+		alert("isOwner is: " + isOwner);
 		var edit = -1;
 		var selected;
 		var prevReview = [];
@@ -390,27 +391,48 @@ foreach ($reviews as $review) {
 		
 			<div class="list-group">
 			<?php
-				$dir =  __DIR__ . "/storage/course_$courseid/assign_$assignid/submissions/$subID/";
-				$filesArray = array();
-				// Open a directory, and read its contents
-				if (is_dir($dir)) {
+				function setupFileTree ($dir =  __DIR__ . "/storage/course_$courseid/assign_$assignid/submissions/$subID/") {
+					// Open a directory, and read its contents
 					if ($dh = opendir($dir)) {
+						echo "<ul>";
+						$filesArray = array();
 						while (($file = readdir($dh)) !== false) {
-							if ($file != "." && $file != "..") {
+							// Check if it's a directory (but not '.' or '..')
+							if (is_dir($dir.$file) && $file != "." && $file != "..") {
+								// Use recursion to go into subdirectories
+								handleSubDir($file, $dir, $filesArray);
+							} else if ($file != "." && $file != "..") {
+								// add the file to the array
 								array_push($filesArray, $file);
 							}
 						}
+						// print the array as a list
+						printPath ($filesArray, $dir);
 						closedir($dh);
+						echo "</ul>";
 					}
 				}
-				// Loop through the directory contents to make the file tree
-				foreach ($filesArray as $name) {
-					if ($name === $filesArray[0]) {
-						echo "<a href='#' id='" . explode('.', $name)[0] . "' class='list-group-item active' onclick='handleSwap(\"" . $name . "\");'>" . $name . "</a>";
-						continue;
-					}
-					echo "<a href='#' id='" . explode('.', $name)[0] . "' class='list-group-item' onclick='handleSwap(\"" . $name . "\");'>" . $name . "</a>";
+				
+				function handleSubDir($subdir, $dir) {
+					// print the name of the directory and then traverse into it
+					echo "<li>" . $subdir;
+					setupFileTree($dir . $subdir . "/");
+					echo "</li>";
 				}
+				
+				function printPath ($filesArray, $dir) {
+					// Loop through the directory contents to make the file tree
+					foreach ($filesArray as $name) {
+						if ($name === $filesArray[0]) {
+							echo "<li><a href='#' id='" . explode('.', $name)[0] . "' class='list-group-item active' onclick='handleSwap(\"" . $dir . $name . "\");'>" . $name . "</a></li>";
+							$initialFile = $dir . $name;
+							continue;
+						}
+						echo "<li><a href='#' id='" . explode('.', $name)[0] . "' class='list-group-item' onclick='handleSwap(\"" . $dir . $name . "\");'>" . $name . "</a></li>";
+					}
+				}
+				
+				setupFileTree();
 			?>
 			</div>
 		</div>
@@ -423,8 +445,8 @@ foreach ($reviews as $review) {
 				<div id="innercontainer">
 					<pre id='assignment_code' style="float: left; min-width: 450px; max-width: 550px"><?php
 					//Loads the first file in the file tree if its not empty
-					if (count($filesArray) > 0) {
-						echo $crs->loadFile($courseid, $assignid, $subID, $filesArray[0]);
+					if ($initialFile !== '') {
+						echo $crs->loadFile($courseid, $assignid, $subID, $initialFile);
 					}
 				?></pre>
 				<div id="reviews" style="clear:right; float:right;"></div>
