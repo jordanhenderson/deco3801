@@ -391,7 +391,7 @@ foreach ($reviews as $review) {
 		
 			<div class="list-group">
 			<?php
-				function setupFileTree ($dir =  __DIR__ . "/storage/course_$courseid/assign_$assignid/submissions/$subID/") {
+				function setupFileTree ($dir) {
 					// Open a directory, and read its contents
 					if ($dh = opendir($dir)) {
 						echo "<ul>";
@@ -424,15 +424,19 @@ foreach ($reviews as $review) {
 					// Loop through the directory contents to make the file tree
 					foreach ($filesArray as $name) {
 						if ($name === $filesArray[0]) {
-							echo "<li><a href='#' id='" . explode('.', $name)[0] . "' class='list-group-item active' onclick='handleSwap(\"" . $dir . $name . "\");'>" . $name . "</a></li>";
+							echo "<li>";
+							echo "<a href='#' id='" . explode('.', $name)[0] . "' class='list-group-item active' onclick='handleSwap(\"" . $dir . $name . "\");'>" . $name . "</a>";
+							echo "</li>";
 							$initialFile = $dir . $name;
 							continue;
 						}
-						echo "<li><a href='#' id='" . explode('.', $name)[0] . "' class='list-group-item' onclick='handleSwap(\"" . $dir . $name . "\");'>" . $name . "</a></li>";
+						echo "<li>";
+						echo "<a href='#' id='" . explode('.', $name)[0] . "' class='list-group-item' onclick='handleSwap(\"" . $dir . $name . "\");'>" . $name . "</a>";
+						echo "</li>";
 					}
 				}
 				
-				setupFileTree();
+				setupFileTree(__DIR__ . "/storage/course_$courseid/assign_$assignid/submissions/$subID/");
 			?>
 			</div>
 		</div>
