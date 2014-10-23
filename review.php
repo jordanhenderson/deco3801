@@ -362,6 +362,7 @@ foreach ($reviews as $review) {
 			//Loads the selected file into the main content area using AJAX
 			var request = {f: 'loadFile', params:  [''+id]};
 			$.post("api.php", JSON.stringify(request), function( filecode ) {
+				alert(filecode);
 				var contentObj = $.parseJSON(filecode);
 				// reset count
 				// want to destroy and recreate to update the id (count)
@@ -431,7 +432,7 @@ foreach ($reviews as $review) {
 						$includesDir = substr_replace($dir . $name, '/includes/..', strlen(''. __DIR__), 0);
 						if ($name === $filesArray[0]) {
 							echo "<li>";
-							echo "<a href='#' id='" . explode('.', $name)[0] . "' class='list-group-item active' onclick='handleSwap(\"" . $includesDir . "\");'>" . $name . "</a>";
+							echo "<a href='#' id='" . explode('.', $name)[0] . "' class='list-group-item active' onclick='handleSwap(\"" . $includesDir . "\");'>" . $name . "testestest" . "</a>";
 							echo "</li>";
 							$initialFile = $dir . $name;
 							continue;
