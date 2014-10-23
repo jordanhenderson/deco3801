@@ -428,7 +428,7 @@ foreach ($reviews as $review) {
 				function printPath ($filesArray, $dir) {
 					// Loop through the directory contents to make the file tree
 					foreach ($filesArray as $name) {
-						$includesDir = substr_replace($dir . $name, '/includes/..', strpos($dir, ''. __DIR__), 0);
+						$includesDir = substr_replace($dir . $name, '/includes/..', strlen(''. __DIR__), 0);
 						if ($name === $filesArray[0]) {
 							echo "<li>";
 							echo "<a href='#' id='" . explode('.', $name)[0] . "' class='list-group-item active' onclick='handleSwap(\"" . $includesDir . "\");'>" . $name . "</a>";
