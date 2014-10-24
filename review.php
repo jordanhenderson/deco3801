@@ -3,6 +3,7 @@
 require_once 'includes/handlers.php';
 //Initialise the PCRHandler
 $crs = new PCRHandler();
+$initialFile = '';
 // Get the submissionID from the url
 $subID = ''.$_GET['subid'];
 while (strlen($subID) < 5) {
@@ -396,16 +397,16 @@ foreach ($reviews as $review) {
 		
 			<div class="list-group">
 			<?php
-				$filesArray = array();
 				function setupFileTree ($dir) {
 					// Open a directory, and read its contents
 					if ($dh = opendir($dir)) {
 						echo "<ul>";
+						$filesArray = array();
 						while (($file = readdir($dh)) !== false) {
 							// Check if it's a directory (but not '.' or '..')
 							if (is_dir($dir.$file) && $file != "." && $file != "..") {
 								// Use recursion to go into subdirectories
-								handleSubDir($file, $dir);
+								handleSubDir($file, $dir, $filesArray);
 							} else if ($file != "." && $file != "..") {
 								// add the file to the array
 								array_push($filesArray, $file);
@@ -428,7 +429,11 @@ foreach ($reviews as $review) {
 				function printPath ($filesArray, $dir) {
 					// Loop through the directory contents to make the file tree
 					foreach ($filesArray as $name) {
+						global $initialFile;
 						$includesDir = substr_replace($dir . $name, '/includes/..', strlen(''. __DIR__), 0);
+						if ($name === $filesArray[0]) {
+							$initialFile = $dir . $name;
+						}
 						echo "<li>";
 						echo "<a href='#' id='" . explode('.', $name)[0] . "' class='list-group-item' onclick='handleSwap(\"" . $includesDir . "\");'>" . $name . "</a>";
 						echo "</li>";
@@ -442,14 +447,14 @@ foreach ($reviews as $review) {
 		<div class="col-md-9">
 			<h1><?php echo $crs->getAssignment($assignid)->getAssignmentName(); ?></h1>
 			<div class="col-md-12">
-				<h2 id="file_heading"><?php if (count($filesArray > 0)) echo explode('.', $filesArray[0])[0]; ?></h2>
+				<h2 id="file_heading"><?php if ($initialFile !== '') echo explode('.', $initialFile)[0]; ?></h2>
 				<h3 id="student_heading" style="display:none">Student <span id="student_heading_span"></span></h3>
 				<div id="studentReviews" class="list-group" style="float:right"></div>
 				<div id="innercontainer">
 					<pre id='assignment_code' style="float: left; min-width: 450px; max-width: 550px"><?php
 					//Loads the first file in the file tree if its not empty
-					if (count($filesArray > 0)) {
-						echo $crs->loadFile($filesArray[0]);
+					if ($initialFile !== '') {
+						echo $crs->loadFile($initialFile);
 					}
 				?></pre>
 				<div id="reviews" style="clear:right; float:right;"></div>
