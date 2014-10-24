@@ -433,6 +433,10 @@ foreach ($reviews as $review) {
 						$includesDir = substr_replace($dir . $name, '/includes/..', strlen(''. __DIR__), 0);
 						if ($name === $filesArray[0]) {
 							$initialFile = $dir . $name;
+							echo "<li>";
+							echo "<a href='#' id='" . explode('.', $name)[0] . "' class='list-group-item active' onclick='handleSwap(\"" . $includesDir . "\");'>" . $name . "</a>";
+							echo "</li>";
+							continue;
 						}
 						echo "<li>";
 						echo "<a href='#' id='" . explode('.', $name)[0] . "' class='list-group-item' onclick='handleSwap(\"" . $includesDir . "\");'>" . $name . "</a>";
