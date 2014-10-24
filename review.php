@@ -447,7 +447,7 @@ foreach ($reviews as $review) {
 		<div class="col-md-9">
 			<h1><?php echo $crs->getAssignment($assignid)->getAssignmentName(); ?></h1>
 			<div class="col-md-12">
-				<h2 id="file_heading"><?php if ($initialFile !== '') echo explode('.', $initialFile)[0]; ?></h2>
+				<h2 id="file_heading"><?php if ($initialFile !== '') echo substr($initialFile, strpos($initialFile, "/") + 1); ?></h2>
 				<h3 id="student_heading" style="display:none">Student <span id="student_heading_span"></span></h3>
 				<div id="studentReviews" class="list-group" style="float:right"></div>
 				<div id="innercontainer">
@@ -455,8 +455,7 @@ foreach ($reviews as $review) {
 					//Loads the first file in the file tree if its not empty
 					if ($initialFile !== '') {
 						echo $crs->loadFile($initialFile);
-					}
-				?></pre>
+					}?></pre>
 				<div id="reviews" style="clear:right; float:right;"></div>
 				</div>	
 				<p style="float:left;clear:left;">

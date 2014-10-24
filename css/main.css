@@ -150,3 +150,7 @@ textarea#content, textarea#comment {
     width: 0;
     z-index: 1;
 }
+
+ul, li {
+	list-style-type: none;
+}
