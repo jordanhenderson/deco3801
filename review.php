@@ -204,6 +204,10 @@ foreach ($reviews as $review) {
 			$('#assignment_code').html(wordArray.join('\n'));
 		}
 		
+		/**
+		 *
+		 *
+		 */
 		function reviewPopulate(wordArray, i) {
 			var index = parseInt(annotations[i].startIndex);
 			var line = parseInt(annotations[i].startLine);
@@ -350,7 +354,6 @@ foreach ($reviews as $review) {
 		 * Handles when someone clicks on the file tree
 		 */
 		function handleSwap(id) {
-			alert(id);
 			$('a.active').removeClass('active');
 			var fileName = '';
 			if (id.indexOf("/") != -1) {
@@ -360,7 +363,6 @@ foreach ($reviews as $review) {
 			//Loads the selected file into the main content area using AJAX
 			var request = {f: 'loadFile', params:  ['' + id]};
 			$.post("api.php", JSON.stringify(request), function( filecode ) {
-				alert(filecode);
 				var contentObj = $.parseJSON(filecode);
 				// reset count
 				// want to destroy and recreate to update the id (count)
@@ -433,10 +435,6 @@ foreach ($reviews as $review) {
 						$includesDir = substr_replace($dir . $name, '/includes/..', strlen(''. __DIR__), 0);
 						if ($name === $filesArray[0]) {
 							$initialFile = $dir . $name;
-							echo "<li>";
-							echo "<a href='#' id='" . explode('.', $name)[0] . "' class='list-group-item active' onclick='handleSwap(\"" . $includesDir . "\");'>" . $name . "</a>";
-							echo "</li>";
-							continue;
 						}
 						echo "<li>";
 						echo "<a href='#' id='" . explode('.', $name)[0] . "' class='list-group-item' onclick='handleSwap(\"" . $includesDir . "\");'>" . $name . "</a>";
@@ -486,6 +484,13 @@ foreach ($reviews as $review) {
 		
 		$(document).ready(function() {
 			$("#breadcrumbs").rcrumbs();
+			// Set the current file to be 'active'
+			var fileName;
+			var id = <?php echo $initialFile; ?>
+			if (id.indexOf("/") != -1) {
+				fileName = id.substring(id.lastIndexOf("/") + 1);
+			}
+			$('#' + fileName.split('.')[0]).addClass('active');
 			if (isOwner == 1) {
 				ownerSetup();
 			}
