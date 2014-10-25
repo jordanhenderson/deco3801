@@ -154,12 +154,28 @@ textarea#content, textarea#comment {
 ul, li {
 	list-style-type: none;
 }
-li {
+.filetree li {
     background-image: url(img/file.png);
     background-position: 0 1px;
     background-repeat: no-repeat;
-    padding-left: 20px;
+    padding-left: 25px;
+	margin-top: 5px;
 }
 li.dir {
     background-image: url(img/folder.png);
+}
+
+.dir ul {
+	margin-left: -30px;
+}
+
+a.active {
+	background-color:#428bca;
+}
+
+.file-tree-container {
+	border: 2px solid #CCCCCC;
+	border-radius: 10px;
+	max-width: 230px;
+	overflow-x: auto;
 }

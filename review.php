@@ -397,12 +397,12 @@ foreach ($reviews as $review) {
 		</div>
 		<div class="col-xs-6 col-sm-3 sidebar-offcanvas" id="sidebar">
 		
-			<div class="list-group">
+			<div class="file-tree-container">
 			<?php
 				function setupFileTree ($dir) {
 					// Open a directory, and read its contents
 					if ($dh = opendir($dir)) {
-						echo "<ul>";
+						echo "<ul class='filetree'>";
 						$filesArray = array();
 						while (($file = readdir($dh)) !== false) {
 							// Check if it's a directory (but not '.' or '..')
@@ -437,7 +437,7 @@ foreach ($reviews as $review) {
 							$initialFile = $dir . $name;
 						}
 						echo "<li>";
-						echo "<a href='#' id='" . explode('.', $name)[0] . "' class='list-group-item' onclick='handleSwap(\"" . $includesDir . "\");'>" . $name . "</a>";
+						echo "<a href='#' id='" . explode('.', $name)[0] . "' class='file-link' onclick='handleSwap(\"" . $includesDir . "\");'>" . $name . "</a>";
 						echo "</li>";
 					}
 				}
@@ -505,6 +505,18 @@ foreach ($reviews as $review) {
 			// Hide all sub directories
 			$('ul ul').hide();
 			
+			// change highlighting colour for text related to hovered comment
+			$(".reviewContainer").hover(
+				function() {
+					// Set colour when mouseover
+					var id = $(this).attr("id");
+					$("#" + id.replace("review", "span")).css("background-color", "#20afcd");
+				}, function() {
+					// Reset colour when mouseout
+					var id = $(this).attr("id");
+					$("#" + id.replace("review", "span")).css("background-color", "#ffff7b");
+				}
+			);
 			if (isOwner == 1) {
 				ownerSetup();
 			}
