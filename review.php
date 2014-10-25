@@ -486,7 +486,7 @@ foreach ($reviews as $review) {
 			$("#breadcrumbs").rcrumbs();
 			// Set the current file to be 'active'
 			var fileName;
-			var id = <?php echo $initialFile; ?>
+			var id = <?php echo $initialFile; ?>;
 			if (id.indexOf("/") != -1) {
 				fileName = id.substring(id.lastIndexOf("/") + 1);
 			}
