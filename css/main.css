@@ -154,3 +154,12 @@ textarea#content, textarea#comment {
 ul, li {
 	list-style-type: none;
 }
+li {
+    background-image: url(img/file.png);
+    background-position: 0 1px;
+    background-repeat: no-repeat;
+    padding-left: 20px;
+}
+li.dir {
+    background-image: url(img/folder.png);
+}

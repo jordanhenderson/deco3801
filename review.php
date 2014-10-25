@@ -423,7 +423,7 @@ foreach ($reviews as $review) {
 				
 				function handleSubDir($subdir, $dir) {
 					// print the name of the directory and then traverse into it
-					echo "<li>" . $subdir;
+					echo "<li class='dir'>" . $subdir;
 					setupFileTree($dir . $subdir . "/");
 					echo "</li>";
 				}
@@ -491,6 +491,20 @@ foreach ($reviews as $review) {
 				fileName = id.substring(id.lastIndexOf("/") + 1);
 			}
 			$('#' + fileName.split('.')[0]).addClass('active');
+			// Turn the file list into a collapsible tree
+			$('li.dir').each(function(i) {
+				// temporarily disconnect the sub directory
+				var subDir = $(this).children().remove();
+				// show/hide the sub directory on click
+				$(this).wrapInner('<a/>').find('a').click(function() {
+					subDir.toggle();
+				});
+				// reconnect the sub directory
+				$(this).append(subDir);
+			});
+			// Hide all sub directories
+			$('ul ul').hide();
+			
 			if (isOwner == 1) {
 				ownerSetup();
 			}
