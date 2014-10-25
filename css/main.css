@@ -171,6 +171,7 @@ li.dir {
 
 a.active {
 	background-color:#428bca;
+	color:#fff;
 }
 
 .file-tree-container {
