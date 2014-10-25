@@ -482,22 +482,6 @@ foreach ($reviews as $review) {
 			});
 		}
 		
-		// change highlighting colour for text related to hovered comment
-		$(".reviewContainer").hover(
-			function() {
-				// Set colour when mouseover
-				alert("jj");
-				var id = $(this).attr("id");
-				alert(id);
-				$("#" + id.replace("review", "span")).css("background-color", "#20afcd");
-			}, function() {
-				// Reset colour when mouseout
-				var id = $(this).attr("id");
-				$("#" + id.replace("review", "span")).css("background-color", "#ffff7b");
-				alert(id.replace("review", "span"));
-			}
-		);
-		
 		$(document).ready(function() {
 			$("#breadcrumbs").rcrumbs();
 			// Set the current file to be 'active'
@@ -520,6 +504,22 @@ foreach ($reviews as $review) {
 			});
 			// Hide all sub directories
 			$('ul ul').hide();
+			
+			// change highlighting colour for text related to hovered comment
+			$(".reviewContainer").hover(
+				function() {
+					// Set colour when mouseover
+					alert("jj");
+					var id = $(this).attr("id");
+					alert(id);
+					$("#" + id.replace("review", "span")).css("background-color", "#20afcd");
+				}, function() {
+					// Reset colour when mouseout
+					var id = $(this).attr("id");
+					$("#" + id.replace("review", "span")).css("background-color", "#ffff7b");
+					alert(id.replace("review", "span"));
+				}
+			);
 			
 			if (isOwner == 1) {
 				ownerSetup();
