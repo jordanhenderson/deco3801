@@ -67,7 +67,7 @@ foreach ($reviews as $review) {
 	<!-- Highlighter JS -->
 	<link rel="stylesheet" href="css/monokai_sublime.css">
 	<script src="js/highlight.pack.js"></script>
-	<script>hljs.initHighlightingOnLoad();</script>
+	
 	<!-- JQuery text highlighter library -->
 	<script type="text/javascript" src="js/jquery.textHighlighter.js"></script>
 	
@@ -368,7 +368,7 @@ foreach ($reviews as $review) {
 				// reset count
 				// want to destroy and recreate to update the id (count)
 				count = 0;
-				$( "#assignment_code" ).html( "<code>" + contentObj.r + "</code>" );
+				$( "#assignment_code" ).html(contentObj.r);
 				$( "#file_heading" ).html( fileName );
 				// remove previous annotations and add the new ones
 				$('#reviews').html('');
@@ -379,7 +379,7 @@ foreach ($reviews as $review) {
 				if (!isOwner) {
 					setupHighlighter();
 				}
-				hljs.initHighlightingOnLoad();
+				hljs.highlightBlock(document.getElementById("assignment_code"));
 			});	  
 			
 		}
@@ -531,6 +531,7 @@ foreach ($reviews as $review) {
 				setupHighlighter();
 			}
 			setupHover();
+			hljs.highlightBlock(document.getElementById("assignment_code"));
 		});
 	</script>
 	<!-- Bootstrap Core JavaScript -->
