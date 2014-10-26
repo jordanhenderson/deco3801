@@ -276,6 +276,7 @@ foreach ($reviews as $review) {
 			annotations.push({"Comments":comment, "text":selected, "status":'n', "startLine":startLine, "startIndex":startIndex, "fileName":$( "#file_heading" ).html(), "SubmissionID":<?php echo $subID;?>});
 			count = count + 1;
 			setupHighlighter();
+			setupHover();
 		}
 		
 		/**
@@ -482,6 +483,21 @@ foreach ($reviews as $review) {
 			});
 		}
 		
+		function setupHover() {
+			// change highlighting colour for text related to hovered comment
+			$(".reviewContainer").hover(
+				function() {
+					// Set colour when mouseover
+					var id = $(this).attr("id");
+					$("#" + id.replace("review", "span")).css("background-color", "#20afcd");
+				}, function() {
+					// Reset colour when mouseout
+					var id = $(this).attr("id");
+					$("#" + id.replace("review", "span")).css("background-color", "#ffff7b");
+				}
+			);
+		}
+		
 		$(document).ready(function() {
 			$("#breadcrumbs").rcrumbs();
 			// Set the current file to be 'active'
@@ -513,21 +529,7 @@ foreach ($reviews as $review) {
 			if (isOwner == 0) {
 				setupHighlighter();
 			}
-			
-			// change highlighting colour for text related to hovered comment
-			$(".reviewContainer").hover(
-				function() {
-					// Set colour when mouseover
-					var id = $(this).attr("id");
-					alert(id);
-					$("#" + id.replace("review", "span")).css("background-color", "#20afcd");
-				}, function() {
-					// Reset colour when mouseout
-					var id = $(this).attr("id");
-					$("#" + id.replace("review", "span")).css("background-color", "#ffff7b");
-					alert(id.replace("review", "span"));
-				}
-			);
+			setupHover();
 		});
 	</script>
 	<!-- Bootstrap Core JavaScript -->
