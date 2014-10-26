@@ -218,7 +218,7 @@ foreach ($reviews as $review) {
 			var text = annotations[i].text;
 			var numLines = (text.match(/\n/g) || []).length;
 			var endLine = line + numLines;
-			var spanString = '<span style="background-color:#20afcd" class="highlighted" id="span' + count + '">';
+			var spanString = '<span id="span' + count + '" style="background-color:#20afcd" class="highlighted">';
 			var endIndex = index + text.length + spanString.length;
 			if (numLines > 0) {
 				var textArr = text.split('\n');
@@ -266,13 +266,6 @@ foreach ($reviews as $review) {
 			if (comment.trim() == "") {
 				alert("Please enter a valid comment");
 				return;
-			}
-			// add code to make sure the comment is unique
-			for (var i=0; i < annotations.length; i++) {
-				if (comment == annotations[i].comment) {
-					alert("Your comment matches another comment, please don't take other peoples comments");
-					return;
-				}
 			}
 			$('#cancel' + id).attr('onclick', 'cancelEdit(' + id + ')');
 			reviewContainerOriginalDisplay(id);
@@ -352,6 +345,7 @@ foreach ($reviews as $review) {
 						annotations[i].prevComment = undefined;
 					}
 				}
+				count = annotations.length;
 			});
 		}
 		
@@ -371,6 +365,7 @@ foreach ($reviews as $review) {
 						annotations[i].prevComment = undefined;
 					}
 				}
+				count = annotations.length;
 			});
 		}
 		
