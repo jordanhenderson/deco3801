@@ -226,6 +226,61 @@ foreach ($reviews as $review) {
 				var textArr = text.split('\n');
 				endIndex = textArr[textArr.length-1].length;
 			}
+			for (var lineNum = line; lineNum <= endLine; lineNum++) {
+				if (lineNum == line && lineNum == endLine) {
+					var checkMergeFront = wordArray[lineNum].substr(index, endIndex).indexOf("<span");
+					if (checkMergeFront != -1) {
+						endIndex = checkMergeFront;
+					}
+					var checkMergeBack = wordArray[lineNum].substr(index, endIndex).indexOf("</span");
+					if (checkMergeBack != -1) {
+						index = checkMergeBack + 7;
+					}
+					break;
+				}
+				if (lineNum == line) {
+					var checkMergeBack = wordArray[lineNum].substr(index, wordArray[lineNum].length).indexOf("</span");
+					if (checkMergeBack != -1) {
+						index = checkMergeBack + 7;
+					}
+					var checkMergeFront = wordArray[lineNum].substr(index, wordArray[lineNum].length).indexOf("<span");
+					if (checkMergeFront != -1) {
+						endIndex = checkMergeFront;
+						endLine = lineNum;
+						break;
+					}
+				}
+				if (lineNum == endLine) {
+					tempIndex = 0;
+					var checkMergeBack = wordArray[lineNum].substr(tempIndex, endIndex).indexOf("</span");
+					if (checkMergeBack != -1) {
+						index = checkMergeBack + 7;
+						tempIndex = index;
+						line = endLine;
+					}
+					var checkMergeFront = wordArray[lineNum].substr(tempIndex, endIndex).indexOf("<span");
+					if (checkMergeFront != -1) {
+						endIndex = checkMergeFront;
+						break;
+					}
+				}
+				var tempStart = 0;
+				var tempEnd = wordArray[lineNum].length;
+				var checkMergeBack = wordArray[lineNum].substr(tempStart, tempEnd).indexOf("</span");
+				if (checkMergeBack != -1) {
+					index = checkMergeBack + 7;
+					line = endLine;
+					tempStart = index;
+				}
+				var checkMergeFront = wordArray[lineNum].substr(tempStart, tempEnd).indexOf("<span");
+				if (checkMergeFront != -1) {
+					endIndex = checkMergeFront;
+					endLine = lineNum;
+				}
+				if (line == endLine) {
+					break;
+				}
+			}
 			wordArray[line] = wordArray[line].slice(0,index) + spanString + wordArray[line].slice(index,wordArray[line].length);
 			wordArray[endLine] = wordArray[endLine].slice(0,endIndex) + "</span>" + wordArray[endLine].slice(endIndex, wordArray[endLine].length); 
 			$('#reviews').append('<div id="review' + count + '" class="reviewContainer"><div id="reviewControls' + count + '"><a class="delete_btn" href="#" onclick="clearReview(' + count + ')" role="button" id="delete' + count + '"></a><a class="edit_btn" href="#" onclick="editAnnotation(' + count + ')" role="button" id="edit' + count + '"></a></div><br><textarea class="reviewContent" rows="2" cols="32" id="textarea' + count + '" readonly="true">'+ annotations[i].Comments + '</textarea></br><a class="cancel_btn" href="#" onclick="cancelEdit(' + count + ')" role="button" id="cancel' + count + '" style="display:none;">Cancel</a><a class="save_btn" href="#" onclick="getContents(' + count + ')" role="button" id="save' + count + '" style="display:none">Save</a></div>');
