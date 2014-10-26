@@ -619,7 +619,7 @@ class Submission extends PCRObject {
 	 */
 	public function getConditionalReviews($submitted) {
 		$arr = array();
-		$sth = $this->db->prepare("SELECT * FROM Review WHERE SubmissionID = ? AND Submitted = ?;");
+		$sth = $this->db->prepare("SELECT * FROM Review WHERE SubmissionID = ? AND Submitted = ? ORDER BY startLine ASC, startIndex ASC;");
 		$sth->execute(array($this->getID(), $submitted));
 		while ($file_row = $sth->fetch(PDO::FETCH_ASSOC)) {
 			array_push($arr, new Review($file_row));
@@ -634,7 +634,7 @@ class Submission extends PCRObject {
 	 */
 	public function getStudentsReviews($stnid) {
 		$arr = array();
-		$sth = $this->db->prepare("SELECT * FROM Review WHERE ReviewerID = ? AND SubmissionID = ?");
+		$sth = $this->db->prepare("SELECT * FROM Review WHERE ReviewerID = ? AND SubmissionID = ? ORDER BY startLine ASC, startIndex ASC;");
 		$sth->execute(array($stnid, $this->getID()));
 		while ($file_row = $sth->fetch(PDO::FETCH_ASSOC)) {
 			array_push($arr, new Review($file_row));
