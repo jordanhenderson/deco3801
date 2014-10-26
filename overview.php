@@ -129,7 +129,9 @@ function printResults($handler) {
 							<td>'.formatDBtime($asg['ReviewsDue']).'</td>';
 							
 							if (!$admin) {
-								echo '<td>'.printResults($crs).'</td>';
+								echo '<td>';
+								printResults($crs);
+								echo '</td>';
 							}
 							?>
 
@@ -180,7 +182,9 @@ function printResults($handler) {
 							echo "
 						<tr>
 							<td>Student #$sub[StudentID]</td>
-							<td>".printResults($crs)."</td>
+							<td>";
+							printResults($crs);
+							echo "</td>
 							<td>$sub[SubmitTime]</td>
 							<td>";
 							

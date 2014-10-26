@@ -188,9 +188,11 @@ function formatDBtime($dbtime) {
 							echo 'Not open for submission.<br><i>Submissions open in: '.seconds2human($timeUntilOpen).'</i>';
 						} else if ($admin) {
 							if ($CurrentTime < $DueTime) {
-								echo 'Submissions open.'; // Open
+								echo 'Submissions open.<br><i>Submissions close in: '.seconds2human($timeUntilDue).'</i>'; // Open
+							} else if ($CurrentTime < $ReviewsDue) {
+								echo 'Submissions closed.<br><i>Reviews close in: '.seconds2human($timeUntilReview).'</i>'; // Closed
 							} else {
-								echo 'Submissions closed.'; // Closed
+								echo 'Submissions closed.<br>Reviews closed.'; // Closed
 							}
 						} else if ($SubmitTime == 0 && $CurrentTime < $DueTime) { // Not Submitted
 							echo 'Not submitted.<br><i>Submissions close in: '.seconds2human($timeUntilDue).'</i>';
