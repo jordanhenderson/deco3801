@@ -515,7 +515,7 @@
                 .addClass(options.highlightedClass);
         },
         defaults: {
-            color: '#ffff7b',
+            color: '#20afcd',
             highlightedClass: 'highlighted',
             contextClass: 'highlighter-context',
             id: 0,
