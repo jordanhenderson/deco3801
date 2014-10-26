@@ -65,8 +65,8 @@ foreach ($reviews as $review) {
 	<link href="css/main.css" rel="stylesheet">
 	
 	<!-- Highlighter JS -->
-	<link rel="stylesheet" href="http://cdnjs.cloudflare.com/ajax/libs/highlight.js/8.1/styles/default.min.css">
-	<script src="http://cdnjs.cloudflare.com/ajax/libs/highlight.js/8.1/highlight.min.js"></script>
+	<link rel="stylesheet" href="css/monokai_sublime.css">
+	<script src="js/highlight.pack.js"></script>
 	<script>hljs.initHighlightingOnLoad();</script>
 	<!-- JQuery text highlighter library -->
 	<script type="text/javascript" src="js/jquery.textHighlighter.js"></script>
@@ -379,6 +379,7 @@ foreach ($reviews as $review) {
 				if (!isOwner) {
 					setupHighlighter();
 				}
+				hljs.initHighlightingOnLoad();
 			});	  
 			
 		}
