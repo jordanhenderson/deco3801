@@ -281,12 +281,9 @@ foreach ($reviews as $review) {
 				edit = -1;
 				return;
 			}
-			toggleSyntaxHighlightingOff();
 			// Push the new comment into the array
 			annotations.push({"Comments":comment, "text":selected, "status":'n', "fileName":$( "#file_heading" ).html(), "SubmissionID":<?php echo $subID;?>});
-			updatePositions();
 			count = count + 1;
-			toggleSyntaxHighlightingOn();
 			setupHighlighter();
 			setupHover();
 		}
@@ -298,7 +295,10 @@ foreach ($reviews as $review) {
 		function updatePositions() {
 			var innerContents = $('#assignment_code').html();
 			var wordArray = innerContents.split('\n');
-			for (var j = 0; j <= count; j++) {
+			for (var j = 0; j < annotations.length; j++) {
+				if (annotations[j].status == 'd') {
+					continue;
+				}
 				var startIndex;
 				var startLine;
 				for (var i = 0; i < wordArray.length; i++) {
@@ -334,6 +334,10 @@ foreach ($reviews as $review) {
 		 * This will definitely change to become simpler
 		 */
 		function saveReviews() {
+			// Update the startIndex and startLine of the comments (Might be effected by the deleted value)
+			toggleSyntaxHighlightingOff();
+			updatePositions();
+			toggleSyntaxHighlightingOn();
 			//AJAX call to store the review in the database
 			var request = {f: 'saveReviews', params: [JSON.stringify(annotations)]};
 			$.post("api.php", JSON.stringify(request), function(retval) {
@@ -355,6 +359,10 @@ foreach ($reviews as $review) {
 		 * Though only a single row needs it to be set to 1, I'm doing them all.
 		 */
 		function submitReviews() {
+			// Update the startIndex and startLine of the comments (Might be effected by the deleted value)
+			toggleSyntaxHighlightingOff();
+			updatePositions();
+			toggleSyntaxHighlightingOn();
 			var request = {f: 'submitReviews', params: [JSON.stringify(annotations)]};
 			$.post("api.php", JSON.stringify(request), function(retval) {
 				alert("Your comments have been submitted!");
