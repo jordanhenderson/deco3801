@@ -303,7 +303,8 @@ foreach ($reviews as $review) {
 				var startLine;
 				for (var i = 0; i < wordArray.length; i++) {
 					// Find the line the comment starts on and allow for the 6 characters ('<span  ')
-					startIndex = wordArray[i].indexOf('id="span' + j + '"') - 6;
+					var filtered = wordArray[i].replace(/ rgb\(32, 175, 205\);/g, "#20afcd");
+					startIndex = filtered.indexOf('id="span' + j + '"') - 6;
 					if (startIndex >= 0) {
 						startLine = i;
 						break;
