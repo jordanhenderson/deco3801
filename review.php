@@ -228,11 +228,36 @@ foreach ($reviews as $review) {
 		}
 		
 		/**
+		 *
+		 *
+		 */
+		function toggleSyntaxHighlightingOff() {
+			$('#assignment_code').removeClass();
+			$('#assignment_code').toggleClass('nohighlight');
+			$('#assignment_code').find("span").each( function() {
+				if (! $(this).is('.highlighted')) {
+					$(this).contents().unwrap();
+				}
+			});
+			hljs.highlightBlock(document.getElementById("assignment_code"));
+		}
+
+		/**
+		 *
+		 *
+		 */
+		function toggleSyntaxHighlightingOn() {
+			$('#assignment_code').removeClass('nohighlight');
+			hljs.highlightBlock(document.getElementById("assignment_code"));
+		}
+		
+		/**
 		 * Gets the contents of the review when they click
 		 * the save button in the review box and stores it in an array
 		 * to push into the database later
 		 */
 		function getContents(id) {
+			toggleSyntaxHighlightingOff();
 			var comment = $('#textarea'+id).val();
 			// Checking for an invalid comment
 			if (comment.trim() == "") {
@@ -275,6 +300,7 @@ foreach ($reviews as $review) {
 			// Push the new comment into the array
 			annotations.push({"Comments":comment, "text":selected, "status":'n', "startLine":startLine, "startIndex":startIndex, "fileName":$( "#file_heading" ).html(), "SubmissionID":<?php echo $subID;?>});
 			count = count + 1;
+			toggleSyntaxHighlightingOn();
 			setupHighlighter();
 			setupHover();
 		}
