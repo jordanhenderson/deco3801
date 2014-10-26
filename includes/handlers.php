@@ -177,9 +177,9 @@ class PCRHandler {
 		$reviews = json_decode($reviews);
 		foreach ($reviews as $review) {
 			if ($review->status == 'd') {
-				$this->removeReview($review->Comments, $review->SubmissionID);
+				$this->removeReview($review->ReviewID, $review->SubmissionID);
 			} elseif ($review->status == 'e') {
-				$this->editReview($review->prevComment, $review->Comments, $review->SubmissionID, 0);
+				$this->editReview($review->ReviewID, $review->Comments, $review->SubmissionID, 0);
 			} elseif ($review->status == 'n') {
 				$this->addReview($review, 0);
 			}
@@ -195,13 +195,13 @@ class PCRHandler {
 		$reviews = json_decode($reviews);
 		foreach ($reviews as $review) {
 			if ($review->status == 'd') {
-				$this->removeReview($review->Comments, $review->SubmissionID);
+				$this->removeReview($review->ReviewID, $review->SubmissionID);
 			} elseif ($review->status == 'e') {
-				$this->editReview($review->prevComment, $review->Comments, $review->SubmissionID, 1);
+				$this->editReview($review->ReviewID, $review->Comments, $review->SubmissionID, 1);
 			} elseif ($review->status == 'n') {
 				$this->addReview($review, 1);
 			} elseif ($review->status == 'o') {
-				$this->editReview($review->Comments, $review->Comments, $review->SubmissionID, 1);
+				$this->editReview($review->ReviewID, $review->Comments, $review->SubmissionID, 1);
 			}
 		}
 	}
@@ -210,20 +210,20 @@ class PCRHandler {
 	 * Removes a review with the given id from the database.
 	 * @param submission id and comment of the review to remove
 	 */
-	public function removeReview($comment, $id) {
+	public function removeReview($reviewID, $id) {
 		// get submission
 		$submission = new Submission(array("SubmissionID"=>$id), false);
 		// call delete review for that submission
-		return $submission->removeReview($comment);
+		return $submission->removeReview($reviewID);
 	}
 	
 	/**
 	 * Edits a review with the given id from the database
 	 * @param submission id, comment and previous comment of the review to edit
 	 */
-	public function editReview($prevComment, $annotationText, $id, $submitted) {
+	public function editReview($reviewID, $annotationText, $id, $submitted) {
 		$submission = new Submission(array("SubmissionID"=>$id), false);
-		return $submission->editReview($prevComment, $annotationText, $submitted);
+		return $submission->editReview($reviewID, $annotationText, $submitted);
 	}
 	
 	/**

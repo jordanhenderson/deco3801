@@ -214,7 +214,7 @@ foreach ($reviews as $review) {
 			var text = annotations[i].text;
 			var numLines = (text.match(/\n/g) || []).length;
 			var endLine = line + numLines;
-			var spanString = '<span style="background-color:#ffff7b" class="highlighted" id="span' + count + '">';
+			var spanString = '<span style="background-color:#20afcd" class="highlighted" id="span' + count + '">';
 			var endIndex = index + text.length + spanString.length;
 			if (numLines > 0) {
 				var textArr = text.split('\n');
@@ -257,7 +257,6 @@ foreach ($reviews as $review) {
 		 * to push into the database later
 		 */
 		function getContents(id) {
-			toggleSyntaxHighlightingOff();
 			var comment = $('#textarea'+id).val();
 			// Checking for an invalid comment
 			if (comment.trim() == "") {
@@ -285,6 +284,7 @@ foreach ($reviews as $review) {
 				edit = -1;
 				return;
 			}
+			toggleSyntaxHighlightingOff();
 			var innerContents = $('#assignment_code').html();
 			var wordArray = innerContents.split('\n');
 			var startIndex;
@@ -484,7 +484,7 @@ foreach ($reviews as $review) {
 					<pre id='assignment_code' style="float: left; min-width: 450px; max-width: 550px"><?php
 					//Loads the first file in the file tree if its not empty
 					if ($initialFile !== '') {
-						echo $crs->loadFile($initialFile);
+						echo trim($crs->loadFile($initialFile));
 					}?></pre>
 				<div id="reviews" style="clear:right; float:right;"></div>
 				</div>	

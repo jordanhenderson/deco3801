@@ -642,12 +642,12 @@ class Submission extends PCRObject {
 		return $arr;
 	}
 	
-	public function removeReview($comment) {
+	public function removeReview($reviewID) {
 		// get the id of the review associated with $comment and the submission id
 		// Create a new review out of it
 		// Delete that review
 		$arr = array();
-		$sth = $this->db->prepare("SELECT ReviewID FROM Review WHERE SubmissionID = ? AND Comments = '" . $comment . "';");
+		$sth = $this->db->prepare("SELECT ReviewID FROM Review WHERE SubmissionID = ? AND ReviewID = " . $reviewID . ";");
 		$sth->execute(array($this->getID()));
 		$file_row = $sth->fetch(PDO::FETCH_ASSOC);
 		$review = new Review($file_row);
@@ -677,9 +677,9 @@ class Submission extends PCRObject {
 	 * editReview edits one of the reviews in the database
 	 * @return the edited review
 	 */
-	public function editReview($prevComment, $annotationText, $submitted) {
+	public function editReview($reviewID, $annotationText, $submitted) {
 		$arr = array();
-		$sth = $this->db->prepare("SELECT ReviewID FROM Review WHERE SubmissionID = ? AND Comments = '" . $prevComment . "';");
+		$sth = $this->db->prepare("SELECT ReviewID FROM Review WHERE SubmissionID = ? AND ReviewID = '" . $reviewID . "';");
 		$sth->execute(array($this->getID()));
 		$file_row = $sth->fetch(PDO::FETCH_ASSOC);
 		$file_row['Comments'] = $annotationText;
