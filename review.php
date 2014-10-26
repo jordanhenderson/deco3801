@@ -129,11 +129,12 @@ foreach ($reviews as $review) {
 			}
 			setupHighlighter();
 			$('#review' + id).remove();
-			// remove the highlight
-			toggleSyntaxHighlightingOff();
-			$("#span" + id).contents().unwrap();
-			//$('#assignment_code').getHighlighter().removeHighlights($('#span' + id));
-			toggleSyntaxHighlightingOn();
+			// remove the highlight(s)
+			$(".highlighted").each(function() {
+				if ($(this).attr('id') == ('span' + id)) {
+					$('#assignment_code').getHighlighter().removeHighlights($(this));
+				}
+			});
 		}
 		
 		/**
