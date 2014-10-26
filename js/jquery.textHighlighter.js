@@ -75,9 +75,10 @@
                 var $wrapper = $.textHighlighter.createWrapper(this.options);
 
                 var createdHighlights = this.highlightRange(range, $wrapper);
-                var normalizedHighlights = this.normalizeHighlights(createdHighlights);
-
-                this.options.onAfterHighlight(normalizedHighlights, rangeText);
+                //var normalizedHighlights = this.normalizeHighlights(createdHighlights);
+				
+				this.options.onAfterHighlight(createdHighlights, rangeText);
+				//this.options.onAfterHighlight(normalizedHighlights, rangeText);
             }
 
             this.removeAllRanges();
@@ -224,7 +225,7 @@
         },
 
         /**
-         * Normalizes highlights - nested highlights are flattened and sibling higlights are merged.
+         * Normalizes highlights - nested highlights are flattened and sibling highlights are merged.
          */
         normalizeHighlights: function(highlights) {
             this.flattenNestedHighlights(highlights);

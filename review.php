@@ -289,24 +289,36 @@ foreach ($reviews as $review) {
 				return;
 			}
 			toggleSyntaxHighlightingOff();
-			var innerContents = $('#assignment_code').html();
-			var wordArray = innerContents.split('\n');
-			var startIndex;
-			var startLine;
-			for (var i = 0; i < wordArray.length; i++) {
-				// Find the line the comment starts on and allow for the 6 characters ('<span  ')
-				startIndex = wordArray[i].indexOf('id="span' + id + '"') - 6;
-				if (startIndex >= 0) {
-					startLine = i;
-					break;
-				}
-			}
 			// Push the new comment into the array
-			annotations.push({"Comments":comment, "text":selected, "status":'n', "startLine":startLine, "startIndex":startIndex, "fileName":$( "#file_heading" ).html(), "SubmissionID":<?php echo $subID;?>});
+			annotations.push({"Comments":comment, "text":selected, "status":'n', "fileName":$( "#file_heading" ).html(), "SubmissionID":<?php echo $subID;?>});
+			updatePositions();
 			count = count + 1;
 			toggleSyntaxHighlightingOn();
 			setupHighlighter();
 			setupHover();
+		}
+		
+		/**
+		 *
+		 *
+		 */
+		function updatePositions() {
+			var innerContents = $('#assignment_code').html();
+			var wordArray = innerContents.split('\n');
+			for (var j = 0; j <= count; j++) {
+				var startIndex;
+				var startLine;
+				for (var i = 0; i < wordArray.length; i++) {
+					// Find the line the comment starts on and allow for the 6 characters ('<span  ')
+					startIndex = wordArray[i].indexOf('id="span' + id + '"') - 6;
+					if (startIndex >= 0) {
+						startLine = i;
+						break;
+					}
+				}
+				annotations[j].startLine = startLine;
+				annotations[j].startIndex = startIndex;
+			}
 		}
 		
 		/**
@@ -520,11 +532,19 @@ foreach ($reviews as $review) {
 				function() {
 					// Set colour when mouseover
 					var id = $(this).attr("id");
-					$("#" + id.replace("review", "span")).css("background-color", "#ec971f");
+					$('.highlighted').each( function() {
+						if ($(this).attr('id') == id.replace("review", "span")) {
+							$(this).css("background-color", "#ec971f");
+						}
+					});
 				}, function() {
 					// Reset colour when mouseout
 					var id = $(this).attr("id");
-					$("#" + id.replace("review", "span")).css("background-color", "#20afcd");
+					$('.highlighted').each( function() {
+						if ($(this).attr('id') == id.replace("review", "span")) {
+							$(this).css("background-color", "#20afcd");
+						}
+					});
 				}
 			);
 		}
