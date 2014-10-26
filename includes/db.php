@@ -604,7 +604,7 @@ class Submission extends PCRObject {
 	 */ 
 	public function getReviews() {
 		$arr = array();
-		$sth = $this->db->prepare("SELECT * FROM Review WHERE SubmissionID = ?;");
+		$sth = $this->db->prepare("SELECT * FROM Review WHERE SubmissionID = ? AND NOT fileName = '';");
 		$sth->execute(array($this->getID()));
 		while ($file_row = $sth->fetch(PDO::FETCH_ASSOC)) {
 			array_push($arr, new Review($file_row));

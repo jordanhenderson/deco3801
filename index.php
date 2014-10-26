@@ -170,29 +170,14 @@ function formatDBtime($dbtime) {
 					<tr href=\"overview.php?assid=$asg[AssignmentID]\">
 						<td>$asg[AssignmentName]</td>";
 						
-						if ($CurrentTime < $OpenTime) { // Before open time
-							echo '
-						<td>'.formatDBtime($asg['OpenTime']).'<br><i>Opens in: '.seconds2human($timeUntilOpen).'.</i></td>';
-						} else { // After open time
-							echo '
-						<td>'.formatDBtime($asg['OpenTime']).'<br><i>Opened: '.seconds2human($timeSinceOpen).' ago.</i></td>';
-						}
+						echo '
+						<td>'.formatDBtime($asg['OpenTime']).'</td>';
 						
-						if ($CurrentTime <= $DueTime) { // Before due time
-							echo '
-						<td>'.formatDBtime($asg['DueTime']).'<br><i>Due in: '.seconds2human($timeUntilDue).'.</i></td>';
-						} else { // After due time
-							echo '
-						<td>'.formatDBtime($asg['DueTime']).'<br><i>Closed: '.seconds2human($timeSinceDue).' ago.</i></td>';
-						}
+						echo '
+						<td>'.formatDBtime($asg['DueTime']).'</td>';
 						
-						if ($CurrentTime <= $ReviewsDue) { // Before reviews due time
-							echo '
-						<td>'.formatDBtime($asg['ReviewsDue']).'<br><i>Due in: '.seconds2human($timeUntilReview).'.</i></td>';
-						} else { // After reviews due time
-							echo '
-						<td>'.formatDBtime($asg['ReviewsDue']).'<br><i>Closed: '.seconds2human($timeSinceReview).' ago.</i></td>';
-						}
+						echo '
+						<td>'.formatDBtime($asg['ReviewsDue']).'</td>';
 						
 						echo "
 						<td>$asg[Weight]%</td>
@@ -200,7 +185,7 @@ function formatDBtime($dbtime) {
 						
 						// Status
 						if ($SubmitTime == 0 && $CurrentTime < $OpenTime) { // Not Open
-							echo 'Not open for submission.';
+							echo 'Not open for submission.<br><i>Submissions open in: '.seconds2human($timeUntilOpen).'</i>';
 						} else if ($admin) {
 							if ($CurrentTime < $DueTime) {
 								echo 'Submissions open.'; // Open
@@ -208,7 +193,7 @@ function formatDBtime($dbtime) {
 								echo 'Submissions closed.'; // Closed
 							}
 						} else if ($SubmitTime == 0 && $CurrentTime < $DueTime) { // Not Submitted
-							echo 'Not submitted.';
+							echo 'Not submitted.<br><i>Submissions close in: '.seconds2human($timeUntilDue).'</i>';
 						} else if ($SubmitTime == 0) { // Overdue
 							echo 'Overdue.';
 						} else if ($SubmitTime <= $DueTime) { // Submitted on time
@@ -217,7 +202,7 @@ function formatDBtime($dbtime) {
 							echo 'Submitted late.';
 						}
 						
-						if ($admin || $CurrentTime < $OpenTime) {
+						if ($admin || $CurrentTime < $DueTime) {
 							// Nothing to see here.
 						} else if ($CurrentTime <= $DueTime) { // Peer review not open
 							echo '<br>Peer reviews not open.';

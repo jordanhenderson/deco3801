@@ -43,18 +43,18 @@ function printResults($handler) {
 	
 	global $assignment;
 	$percentage = $passed = $numTests = 0;
-	if($assignment->isValid()) {
-	    $numTests = $asg["NumberTests"];
-	    if((int)$numTests > 0) {
-		$passed = substr_count($results, 'pass');
-		$percentage = ($passed/$numTests)*100;
-	    }
+	if ($assignment->isValid()) {
+		$numTests = $asg["NumberTests"];
+		if ((int)$numTests > 0) {
+			$passed = substr_count($results, 'pass');
+			$percentage = ($passed / $numTests) * 100;
+		}
 	}
 
 	echo "$passed/$numTests tests passed";
 	echo "
-    <div style='width:100%; background-color:white; height:auto; border:1px solid #000;'>
-    	<div style='width:".$percentage."%; background-color:green; height:10px;'></div>
+	<div style='width:100%; background-color:white; height:auto; border:1px solid #000;'>
+		<div style='width:".$percentage."%; background-color:green; height:10px;'></div>
 	</div>";
 }
 
@@ -129,9 +129,7 @@ function printResults($handler) {
 							<td>'.formatDBtime($asg['ReviewsDue']).'</td>';
 							
 							if (!$admin) {
-								echo '<td>';
-								printResults($crs);
-								echo '</td>';
+								echo '<td>'.printResults($crs).'</td>';
 							}
 							?>
 
@@ -182,7 +180,7 @@ function printResults($handler) {
 							echo "
 						<tr>
 							<td>Student #$sub[StudentID]</td>
-							<td>$sub[Results]</td>
+							<td>".printResults($crs)."</td>
 							<td>$sub[SubmitTime]</td>
 							<td>";
 							
