@@ -178,7 +178,7 @@ class PCRHandler {
 			if ($review->status == 'd') {
 				$this->removeReview($review->ReviewID, $review->SubmissionID);
 			} elseif ($review->status == 'e') {
-				$this->editReview($review->ReviewID, $review->Comments, $review->SubmissionID, 0);
+				$this->editReview($review->startLine, $review->startIndex, $review->ReviewID, $review->Comments, $review->SubmissionID, 0);
 			} elseif ($review->status == 'n') {
 				$this->addReview($review, 0);
 			} elseif ($review->status == 'o') {
@@ -198,7 +198,7 @@ class PCRHandler {
 			if ($review->status == 'd') {
 				$this->removeReview($review->ReviewID, $review->SubmissionID);
 			} elseif ($review->status == 'e') {
-				$this->editReview($review->ReviewID, $review->Comments, $review->SubmissionID, 1);
+				$this->editReview($review->startLine, $review->startIndex, $review->ReviewID, $review->Comments, $review->SubmissionID, 1);
 			} elseif ($review->status == 'n') {
 				$this->addReview($review, 1);
 			} elseif ($review->status == 'o') {
