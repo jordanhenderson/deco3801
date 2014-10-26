@@ -677,13 +677,15 @@ class Submission extends PCRObject {
 	 * editReview edits one of the reviews in the database
 	 * @return the edited review
 	 */
-	public function editReview($reviewID, $annotationText, $submitted) {
+	public function editReview($startLine, $startIndex, $reviewID, $annotationText, $submitted) {
 		$arr = array();
 		$sth = $this->db->prepare("SELECT ReviewID FROM Review WHERE SubmissionID = ? AND ReviewID = '" . $reviewID . "';");
 		$sth->execute(array($this->getID()));
 		$file_row = $sth->fetch(PDO::FETCH_ASSOC);
 		$file_row['Comments'] = $annotationText;
 		$file_row['Submitted'] = $submitted;
+		$file_row['startLine'] = $startLine;
+		$file_row['startIndex'] = $startIndex;
 		$review = new Review($file_row);
 		$review->commit();
 		return $review;

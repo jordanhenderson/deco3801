@@ -181,6 +181,8 @@ class PCRHandler {
 				$this->editReview($review->ReviewID, $review->Comments, $review->SubmissionID, 0);
 			} elseif ($review->status == 'n') {
 				$this->addReview($review, 0);
+			} elseif ($review->status == 'o') {
+				$this->editReview($review->startLine, $review->startIndex, $review->ReviewID, $review->Comments, $review->SubmissionID, 1);
 			}
 		}
 	}
@@ -200,7 +202,7 @@ class PCRHandler {
 			} elseif ($review->status == 'n') {
 				$this->addReview($review, 1);
 			} elseif ($review->status == 'o') {
-				$this->editReview($review->ReviewID, $review->Comments, $review->SubmissionID, 1);
+				$this->editReview($review->startLine, $review->startIndex, $review->ReviewID, $review->Comments, $review->SubmissionID, 1);
 			}
 		}
 	}
@@ -220,9 +222,9 @@ class PCRHandler {
 	 * Edits a review with the given id from the database
 	 * @param submission id, comment and previous comment of the review to edit
 	 */
-	public function editReview($reviewID, $annotationText, $id, $submitted) {
+	public function editReview($startLine, $startIndex, $reviewID, $annotationText, $id, $submitted) {
 		$submission = new Submission(array("SubmissionID"=>$id), false);
-		return $submission->editReview($reviewID, $annotationText, $submitted);
+		return $submission->editReview($startLine, $startIndex, $reviewID, $annotationText, $submitted);
 	}
 	
 	/**
