@@ -32,7 +32,7 @@ class PCRHandler {
 	 */
 	public function getCourse() {
 		$crs = new Course(array("CourseID"=>$_SESSION['course_id']));
-		if(!$crs->isValid()) 
+		if (!$crs->isValid()) 
 			$crs->commit();
 		return $crs;
 	}
@@ -50,7 +50,7 @@ class PCRHandler {
 	 * Removes a comment with the given id from the database.
 	 * @param id of the comment to remove
 	 */
-	public function deleteComment($id){
+	public function deleteComment($id) {
 		$comment = new Comment(array("CommentID"=>$id));
         $comment->delete();
 	}
@@ -83,13 +83,12 @@ class PCRHandler {
 	public function toggleHelp($status) {
 		$crs = new Course(array("CourseID"=>$_SESSION['course_id']));
 		$help = &$crs->getRow();
-		if($status == 0){
-		$help['HelpEnabled'] = "1";
-		$crs->commit();
-		}
-		else {
-		$help['HelpEnabled'] = "0";
-		$crs->commit();
+		if ($status == 0) {
+			$help['HelpEnabled'] = "1";
+			$crs->commit();
+		} else {
+			$help['HelpEnabled'] = "0";
+			$crs->commit();
 		}
 	}
 	
@@ -100,7 +99,7 @@ class PCRHandler {
 	 * @param stnid the student ID
 	 * @param fullname full name of the student
 	 */
-	public function storeNewQuestion($title, $content, $stnid, $fullname, $postdate){
+	public function storeNewQuestion($title, $content, $stnid, $fullname, $postdate) {
 		$question = new Question(array(
 									"StudentID" => $stnid,
 									"CourseID" => $_SESSION["course_id"],
@@ -264,13 +263,67 @@ class PCRHandler {
 		return $submission->getResults();
 	}
 	
+	/*
+	 * Sets the assignment with the provided ID to have the following dates:
+	 * 
+	 * OPEN:		23 October 2014, 11am
+	 * DUE:			30 October 2014, 11am
+	 * REVIEWSDUE:	31 October 2014, 11am
+	 */
+	public function makeopen($assignment_id) {
+		$assignment = new Assignment(array("AssignmentID"=>$assignment_id,
+										   "OpenTime"=>"2014-10-23 11:00:00",
+										   "DueTime"=>"2014-10-30 11:00:00",
+										   "ReviewsDue"=>"2014-10-31 11:00:00"));
+		if (!$assignment->isValid()) {
+			return;
+		}
+		$assignment->commit();
+	}
+	
+	/*
+	 * Sets the assignment with the provided ID to have the following dates:
+	 * 
+	 * OPEN:		23 October 2014, 11am
+	 * DUE:			24 October 2014, 11am
+	 * REVIEWSDUE:	31 October 2014, 11am
+	 */
+	public function makedue($assignment_id) {
+		$assignment = new Assignment(array("AssignmentID"=>$assignment_id,
+										   "OpenTime"=>"2014-10-23 11:00:00",
+										   "DueTime"=>"2014-10-24 11:00:00",
+										   "ReviewsDue"=>"2014-10-31 11:00:00"));
+		if (!$assignment->isValid()) {
+			return;
+		}
+		$assignment->commit();
+	}
+	
+	/*
+	 * Sets the assignment with the provided ID to have the following dates:
+	 * 
+	 * OPEN:		23 October 2014, 11am
+	 * DUE:			24 October 2014, 11am
+	 * REVIEWSDUE:	25 October 2014, 11am
+	 */
+	public function makereviewsdue($assignment_id) {
+		$assignment = new Assignment(array("AssignmentID"=>$assignment_id,
+										   "OpenTime"=>"2014-10-23 11:00:00",
+										   "DueTime"=>"2014-10-24 11:00:00",
+										   "ReviewsDue"=>"2014-10-25 11:00:00"));
+		if (!$assignment->isValid()) {
+			return;
+		}
+		$assignment->commit();
+	}
+	
 	/**
 	 * uploadTest uploads tests for an assignment.
 	*/
 	public function uploadTest($assignment_id) {
 		$assignment = new Assignment(array("AssignmentID"=>$assignment_id));
-		if(!$assignment->isValid()) return;
-		if(!isset($_FILES["file"]) || $_FILES["file"]["error"] != 0) {
+		if (!$assignment->isValid()) return;
+		if (!isset($_FILES["file"]) || $_FILES["file"]["error"] != 0) {
 			return;
 		}
 		
@@ -279,7 +332,7 @@ class PCRHandler {
 		
 		$file = $assignment->getDir() . "/test/" . $_FILES["file"]["name"];
 		
-		if(is_uploaded_file($_FILES["file"]["tmp_name"]))
+		if (is_uploaded_file($_FILES["file"]["tmp_name"]))
 			move_uploaded_file($_FILES["file"]["tmp_name"], $file);
 		else
 			copy($_FILES["file"]["tmp_name"], $file);
@@ -303,24 +356,24 @@ class PCRHandler {
 	 */
 	public function uploadArchive($assignment_id) {
 		$assignment = new Assignment(array("AssignmentID"=>$assignment_id));
-		if(!$assignment->isValid()) return;
+		if (!$assignment->isValid()) return;
 		
 		//Look for an existing submission - return if resubmission not allowed.
 		$oldsubmission = $assignment->getSubmission($_SESSION['user_id']);
-		if(!$assignment->canResubmit() && $oldsubmission->isValid()) return;
+		if (!$assignment->canResubmit() && $oldsubmission->isValid()) return;
 		$oldsubmission->delete();
 		
 		$submission = new Submission(array("AssignmentID"=>$assignment_id, "StudentID"=>$_SESSION['user_id'], "Results" => ""));
 		
 		if ($submission->isValid()) {
-			if(!isset($_FILES["file"]) || $_FILES["file"]["error"] != 0) {
+			if (!isset($_FILES["file"]) || $_FILES["file"]["error"] != 0) {
 				$submission->delete();
 				return;
 			}
 			
 			$file = $submission->getStorageDir() . $_FILES["file"]["name"];
 			
-			if(is_uploaded_file($_FILES["file"]["tmp_name"]))
+			if (is_uploaded_file($_FILES["file"]["tmp_name"]))
 				move_uploaded_file($_FILES["file"]["tmp_name"], $file);
 			else
 				copy($_FILES["file"]["tmp_name"], $file);
@@ -338,7 +391,7 @@ class PCRHandler {
 				unlink($file);
 			}
 			
-			if($submission->addFiles() == 0) {
+			if ($submission->addFiles() == 0) {
 				$submission->delete();
 				return;
 			}
@@ -357,11 +410,11 @@ class PCRHandler {
 	 */
 	public function uploadRepo($assignment_id, $repo_url, $username, $password) {
 		$assignment = new Assignment(array("AssignmentID"=>$assignment_id));
-		if(!$assignment->isValid()) return;
+		if (!$assignment->isValid()) return;
 		
 		//Look for an existing submission - return if resubmission not allowed.
 		$oldsubmission = $assignment->getSubmission($_SESSION['user_id']);
-		if(!$assignment->canResubmit() && $oldsubmission->isValid()) return;
+		if (!$assignment->canResubmit() && $oldsubmission->isValid()) return;
 		
 		$oldsubmission->delete();
 		
@@ -371,7 +424,7 @@ class PCRHandler {
 			$dir = $submission->getStorageDir();
 			exec("cd $dir && git clone https://$username:$password@$repo_url .");
 			
-			if($submission->addFiles() == 0) {
+			if ($submission->addFiles() == 0) {
 				//No files, failed?
 				$submission->delete();
 				return;

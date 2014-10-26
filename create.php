@@ -228,6 +228,6 @@ if (isset($_GET['assid'])) {
 				window.location.replace("index.php");
 			});
 		});
-	</script> 
+	</script>
 </body>
 </html>

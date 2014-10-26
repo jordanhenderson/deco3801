@@ -11,7 +11,8 @@ if (isset($_SESSION['admin']) && $_SESSION['admin']) {
 $crs = new PCRHandler();
 
 if (isset($_REQUEST['assid'])) {
-	$assignment = $crs->getAssignment($_REQUEST['assid']);
+	$assid = $_REQUEST['assid'];
+	$assignment = $crs->getAssignment($assid);
 	
 	if ($assignment->isValid()) {
 		$asg = &$assignment->getRow();
@@ -19,7 +20,7 @@ if (isset($_REQUEST['assid'])) {
 			exit("Assignment is for a different course (course_id = $asg[CourseID]). Please log in to that course's page from Moodle to access it.");
 		}
 	} else {
-		exit("Corrupt/Invalid assignment. Please contact site administrator, with code: \"assid=$_REQUEST[assid])\"");
+		exit("Corrupt/Invalid assignment. Please contact site administrator, with code: \"assid=$assid)\"");
 	}
 } else {
 	exit("No Assignment Specified For Overview.");
@@ -30,9 +31,9 @@ function formatDBtime($dbtime) {
 	return date_format($date, 'j M \'y, g:ia'); // e.g: 6 Feb '14, 8:30pm
 }
 
-function printResults($handler) {
+function printResults($studentid) {
 	global $asg;
-	$submission = $handler->getSubmission($_REQUEST['assid']);
+	$submission = $crs->getAssignment($assid)->getSubmission($studentid);
 	
 	$sub = &$submission->getRow();
 	if ($submission->isValid()) {
@@ -130,7 +131,7 @@ function printResults($handler) {
 							
 							if (!$admin) {
 								echo '<td>';
-								printResults($crs);
+								printResults($_SESSION['user_id']);
 								echo '</td>';
 							}
 							?>
@@ -140,7 +141,11 @@ function printResults($handler) {
 				</table>
 				<?php
 					if ($admin) {
-						echo '<a class="btn btn-primary" href="create.php?assid='.$_REQUEST['assid'].'" role="button">Edit Assignment</a>';
+						echo '<a class="btn btn-primary" href="create.php?assid='.$assid.'" role="button">Edit Assignment</a>';
+						echo '<br>Impatient Buttons - For demonstration purposes only.<br>';
+						echo '<a class="btn btn-danger impatient" name="makeopen" role="button">Make Assignment Open</a><br>';
+						echo '<a class="btn btn-danger impatient" name="makedue" role="button">Make Assignment Due</a><br>';
+						echo '<a class="btn btn-danger impatient" name="makereviewsdue" role="button">Make Assignment Reviews Due</a>';
 					}
 				?>
 			</div>
@@ -183,7 +188,7 @@ function printResults($handler) {
 						<tr>
 							<td>Student #$sub[StudentID]</td>
 							<td>";
-							printResults($crs);
+							printResults($sub['StudentID']);
 							echo "</td>
 							<td>$sub[SubmitTime]</td>
 							<td>";
@@ -192,11 +197,11 @@ function printResults($handler) {
 								echo "No reviews.";
 							} else {
 								foreach ($reviews as $rev) {
-									if (!$rev->isValid()) {
+									if (!$rev->isValid() || $rev->getRow()['fileName'] == '') {
 										continue;
 									}
 									$rev = &$rev->getRow();
-									echo '<a href="#" style="font-family: Monospace">'.str_replace(' ', '&nbsp;', str_pad(substr(str_replace('\n', ' ', $rev['text']), 0, 32), 32)).' - "'.substr($rev['Comments'], 0, 32).'..."</a><br>';
+									echo '<a href="#" style="font-family: Monospace">'.str_replace(array(' ', '\n'), '&nbsp;', str_pad(substr($rev['text'], 0, 33), 33)).' - "'.substr($rev['Comments'], 0, 33).' ..."</a><br>';
 								}
 							}
 							echo '</td>
@@ -235,7 +240,7 @@ function printResults($handler) {
 						($submission->isValid() && $assignment->canResubmit() || !$submission->isValid())) {
 					?>
 				<br>
-				<a href="submit.php?assid=<?php echo $_REQUEST['assid']; ?>">
+				<a href="submit.php?assid=<?php echo $assid; ?>">
 					<span class="btn btn-default btn-primary">New Submission</span>
 				</a>
 					<?php
@@ -255,6 +260,14 @@ function printResults($handler) {
 	<script>
 		$(document).ready(function() {
 			$("#breadcrumbs").rcrumbs();
+		});
+		
+		$(".impatient").click(function() {
+			var func = $(this).attr("name");
+			var funcparams = [<?php echo '"'.$assid.'"'; ?>];
+			var request = {f: func, params: funcparams};
+			$.post("api.php", JSON.stringify(request), function() {});
+			alert("Done.");
 		});
 	</script>
 </body>
