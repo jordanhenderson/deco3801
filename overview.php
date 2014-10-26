@@ -196,7 +196,7 @@ function printResults($handler) {
 										continue;
 									}
 									$rev = &$rev->getRow();
-									echo '<a href="#" style="font-family: Monospace">'.str_replace(' ', '&nbsp;', str_pad(substr('\n', ' ', str_replace($rev['text']), 0, 32), 32)).' - "'.substr($rev['Comments'], 0, 32).'..."</a><br>';
+									echo '<a href="#" style="font-family: Monospace">'.str_replace(' ', '&nbsp;', str_pad(substr(str_replace('\n', ' ', $rev['text']), 0, 32), 32)).' - "'.substr($rev['Comments'], 0, 32).'..."</a><br>';
 								}
 							}
 							echo '</td>
