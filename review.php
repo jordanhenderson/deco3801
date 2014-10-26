@@ -310,7 +310,7 @@ foreach ($reviews as $review) {
 				var startLine;
 				for (var i = 0; i < wordArray.length; i++) {
 					// Find the line the comment starts on and allow for the 6 characters ('<span  ')
-					startIndex = wordArray[i].indexOf('id="span' + id + '"') - 6;
+					startIndex = wordArray[i].indexOf('id="span' + j + '"') - 6;
 					if (startIndex >= 0) {
 						startLine = i;
 						break;
