@@ -368,7 +368,7 @@ foreach ($reviews as $review) {
 				// reset count
 				// want to destroy and recreate to update the id (count)
 				count = 0;
-				$( "#assignment_code" ).html( contentObj.r );
+				$( "#assignment_code" ).html( "<code>" + contentObj.r + "</code>" );
 				$( "#file_heading" ).html( fileName );
 				// remove previous annotations and add the new ones
 				$('#reviews').html('');

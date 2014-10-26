@@ -419,7 +419,6 @@ class PCRHandler {
 		$contents = fread($handle, filesize($fileName));
 		$contents = str_replace('<', '&lt;', $contents);
 		$contents = str_replace('>', '&gt;', $contents);
-		$contents = "<code>" + $contents + "</code>";
 		fclose($handle);
 		return $contents;
 	}
