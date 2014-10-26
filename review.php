@@ -131,7 +131,8 @@ foreach ($reviews as $review) {
 			$('#review' + id).remove();
 			// remove the highlight
 			toggleSyntaxHighlightingOff();
-			$('#assignment_code').getHighlighter().removeHighlights($('#span' + id));
+			$("#span" + id).contents().unwrap();
+			//$('#assignment_code').getHighlighter().removeHighlights($('#span' + id));
 			toggleSyntaxHighlightingOn();
 		}
 		
