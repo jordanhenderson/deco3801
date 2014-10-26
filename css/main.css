@@ -104,6 +104,7 @@ textarea#content, textarea#comment {
         color: #333;
         border: 1px solid #ccc;
 		font-size: 8pt;
+		margin-right: 15px;
     }
 	.cancel_btn, .save_btn{
 		background: #ec971f;

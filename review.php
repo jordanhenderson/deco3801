@@ -130,7 +130,9 @@ foreach ($reviews as $review) {
 			setupHighlighter();
 			$('#review' + id).remove();
 			// remove the highlight
+			toggleSyntaxHighlightingOff();
 			$('#assignment_code').getHighlighter().removeHighlights($('#span' + id));
+			toggleSyntaxHighlightingOn();
 		}
 		
 		/**
