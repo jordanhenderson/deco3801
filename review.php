@@ -505,11 +505,19 @@ foreach ($reviews as $review) {
 			// Hide all sub directories
 			$('ul ul').hide();
 			
+			if (isOwner == 1) {
+				ownerSetup();
+			}
+			getComments();
+			// don't setup the highlighter for the owner
+			if (isOwner == 0) {
+				setupHighlighter();
+			}
+			
 			// change highlighting colour for text related to hovered comment
 			$(".reviewContainer").hover(
 				function() {
 					// Set colour when mouseover
-					alert("jj");
 					var id = $(this).attr("id");
 					alert(id);
 					$("#" + id.replace("review", "span")).css("background-color", "#20afcd");
@@ -520,15 +528,6 @@ foreach ($reviews as $review) {
 					alert(id.replace("review", "span"));
 				}
 			);
-			
-			if (isOwner == 1) {
-				ownerSetup();
-			}
-			getComments();
-			// don't setup the highlighter for the owner
-			if (isOwner == 0) {
-				setupHighlighter();
-			}
 		});
 	</script>
 	<!-- Bootstrap Core JavaScript -->
