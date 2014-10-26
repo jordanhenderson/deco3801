@@ -124,7 +124,7 @@ $crs = new PCRHandler();
 						//Display each comment as readonly for specific question
 					if($_SESSION['user_id'] == $commentRow['StudentID']){
 						echo "	
-						<div class='name'>$commentRow[StudentName] $commentRow[CommentID]<div class='date'>".$daysago." ago</div></div>
+						<div class='name'>$commentRow[StudentName]<div class='date'>".$daysago." ago</div></div>
 						<div class='comment'><div class='delete'><input type='submit' class='btn btn-danger btn-xs' id='$commentRow[CommentID]' name='deleteComment' 
 						value='Delete Comment'></div><td>$commentRow[Content]</div><br>";
 					}
