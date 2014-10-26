@@ -196,7 +196,7 @@ function printResults($handler) {
 										continue;
 									}
 									$rev = &$rev->getRow();
-									echo "<a href='#'>$rev[Comments] - $rev[text]</a><br>";
+									echo '<a href="#">'.str_replace(' ', str_pad(substr($rev['text'], 0, 30), 30), '&nbsp;').' - '.substr($rev['Comments'], 0, 30).'</a><br>';
 								}
 							}
 							echo '</td>
