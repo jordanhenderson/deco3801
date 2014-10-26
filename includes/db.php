@@ -693,8 +693,7 @@ class Submission extends PCRObject {
 		// Run appropriate tests
 		switch ($assignment_type) {
 			case 'bash':
-				// TODO remove hardcoding filename 
-				$tester = new bashTesting($test_file_location, $this->storage_dir . "tester.sh");
+				$tester = new bashTesting($test_file_location, $this->storage_dir . "run.sh");
 				$results = $tester->execute();
 
 				// Update results in database
