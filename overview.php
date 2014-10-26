@@ -31,7 +31,7 @@ function formatDBtime($dbtime) {
 	return date_format($date, 'j M \'y, g:ia'); // e.g: 6 Feb '14, 8:30pm
 }
 
-function printResults($handle, $studentid) {
+function printResults($handle, $assid, $studentid) {
 	global $asg;
 	$submission = $handle->getAssignment($assid)->getSubmission($studentid);
 	
@@ -131,7 +131,7 @@ function printResults($handle, $studentid) {
 							
 							if (!$admin) {
 								echo '<td>';
-								printResults($crs, $_SESSION['user_id']);
+								printResults($crs, $assid, $_SESSION['user_id']);
 								echo '</td>';
 							}
 							?>
@@ -188,7 +188,7 @@ function printResults($handle, $studentid) {
 						<tr>
 							<td>Student #$sub[StudentID]</td>
 							<td>";
-							printResults($crs, $sub['StudentID']);
+							printResults($crs, $assid, $sub['StudentID']);
 							echo "</td>
 							<td>$sub[SubmitTime]</td>
 							<td>";
