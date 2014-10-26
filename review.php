@@ -224,8 +224,8 @@ foreach ($reviews as $review) {
 				var textArr = text.split('\n');
 				endIndex = textArr[textArr.length-1].length;
 			}
-			for (var lineNum = startLine; lineNum <= endLine; lineNum++) {
-				if (lineNum == startLine && lineNum == endLine) {
+			for (var lineNum = line; lineNum <= endLine; lineNum++) {
+				if (lineNum == line && lineNum == endLine) {
 					var checkMergeFront = wordArray[lineNum].substr(index, endIndex).indexOf("<span");
 					if (checkMergeFront != -1) {
 						endIndex = checkMergeFront;
@@ -236,7 +236,7 @@ foreach ($reviews as $review) {
 					}
 					break;
 				}
-				if (lineNum == startLine) {
+				if (lineNum == line) {
 					var checkMergeBack = wordArray[lineNum].substr(index, wordArray[lineNum].length).indexOf("</span");
 					if (checkMergeBack != -1) {
 						index = checkMergeBack + 7;
@@ -254,7 +254,7 @@ foreach ($reviews as $review) {
 					if (checkMergeBack != -1) {
 						index = checkMergeBack + 7;
 						tempIndex = index;
-						startLine = endLine;
+						line = endLine;
 					}
 					var checkMergeFront = wordArray[lineNum].substr(tempIndex, endIndex).indexOf("<span");
 					if (checkMergeFront != -1) {
@@ -267,7 +267,7 @@ foreach ($reviews as $review) {
 				var checkMergeBack = wordArray[lineNum].substr(tempStart, tempEnd).indexOf("</span");
 				if (checkMergeBack != -1) {
 					index = checkMergeBack + 7;
-					startLine = endLine;
+					line = endLine;
 					tempStart = index;
 				}
 				var checkMergeFront = wordArray[lineNum].substr(tempStart, tempEnd).indexOf("<span");
@@ -275,7 +275,7 @@ foreach ($reviews as $review) {
 					endIndex = checkMergeFront;
 					endLine = lineNum;
 				}
-				if (startLine == endLine) {
+				if (line == endLine) {
 					break;
 				}
 			}
