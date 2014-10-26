@@ -693,7 +693,7 @@ class Submission extends PCRObject {
 		// Run appropriate tests
 		switch ($assignment_type) {
 			case 'bash':
-				$tester = new bashTesting($test_file_location, $this->storage_dir . "run.sh");
+				$tester = new bashTesting($test_file_location, $this->storage_dir . "*");
 				$results = $tester->execute();
 
 				// Update results in database
