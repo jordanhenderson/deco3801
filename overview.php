@@ -33,7 +33,7 @@ function formatDBtime($dbtime) {
 
 function printResults($handle, $studentid) {
 	global $asg;
-	$submission = $crs->getAssignment($assid)->getSubmission($studentid);
+	$submission = $handle->getAssignment($assid)->getSubmission($studentid);
 	
 	$sub = &$submission->getRow();
 	if ($submission->isValid()) {
