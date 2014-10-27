@@ -66,12 +66,12 @@ In addition, collaboration between students and lecturers are also facilitated v
 		<div>
 		<h2>The Team</h2>
 		<ul type="circle">
-		<li>&#8226 Addison Gourluck</li>
-		<li>&#8226 Kieran Shannon</li>
-		<li>&#8226 Jordan Henderson</li>
-		<li>&#8226 Carlie Smits</li>
-		<li>&#8226 Sean Winters</li>
-		<li>&#8226 Morgan Haig</li>
+		<li>&#8226 Addison Gourluck - addison@gourluck.com</li>
+		<li>&#8226 Kieran Shannon - kieran.shannon@uqconnect.edu.au</li>
+		<li>&#8226 Jordan Henderson - jordan.henderson@uqconnect.edu.au</li>
+		<li>&#8226 Carlie Smits - carlie.smits@uqconnect.edu.au</li>
+		<li>&#8226 Sean Winters - seanwinters13@hotmail.com</li>
+		<li>&#8226 Morgan Haig - morgan.haig@uqconnect.edu.au</li>
 		</ul>
 		</div>
 	<!-- jQuery Version 1.11.0 -->
