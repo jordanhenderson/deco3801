@@ -429,6 +429,7 @@ foreach ($reviews as $review) {
 					setupHighlighter();
 				}
 				hljs.highlightBlock(document.getElementById("assignment_code"));
+				setupHover();
 			});	  
 			
 		}
