@@ -28,7 +28,7 @@ if (intval($_SESSION['user_id']) == intval($owner)) {
 	$reviews = $submission->getConditionalReviews(1); // submitted == 1
 	$isOwner = 1;
 } elseif(isset($_SESSION['admin'])) {
-	$reviews = $submission->getConditionalReviews(1);
+	$reviews = $submission->getReviews();
 } else {
 	// Load only the reviews for the current reviewer
 	$reviews = $submission->getStudentsReviews($_SESSION['user_id']);
