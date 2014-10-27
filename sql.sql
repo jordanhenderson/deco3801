@@ -3,7 +3,7 @@
 -- http://www.phpmyadmin.net
 --
 -- Host: localhost
--- Generation Time: Oct 27, 2014 at 02:15 AM
+-- Generation Time: Oct 27, 2014 at 02:42 AM
 -- Server version: 5.5.33
 -- PHP Version: 5.4.20
 
@@ -18,7 +18,7 @@ SET time_zone = "+00:00";
 /*!40101 SET NAMES utf8 */;
 
 --
--- Database: `backup22oct`
+-- Database: `deco3801`
 --
 
 -- --------------------------------------------------------
@@ -27,7 +27,6 @@ SET time_zone = "+00:00";
 -- Table structure for table `Assignments`
 --
 
-DROP TABLE IF EXISTS `Assignments`;
 CREATE TABLE IF NOT EXISTS `Assignments` (
   `AssignmentID` smallint(5) unsigned zerofill NOT NULL AUTO_INCREMENT,
   `CourseID` varchar(32) NOT NULL,
@@ -63,7 +62,6 @@ INSERT INTO `Assignments` (`AssignmentID`, `CourseID`, `AssignmentName`, `Weight
 -- Table structure for table `Comment`
 --
 
-DROP TABLE IF EXISTS `Comment`;
 CREATE TABLE IF NOT EXISTS `Comment` (
   `CommentID` smallint(5) unsigned zerofill NOT NULL AUTO_INCREMENT,
   `QuestionID` smallint(5) unsigned zerofill NOT NULL,
@@ -73,7 +71,7 @@ CREATE TABLE IF NOT EXISTS `Comment` (
   `postdate` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
   PRIMARY KEY (`CommentID`),
   KEY `QuestionID` (`QuestionID`)
-) ENGINE=InnoDB  DEFAULT CHARSET=utf8 AUTO_INCREMENT=181 ;
+) ENGINE=InnoDB  DEFAULT CHARSET=utf8 AUTO_INCREMENT=182 ;
 
 --
 -- Dumping data for table `Comment`
@@ -90,7 +88,8 @@ INSERT INTO `Comment` (`CommentID`, `QuestionID`, `StudentID`, `StudentName`, `C
 (00173, 00115, '7', 'Markus Firstius', '<p>Here is my question response</p>\n\n<pre>\nif(empty($lastpost)){\n                            echo &#39;No answers&#39;;\n                        }\n                        foreach ($lastpost as $last) {\n                            if(!$last-&gt;isValid()) continue;\n                            //Display last posts individually\n                            $last = &amp;$last-&gt;getRow();\n                                $CurrentTime = time();\n                                $date = date_create_from_format(&#39;Y-m-d G:i:s&#39;, $last[&#39;postdate&#39;]);\n                                $OpenTime = (int) date_format($date, &#39;U&#39;);\n                                $daysago = seconds2human($CurrentTime - $OpenTime);\n\n                                echo  $daysago.&quot; ago by \n&quot;.$last[&#39;StudentName&#39;].&quot;&quot;;\n                        }</pre>\n', '2014-10-21 11:55:15'),
 (00177, 00119, '2', 'Admin User', '<p>Response</p>\n\n<p>&nbsp;</p>\n', '2014-10-22 14:11:32'),
 (00179, 00120, '8', 'Julianas Secondus', '<p>Test</p>\n', '2014-10-22 19:42:56'),
-(00180, 00115, '8', 'Julianas Secondus', '<p>dfdf</p>\n', '2014-10-22 19:45:32');
+(00180, 00115, '8', 'Julianas Secondus', '<p>dfdf</p>\n', '2014-10-22 19:45:32'),
+(00181, 00115, '2', 'Admin User', '<p>Answer is here...</p>\n', '2014-10-27 12:29:53');
 
 -- --------------------------------------------------------
 
@@ -98,7 +97,6 @@ INSERT INTO `Comment` (`CommentID`, `QuestionID`, `StudentID`, `StudentName`, `C
 -- Table structure for table `Course`
 --
 
-DROP TABLE IF EXISTS `Course`;
 CREATE TABLE IF NOT EXISTS `Course` (
   `CourseID` varchar(32) NOT NULL,
   `HelpEnabled` tinyint(1) NOT NULL,
@@ -123,7 +121,6 @@ INSERT INTO `Course` (`CourseID`, `HelpEnabled`) VALUES
 -- Table structure for table `Files`
 --
 
-DROP TABLE IF EXISTS `Files`;
 CREATE TABLE IF NOT EXISTS `Files` (
   `FileID` smallint(5) unsigned zerofill NOT NULL AUTO_INCREMENT,
   `SubmissionID` smallint(5) unsigned zerofill NOT NULL,
@@ -155,7 +152,6 @@ INSERT INTO `Files` (`FileID`, `SubmissionID`, `FileName`) VALUES
 -- Table structure for table `Question`
 --
 
-DROP TABLE IF EXISTS `Question`;
 CREATE TABLE IF NOT EXISTS `Question` (
   `QuestionID` smallint(5) unsigned zerofill NOT NULL AUTO_INCREMENT,
   `StudentID` varchar(32) NOT NULL,
@@ -166,7 +162,7 @@ CREATE TABLE IF NOT EXISTS `Question` (
   `Content` text NOT NULL,
   `Status` tinyint(4) NOT NULL,
   PRIMARY KEY (`QuestionID`)
-) ENGINE=InnoDB  DEFAULT CHARSET=utf8 AUTO_INCREMENT=124 ;
+) ENGINE=InnoDB  DEFAULT CHARSET=utf8 AUTO_INCREMENT=125 ;
 
 --
 -- Dumping data for table `Question`
@@ -191,7 +187,6 @@ INSERT INTO `Question` (`QuestionID`, `StudentID`, `CourseID`, `StudentName`, `O
 -- Table structure for table `Review`
 --
 
-DROP TABLE IF EXISTS `Review`;
 CREATE TABLE IF NOT EXISTS `Review` (
   `ReviewID` smallint(5) unsigned zerofill NOT NULL AUTO_INCREMENT,
   `SubmissionID` smallint(5) unsigned zerofill NOT NULL,
@@ -243,7 +238,6 @@ INSERT INTO `Review` (`ReviewID`, `SubmissionID`, `ReviewerID`, `Comments`, `sta
 -- Table structure for table `Submission`
 --
 
-DROP TABLE IF EXISTS `Submission`;
 CREATE TABLE IF NOT EXISTS `Submission` (
   `SubmissionID` smallint(5) unsigned zerofill NOT NULL AUTO_INCREMENT,
   `AssignmentID` smallint(5) unsigned zerofill NOT NULL,
@@ -272,7 +266,6 @@ INSERT INTO `Submission` (`SubmissionID`, `AssignmentID`, `StudentID`, `Results`
 -- Table structure for table `Testing`
 --
 
-DROP TABLE IF EXISTS `Testing`;
 CREATE TABLE IF NOT EXISTS `Testing` (
   `SubmissionID` int(11) NOT NULL,
   `TestID` int(4) NOT NULL,
