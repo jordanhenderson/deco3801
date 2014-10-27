@@ -3,7 +3,7 @@ $mysqlDatabaseName ='deco3801';
 $mysqlUserName ='deco3801';
 $mysqlPassword ='hh2z2WG2q';
 $mysqlHostName ='localhost';
-$mysqlImportFilename ='bk.sql';
+$mysqlImportFilename ='sql.sql';
 $con = mysql_connect($mysqlHostName, $mysqlUserName, $mysqlPassword);
 if (!$con)
   {
