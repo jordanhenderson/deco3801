@@ -5,7 +5,7 @@ $mysqlPassword ='hh2z2WG2q';
 $mysqlHostName ='localhost';
 $mysqlImportFilename ='bk.sql';
 'DROP TABLE `Assignments`, `Comment`, `Course`, `Files`, `Question`, `Review`, `Submission`, `Testing`;'
-$con = mysql_connect("localhost",$mysqlDatabaseName,$mysqlPassword);
+$con = mysql_connect($mysqlHostName, $mysqlUserName, $mysqlPassword);
 if (!$con)
   {
   die('Could not connect: ' . mysql_error());
