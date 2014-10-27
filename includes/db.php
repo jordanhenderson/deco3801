@@ -778,7 +778,7 @@ class Course extends PCRObject {
 	 */
 	public function getHelpCentreQuestions() {
 		$arr = array();
-		$sth = $this->db->prepare("SELECT * FROM Question WHERE CourseID = ?;");
+		$sth = $this->db->prepare("SELECT * FROM Question WHERE CourseID = ? ORDER BY Opendate DESC;");
 		$sth->execute(array($this->getID()));
 		while ($file_row = $sth->fetch(PDO::FETCH_ASSOC)) {
 			array_push($arr, new Question($file_row));
