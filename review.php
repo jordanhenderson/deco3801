@@ -298,8 +298,10 @@ foreach ($reviews as $review) {
 			toggleSyntaxHighlightingOff();
 			var innerContents = $('#assignment_code').html();
 			var wordArray = innerContents.split('\n');
+			var numInOtherFile = 0;
 			for (var j = 0; j < annotations.length; j++) {
 				if (annotations[j].status == 'd' || annotations[j].fileName != $( "#file_heading" ).html()) {
+					numInOtherFile++;
 					continue;
 				}
 				var startIndex;
@@ -307,7 +309,7 @@ foreach ($reviews as $review) {
 				for (var i = 0; i < wordArray.length; i++) {
 					// Find the line the comment starts on and allow for the 6 characters ('<span  ')
 					var filtered = wordArray[i].replace(/ rgb\(32, 175, 205\);/g, "#20afcd");
-					startIndex = filtered.indexOf('id="span' + j + '"') - 6;
+					startIndex = filtered.indexOf('id="span' + (j-numInOtherFile) + '"') - 6;
 					if (startIndex >= 0) {
 						startLine = i;
 						break;
