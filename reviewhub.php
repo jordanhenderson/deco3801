@@ -82,7 +82,7 @@ $crs = new PCRHandler();
 						<td>$asg[AssignmentName]</td>
 						<td>$sub[StudentID]</td>
 						<td>$asg[ReviewsDue]</td>
-						<td><a class='btn btn-xs btn-info' href='review.php?subid=$sub[SubmissionID]' role='button'>Mark</a></td>
+						<td><a class='btn btn-xs btn-info' href='review.php?subid=$sub[SubmissionID]' role='button'>Review</a></td>
 					<tr>";
 			}
 			echo '
