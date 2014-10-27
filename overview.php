@@ -201,7 +201,7 @@ function printResults($handle, $assid, $studentid) {
 										continue;
 									}
 									$rev = &$rev->getRow();
-									echo '<a href="review.php?subid=' . $rev['ReviewID'] . '" style="font-family: Monospace">'.str_replace(array(' ', '\n'), '&nbsp;', str_pad(substr($rev['text'], 0, 33), 33)).' - "'.substr($rev['Comments'], 0, 33).' ..."</a><br>';
+									echo '<a href="review.php?subid=' . $rev['SubmissionID'] . '" style="font-family: Monospace">'.str_replace(array(' ', '\n'), '&nbsp;', str_pad(substr($rev['text'], 0, 33), 33)).' - "'.substr($rev['Comments'], 0, 33).' ..."</a><br>';
 								}
 							}
 							echo '</td>
