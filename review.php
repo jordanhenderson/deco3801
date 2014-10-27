@@ -295,10 +295,11 @@ foreach ($reviews as $review) {
 		 *
 		 */
 		function updatePositions() {
+			toggleSyntaxHighlightingOff();
 			var innerContents = $('#assignment_code').html();
 			var wordArray = innerContents.split('\n');
 			for (var j = 0; j < annotations.length; j++) {
-				if (annotations[j].status == 'd') {
+				if (annotations[j].status == 'd' || annotations[j].fileName != $( "#file_heading" ).html()) {
 					continue;
 				}
 				var startIndex;
@@ -315,6 +316,7 @@ foreach ($reviews as $review) {
 				annotations[j].startLine = startLine;
 				annotations[j].startIndex = startIndex;
 			}
+			toggleSyntaxHighlightingOn();
 		}
 		
 		/**
@@ -337,9 +339,7 @@ foreach ($reviews as $review) {
 		 */
 		function saveReviews() {
 			// Update the startIndex and startLine of the comments (Might be effected by the deleted value)
-			toggleSyntaxHighlightingOff();
 			updatePositions();
-			toggleSyntaxHighlightingOn();
 			//AJAX call to store the review in the database
 			var request = {f: 'saveReviews', params: [JSON.stringify(annotations)]};
 			$.post("api.php", JSON.stringify(request), function(retval) {
@@ -362,9 +362,7 @@ foreach ($reviews as $review) {
 		 */
 		function submitReviews() {
 			// Update the startIndex and startLine of the comments (Might be effected by the deleted value)
-			toggleSyntaxHighlightingOff();
 			updatePositions();
-			toggleSyntaxHighlightingOn();
 			var request = {f: 'submitReviews', params: [JSON.stringify(annotations)]};
 			$.post("api.php", JSON.stringify(request), function(retval) {
 				alert("Your comments have been submitted!");
@@ -403,6 +401,7 @@ foreach ($reviews as $review) {
 		 * Handles when someone clicks on the file tree
 		 */
 		function handleSwap(id) {
+			updatePositions();
 			$('a.active').removeClass('active');
 			var fileName = '';
 			if (id.indexOf("/") != -1) {
