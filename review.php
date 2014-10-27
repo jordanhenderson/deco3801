@@ -181,9 +181,9 @@ foreach ($reviews as $review) {
 			$('#assignment_code').getHighlighter().destroy();
 			count = 0;
 			$('#reviews').html('');
-			turnSyntaxHighlightingOff();
+			toggleSyntaxHighlightingOff();
 			getComments();
-			turnSyntaxHighlightingOn();
+			toggleSyntaxHighlightingOn();
 		}
 
 		/**
