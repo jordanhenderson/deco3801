@@ -168,7 +168,7 @@ foreach ($reviews as $review) {
 					first = 1;
 					$('#student_heading_span').html(key);
 				}
-				$('#studentReviews').append('<a href="#" class="reviewedBy" onclick="changeReviewer(' + key + ')">Student: ' + key + '</a>');
+				$('#studentReviews').append('<button class="reviewedBy" onclick="changeReviewer(' + key + ')">Student: ' + key + '</button>');
 			}
 		}
 		
@@ -178,9 +178,12 @@ foreach ($reviews as $review) {
 		 */
 		function changeReviewer(id) {
 			$('#student_heading_span').html(id);
-			setupHighlighter();
+			/*setupHighlighter();
 			$('#assignment_code').getHighlighter().removeHighlights();
-			$('#assignment_code').getHighlighter().destroy();
+			$('#assignment_code').getHighlighter().destroy();*/
+			$(".highlighted").each(function() {
+				$(this).contents().unwrap();
+			});
 			count = 0;
 			$('#reviews').html('');
 			// Load the comments for the next review in
