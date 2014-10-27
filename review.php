@@ -156,6 +156,8 @@ foreach ($reviews as $review) {
 		 */
 		function ownerSetup() {
 			$('#student_heading').show();
+			$('#saveButton').hide();
+			$('#submitButton').hide();
 			var counts = {};
 			var first = 0;
 			for (var i = 0; i < annotations.length; i++) {
@@ -181,9 +183,11 @@ foreach ($reviews as $review) {
 			$('#assignment_code').getHighlighter().destroy();
 			count = 0;
 			$('#reviews').html('');
+			// Load the comments for the next review in
 			toggleSyntaxHighlightingOff();
 			getComments();
 			toggleSyntaxHighlightingOn();
+			setupHover();
 		}
 
 		/**
@@ -405,7 +409,10 @@ foreach ($reviews as $review) {
 		 * Handles when someone clicks on the file tree
 		 */
 		function handleSwap(id) {
-			updatePositions();
+			// Don't update for the owner, since they can't change them anyway
+			if (isOwner == 0) {
+				updatePositions();
+			}
 			$('a.active').removeClass('active');
 			var fileName = '';
 			if (id.indexOf("/") != -1) {
@@ -515,8 +522,8 @@ foreach ($reviews as $review) {
 				<div id="reviews" style="clear:right; float:right;"></div>
 				</div>	
 				<p style="float:left;clear:left;">
-					<a class="btn btn-info" href="#" onclick="saveReviews()" role="button">Save</a>
-					<a class="btn btn-primary" href="reviewhub.php" onclick="submitReviews()" role="button">Submit</a>
+					<a class="btn btn-info" href="#" onclick="saveReviews()" id = "saveButton" role="button">Save</a>
+					<a class="btn btn-primary" href="reviewhub.php" onclick="submitReviews()" id="submitButton" role="button">Submit</a>
 					<a class="btn btn-warning" href="reviewhub.php" role="button">Close</a>
 				</p>
 			</div>

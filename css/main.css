@@ -181,3 +181,15 @@ a.active {
 	max-width: 230px;
 	overflow-x: auto;
 }
+
+#studentReviews {
+	overflow-y: hidden;
+	overflow-x: auto;
+	min-height: 80px;
+	max-height: 80px;
+	min-width: 250px;
+	max-width: 250px;
+	padding-bottom: 0px;
+	margin-bottom: 0px;
+	white-space: nowrap;
+}
