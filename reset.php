@@ -13,7 +13,7 @@ if (!$con)
 $sql = "DROP TABLE `Assignments`, `Comment`, `Course`, `Files`, `Question`, `Review`, `Submission`, `Testing`";
 mysql_query($sql,$con);
 mysql_close($con);
-?>
+
 //DONT EDIT BELOW THIS LINE
 //Export the database and output the status to the page
 $command='mysql -h' .$mysqlHostName .' -u' .$mysqlUserName .' -p' .$mysqlPassword .' ' .$mysqlDatabaseName .' < ' .$mysqlImportFilename;
