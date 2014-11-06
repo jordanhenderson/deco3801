@@ -213,7 +213,7 @@ function printResults($results) {
 								echo "No reviews.";
 							} else {
 								foreach ($reviews as $rev) {
-									if (!$rev->isValid() || $rev->getRow()['fileName'] == '') {
+									if (!$rev->isValid() || $rev->getRow()['FileID'] == '') {
 										continue;
 									}
 									$rev = &$rev->getRow();
