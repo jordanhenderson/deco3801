@@ -43,8 +43,10 @@ function printResults($results) {
 	    $numTests = $asg["NumberTests"];
 	    if((int)$numTests > 0) {
 		$passed = 0;
-		foreach($results as $val) {
-		    if($val == 'pass') $passed++;
+		if($results) {
+			foreach($results as $val) {
+			    if($val == 'pass') $passed++;
+			}
 		}
 		
 		$percentage = ($passed/$numTests)*100;
