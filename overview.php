@@ -147,19 +147,20 @@ function printResults($results) {
 				</table>
 				<?php
 					if ($admin) {
-						echo '<a class="btn btn-primary" href="create.php?assid='.$assid.'" role="button">Edit Assignment</a>';
-						echo '<br>Impatient Buttons - For demonstration purposes only.<br>';
-						echo '<a class="btn btn-danger impatient" name="makeopen" role="button">Make Assignment Open</a><br>';
-						echo '<a class="btn btn-danger impatient" name="makedue" role="button">Make Assignment Due</a><br>';
-						echo '<a class="btn btn-danger impatient" name="makereviewsdue" role="button">Make Assignment Reviews Due</a>';
-
-						echo '<a class="btn btn-primary" href="create.php?assid='.$assid.'" role="button">Edit Assignment</a>';
+						echo '<a class="btn btn-primary" href="create.php?assid='.$assid.'" role="button">Edit Assignment</a><br>';
 						
-						$currentTime = time();
+						$currentTime = new DateTime();
 						$date = date_create_from_format('Y-m-d G:i:s', $asg['DueTime']);
 						if($date <= $currentTime) {
-							echo '<a class="btn btn-warning" href="assignReviews.php?assid='.$assid.'" role="button">Assign Reviews</a>';
+							echo '<a class="btn btn-warning" href="assignReviews.php?assid='.$assid.'" role="button">Assign Reviews</a><br>';
 						}
+						echo '<h3>Quick Actions</h3>';
+						echo '<a class="btn btn-danger impatient" name="makeopen" role="button">Make Assignment Open</a><br>';
+						echo '<a class="btn btn-danger impatient" name="makedue" role="button">Make Assignment Due</a><br>';
+						echo '<a class="btn btn-danger impatient" name="makereviewsdue" role="button">Make Assignment Reviews Due</a><br>';
+
+						
+
 					}
 					
 				?>
