@@ -15,7 +15,7 @@ if ($config['DEBUG'] == false) {
 	$_SESSION['course_code'] = "Debug Course";
 	$_SESSION['course_title'] = "Debug Course";
 	$_SESSION['helpenabled'] = "1";
-	$_SESSION['admin'] = true;
+	if($config['isadmin']) $_SESSION['admin'] = true;
 }
 
 /* LTI Handling */

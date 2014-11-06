@@ -5,15 +5,14 @@ require_once 'includes/handlers.php';
 $crs = new PCRHandler();
 $initialFile = '';
 // Get the submissionID from the url
-$subID = ''.$_GET['subid'];
-while (strlen($subID) < 5) {
-	$subID = '0'.$subID;
-}
-
+$subID = $_GET['subid'];
 $courseid = $_SESSION['course_id'];
 
-// This currently returns an empty value (TODO does it still?)
 $submission = $crs->getSubmissionForReviewing($subID);
+if(!$submission->isValid()) {
+	header("Location: reviewhub.php");
+	die();
+}
 $assignid = ''.$submission->getAssignmentID();
 while (strlen($assignid) < 5) {
 	$assignid = '0'.$assignid;
@@ -22,6 +21,7 @@ while (strlen($assignid) < 5) {
 // Get the owner of the submission
 $owner = $submission->getOwner();
 $isOwner = 0;
+
 // Check who is accessing the page (submission owner or reviewer)
 if (intval($_SESSION['user_id']) == intval($owner)) {
 	// Load all submitted reviews made for the submission for viewing
@@ -30,8 +30,15 @@ if (intval($_SESSION['user_id']) == intval($owner)) {
 } elseif(isset($_SESSION['admin'])) {
 	$reviews = $submission->getReviews();
 } else {
+	//Redirect the user to overview.php if access is denied.
+	$review = new Review(array("SubmissionID"=>$submission->getID(), "ReviewerID"=>$_SESSION['user_id']), false);
+	if(!$review->isValid()) {
+		header("Location: reviewhub.php");
+		die();
+	}
 	// Load only the reviews for the current reviewer
 	$reviews = $submission->getStudentsReviews($_SESSION['user_id']);
+
 }
 
 $annotations = array();
@@ -42,7 +49,7 @@ foreach ($reviews as $review) {
 	 * review that is already in the database.
 	 */
 	$row = $review->getRow();
-	if ($row["SubmissionID"] == $subID) {
+	if ($row["SubmissionID"] == $subID && $row["FileID"] !== null) {
 		$row["status"]='o';
 		array_push($annotations, $row);
 	}
@@ -206,11 +213,11 @@ foreach ($reviews as $review) {
 				//annotations[i].status = 'o';
 				
 				if (isOwner == 0) {
-					if (annotations[i].fileName == $( "#file_heading" ).html() ) {
+					if (annotations[i].FileID == $( "#file_heading" ).data("fid") ) {
 						wordArray = reviewPopulate(wordArray, i);
 					}
 				} else {
-					if (annotations[i].fileName == $("#file_heading").html() && annotations[i].ReviewerID == $("#student_heading_span").html()) {
+					if (annotations[i].FileID == $("#file_heading").data("fid") && annotations[i].ReviewerID == $("#student_heading_span").html()) {
 						wordArray = reviewPopulate(wordArray, i);
 						$("#reviewControls" + (count-1)).hide();
 					}
@@ -293,7 +300,8 @@ foreach ($reviews as $review) {
 				return;
 			}
 			// Push the new comment into the array
-			annotations.push({"Comments":comment, "text":selected, "status":'n', "fileName":$( "#file_heading" ).html(), "SubmissionID":<?php echo $subID;?>});
+			var fileHeading = $("#file_heading");
+			annotations.push({"Comments":comment, "text":selected, "status":'n', "FileID":fileHeading.data("fid"), "SubmissionID":"<?php echo $subID;?>"});
 			count = count + 1;
 			setupHighlighter();
 			setupHover();
@@ -309,7 +317,7 @@ foreach ($reviews as $review) {
 			var wordArray = innerContents.split('\n');
 			var numInOtherFile = 0;
 			for (var j = 0; j < annotations.length; j++) {
-				if (annotations[j].status == 'd' || annotations[j].fileName != $( "#file_heading" ).html()) {
+				if (annotations[j].status == 'd' || annotations[j].FileID != $( "#file_heading" ).data("fid")) {
 					numInOtherFile++;
 					continue;
 				}
@@ -352,7 +360,7 @@ foreach ($reviews as $review) {
 			// Update the startIndex and startLine of the comments (Might be effected by the deleted value)
 			updatePositions();
 			//AJAX call to store the review in the database
-			var request = {f: 'saveReviews', params: [JSON.stringify(annotations)]};
+			var request = {f: 'saveReviews', params: [annotations]};
 			$.post("api.php", JSON.stringify(request), function(retval) {
 				alert("Your comments have been saved!");
 				for (var i=0; i < annotations.length; i++) {
@@ -374,7 +382,7 @@ foreach ($reviews as $review) {
 		function submitReviews() {
 			// Update the startIndex and startLine of the comments (Might be effected by the deleted value)
 			updatePositions();
-			var request = {f: 'submitReviews', params: [JSON.stringify(annotations)]};
+			var request = {f: 'submitReviews', params: [annotations]};
 			$.post("api.php", JSON.stringify(request), function(retval) {
 				alert("Your comments have been submitted!");
 				for (var i=0; i < annotations.length; i++) {
@@ -411,26 +419,24 @@ foreach ($reviews as $review) {
 		/**
 		 * Handles when someone clicks on the file tree
 		 */
-		function handleSwap(id) {
+		function handleSwap() {
+			var file_link = $(this);
 			// Don't update for the owner, since they can't change them anyway
 			if (isOwner == 0) {
 				updatePositions();
 			}
 			$('a.active').removeClass('active');
-			var fileName = '';
-			if (id.indexOf("/") != -1) {
-				fileName = id.substring(id.lastIndexOf("/") + 1);
-			}
-			$('#' + fileName.split('.')[0]).addClass('active');
+			file_link.addClass('active');
 			//Loads the selected file into the main content area using AJAX
-			var request = {f: 'loadFile', params:  ['' + id]};
+			var request = {f: 'loadFile', params: [file_link.data("fid")]};
 			$.post("api.php", JSON.stringify(request), function( filecode ) {
 				var contentObj = $.parseJSON(filecode);
 				// reset count
 				// want to destroy and recreate to update the id (count)
 				count = 0;
 				$( "#assignment_code" ).html(contentObj.r.trim());
-				$( "#file_heading" ).html( fileName );
+				$( "#file_heading" ).html( file_link.data("fname") );
+				$( "#file_heading" ).data("fid", file_link.data("fid"));
 				// remove previous annotations and add the new ones
 				$('#reviews').html('');
 				getComments();
@@ -462,65 +468,48 @@ foreach ($reviews as $review) {
 		<div class="col-xs-6 col-sm-3 sidebar-offcanvas" id="sidebar">
 		
 			<div class="file-tree-container">
+				<ul class="filetree">
 			<?php
-				function setupFileTree ($dir) {
-					// Open a directory, and read its contents
-					if ($dh = opendir($dir)) {
-						echo "<ul class='filetree'>";
-						$filesArray = array();
-						while (($file = readdir($dh)) !== false) {
-							// Check if it's a directory (but not '.' or '..')
-							if (is_dir($dir.$file) && $file != "." && $file != "..") {
-								// Use recursion to go into subdirectories
-								handleSubDir($file, $dir, $filesArray);
-							} else if ($file != "." && $file != "..") {
-								// add the file to the array
-								array_push($filesArray, $file);
-							}
-						}
-						// print the array as a list
-						printPath ($filesArray, $dir);
-						closedir($dh);
-						echo "</ul>";
+				$files = $crs->getFiles($subID);
+				$initialFile = $files[0];
+				$lastdir = "";
+				$close = "";
+				foreach($files as $file) {
+					$id = $file->getID();
+					$name = $file->getFileName();
+					$path = $file->getPath();
+
+					if($path === $lastdir) {
+						//Same subdirectory.
+					} elseif($lastdir === "" || strpos($lastdir, $path) !== FALSE) {
+						//Deeper directory.
+						$close .= "</ul></li>";
+						echo "<li class='dir'>" . $file->getLastPath() . "<ul class='filetree'>";
+					} else {
+						//pull back.
+						echo $close;
+						$close = "";
 					}
+					$lastdir = $path;
+				      
+					$active = $file == $files[0] ? "active" : "";
+					echo "<li><a href='#' class='file-link $active' data-fid='$id' data-fname='$name'>$name</a></li>";
 				}
-				
-				function handleSubDir($subdir, $dir) {
-					// print the name of the directory and then traverse into it
-					echo "<li class='dir'>" . $subdir;
-					setupFileTree($dir . $subdir . "/");
-					echo "</li>";
-				}
-				
-				function printPath ($filesArray, $dir) {
-					// Loop through the directory contents to make the file tree
-					foreach ($filesArray as $name) {
-						global $initialFile;
-						$includesDir = substr_replace($dir . $name, '/includes/..', strlen(''. __DIR__), 0);
-						if ($name === $filesArray[0]) {
-							$initialFile = $dir . $name;
-						}
-						echo "<li>";
-						echo "<a href='#' id='" . explode('.', $name)[0] . "' class='file-link' onclick='handleSwap(\"" . $includesDir . "\");'>" . $name . "</a>";
-						echo "</li>";
-					}
-				}
-				
-				setupFileTree(__DIR__ . "/storage/course_$courseid/assign_$assignid/submissions/$subID/");
 			?>
+			 </ul>
 			</div>
 		</div>
 		<div class="col-md-9">
-			<h1><?php echo $crs->getAssignment($assignid)->getAssignmentName(); ?></h1>
+			<h1>Reviewing: <?php echo $crs->getAssignment($assignid)->getAssignmentName(); ?></h1>
 			<div class="col-md-12">
-				<h2 id="file_heading"><?php if ($initialFile !== '') echo substr($initialFile, strrpos($initialFile, "/") + 1); ?></h2>
+				<h2 id="file_heading">Reviews</h2>
 				<h3 id="student_heading" style="display:none">Student <span id="student_heading_span"></span></h3>
 				<div id="studentReviews" class="list-group" style="float:right"></div>
 				<div id="innercontainer">
 					<pre id='assignment_code' style="float: left; min-width: 450px; max-width: 550px"><?php
 					//Loads the first file in the file tree if its not empty
 					if ($initialFile !== '') {
-						echo trim($crs->loadFile($initialFile));
+						echo trim($crs->loadFile($initialFile->getID()));
 					}?></pre>
 				<div id="reviews" style="clear:right; float:right;"></div>
 				</div>	
@@ -571,13 +560,8 @@ foreach ($reviews as $review) {
 		
 		$(document).ready(function() {
 			$("#breadcrumbs").rcrumbs();
-			// Set the current file to be 'active'
-			var fileName;
-			var id = '<?php echo $initialFile; ?>';
-			if (id.indexOf("/") != -1) {
-				fileName = id.substring(id.lastIndexOf("/") + 1);
-			}
-			$('#' + fileName.split('.')[0]).addClass('active');
+			$(".file-tree-container").on("click", ".file-link", handleSwap);
+			$(".file-link").first().trigger("click");
 			// Turn the file list into a collapsible tree
 			$('li.dir').each(function(i) {
 				// temporarily disconnect the sub directory

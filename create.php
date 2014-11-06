@@ -127,6 +127,9 @@ if (isset($_GET['assid'])) {
 					<p class="help-block">Toggle the above to prevent or allow students to make multiple assignment submission attempts.</p>
 				</div>
 			</div>
+					<?php 
+		if(!$new) { 
+		?> 
 			<div class="row">
 				<div class="col-md-6">
 					<label for="NumberTests">Number of Tests</label>
@@ -134,7 +137,19 @@ if (isset($_GET['assid'])) {
 					<p class="help-block">Enter the number of tests run by the test script provided below.</p>
 				</div>
 			</div>
+			<?php 
+			} else {
+			?>
+			
+			    <input type="hidden" name="NumberTests" id="NumberTests" value="0">
+			
+			<?php
+			}
+			?>
 		</form>
+		<?php 
+		if(!$new) { 
+		?> 
 		<form enctype="multipart/form-data" action="uploadTest.php" method="POST">
 		<div class="row">
 				<div class="col-md-12">
@@ -147,11 +162,14 @@ if (isset($_GET['assid'])) {
 							</span>
 							<input class="btn btn-default btn-primary" type="submit" value="Submit" />
 						
-						<p class="help-block">Please zip test file(s). The file executed when testing must be named "runtest".</p>
+						<p class="help-block">Please zip test file(s). The file executed when testing must be named "run.sh".</p>
 					</div>
 				</div>
 			</div>
 		</form>
+		<?php
+		}
+		?>
 		<div align="center">
 				<?php
 				if ($new) {
@@ -228,6 +246,6 @@ if (isset($_GET['assid'])) {
 				window.location.replace("index.php");
 			});
 		});
-	</script>
+	</script> 
 </body>
 </html>

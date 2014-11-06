@@ -1,20 +1,8 @@
 <?php
-	$submissions = $asg_obj->getSubmissions();
-	
-	$reviewnum = count($submissions) - 1;
-	
-	if ($reviewnum > $asg['ReviewsNeeded']) {
-		$reviewnum = $asg['ReviewsNeeded'];
-	}
-	
-	// for each submission
-	for ($i = 0; $i < count($submissions); ++$i) {
-		// the student who made the submission must mark 'reviewnum' submissions.
-		for ($j = 0; $j < $reviewnum; ++$j) {
-			// Make review row for student/submission
-			$index = ($i + $j + 1) % count($submissions);
-			$reviewerID = $submissions[$index]->getOwner();
-			$submissions[$i]->addReview("http://imgur.com/QsNW6O4", $reviewerID, 0, 0, "", "http://imgur.com/QsNW6O4", 0);
-		}
-	}
+require_once('includes/handlers.php');
+
+$handler = new PCRHandler();
+$handler->assignReviews($_REQUEST["assid"]);
+
+header("Location: overview.php?assid=".$_REQUEST["assid"]);
 ?>

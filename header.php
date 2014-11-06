@@ -17,7 +17,7 @@ require_once('includes/handlers.php');
 					<li><a href="index.php">Home Page</a></li>
 					<?php
 						// Display the help center bar only if help is enabled or admin user.
-						if ((isset($_SESSION['helpenabled']) && $_SESSION['helpenabled']) || $_SESSION['admin']) {
+						if ((isset($_SESSION['helpenabled']) && $_SESSION['helpenabled']) || isset($_SESSION['admin'])) {
 							echo '<li><a href="help.php">Help Centre</a></li>';
 						}
 						if (!isset($_SESSION['admin'])) {

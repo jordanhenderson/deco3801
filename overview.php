@@ -31,31 +31,30 @@ function formatDBtime($dbtime) {
 	return date_format($date, 'j M \'y, g:ia'); // e.g: 6 Feb '14, 8:30pm
 }
 
-function printResults($handle, $assid, $studentid) {
+function printResults($results) {
 	global $asg;
-	$submission = $handle->getAssignment($assid)->getSubmission($studentid);
 	
-	$sub = &$submission->getRow();
-	if ($submission->isValid()) {
-		$results = $sub['Results'];
-	} else {
-		$results = "";
-	}
+
+	$results = json_decode($results);
 	
 	global $assignment;
 	$percentage = $passed = $numTests = 0;
-	if ($assignment->isValid()) {
-		$numTests = $asg["NumberTests"];
-		if ((int)$numTests > 0) {
-			$passed = substr_count($results, 'pass');
-			$percentage = ($passed / $numTests) * 100;
+	if($assignment->isValid()) {
+	    $numTests = $asg["NumberTests"];
+	    if((int)$numTests > 0) {
+		$passed = 0;
+		foreach($results as $val) {
+		    if($val == 'pass') $passed++;
 		}
+		
+		$percentage = ($passed/$numTests)*100;
+	    }
 	}
 
 	echo "$passed/$numTests tests passed";
 	echo "
-	<div style='width:100%; background-color:white; height:auto; border:1px solid #000;'>
-		<div style='width:".$percentage."%; background-color:green; height:10px;'></div>
+    <div style='width:100%; background-color:white; height:auto; border:1px solid #000;'>
+    	<div style='width:".$percentage."%; background-color:green; height:10px;'></div>
 	</div>";
 }
 
@@ -131,7 +130,12 @@ function printResults($handle, $assid, $studentid) {
 							
 							if (!$admin) {
 								echo '<td>';
-								printResults($crs, $assid, $_SESSION['user_id']);
+								$sub = $crs->getSubmission($assid);
+								$results = "";
+								if($sub->isValid()) {
+								    $results = $sub->getRow()["Results"];
+								}
+								printResults($results);
 								echo '</td>';
 							}
 							?>
@@ -146,7 +150,16 @@ function printResults($handle, $assid, $studentid) {
 						echo '<a class="btn btn-danger impatient" name="makeopen" role="button">Make Assignment Open</a><br>';
 						echo '<a class="btn btn-danger impatient" name="makedue" role="button">Make Assignment Due</a><br>';
 						echo '<a class="btn btn-danger impatient" name="makereviewsdue" role="button">Make Assignment Reviews Due</a>';
+
+						echo '<a class="btn btn-primary" href="create.php?assid='.$assid.'" role="button">Edit Assignment</a>';
+						
+						$currentTime = time();
+						$date = date_create_from_format('Y-m-d G:i:s', $asg['DueTime']);
+						if($date <= $currentTime) {
+							echo '<a class="btn btn-warning" href="assignReviews.php?assid='.$assid.'" role="button">Assign Reviews</a>';
+						}
 					}
+					
 				?>
 			</div>
 		</div>
@@ -188,7 +201,7 @@ function printResults($handle, $assid, $studentid) {
 						<tr>
 							<td>Student #$sub[StudentID]</td>
 							<td>";
-							printResults($crs, $assid, $sub['StudentID']);
+							printResults($sub["Results"]);
 							echo "</td>
 							<td>$sub[SubmitTime]</td>
 							<td>";

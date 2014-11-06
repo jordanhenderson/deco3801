@@ -167,22 +167,49 @@ class PCRHandler {
 		return $question->addComment($studentid, $fullname, $content, $date);
 	}
 	
+	
+	public function assignReviews($assign_id) {
+	      $asg_obj = new Assignment(array("AssignmentID"=>$assign_id));
+	      
+	      if(!$asg_obj->isValid()) return;
+	      
+	      //Abort if any existing reviews for assignment
+	      $asg = $asg_obj->getRow();
+	      
+	      $submissions = $asg_obj->getSubmissions();
+	      $reviewnum = $asg['ReviewsNeeded'];
+	      
+	    
+	      // for each submission
+	      for ($i = 0; $i < count($submissions); ++$i) {
+		      // the student who made the submission must mark 'reviewnum' submissions.
+		      for ($j = 0; $j < $reviewnum; ++$j) {
+			      // Make review row for student/submission
+			      $index = ($i + $j + 1) % count($submissions);
+			      $reviewerID = $submissions[$index]->getOwner();
+			      if($reviewerID != $submissions[$i]->getOwner()) {
+					$exist_review = new Review(array("ReviewerID"=>$reviewerID, "SubmissionID"=>$submissions[$i]->getID()), false);
+					if(!$exist_review->isValid())
+						  $submissions[$i]->addReview("", $reviewerID, 0, 0, null, "", 0);
+			      }
+		      }
+	      }
+	}
 	/**
 	 * Function that is run when save is clicked. It will remove any deleted
 	 * reviews, update any edited ones, insert any new ones and ignore
 	 * unchanged ones
 	 */
 	public function saveReviews($reviews) {
-		$reviews = json_decode($reviews);
 		foreach ($reviews as $review) {
-			if ($review->status == 'd') {
-				$this->removeReview($review->ReviewID, $review->SubmissionID);
-			} elseif ($review->status == 'e') {
-				$this->editReview($review->startLine, $review->startIndex, $review->ReviewID, $review->Comments, $review->SubmissionID, 0);
-			} elseif ($review->status == 'n') {
+			if ($review["status"] == 'd') {
+				$this->removeReview($review["ReviewID"], $review["SubmissionID"]);
+			} elseif ($review["status"] == 'e') {
+				$this->editReview($review["startLine"], $review["startIndex"], $review["ReviewID"], $review["Comments"], $review["SubmissionID"], 0);
+			} elseif ($review["status"] == 'n') {
 				$this->addReview($review, 0);
-			} elseif ($review->status == 'o') {
-				$this->editReview($review->startLine, $review->startIndex, $review->ReviewID, $review->Comments, $review->SubmissionID, 1);
+			} elseif ($review["status"] == 'o') {
+				$this->editReview($review["startLine"], $review["startIndex"], $review["ReviewID"], $review["Comments"], $review["SubmissionID"], 1);
 			}
 		}
 	}
@@ -193,16 +220,15 @@ class PCRHandler {
 	 * unchanged ones
 	 */
 	public function submitReviews($reviews) {
-		$reviews = json_decode($reviews);
 		foreach ($reviews as $review) {
-			if ($review->status == 'd') {
-				$this->removeReview($review->ReviewID, $review->SubmissionID);
-			} elseif ($review->status == 'e') {
-				$this->editReview($review->startLine, $review->startIndex, $review->ReviewID, $review->Comments, $review->SubmissionID, 1);
-			} elseif ($review->status == 'n') {
+			if ($review["status"] == 'd') {
+				$this->removeReview($review["ReviewID"], $review["SubmissionID"]);
+			} elseif ($review["status"] == 'e') {
+				$this->editReview($review["startLine"], $review["startIndex"], $review["ReviewID"], $review["Comments"], $review["SubmissionID"], 1);
+			} elseif ($review["status"] == 'n') {
 				$this->addReview($review, 1);
-			} elseif ($review->status == 'o') {
-				$this->editReview($review->startLine, $review->startIndex, $review->ReviewID, $review->Comments, $review->SubmissionID, 1);
+			} elseif ($review["status"] == 'o') {
+				$this->editReview($review["startLine"], $review["startIndex"], $review["ReviewID"], $review["Comments"], $review["SubmissionID"], 1);
 			}
 		}
 	}
@@ -234,11 +260,12 @@ class PCRHandler {
 	 */
 	public function addReview($review, $submitted) {
 		// Get the submission for the student you are submitting a review for
-		$submission = new Submission(array("SubmissionID"=>$review->SubmissionID), false);
+		$submission = new Submission(array("SubmissionID"=>$review["SubmissionID"]), false);
+		if(!$submission->isValid()) return;
 		// Then add the review to the database
-		return $submission->addReview($review->Comments, $_SESSION['user_id'], 
-						$review->startIndex, $review->startLine, 
-						$review->fileName, $review->text, $submitted);
+		return $submission->addReview($review["Comments"], $_SESSION['user_id'], 
+						$review["startIndex"], $review["startLine"], 
+						$review["FileID"], $review["text"], $submitted);
 	}
 	
 	/**
@@ -350,6 +377,15 @@ class PCRHandler {
 			$zip->extractTo($path);
 			$zip->close();
 			unlink($file);
+			
+			//Set executable flag on run.sh.
+			chdir($assignment->getDir() . "/test/");
+			if(!file_exists("run.sh")) {
+			      //Test invalid, no run.sh!
+			      $assignment->cleanTest();
+			} else {
+			      chmod("run.sh", 0750);
+			}
 		}
 	}
 	
@@ -399,9 +435,8 @@ class PCRHandler {
 			}
 
 			$assign = &$assignment->getRow();
-			$assignment_type = $assign["Language"];
 			$test_file_location = $assignment->getDir() . "test/";
-			$submission->testSubmission($assignment_type, $test_file_location);
+			$submission->testSubmission($test_file_location);
 					
 		}
 		return $submission;
@@ -419,6 +454,7 @@ class PCRHandler {
 		if (!$assignment->canResubmit() && $oldsubmission->isValid()) return;
 		
 		$oldsubmission->delete();
+		print_r($oldsubmission);
 		
 		$submission = new Submission(array("AssignmentID"=>$assignment_id, "StudentID"=>$_SESSION['user_id']));
 		if ($submission->isValid()) {
@@ -431,8 +467,9 @@ class PCRHandler {
 				$submission->delete();
 				return;
 			}
-			// TODO Uncomment when ready for testing
-			$submission->testSubmission();
+
+			$test_file_location = $assignment->getDir() . "test/";
+			$submission->testSubmission($test_file_location);
 		}
 		return $submission;
 	}
@@ -467,9 +504,26 @@ class PCRHandler {
 	 * Retrieves the file from the server and returns it to the calling page i.e. 
 	 * review_dev.php. 
 	 */
-	public function loadFile($fileName) {
-		$fileName .= ''; // convert to string (just in case)
+	public function loadFile($fileID) {
+		$file = new File(array("FileID"=>$fileID));
+		if(!$file->isValid()) return "";
+		$file_row = $file->getRow();
+
+		$submission = new Submission(array("SubmissionID"=>$file_row["SubmissionID"]));
+		if(!$submission->isValid()) return ""; //invalid submission ID?
+
+		if(!isset($_SESSION['admin'])) {
+			//Check to ensure we have access to the file
+			$submission_row = $submission->getRow();
+			if($_SESSION['user_id'] !== $submission_row['StudentID']) {
+				//Check to ensure the student cannot review this submission
+				$review = new Review(array("ReviewerID"=>$_SESSION['user_id'], "SubmissionID"=>$submission->getID()), false);
+				if(!$review->isValid()) return ""; //user should not be able to access file!
+			}
+		}
+
 		//$assignment =  __DIR__ . "/../storage/course_$courseID/assign_$assignmentid/submissions/$submissionID/" . $fileName;
+		$fileName = $submission->getStorageDir() . $file_row["FileName"];
 		$handle = fopen($fileName, "r");
 		$contents = fread($handle, filesize($fileName));
 		$contents = str_replace('<', '&lt;', $contents);

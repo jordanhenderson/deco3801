@@ -129,6 +129,7 @@ abstract class PCRObject implements JsonSerializable {
 		try {
 			$sth = $this->db->prepare("INSERT INTO $this->table ($cols) VALUES ($vals);");
 			$sth->execute($this->row);
+
 			$id = $this->db->lastInsertId();
 			$reqid = isset($this->row[$this->id_field]) ? $this->row[$this->id_field] : null;
 			//Update the item's ID
@@ -188,7 +189,18 @@ abstract class PCRObject implements JsonSerializable {
 			
 			//Guarantee the id field has been provided.
 			$row = null;
-			$id = isset($this->id) ? $this->id : (isset($this->row[$this->id_field]) ? $this->row[$this->id_field] : null);
+			
+			$id = null;
+			
+			if(isset($this->id)) {
+				$id = $this->id;
+			} else if(isset($this->row[$this->id_field])) {
+				$passed_id = $this->row[$this->id_field];
+				if($passed_id !== '') $id = $passed_id;
+				else return;
+				
+			}
+
 			if ($this->autocreate && $id == null) {
 				//Insert a new row.
 				$this->insertRow();
@@ -201,9 +213,10 @@ abstract class PCRObject implements JsonSerializable {
 			} else {
 				//Select an existing row matching the ID - this may succeed or fail.
 				$sth->execute(array($id));
-				$row = $sth->fetch(PDO::FETCH_ASSOC);
 				
+				$row = $sth->fetch(PDO::FETCH_ASSOC);
 				if ($row) {
+					$id = $row[$this->id_field];
 					$changed = false;
 					foreach ($this->row as $key => $value) {
 						if ($row[$key] !== $value) {
@@ -213,6 +226,7 @@ abstract class PCRObject implements JsonSerializable {
 					}
 					if ($changed) $this->updateRow($row);
 					else $this->row = $row;
+					$this->row[$this->id_field] = $id; //fix erronous ids
 				}
 				else {
 					$this->insertRow();
@@ -491,6 +505,46 @@ class File extends PCRObject {
 	public function __construct($data, $autocreate = true) {
 		parent::__construct("FileID", "Files", $data, $autocreate);
 	}
+	public function getFileName() {
+		parent::Update();
+		$filename = $this->row["FileName"];
+		$lastsep = strrpos($filename, "/");
+		if($lastsep !== FALSE) {
+			//Need to substr.
+			return substr($filename, $lastsep + 1);
+		} else {
+			return $filename;
+		}
+	}
+	
+	public function getPath() {
+		parent::Update();
+		$filename = $this->row["FileName"];
+		$lastsep = strrpos($filename, "/");
+		if($lastsep !== FALSE) {
+			//Need to substr.
+			return substr($filename, 0, $lastsep + 1);
+		} else {
+			return "";
+		}
+	}
+	
+	public function getLastPath() {
+		parent::Update();
+		$filename = $this->row["FileName"];
+		$lastsep = strrpos($filename, "/");
+
+		if($lastsep !== FALSE) {
+			$nextsep = strrpos($filename, "/", -(strlen($filename) - $lastsep + 1) );
+			if($nextsep === FALSE) {
+				//Need to substr.
+				$nextsep = 0;
+			}
+			return substr($filename, $nextsep, $lastsep);
+		} else {
+			return "";
+		}
+	}
 	
 	public function jsonSerialize() {
 		parent::Update();
@@ -533,6 +587,25 @@ class Submission extends PCRObject {
 				mkdir($this->storage_dir, 0755, true);
 			}
 		}
+	}
+	
+	public function Cleanup() {
+		if(!$this->isValid()) return;
+		$dir = $this->storage_dir;
+		$it = new RecursiveDirectoryIterator($dir, RecursiveDirectoryIterator::SKIP_DOTS);
+		$files = new RecursiveIteratorIterator($it,
+			    RecursiveIteratorIterator::CHILD_FIRST);
+		foreach($files as $file) {
+		    if ($file->getFilename() === '.' || $file->getFilename() === '..') {
+			continue;
+		    }
+		    if ($file->isDir()){
+			rmdir($file->getRealPath());
+		    } else {
+			unlink($file->getRealPath());
+		    }
+		}
+		rmdir($dir);
 	}
 	
 	public function getStorageDir() {
@@ -587,6 +660,7 @@ class Submission extends PCRObject {
 				if (strpos($path, ".git") === false) {
 					$f = new File(array("SubmissionID"=>$this->getID(), 
 										"FileName"=>$iterator->getSubPathName()));
+					$f->commit();
 					$count++;
 					
 				}
@@ -604,7 +678,7 @@ class Submission extends PCRObject {
 	 */ 
 	public function getReviews() {
 		$arr = array();
-		$sth = $this->db->prepare("SELECT * FROM Review WHERE SubmissionID = ?");
+		$sth = $this->db->prepare("SELECT * FROM Review WHERE SubmissionID = ?;");
 		$sth->execute(array($this->getID()));
 		while ($file_row = $sth->fetch(PDO::FETCH_ASSOC)) {
 			array_push($arr, new Review($file_row));
@@ -658,17 +732,15 @@ class Submission extends PCRObject {
 	 * addReview adds a review to the database
 	 * @return the review that was added
 	 */
-	public function addReview($annotationText, $stnid, $startIndex, $startLine, $fileName, $text, $submitted) {
-		echo $annotationText . "::" . $stnid . "::" . $startIndex . "::" . $startLine . "::" . $fileName . "::" . $text . "--";
-		// Need to check if the review already exists and update if that's the case
+	public function addReview($annotationText, $stnid, $startIndex, $startLine, $FileID, $text, $submitted) {
 		$review = new Review(array("SubmissionID"=>$this->getID(),
-								"Comments"=>$annotationText,
-								"ReviewerID"=>$stnid,
-								"startIndex"=>$startIndex,
-								"startLine"=>$startLine,
-								"fileName"=>$fileName,
-								"text"=>$text,
-								"Submitted"=>$submitted));
+							"Comments"=>$annotationText,
+							"ReviewerID"=>$stnid,
+							"startIndex"=>$startIndex,
+							"startLine"=>$startLine,
+							"FileID"=>$FileID,
+							"text"=>$text,
+							"Submitted"=>$submitted));
 		$review->commit();
 		return $review;
 	}
@@ -682,56 +754,26 @@ class Submission extends PCRObject {
 		$sth = $this->db->prepare("SELECT ReviewID FROM Review WHERE SubmissionID = ? AND ReviewID = '" . $reviewID . "';");
 		$sth->execute(array($this->getID()));
 		$file_row = $sth->fetch(PDO::FETCH_ASSOC);
-		$file_row['Comments'] = $annotationText;
-		$file_row['Submitted'] = $submitted;
-		$file_row['startLine'] = $startLine;
-		$file_row['startIndex'] = $startIndex;
 		$review = new Review($file_row);
+		$review_row = &$review->getRow();
+		$review_row['Comments'] = $annotationText;
+		$review_row['Submitted'] = $submitted;
+		$review_row['startLine'] = $startLine;
+		$review_row['startIndex'] = $startIndex;
+		
 		$review->commit();
 		return $review;
 	}
 
-	public function testSubmission($assignment_type, $test_file_location) {
-		// Run appropriate tests
-		switch ($assignment_type) {
-			case 'bash':
-				$tester = new bashTesting($test_file_location, $this->storage_dir . "*");
-				$results = $tester->execute();
+	public function testSubmission($test_file_location) {
+		// Run appropriate tests 
+		$tester = new bashTesting($test_file_location, $this->storage_dir);
+		$results = $tester->execute();
 
-				// Update results in database
-				$dbString = "";
-
-				// Test resuts must be in string format to store in database
-				foreach ($results as $value) {
-					$dbString = $dbString . "," . $value;
-				}
-
-				// Removes the comma present at start of string
-				$dbString = substr($dbString, 1);
-
-				$this->row["Results"] = $dbString;
-				$this->commit();
-				break;
-			case 'java':
-				// Get assignment files location
-				$assignment_file = $this->db->prepare("SELECT FileName FROM Files WHERE SubmissionID = ?;");
-				$assignment_file->execute(array($this->getID()));
-				$assignment_file = $assignment_file->fetch(PDO::FETCH_ASSOC)['FileName'];
-
-				$tester = new javaTesting($this->storage_dir, $this->storage_dir, $assignment_file);
-				$tester->compile();
-				$tester->runJUnitTest();
-
-				// Update results in database
-				$this->row["Results"] = "pass";
-				$this->commit(); 
-				
-				break;
-			default:
-				$this->row["Results"] = "No results";
-				$this->commit();
-				break;
-		}
+		// Update results in database
+		$dbString = json_encode($results);
+		$this->row["Results"] = $dbString;
+		$this->commit();
 	}
 	
 	/**
