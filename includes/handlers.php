@@ -118,7 +118,7 @@ class PCRHandler {
 									"Status" => "0"
 								));
 		if(!trim($content) || !trim($title)){
-			
+			return $question;
 		}
 		else{
 		$question->commit();
