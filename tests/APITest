@@ -3,34 +3,28 @@ session_start();
 $_SESSION['user_id'] = "0";
 require_once('includes/handlers.php');
 
-class APITest extends PHPUnit_Framework_TestCase 
-{
-	public function testEmptyFunction()
-	{
+class APITest extends PHPUnit_Framework_TestCase {
+	public function testEmptyFunction() {
 		$backend = new PCRBackend();
 		$request = "{f:''}";
 		$this->assertEquals("{}", $backend->handleRequest());
 	}
 	
-	public function testBadFunction()
-	{
+	public function testBadFunction() {
 		$backend = new PCRBackend();
 		$request = "{f:'badFunction'}";
 		$this->assertEquals("{}", $backend->handleRequest());
 	}
 	
-	public function testNoFunction()
-	{
+	public function testNoFunction() {
 		$backend = new PCRBackend();
 		$request = "{params:[]}";
 		$this->assertEquals("{}", $backend->handleRequest());
 	}
 	
-	public function testInvalidRequest()
-	{
+	public function testInvalidRequest() {
 		$backend = new PCRBackend();
 		$request = "{Very invalid JSON:= '\r\n\"";
 		$this->assertEquals("{}", $backend->handleRequest());
 	}
-
-} 
+}

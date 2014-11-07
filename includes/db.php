@@ -95,7 +95,7 @@ abstract class PCRObject implements JsonSerializable {
 		$this->id = $row[$this->id_field];
 		/* Update the row to match the latest set of data. */
 		$update = "UPDATE $this->table SET ";
-		foreach ($row as $key=>$value) {
+		foreach ($row as $key => $value) {
 			$update .= "$key = :$key,";
 		}
 		$update = rtrim($update, ",");
@@ -152,7 +152,7 @@ abstract class PCRObject implements JsonSerializable {
 	private function searchRow() {
 		$search = "SELECT * FROM $this->table WHERE ";
 		
-		foreach ($this->row as $key=>$value) {
+		foreach ($this->row as $key => $value) {
 			$search .= " $key = :$key AND";
 		}
 		
@@ -192,11 +192,11 @@ abstract class PCRObject implements JsonSerializable {
 			
 			$id = null;
 			
-			if(isset($this->id)) {
+			if (isset($this->id)) {
 				$id = $this->id;
-			} else if(isset($this->row[$this->id_field])) {
+			} else if (isset($this->row[$this->id_field])) {
 				$passed_id = $this->row[$this->id_field];
-				if($passed_id !== '') $id = $passed_id;
+				if ($passed_id !== '') $id = $passed_id;
 				else return;
 				
 			}
@@ -323,18 +323,18 @@ class PCRBuilder {
  * 
  * After population, contains the following rows:
  * 
- * (uint_16)		AssignmentID
- * (uint_16)		CourseID
+ * (smallint(5))	AssignmentID
+ * (varchar(32))	CourseID
  * (varchar(32))	AssignmentName
- * (uint_8)			Weight
- * (uint_8)			SubmissionMethod
- * (uint_8)			ReviewsNeeded
+ * (tinyint(3))		Weight
+ * (tinyint(3))		ReviewsNeeded
  * (timestamp)		OpenTime
  * (timestamp)		DueTime
  * (timestamp)		ReviewsDue
  * (text)			Language
  * (tinyint(1))		ReviewsAllocated
- * (tinyint(1))		ResubmitAllowed
+ * (tinyint(3))		ResubmitAllowed
+ * (tinyint(3))		NumberTests
  */
 class Assignment extends PCRObject {
 	private $ass_dir;
@@ -367,6 +367,22 @@ class Assignment extends PCRObject {
 				}
 			mkdir($dir, 0755, true);
 		}
+	}
+	
+	/**
+	 * getReviews returns all of the reviews for this assignment
+	 * 
+	 * @return an array of review objects
+	 */
+	public function getReviews() {
+		$arr = array();
+		$sth = $this->db->prepare("SELECT * FROM Review WHERE SubmissionID IN
+			(SELECT Submission.SubmissionID FROM Submission WHERE AssignmentID = ?);");
+		$sth->execute(array($this->getID()));
+		while ($file_row = $sth->fetch(PDO::FETCH_ASSOC)) {
+			array_push($arr, new Review($file_row));
+		}
+		return $arr;
 	}
 	
 	public function delete() {
@@ -469,8 +485,8 @@ class Assignment extends PCRObject {
 	 * @return an array of Submission objects.
 	 */
 	public function getSubmission($studentid) {
-		return new Submission(array("AssignmentID"=>$this->getID(), 
-									"StudentID"=>$studentid), false);
+		return new Submission(array("AssignmentID" => $this->getID(), 
+									"StudentID" => $studentid), false);
 	}
 	
 	/**
@@ -509,7 +525,7 @@ class File extends PCRObject {
 		parent::Update();
 		$filename = $this->row["FileName"];
 		$lastsep = strrpos($filename, "/");
-		if($lastsep !== FALSE) {
+		if ($lastsep !== FALSE) {
 			//Need to substr.
 			return substr($filename, $lastsep + 1);
 		} else {
@@ -521,7 +537,7 @@ class File extends PCRObject {
 		parent::Update();
 		$filename = $this->row["FileName"];
 		$lastsep = strrpos($filename, "/");
-		if($lastsep !== FALSE) {
+		if ($lastsep !== FALSE) {
 			//Need to substr.
 			return substr($filename, 0, $lastsep + 1);
 		} else {
@@ -534,9 +550,9 @@ class File extends PCRObject {
 		$filename = $this->row["FileName"];
 		$lastsep = strrpos($filename, "/");
 
-		if($lastsep !== FALSE) {
+		if ($lastsep !== FALSE) {
 			$nextsep = strrpos($filename, "/", -(strlen($filename) - $lastsep + 1) );
-			if($nextsep === FALSE) {
+			if ($nextsep === FALSE) {
 				//Need to substr.
 				$nextsep = 0;
 			}
@@ -590,20 +606,20 @@ class Submission extends PCRObject {
 	}
 	
 	public function Cleanup() {
-		if(!$this->isValid()) return;
+		if (!$this->isValid()) return;
 		$dir = $this->storage_dir;
 		$it = new RecursiveDirectoryIterator($dir, RecursiveDirectoryIterator::SKIP_DOTS);
 		$files = new RecursiveIteratorIterator($it,
-			    RecursiveIteratorIterator::CHILD_FIRST);
+			RecursiveIteratorIterator::CHILD_FIRST);
 		foreach($files as $file) {
-		    if ($file->getFilename() === '.' || $file->getFilename() === '..') {
-			continue;
-		    }
-		    if ($file->isDir()){
-			rmdir($file->getRealPath());
-		    } else {
-			unlink($file->getRealPath());
-		    }
+			if ($file->getFilename() === '.' || $file->getFilename() === '..') {
+				continue;
+			}
+			if ($file->isDir()) {
+				rmdir($file->getRealPath());
+			} else {
+				unlink($file->getRealPath());
+			}
 		}
 		rmdir($dir);
 	}
@@ -658,8 +674,8 @@ class Submission extends PCRObject {
 			if (!$fileinfo->isDir()) {
 				$path = $iterator->getSubPathName();
 				if (strpos($path, ".git") === false) {
-					$f = new File(array("SubmissionID"=>$this->getID(), 
-										"FileName"=>$iterator->getSubPathName()));
+					$f = new File(array("SubmissionID" => $this->getID(), 
+										"FileName" => $iterator->getSubPathName()));
 					$f->commit();
 					$count++;
 					
@@ -687,7 +703,7 @@ class Submission extends PCRObject {
 	}
 	
 	/**
-	 * getReviews returns an array of reviews for a submission. Submitted
+	 * getConditionalReviews returns an array of reviews for a submission. Submitted
 	 * variable dictates whether they are only submitted, or unsubmitted ones.
 	 * @return an array of reviews
 	 */
@@ -732,14 +748,14 @@ class Submission extends PCRObject {
 	 * @return the review that was added
 	 */
 	public function addReview($annotationText, $stnid, $startIndex, $startLine, $FileID, $text, $submitted) {
-		$review = new Review(array("SubmissionID"=>$this->getID(),
-							"Comments"=>$annotationText,
-							"ReviewerID"=>$stnid,
-							"startIndex"=>$startIndex,
-							"startLine"=>$startLine,
-							"FileID"=>$FileID,
-							"text"=>$text,
-							"Submitted"=>$submitted));
+		$review = new Review(array("SubmissionID" => $this->getID(),
+							"Comments" => $annotationText,
+							"ReviewerID" => $stnid,
+							"startIndex" => $startIndex,
+							"startLine" => $startLine,
+							"FileID" => $FileID,
+							"text" => $text,
+							"Submitted" => $submitted));
 		$review->commit();
 		return $review;
 	}
@@ -956,14 +972,15 @@ class Question extends PCRObject {
  * 
  * After population, contains the following rows:
  * 
- * (uint_16)		SubmissionID
- * (text)			Comments
- * (varchar(32))	ReviewerID
  * (uint_16)		ReviewID
+ * (uint_16)		SubmissionID
+ * (uint_16)		FileID
+ * (varchar(32))	ReviewerID
+ * (text)			Comments
  * (int(11))		startIndex
  * (int(11))		startLine
- * text				fileName
- * text				text
+ * (text)			text
+ * (uint_8)			Submitted
  */	
 class Review extends PCRObject {
 	public function __construct($data, $autocreate = true) {
@@ -983,9 +1000,9 @@ class Review extends PCRObject {
 		}
 		return $arr;
 	}
-
+	
 	/**
-	 * getReviews returns an array of reviews available for a Student in a course
+	 * getFeedback returns an array of reviews available for a Student in a course
 	 * @return an array of reviews
 	 */
 	public function getFeedback() {

@@ -22,7 +22,7 @@ class PCRHandler {
 	 * @return an array of files within a submission
 	 */
 	public function getFiles($id) {
-		$submission = new Submission(array("SubmissionID"=>$id));
+		$submission = new Submission(array("SubmissionID" => $id));
 		return $submission->getFiles();
 	}
 	
@@ -31,7 +31,7 @@ class PCRHandler {
 	 * @return the course
 	 */
 	public function getCourse() {
-		$crs = new Course(array("CourseID"=>$_SESSION['course_id']));
+		$crs = new Course(array("CourseID" => $_SESSION['course_id']));
 		if (!$crs->isValid()) 
 			$crs->commit();
 		return $crs;
@@ -42,8 +42,10 @@ class PCRHandler {
 	 * @param id of the question to remove
 	 */
 	public function removeQuestion($id) {
-		$question = new Question(array("QuestionID"=>$id));
-		$question->delete();
+		$question = new Question(array("QuestionID" => $id));
+		if (isset($_SESSION['admin'])) {
+			$question->delete();
+		}
 	}
 
 	/**
@@ -51,8 +53,11 @@ class PCRHandler {
 	 * @param id of the comment to remove
 	 */
 	public function deleteComment($id) {
-		$comment = new Comment(array("CommentID"=>$id));
-        $comment->delete();
+		$comment = new Comment(array("CommentID" => $id));
+		$commentRow = &$comment->getRow();
+		if ($commentRow["StudentID"] == $_SESSION["user_id"]) {
+			$comment->delete();
+		}
 	}
 	
 	/**
@@ -60,7 +65,7 @@ class PCRHandler {
 	 * @param id of the question to mark as resolved
 	 */
 	public function markResolved($id) {
-		$question = new Question(array("QuestionID"=>$id));
+		$question = new Question(array("QuestionID" => $id));
 		$questionRow = &$question->getRow();
 		$questionRow["Status"] = "1";
 		$question->commit();
@@ -71,18 +76,20 @@ class PCRHandler {
 	 * @param id of the question to mark as unresolved
 	 */
 	public function markUnresolved($id) {
-		$question = new Question(array("QuestionID"=>$id));
+		$question = new Question(array("QuestionID" => $id));
 		$questionRow = &$question->getRow();
 		$questionRow["Status"] = "0";
 		$question->commit();
 	}
+	
 	/**
 	 * Marks the question specified by id as unresolved.
 	 * @param status of the help centre currently
 	 */
 	public function toggleHelp($status) {
-		$crs = new Course(array("CourseID"=>$_SESSION['course_id']));
+		$crs = new Course(array("CourseID" => $_SESSION['course_id']));
 		$help = &$crs->getRow();
+		if (isset($_SESSION['admin'])) {
 		if ($status == 0) {
 			$help['HelpEnabled'] = "1";
 			$crs->commit();
@@ -90,6 +97,7 @@ class PCRHandler {
 			$help['HelpEnabled'] = "0";
 			$crs->commit();
 		}
+	}
 	}
 	
 	/**
@@ -100,17 +108,21 @@ class PCRHandler {
 	 * @param fullname full name of the student
 	 */
 	public function storeNewQuestion($title, $content, $stnid, $fullname, $postdate) {
-		$question = new Question(array(
-									"StudentID" => $stnid,
-									"CourseID" => $_SESSION["course_id"],
-									"StudentName" => $fullname,
-									"Opendate" => $postdate,
-									"Title" => $title,
-									"Content" => $content,
-									"Status" => "0"
-								));
-		$question->commit();
-		return $question;
+		if (!trim($content) || !trim($title)) {
+			return null;
+		} else {
+			$question = new Question(array(
+						"StudentID" => $stnid,
+						"CourseID" => $_SESSION["course_id"],
+						"StudentName" => $fullname,
+						"Opendate" => $postdate,
+						"Title" => $title,
+						"Content" => $content,
+						"Status" => "0"
+					));
+			$question->commit();
+			return $question;
+		}
 	}
 	
 	/**
@@ -119,7 +131,7 @@ class PCRHandler {
 	 * @return the assignment object
 	 */
 	public function getAssignment($id) {
-		return new Assignment(array("AssignmentID"=>$id));
+		return new Assignment(array("AssignmentID" => $id));
 	}
 	
 	/**
@@ -130,7 +142,7 @@ class PCRHandler {
 	 * @return the submission object
 	 */
 	public function getSubmission($id) {
-		$assignment = new Assignment(array("AssignmentID"=>$id));
+		$assignment = new Assignment(array("AssignmentID" => $id));
 		return $assignment->getSubmission($_SESSION['user_id']);
 	}
 	
@@ -140,7 +152,7 @@ class PCRHandler {
 	 * @return the submission object
 	 */
 	public function getSubmissionForReviewing($id) {
-		return new Submission(array("SubmissionID"=>$id), false);
+		return new Submission(array("SubmissionID" => $id), false);
 	}
 	
 	/**
@@ -148,7 +160,7 @@ class PCRHandler {
 	 * @return the Student
 	 */
 	public function getStudent() {
-		return new Review(array("StudentID"=>$_SESSION['user_id']));
+		return new Review(array("StudentID" => $_SESSION['user_id']));
 	}
 	
 	/**
@@ -156,7 +168,7 @@ class PCRHandler {
 	 * @param id the question ID
 	 */
 	public function getQuestion($id) {
-		return new Question(array("QuestionID"=>$id));
+		return new Question(array("QuestionID" => $id));
 	}
 	
 	/**
@@ -167,38 +179,46 @@ class PCRHandler {
 		return $question->addComment($studentid, $fullname, $content, $date);
 	}
 	
-	
+	/**
+	 * assignReviews distributes reviews to each student who made a submission,
+	 * up to the amount of reviews required, or the amount of submissions made
+	 * minus 1.
+	 * @param assignment ID
+	 */
 	public function assignReviews($assign_id) {
-	      $asg_obj = new Assignment(array("AssignmentID"=>$assign_id));
-	      
-	      if(!$asg_obj->isValid()) return;
-	      
-	      //Abort if any existing reviews for assignment
-	      $asg = $asg_obj->getRow();
-	      
-	      $submissions = $asg_obj->getSubmissions();
-	      $reviewnum = $asg['ReviewsNeeded'];
-	      
-	    
-	      // for each submission
-	      for ($i = 0; $i < count($submissions); ++$i) {
-		      // the student who made the submission must mark 'reviewnum' submissions.
-		      for ($j = 0; $j < $reviewnum; ++$j) {
-			      // Make review row for student/submission
-			      $index = ($i + $j + 1) % count($submissions);
-			      $reviewerID = $submissions[$index]->getOwner();
-			      if($reviewerID != $submissions[$i]->getOwner()) {
-					$exist_review = new Review(array("ReviewerID"=>$reviewerID, "SubmissionID"=>$submissions[$i]->getID()), false);
-					if(!$exist_review->isValid())
-						  $submissions[$i]->addReview("", $reviewerID, 0, 0, null, "", 0);
-			      }
-		      }
-	      }
+		$asg = new Assignment(array("AssignmentID" => $assign_id));
+		
+		if (!$asg->isValid()) return;
+		
+		$submissions = $asg->getSubmissions();
+		$asg = $asg->getRow();
+		
+		//Abort if any existing reviews for assignment
+		
+		$reviewnum = $asg['ReviewsNeeded'];
+		
+		// for each submission
+		for ($i = 0; $i < count($submissions); ++$i) {
+			// the student who made the submission must mark 'reviewnum' submissions.
+			for ($j = 0; $j < $reviewnum; ++$j) {
+				// Make review row for student/submission
+				$index = ($i + $j + 1) % count($submissions);
+				$reviewerID = $submissions[$index]->getOwner();
+				if ($reviewerID != $submissions[$i]->getOwner()) {
+					$exist_review = new Review(array("ReviewerID" => $reviewerID, "SubmissionID" => $submissions[$i]->getID()), false);
+					if (!$exist_review->isValid()) {
+						$submissions[$i]->addReview("", $reviewerID, 0, 0, null, "", 0);
+					}
+				}
+			}
+		}
 	}
+	
 	/**
 	 * Function that is run when save is clicked. It will remove any deleted
 	 * reviews, update any edited ones, insert any new ones and ignore
 	 * unchanged ones
+	 * @param an array of review objects
 	 */
 	public function saveReviews($reviews) {
 		foreach ($reviews as $review) {
@@ -219,6 +239,7 @@ class PCRHandler {
 	 * reviews, update any edited ones, insert any new ones and ignore
 	 * unchanged ones. It will then remove that users access to reviewing the 
 	 * submission
+	 * @param an array of review objects
 	 */
 	public function submitReviews($reviews) {
 		foreach ($reviews as $review) {
@@ -242,7 +263,7 @@ class PCRHandler {
 	 */
 	public function removeReview($reviewID, $id) {
 		// get submission
-		$submission = new Submission(array("SubmissionID"=>$id), false);
+		$submission = new Submission(array("SubmissionID" => $id), false);
 		// call delete review for that submission
 		return $submission->removeReview($reviewID);
 	}
@@ -252,7 +273,7 @@ class PCRHandler {
 	 * @param submission id, comment and previous comment of the review to edit
 	 */
 	public function editReview($startLine, $startIndex, $reviewID, $annotationText, $id, $submitted) {
-		$submission = new Submission(array("SubmissionID"=>$id), false);
+		$submission = new Submission(array("SubmissionID" => $id), false);
 		return $submission->editReview($startLine, $startIndex, $reviewID, $annotationText, $submitted);
 	}
 	
@@ -263,8 +284,8 @@ class PCRHandler {
 	 */
 	public function addReview($review, $submitted) {
 		// Get the submission for the student you are submitting a review for
-		$submission = new Submission(array("SubmissionID"=>$review["SubmissionID"]), false);
-		if(!$submission->isValid()) return;
+		$submission = new Submission(array("SubmissionID" => $review["SubmissionID"]), false);
+		if (!$submission->isValid()) return;
 		// Then add the review to the database
 		return $submission->addReview($review["Comments"], $_SESSION['user_id'], 
 						$review["startIndex"], $review["startLine"], 
@@ -278,7 +299,7 @@ class PCRHandler {
 	 */
 	public function getReviews($id) {
 		// Get submission
-		$submission = new Submission(array("SubmissionID"=>$id), false);
+		$submission = new Submission(array("SubmissionID" => $id), false);
 		// Get reviews for that submission
 		return $submission->getReviews();
 	}
@@ -290,59 +311,62 @@ class PCRHandler {
 	 */
 	public function getResults($id) {
 		// Get submission
-		$submission = new Submission(array("SubmissionID"=>$id));
+		$submission = new Submission(array("SubmissionID" => $id));
 		// Get reviews for that submission
 		return $submission->getResults();
 	}
 	
-	/*
+	/**
+	 * TESTING FUNCTION ONLY - FOR TUTORS CONVENIENCE AND DEMO
 	 * Sets the assignment with the provided ID to have the following dates:
 	 * 
-	 * OPEN:		23 October 2014, 11am
-	 * DUE:			30 October 2014, 11am
-	 * REVIEWSDUE:	31 October 2014, 11am
+	 * OPEN:		5 November 2014, 11am
+	 * DUE:			30 November 2014, 11am
+	 * REVIEWSDUE:	31 November 2014, 11am
 	 */
 	public function makeopen($assignment_id) {
-		$assignment = new Assignment(array("AssignmentID"=>$assignment_id,
-										   "OpenTime"=>"2014-10-23 11:00:00",
-										   "DueTime"=>"2014-10-30 11:00:00",
-										   "ReviewsDue"=>"2014-10-31 11:00:00"));
+		$assignment = new Assignment(array("AssignmentID" => $assignment_id,
+										   "OpenTime" => "2014-11-5 11:00:00",
+										   "DueTime" => "2014-11-30 11:00:00",
+										   "ReviewsDue" => "2014-11-31 11:00:00"));
 		if (!$assignment->isValid()) {
 			return;
 		}
 		$assignment->commit();
 	}
 	
-	/*
+	/**
+	 * TESTING FUNCTION ONLY - FOR TUTORS CONVENIENCE AND DEMO
 	 * Sets the assignment with the provided ID to have the following dates:
 	 * 
-	 * OPEN:		23 October 2014, 11am
-	 * DUE:			24 October 2014, 11am
-	 * REVIEWSDUE:	31 October 2014, 11am
+	 * OPEN:		5 November 2014, 11am
+	 * DUE:			6 November 2014, 11am
+	 * REVIEWSDUE:	31 November 2014, 11am
 	 */
 	public function makedue($assignment_id) {
-		$assignment = new Assignment(array("AssignmentID"=>$assignment_id,
-										   "OpenTime"=>"2014-10-23 11:00:00",
-										   "DueTime"=>"2014-10-24 11:00:00",
-										   "ReviewsDue"=>"2014-10-31 11:00:00"));
+		$assignment = new Assignment(array("AssignmentID" => $assignment_id,
+										   "OpenTime" => "2014-11-5 11:00:00",
+										   "DueTime" => "2014-11-6 11:00:00",
+										   "ReviewsDue" => "2014-11-31 11:00:00"));
 		if (!$assignment->isValid()) {
 			return;
 		}
 		$assignment->commit();
 	}
 	
-	/*
+	/**
+	 * TESTING FUNCTION ONLY - FOR TUTORS CONVENIENCE AND DEMO
 	 * Sets the assignment with the provided ID to have the following dates:
 	 * 
-	 * OPEN:		23 October 2014, 11am
-	 * DUE:			24 October 2014, 11am
-	 * REVIEWSDUE:	25 October 2014, 11am
+	 * OPEN:		5 November 2014, 11am
+	 * DUE:			6 November 2014, 11am
+	 * REVIEWSDUE:	7 November 2014, 11am
 	 */
 	public function makereviewsdue($assignment_id) {
-		$assignment = new Assignment(array("AssignmentID"=>$assignment_id,
-										   "OpenTime"=>"2014-10-23 11:00:00",
-										   "DueTime"=>"2014-10-24 11:00:00",
-										   "ReviewsDue"=>"2014-10-25 11:00:00"));
+		$assignment = new Assignment(array("AssignmentID" => $assignment_id,
+										   "OpenTime" => "2014-11-5 11:00:00",
+										   "DueTime" => "2014-11-6 11:00:00",
+										   "ReviewsDue" => "2014-11-7 11:00:00"));
 		if (!$assignment->isValid()) {
 			return;
 		}
@@ -351,9 +375,10 @@ class PCRHandler {
 	
 	/**
 	 * uploadTest uploads tests for an assignment.
+	 * @param assignment ID
 	*/
 	public function uploadTest($assignment_id) {
-		$assignment = new Assignment(array("AssignmentID"=>$assignment_id));
+		$assignment = new Assignment(array("AssignmentID" => $assignment_id));
 		if (!$assignment->isValid()) return;
 		if (!isset($_FILES["file"]) || $_FILES["file"]["error"] != 0) {
 			return;
@@ -383,20 +408,21 @@ class PCRHandler {
 			
 			//Set executable flag on run.sh.
 			chdir($assignment->getDir() . "/test/");
-			if(!file_exists("run.sh")) {
-			      //Test invalid, no run.sh!
-			      $assignment->cleanTest();
+			if (!file_exists("run.sh")) {
+				//Test invalid, no run.sh!
+				$assignment->cleanTest();
 			} else {
-			      chmod("run.sh", 0750);
+				chmod("run.sh", 0750);
 			}
 		}
 	}
 	
 	/**
 	 * uploadArchive uploads an archive to an assignment
+	 * @param assignment ID
 	 */
 	public function uploadArchive($assignment_id) {
-		$assignment = new Assignment(array("AssignmentID"=>$assignment_id));
+		$assignment = new Assignment(array("AssignmentID" => $assignment_id));
 		if (!$assignment->isValid()) return;
 		
 		//Look for an existing submission - return if resubmission not allowed.
@@ -404,7 +430,7 @@ class PCRHandler {
 		if (!$assignment->canResubmit() && $oldsubmission->isValid()) return;
 		$oldsubmission->delete();
 		
-		$submission = new Submission(array("AssignmentID"=>$assignment_id, "StudentID"=>$_SESSION['user_id'], "Results" => ""));
+		$submission = new Submission(array("AssignmentID" => $assignment_id, "StudentID" => $_SESSION['user_id'], "Results" => ""));
 		
 		if ($submission->isValid()) {
 			if (!isset($_FILES["file"]) || $_FILES["file"]["error"] != 0) {
@@ -449,7 +475,7 @@ class PCRHandler {
 	 * uploadRepo uploads a repository to an assignment
 	 */
 	public function uploadRepo($assignment_id, $repo_url, $username, $password) {
-		$assignment = new Assignment(array("AssignmentID"=>$assignment_id));
+		$assignment = new Assignment(array("AssignmentID" => $assignment_id));
 		if (!$assignment->isValid()) return;
 		
 		//Look for an existing submission - return if resubmission not allowed.
@@ -459,7 +485,7 @@ class PCRHandler {
 		$oldsubmission->delete();
 		print_r($oldsubmission);
 		
-		$submission = new Submission(array("AssignmentID"=>$assignment_id, "StudentID"=>$_SESSION['user_id']));
+		$submission = new Submission(array("AssignmentID" => $assignment_id, "StudentID" => $_SESSION['user_id']));
 		if ($submission->isValid()) {
 		
 			$dir = $submission->getStorageDir();
@@ -497,35 +523,37 @@ class PCRHandler {
 	
 	/**
 	 * Delete an assignment.
+	 * @param assignment ID
 	 */
 	public function deleteAssignment($AssignmentID) {
-		$assignment = new Assignment(array("AssignmentID"=>$AssignmentID));
+		$assignment = new Assignment(array("AssignmentID" => $AssignmentID));
 		$assignment->delete();
 	}
 	
-	/*
+	/**
 	 * Retrieves the file from the server and returns it to the calling page i.e. 
-	 * review_dev.php. 
+	 * review_dev.php
+	 * @param File ID
 	 */
 	public function loadFile($fileID) {
-		$file = new File(array("FileID"=>$fileID));
-		if(!$file->isValid()) return "";
+		$file = new File(array("FileID" => $fileID));
+		if (!$file->isValid()) return "";
 		$file_row = $file->getRow();
 
-		$submission = new Submission(array("SubmissionID"=>$file_row["SubmissionID"]));
-		if(!$submission->isValid()) return ""; //invalid submission ID?
+		$submission = new Submission(array("SubmissionID" => $file_row["SubmissionID"]));
+		if (!$submission->isValid()) return ""; //invalid submission ID?
 
-		if(!isset($_SESSION['admin'])) {
+		if (!isset($_SESSION['admin'])) {
 			//Check to ensure we have access to the file
 			$submission_row = $submission->getRow();
-			if($_SESSION['user_id'] !== $submission_row['StudentID']) {
+			if ($_SESSION['user_id'] !== $submission_row['StudentID']) {
 				//Check to ensure the student cannot review this submission
-				$review = new Review(array("ReviewerID"=>$_SESSION['user_id'], "SubmissionID"=>$submission->getID()), false);
-				if(!$review->isValid()) return ""; //user should not be able to access file!
+				$review = new Review(array("ReviewerID" => $_SESSION['user_id'], "SubmissionID" => $submission->getID()), false);
+				if (!$review->isValid()) return ""; //user should not be able to access file!
 			}
 		}
 
-		//$assignment =  __DIR__ . "/../storage/course_$courseID/assign_$assignmentid/submissions/$submissionID/" . $fileName;
+		//$assignment = __DIR__ . "/../storage/course_$courseID/assign_$assignmentid/submissions/$submissionID/" . $fileName;
 		$fileName = $submission->getStorageDir() . $file_row["FileName"];
 		$handle = fopen($fileName, "r");
 		$contents = fread($handle, filesize($fileName));
@@ -537,7 +565,7 @@ class PCRHandler {
 }
 
 /**
- * Needs Comment.
+ * 
  */
 class PCRBackend {
 	private $request;
@@ -551,7 +579,8 @@ class PCRBackend {
 	}
 	
 	/**
-	 * Needs Comment.
+	 * handleRequest deas with requests that specify a particular method to be
+	 * run, with particular parameters.
 	 */
 	public function handleRequest() {
 		try {
@@ -565,7 +594,7 @@ class PCRBackend {
 				if ($fct->getNumberOfRequiredParameters() == count($params))
 					$response = call_user_func_array(array($this->handler, $method), $params);
 			}
-			if ($response) return json_encode(array("r"=> $response));
+			if ($response) return json_encode(array("r" => $response));
 			else return "{}";
 		} catch(Exception $e) {
 			error_log($e);

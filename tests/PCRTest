@@ -9,8 +9,7 @@ class PCRTest extends PHPUnit_Framework_TestCase {
 	/**
 	 * Tests a basic PCRObject's functionality (ID, deletion etc.)
 	*/
-	public function testObject()
-	{
+	public function testObject() {
 		$course = new Course(array("CourseID"=>"0"));
 		//Check PCRObject ID
 		$this->assertEquals("0", $course->getID());
@@ -22,8 +21,7 @@ class PCRTest extends PHPUnit_Framework_TestCase {
 		$this->assertEquals(false, $course->isValid());
 	}
 
-	public function testCourse()
-	{
+	public function testCourse() {
 		$handler = new PCRHandler();
 		$_SESSION['course_id'] = "0";
 		$course = $handler->getCourse();

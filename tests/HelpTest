@@ -1,0 +1,80 @@
+<?php
+
+session_start();
+$_SESSION['user_id'] = "0";
+$_SESSION['commentuser_id'] = "1";
+require_once('config.php');
+require_once('includes/handlers.php');
+
+class HelpTest extends PHPUnit_Framework_TestCase {
+	/**
+	 * Tests that a question gets created and stored to a specific course properly
+	 */
+	public function testObject() {
+		//Test date for adding comments and questions
+		$date = date("Y-m-d  H:i:s", time());
+		//Make a new course - add a question to that course
+		$course = new Course(array("CourseID" => "0"));
+		$question = new Question(array(
+									"StudentID" => $_SESSION['user_id'],
+									"CourseID" =>  $course->getID(),
+									"StudentName" => "testName",
+									"Opendate" => $date,
+									"Title" => "testTitle",
+									"Content" => "test",
+									"Status" => "0"
+								));
+
+		$comment = new Comment(array(
+									"StudentID" => $_SESSION['commentuser_id'], 
+									"QuestionID" => $question->getID(),
+									"StudentName" => "commentTestName",
+									"Content" => "testComment",
+									"postdate" => $date
+								));
+
+		$this->assertEquals(true, $course->isValid());
+		$this->assertEquals(true, $question->isValid());
+		$this->assertEquals(true, $comment->isValid());
+		//Check PCRObject ID
+		$questionRow = &$question->getRow();
+		$this->assertEquals("0", $course->getID());
+
+		//Question assertions
+		$this->assertEquals("0", $questionRow["CourseID"]);
+		$this->assertEquals("testTitle", $questionRow["Title"]);
+		$this->assertEquals("0", $questionRow["StudentID"]);
+
+		$commentRow = &$comment->getRow();
+		//Comment assertions
+		$this->assertEquals($questionRow["QuestionID"], $question->getID());
+		$this->assertEquals("testComment", $commentRow["Content"]);
+		$this->assertEquals("1", $commentRow["StudentID"]);
+		
+		$course->delete();
+		$question->delete();
+		$comment->delete();
+
+		$this->assertEquals(false, $course->isValid());
+		$this->assertEquals(false, $question->isValid());
+		$this->assertEquals(false, $comment->isValid());
+
+	}
+
+	public function testBadQuestion() {
+		//Test date for adding comments and questions
+		$date = date("Y-m-d  H:i:s", time());
+
+		$handler = new PCRHandler();
+		$_SESSION['course_id'] = "0";
+		$course = new Course(array("CourseID" => "0"));
+
+		$date = date("Y-m-d  H:i:s", time());
+		//Make a new course - add a question to that course
+		$course = new Course(array("CourseID" => "0"));
+		$question = $handler->storeNewQuestion("", "", $_SESSION['user_id'], "testName", $date);
+		$this->assertEquals(true, $course->isValid());
+		$this->assertNull($question, true);
+		$course->delete();
+	}
+}

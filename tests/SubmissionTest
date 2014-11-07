@@ -14,7 +14,7 @@ class SubmissionTest extends PHPUnit_Framework_TestCase {
 		$assignment = new Assignment(array("AssignmentID"=>"0"));
 		$assignment->delete();
 		
-		$assignment = $handler->changeAssignment("0", "Test Assignment", "0", "0", "0", "0", "0", "0","0");
+		$assignment = $handler->changeAssignment("0", "Test Assignment", "0", "0", "0", "0", "0", "0", "0");
 		
 		$this->assertNotNull($assignment);
 		$this->assertEquals($assignment->isValid(), true);
@@ -34,5 +34,4 @@ class SubmissionTest extends PHPUnit_Framework_TestCase {
 		//Clean up the assignment 
 		$assignment->delete();
 	}
-
 }
