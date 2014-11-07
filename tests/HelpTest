@@ -88,10 +88,17 @@ class HelpTest extends PHPUnit_Framework_TestCase {
 		//Make a new course - add a question to that course
 		$question = $handler->storeNewQuestion("testTitle", "testContent", $_SESSION['user_id'], "testName", $date);
 		$comment = $handler->addComment($question->getID(), $_SESSION['user_id'], "testName", "CommentContent", $date);
+		//Set the user to a differnet person
 		$_SESSION['user_id'] = "1";
+		//Try and delete the comment for another user
 		$deleteComment = $handler->deleteComment($comment->getID());
+		//Should be null if the comment was NOT deleted and thus is valid
 		$this->assertNull($deleteComment, true);
 		$this->assertEquals(true, $comment->isValid());
+		//Change back to original user and delete comment
+		$_SESSION['user_id'] = "0";
+		$deleteComment = $handler->deleteComment($comment->getID());
+		$this->assertEquals(false, $comment->isValid());
 		$course->delete();
 	}
 }
