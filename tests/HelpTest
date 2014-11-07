@@ -8,7 +8,7 @@ require_once('includes/handlers.php');
 
 class PCRTest extends PHPUnit_Framework_TestCase {
 	/**
-	 * Tests a basic PCRObject's functionality (ID, deletion etc.)
+	 * Tests that a question gets created and stored to a specific course properly
 	*/
 	public function testObject()
 	{
@@ -27,6 +27,7 @@ class PCRTest extends PHPUnit_Framework_TestCase {
 		//Check PCRObject ID
 		$questionRow = &$question->getRow();
 		$this->assertEquals("0", $course->getID());
+		$this->assertEquals("0", $questionRow["CourseID"]);
 		$this->assertEquals("testTitle", $questionRow["Title"]);
 		$this->assertEquals("0", $questionRow["StudentID"]);
 		
