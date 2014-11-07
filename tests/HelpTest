@@ -95,7 +95,9 @@ class HelpTest extends PHPUnit_Framework_TestCase {
 		//Should be null if the comment was NOT deleted and thus is valid
 		$this->assertNull($deleteComment, true);
 		$this->assertEquals(true, $comment->isValid());
+		$question->delete();
 		$course->delete();
+		$comment->delete();
 	}
 	public function testDeleteingQuestion(){
 		$date = date("Y-m-d  H:i:s", time());
@@ -110,6 +112,7 @@ class HelpTest extends PHPUnit_Framework_TestCase {
 		$question = $handler->removeQuestion($question->getID());
 		//Test it hasn't been deleted because an admin didn't send the request
 		$this->assertNull($question, true);
+		$question->delete();
 		$course->delete();
 
 	}
@@ -126,13 +129,13 @@ class HelpTest extends PHPUnit_Framework_TestCase {
 		$this->assertEquals(true, $course->isValid());
 		$this->assertEquals(true, $question->isValid());
 		$this->assertEquals("0", $questionRow["Status"]);
-		$this->assertEquals($questionRow["QuestionID"], $question->getID());
 		//Mark the question resolved and check status is 1
-		$handler->markResolved("00280");
+		$handler->markResolved($question->getID());
 		$this->assertEquals("1", $questionRow["Status"]);
 		//Mark unresolved and check status is 0
 		$handler->markUnresolved($question->getID());
 		$this->assertEquals("0", $questionRow["Status"]);
+		$question->delete();
 		$course->delete();
 	}
 }
