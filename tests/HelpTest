@@ -157,6 +157,5 @@ class HelpTest extends PHPUnit_Framework_TestCase {
 		//Should be null if the comment was NOT deleted and thus is valid
 		$question->delete();
 		$course->delete();
-		$comment->delete();
 	}
 }
