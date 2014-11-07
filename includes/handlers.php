@@ -118,7 +118,7 @@ class PCRHandler {
 									"Status" => "0"
 								));
 		if(!trim($content) || !trim($title)){
-			header('Location: ../help.php');
+			exit();
 		}
 		else{
 		$question->commit();
