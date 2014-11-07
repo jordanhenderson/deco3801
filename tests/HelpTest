@@ -2,7 +2,7 @@
 
 session_start();
 $_SESSION['user_id'] = "0";
-
+$_SESSION['commentuser_id'] = "1";
 require_once('config.php');
 require_once('includes/handlers.php');
 
@@ -12,7 +12,9 @@ class PCRTest extends PHPUnit_Framework_TestCase {
 	*/
 	public function testObject()
 	{
+		//Test date for adding comments and questions
 		$date = date("Y-m-d  H:i:s", time());
+		//Make a new course - add a question to that course
 		$course = new Course(array("CourseID" => "0"));
 		$question = new Question(array(
 									"StudentID" => $_SESSION['user_id'],
@@ -24,23 +26,45 @@ class PCRTest extends PHPUnit_Framework_TestCase {
 									"Status" => "0"
 								));
 
+		$comment = new Comment(array(
+									"StudentID" => $_SESSION['commentuser_id'], 
+									"QuestionID" => $question->getID(),
+									"StudentName" => "commentTestName",
+									"Content" => "testComment",
+									"postdate" => $date
+								));
+
+
 		//Check PCRObject ID
 		$questionRow = &$question->getRow();
 		$this->assertEquals("0", $course->getID());
+
+		//Question assertions
 		$this->assertEquals("0", $questionRow["CourseID"]);
 		$this->assertEquals("testTitle", $questionRow["Title"]);
 		$this->assertEquals("0", $questionRow["StudentID"]);
+
+		$commentRow = &$comment->getRow();
+		//Comment assertions
+		$this->assertEquals("0", $question->getID());
+		$this->assertEquals("testComment", $commentRow["Content"]);
+		$this->assertEquals("1", $commentRow["StudentID"]);
 		
 		$course->delete();
 		$question->delete();
-		
+		$comment->delete();
+
 		$this->assertEquals(false, $course->isValid());
 		$this->assertEquals(false, $question->isValid());
+		$this->assertEquals(false, $comment->isValid());
 
 	}
 
-	/*public function testCourse()
+	public function testCommenting()
 	{
+		//Test date for adding comments and questions
+		$date = date("Y-m-d  H:i:s", time());
+
 		$handler = new PCRHandler();
 		$_SESSION['course_id'] = "0";
 		$course = $handler->getCourse();
@@ -57,15 +81,13 @@ class PCRTest extends PHPUnit_Framework_TestCase {
 		$course = $handler->getCourse();
 		$courseRow = &$course->getRow();
 		$this->assertEquals("1", $courseRow["HelpEnabled"]);
-		
-		//Toggle help enabled.
-		$courseRow = &$course->getRow();
-		$courseRow["HelpEnabled"] = "0";
-		$course->commit();
 
-		//Get course row again, validate help enabled set.
-		$course = $handler->getCourse();
-		$courseRow = &$course->getRow();
-		$this->assertEquals("0", $courseRow["HelpEnabled"]);
-	}*/
+		//Add a question to this course
+
+		//Add a Comment to this question
+		
+
+		
+
+	}
 }
