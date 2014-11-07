@@ -6,14 +6,13 @@ $_SESSION['user_id'] = "0";
 require_once('config.php');
 require_once('includes/handlers.php');
 
-$handler = new PCRHandler();
-
 class AssignReviewsTest extends PHPUnit_Framework_TestCase {
 	/**
 	 * Causes a given student to create a submission for a given course.
 	 * The bogus submission contains no file, and is purely an SQL entity.
 	 */
 	public function makeSubmission($studentid, $assignmentid) {
+		$handler = new PCRHandler();
 		$_SESSION['user_id'] = $studentid;
 		//Fake file upload by populating $_FILES
 		$_FILES["file"]["name"] = "test.zip";
@@ -30,6 +29,7 @@ class AssignReviewsTest extends PHPUnit_Framework_TestCase {
 	 * 
 	 */
 	public function testAssignReviews() {
+		$handler = new PCRHandler();
 		
 		// Create a bogus assignment, with ID 0, and deletes the old one.
 		$assignment = new Assignment(array("AssignmentID" => "0"));
