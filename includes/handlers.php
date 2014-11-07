@@ -117,9 +117,7 @@ class PCRHandler {
 									"Content" => $content,
 									"Status" => "0"
 								));
-		$trimmedContent = trim($content);
-		$trimmedTitle = trim($title);
-		if($trimmedContent  = "" || $trimmedTitle = ""){
+		if(!trim($content) || !trim($title)){
 			header('Location: ../help.php');
 		}
 		else{
