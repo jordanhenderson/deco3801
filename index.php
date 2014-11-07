@@ -33,6 +33,8 @@ if ($context->valid) { // Redirect from Moodle, reload data, in case different c
 	if ($context->isInstructor()) {
 		$_SESSION['admin'] = true;
 	}
+	//Redirect here to avoid form resubmission issues.
+	header("Location: /");
 } else if (isset($_SESSION['user_id'])) {
 	// No action, since user is already authenticated, and data stored
 } else {
