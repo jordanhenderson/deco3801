@@ -34,7 +34,9 @@ class PCRTest extends PHPUnit_Framework_TestCase {
 									"postdate" => $date
 								));
 
-
+		$this->assertEquals(true, $course->isValid());
+		$this->assertEquals(true, $question->isValid());
+		$this->assertEquals(true, $comment->isValid());
 		//Check PCRObject ID
 		$questionRow = &$question->getRow();
 		$this->assertEquals("0", $course->getID());
@@ -85,9 +87,6 @@ class PCRTest extends PHPUnit_Framework_TestCase {
 		//Add a question to this course
 
 		//Add a Comment to this question
-		
-
-		
 
 	}*/
 }

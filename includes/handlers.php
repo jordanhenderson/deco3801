@@ -43,7 +43,9 @@ class PCRHandler {
 	 */
 	public function removeQuestion($id) {
 		$question = new Question(array("QuestionID"=>$id));
+		if(isset($_SESSION['admin'])){
 		$question->delete();
+	    }
 	}
 
 	/**
@@ -52,7 +54,10 @@ class PCRHandler {
 	 */
 	public function deleteComment($id) {
 		$comment = new Comment(array("CommentID"=>$id));
+		$commentRow = &$comment->getRow();
+		if($commentRow["StudentID"] == $_SESSION["user_id"]){
         $comment->delete();
+   		}
 	}
 	
 	/**
@@ -83,6 +88,7 @@ class PCRHandler {
 	public function toggleHelp($status) {
 		$crs = new Course(array("CourseID"=>$_SESSION['course_id']));
 		$help = &$crs->getRow();
+		if(isset($_SESSION['admin'])){
 		if ($status == 0) {
 			$help['HelpEnabled'] = "1";
 			$crs->commit();
@@ -90,6 +96,7 @@ class PCRHandler {
 			$help['HelpEnabled'] = "0";
 			$crs->commit();
 		}
+	}
 	}
 	
 	/**
