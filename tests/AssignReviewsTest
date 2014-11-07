@@ -34,7 +34,7 @@ class AssignReviewsTest extends PHPUnit_Framework_TestCase {
 		$_SESSION['user_id'] = 1;
 		$_FILES["file"]["name"] = "test.zip";
 		$_FILES["file"]["error"] = 0;
-		$_FILES["file"]["tmp_name"] = "../tests/test.zip";
+		$_FILES["file"]["tmp_name"] = "test.zip";
 		$sub1 = $handler->uploadArchive(0);
 		
 		$handler->assignReviews(0);
@@ -46,7 +46,7 @@ class AssignReviewsTest extends PHPUnit_Framework_TestCase {
 		$_SESSION['user_id'] = 2;
 		$_FILES["file"]["name"] = "test.zip";
 		$_FILES["file"]["error"] = 0;
-		$_FILES["file"]["tmp_name"] = "../tests/test.zip";
+		$_FILES["file"]["tmp_name"] = "test.zip";
 		$sub1 = $handler->uploadArchive(0);
 		
 		// Create submission for student 3
@@ -54,7 +54,7 @@ class AssignReviewsTest extends PHPUnit_Framework_TestCase {
 		$_SESSION['user_id'] = 3;
 		$_FILES["file"]["name"] = "test.zip";
 		$_FILES["file"]["error"] = 0;
-		$_FILES["file"]["tmp_name"] = "../tests/test.zip";
+		$_FILES["file"]["tmp_name"] = "test.zip";
 		$sub1 = $handler->uploadArchive(0);
 		
 		$handler->assignReviews(0);
