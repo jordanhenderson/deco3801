@@ -147,7 +147,7 @@ function formatDBtime($dbtime) {
 						// Check if assignment needs to have reviews distributed.
 						if (!$asg['ReviewsAllocated'] && $CurrentTime > $DueTime) {
 							// Reviews have not been distributed to students. Do so now.
-							$crs->assignReviews($asg['AssignmentID']]);
+							$crs->assignReviews($asg['AssignmentID']);
 							$asg_obj->setReviewsAllocated();
 						}
 						
