@@ -87,7 +87,7 @@ class HelpTest extends PHPUnit_Framework_TestCase {
 
 		//Make a new course - add a question to that course
 		$question = $handler->storeNewQuestion("testTitle", "testContent", $_SESSION['user_id'], "testName", $date);
-		$comment = $handler->addComment($_SESSION['user_id'], "testName", "CommentContent", $date);
+		$comment = $handler->addComment($question->getID(), $_SESSION['user_id'], "testName", "CommentContent", $date);
 		$_SESSION['user_id'] = "1";
 		$comment = $handler->deleteComment($comment->getID());
 		$this->assertNull($comment, true);
