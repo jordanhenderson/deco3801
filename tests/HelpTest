@@ -69,7 +69,7 @@ class PCRTest extends PHPUnit_Framework_TestCase {
 
 		$handler = new PCRHandler();
 		$_SESSION['course_id'] = "0";
-		$course = $handler->getCourse();
+		$course = new Course(array("CourseID" => "0"));
 
 		$date = date("Y-m-d  H:i:s", time());
 		//Make a new course - add a question to that course
