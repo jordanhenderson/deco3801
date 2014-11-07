@@ -116,12 +116,11 @@ class PCRHandler {
 									"Content" => $content,
 									"Status" => "0"
 								));
-		//if it gets here, and its empty still (somehow) send it back
-		/*$contentStripped = strip_tags($content, '<p>');
-		$titleStripped =  strip_tags($title, '<p>');
-		if($contentStripped.trim() = "" || $titleStripped.trim() = ""){
-
-		}*/
+		$trimmedContent = $content.trim();
+		$trimmedTitle = $title.trim();
+		if($trimmedContent  = "" || $trimmedTitle = ""){
+			exit();
+		}
 		$question->commit();
 		return $question;
 	}

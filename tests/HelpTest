@@ -62,7 +62,7 @@ class PCRTest extends PHPUnit_Framework_TestCase {
 
 	}
 
-	/*public function testCommenting()
+	public function testBadQuestion()
 	{
 		//Test date for adding comments and questions
 		$date = date("Y-m-d  H:i:s", time());
@@ -70,23 +70,22 @@ class PCRTest extends PHPUnit_Framework_TestCase {
 		$handler = new PCRHandler();
 		$_SESSION['course_id'] = "0";
 		$course = $handler->getCourse();
-		
-		//Ensure course is not null
-		$this->assertNotNull($course);
-		
-		//Get course row, toggle help enabled.
-		$courseRow = &$course->getRow();
-		$courseRow["HelpEnabled"] = "1";
-		$course->commit();
-		
-		//Get course row again, validate help enabled set.
-		$course = $handler->getCourse();
-		$courseRow = &$course->getRow();
-		$this->assertEquals("1", $courseRow["HelpEnabled"]);
 
-		//Add a question to this course
+		$date = date("Y-m-d  H:i:s", time());
+		//Make a new course - add a question to that course
+		$course = new Course(array("CourseID" => "0"));
+		$question = new Question(array(
+									"StudentID" => $_SESSION['user_id'],
+									"CourseID" =>  $course->getID(),
+									"StudentName" => "testName",
+									"Opendate" => $date,
+									"Title" => "",
+									"Content" => "",
+									"Status" => "0"
+								));
 
-		//Add a Comment to this question
-
-	}*/
+		$this->assertEquals(true, $course->isValid());
+		$this->assertEquals(false, $question->isValid());
+		$course->delete();
+	}
 }
