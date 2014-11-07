@@ -117,8 +117,10 @@ class PCRHandler {
 									"Status" => "0"
 								));
 		//if it gets here, and its empty still (somehow) send it back
-		if(strip_tags($content.trim(), '<p>') = "" || strip_tags($title.trim(), '<p>') = ""){
-			header('../help.php');
+		$contentStripped = strip_tags($content, '<p>')
+		$titleStripped =  strip_tags($title, '<p>');
+		if($contentStripped.trim() = "" || $titleStripped.trim() = ""){
+
 		}
 		$question->commit();
 		return $question;
