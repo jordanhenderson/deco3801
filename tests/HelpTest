@@ -46,7 +46,7 @@ class PCRTest extends PHPUnit_Framework_TestCase {
 
 		$commentRow = &$comment->getRow();
 		//Comment assertions
-		$this->assertEquals("0", $question->getID());
+		$this->assertEquals($questionRow["QuestionID"], $question->getID());
 		$this->assertEquals("testComment", $commentRow["Content"]);
 		$this->assertEquals("1", $commentRow["StudentID"]);
 		
@@ -60,7 +60,7 @@ class PCRTest extends PHPUnit_Framework_TestCase {
 
 	}
 
-	public function testCommenting()
+	/*public function testCommenting()
 	{
 		//Test date for adding comments and questions
 		$date = date("Y-m-d  H:i:s", time());
@@ -89,5 +89,5 @@ class PCRTest extends PHPUnit_Framework_TestCase {
 
 		
 
-	}
+	}*/
 }
