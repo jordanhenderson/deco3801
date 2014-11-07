@@ -75,6 +75,7 @@ class PCRHandler {
 		$questionRow = &$question->getRow();
 		$questionRow["Status"] = "1";
 		$question->commit();
+		return $question;
 	}
 	
 	/**
@@ -86,6 +87,7 @@ class PCRHandler {
 		$questionRow = &$question->getRow();
 		$questionRow["Status"] = "0";
 		$question->commit();
+		return $question;
 	}
 	
 	/**

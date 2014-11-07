@@ -129,11 +129,11 @@ class HelpTest extends PHPUnit_Framework_TestCase {
 		$this->assertEquals(true, $course->isValid());
 		$this->assertEquals(true, $question->isValid());
 		//Mark the question resolved and check status is 1
-		$handler->markResolved($question->getID());
+		$question = $handler->markResolved($question->getID());
 		$questionRow = &$question->getRow();
 		$this->assertEquals("1", $questionRow["Status"]);
 		//Mark unresolved and check status is 0
-		$handler->markUnresolved($question->getID());
+		$question = $handler->markUnresolved($question->getID());
 		$questionRow= &$question->getRow();
 		$this->assertEquals("0", $questionRow["Status"]);
 		$question->delete();
