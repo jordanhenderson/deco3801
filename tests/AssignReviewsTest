@@ -28,13 +28,38 @@ class AssignReviewsTest extends PHPUnit_Framework_TestCase {
 		
 		// 1 submission, 1 review per student (tests self reviewing)
 		$assignment = $handler->changeAssignment("0", "Test Assignment", "1", "0", "0", "0", "0", "1", "0");
-		$sub1 = makeSubmission(1, 0); // Submission 1
+		
+		// Create submission for student 1
+		$handler = new PCRHandler();
+		$_SESSION['user_id'] = 1;
+		//Fake file upload by populating $_FILES
+		$_FILES["file"]["name"] = "test.zip";
+		$_FILES["file"]["error"] = 0;
+		$_FILES["file"]["tmp_name"] = "tests/test.zip";
+		$sub1 = $handler->uploadArchive(0);
+		
 		$handler->assignReviews(0);
 		$this->assertEquals($assignment->getReviews(), array()); // empty
 		
 		// 3 submissions, 1 review per student (tests standard case)
-		$sub2 = makeSubmission(2, 0); // Submission 2
-		$sub3 = makeSubmission(3, 0); // Submission 3
+		// Create submission for student 2
+		$handler = new PCRHandler();
+		$_SESSION['user_id'] = 2;
+		//Fake file upload by populating $_FILES
+		$_FILES["file"]["name"] = "test.zip";
+		$_FILES["file"]["error"] = 0;
+		$_FILES["file"]["tmp_name"] = "tests/test.zip";
+		$sub1 = $handler->uploadArchive(0);
+		
+		// Create submission for student 3
+		$handler = new PCRHandler();
+		$_SESSION['user_id'] = 3;
+		//Fake file upload by populating $_FILES
+		$_FILES["file"]["name"] = "test.zip";
+		$_FILES["file"]["error"] = 0;
+		$_FILES["file"]["tmp_name"] = "tests/test.zip";
+		$sub1 = $handler->uploadArchive(0);
+		
 		$handler->assignReviews(0);
 		
 		$student1reviews = $assignment->getUnmarkedSubmissions(1);
@@ -64,15 +89,7 @@ class AssignReviewsTest extends PHPUnit_Framework_TestCase {
 	 * The bogus submission contains no file, and is purely an SQL entity.
 	 */
 	public function makeSubmission($studentid, $assignmentid) {
-		$handler = new PCRHandler();
-		$_SESSION['user_id'] = $studentid;
-		//Fake file upload by populating $_FILES
-		$_FILES["file"]["name"] = "test.zip";
-		$_FILES["file"]["error"] = 0;
-		$_FILES["file"]["tmp_name"] = "tests/test.zip";
 		
-		//Create a submission
-		$sub = $handler->uploadArchive($assignmentid);
 		return $sub;
 	}
 }
