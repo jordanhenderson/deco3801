@@ -74,7 +74,7 @@ class PCRTest extends PHPUnit_Framework_TestCase {
 		$date = date("Y-m-d  H:i:s", time());
 		//Make a new course - add a question to that course
 		$course = new Course(array("CourseID" => "0"));
-		$handler = $course->storeNewQuestion("", "", $_SESSION['user_id'], "testName", $date);
+		$handler = storeNewQuestion("", "", $_SESSION['user_id'], "testName", $date);
 		$this->assertEquals(true, $course->isValid());
 		$this->assertEquals(false, $question->isValid());
 		$course->delete();
