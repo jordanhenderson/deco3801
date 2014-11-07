@@ -192,11 +192,11 @@ abstract class PCRObject implements JsonSerializable {
 			
 			$id = null;
 			
-			if(isset($this->id)) {
+			if (isset($this->id)) {
 				$id = $this->id;
-			} else if(isset($this->row[$this->id_field])) {
+			} else if (isset($this->row[$this->id_field])) {
 				$passed_id = $this->row[$this->id_field];
-				if($passed_id !== '') $id = $passed_id;
+				if ($passed_id !== '') $id = $passed_id;
 				else return;
 				
 			}
@@ -509,7 +509,7 @@ class File extends PCRObject {
 		parent::Update();
 		$filename = $this->row["FileName"];
 		$lastsep = strrpos($filename, "/");
-		if($lastsep !== FALSE) {
+		if ($lastsep !== FALSE) {
 			//Need to substr.
 			return substr($filename, $lastsep + 1);
 		} else {
@@ -521,7 +521,7 @@ class File extends PCRObject {
 		parent::Update();
 		$filename = $this->row["FileName"];
 		$lastsep = strrpos($filename, "/");
-		if($lastsep !== FALSE) {
+		if ($lastsep !== FALSE) {
 			//Need to substr.
 			return substr($filename, 0, $lastsep + 1);
 		} else {
@@ -534,9 +534,9 @@ class File extends PCRObject {
 		$filename = $this->row["FileName"];
 		$lastsep = strrpos($filename, "/");
 
-		if($lastsep !== FALSE) {
+		if ($lastsep !== FALSE) {
 			$nextsep = strrpos($filename, "/", -(strlen($filename) - $lastsep + 1) );
-			if($nextsep === FALSE) {
+			if ($nextsep === FALSE) {
 				//Need to substr.
 				$nextsep = 0;
 			}
@@ -590,7 +590,7 @@ class Submission extends PCRObject {
 	}
 	
 	public function Cleanup() {
-		if(!$this->isValid()) return;
+		if (!$this->isValid()) return;
 		$dir = $this->storage_dir;
 		$it = new RecursiveDirectoryIterator($dir, RecursiveDirectoryIterator::SKIP_DOTS);
 		$files = new RecursiveIteratorIterator($it,

@@ -1,6 +1,9 @@
 <?php
 session_start();
+$_SESSION['course_id'] = "0";
 $_SESSION['user_id'] = "0";
+
+$handler = new PCRHandler();
 
 require_once('config.php');
 require_once('includes/handlers.php');
@@ -10,41 +13,53 @@ class AssignReviewsTest extends PHPUnit_Framework_TestCase {
 	 * Causes a given student to create a submission for a given course.
 	 * The bogus submission contains no file, and is purely an SQL entity.
 	 */
-	public function submitAssignment($studentid, $courseid) {
+	public function makeSubmission($studentid, $assignmentid) {
+		$_SESSION['user_id'] = $studentid;
+		//Fake file upload by populating $_FILES
+		$_FILES["file"]["name"] = "test.zip";
+		$_FILES["file"]["error"] = 0;
+		$_FILES["file"]["tmp_name"] = "tests/test.zip";
 		
+		//Create a submission
+		$sub = $handler->uploadArchive($assignmentid);
+		return $sub;
 	}
 	
 	/**
 	 * 
 	 * 
-	 * 
 	 */
 	public function testAssignReviews() {
-		$_SESSION['course_id'] = "0";
-		$handler = new PCRHandler();
-		$course = $handler->getCourse();
-		//Create an assignment (delete the old one first)
+		
+		// Create a bogus assignment, with ID 0, and deletes the old one.
 		$assignment = new Assignment(array("AssignmentID"=>"0"));
 		$assignment->delete();
 		
-		$assignment = $handler->changeAssignment("0", "Test Assignment", "0", "0", "0", "0", "0", "0","0");
+		// Test review distributions
 		
-		$this->assertNotNull($assignment);
-		$this->assertEquals($assignment->isValid(), true);
+		// No submissions, 1 review per student (tests 0 students)
+		$assignment = $handler->changeAssignment("0", "Test Assignment", "1", "0", "0", "0", "0", "1", "0");
 		
-		//Fake file upload by populating $_FILES
-		$_FILES["file"]["name"] = "test.zip";
-		$_FILES["file"]["error"] = 0;
-		$_FILES["file"]["tmp_name"] = "tests/test.zip";
-		//Create a submission
-		$subm = $handler->uploadArchive($assignment->getID());
-		$this->assertNotNull($subm);
-		$this->assertEquals($subm->isValid(), true);
+		// 1 submission, 1 review per student (tests self reviewing)
+		$assignment = $handler->changeAssignment("0", "Test Assignment", "1", "0", "0", "0", "0", "1", "0");
+		$sub1 = makeSubmission(1, 0); // Submission 1
 		
-		//Try uploading a repo submission with no host (should return null)
-		$this->assertNull($handler->uploadRepo($assignment->getID(), "", "", ""));
 		
-		//Clean up the assignment 
-		$assignment->delete();
+		// 3 submissions, 1 review per student (tests standard case)
+		$assignment = $handler->changeAssignment("0", "Test Assignment", "1", "0", "0", "0", "0", "1", "0");
+		$sub2 = makeSubmission(2, 0); // Submission 2
+		$sub3 = makeSubmission(3, 0); // Submission 3
+		
+		// 3 submissions, 5 reviews per student (tests reviews >= submissions)
+		$assignment = $handler->changeAssignment("0", "Test Assignment", "5", "0", "0", "0", "0", "1", "0");
+		
+		
+		// 3 submissions, 0 reviews per student (tests 0 reviews)
+		$assignment = $handler->changeAssignment("0", "Test Assignment", "0", "0", "0", "0", "0", "1", "0");
+		
+		// Delete submissions
+		$sub1->delete();
+		$sub2->delete();
+		$sub3->delete();
 	}
 }
