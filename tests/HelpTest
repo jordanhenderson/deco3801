@@ -25,9 +25,10 @@ class PCRTest extends PHPUnit_Framework_TestCase {
 								));
 
 		//Check PCRObject ID
+		$questionRow = &$question->getRow();
 		$this->assertEquals("0", $course->getID());
-		$this->assertEquals("testTitle", $question["Title"]);
-		$this->assertEquals("0", $question["StudentID"]);
+		$this->assertEquals("testTitle", $questionRow["Title"]);
+		$this->assertEquals("0", $questionRown["StudentID"]);
 		
 		$course->delete();
 		$question->delete();
