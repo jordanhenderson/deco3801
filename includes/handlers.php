@@ -43,7 +43,7 @@ class PCRHandler {
 	 */
 	public function removeQuestion($id) {
 		$question = new Question(array("QuestionID" => $id));
-		if (isset($_SESSION['admin'])){
+		if (isset($_SESSION['admin'])) {
 			$question->delete();
 		}
 	}
@@ -55,9 +55,9 @@ class PCRHandler {
 	public function deleteComment($id) {
 		$comment = new Comment(array("CommentID" => $id));
 		$commentRow = &$comment->getRow();
-		if ($commentRow["StudentID"] == $_SESSION["user_id"]){
+		if ($commentRow["StudentID"] == $_SESSION["user_id"]) {
 			$comment->delete();
-   		}
+		}
 	}
 	
 	/**
@@ -81,6 +81,7 @@ class PCRHandler {
 		$questionRow["Status"] = "0";
 		$question->commit();
 	}
+	
 	/**
 	 * Marks the question specified by id as unresolved.
 	 * @param status of the help centre currently
@@ -88,7 +89,7 @@ class PCRHandler {
 	public function toggleHelp($status) {
 		$crs = new Course(array("CourseID" => $_SESSION['course_id']));
 		$help = &$crs->getRow();
-		if(isset($_SESSION['admin'])){
+		if (isset($_SESSION['admin'])) {
 		if ($status == 0) {
 			$help['HelpEnabled'] = "1";
 			$crs->commit();
@@ -117,7 +118,7 @@ class PCRHandler {
 									"Content" => $content,
 									"Status" => "0"
 								));
-		if(!trim($content) || !trim($title)){
+		if (!trim($content) || !trim($title)) {
 			return $question;
 		}
 		else{
@@ -180,38 +181,46 @@ class PCRHandler {
 		return $question->addComment($studentid, $fullname, $content, $date);
 	}
 	
-	
+	/**
+	 * assignReviews distributes reviews to each student who made a submission,
+	 * up to the amount of reviews required, or the amount of submissions made
+	 * minus 1.
+	 * @param assignment ID
+	 */
 	public function assignReviews($assign_id) {
-		  $asg_obj = new Assignment(array("AssignmentID" => $assign_id));
-		  
-		  if(!$asg_obj->isValid()) return;
-		  
-		  //Abort if any existing reviews for assignment
-		  $asg = $asg_obj->getRow();
-		  
-		  $submissions = $asg_obj->getSubmissions();
-		  $reviewnum = $asg['ReviewsNeeded'];
-		  
+		$asg = new Assignment(array("AssignmentID" => $assign_id));
 		
-		  // for each submission
-		  for ($i = 0; $i < count($submissions); ++$i) {
-			  // the student who made the submission must mark 'reviewnum' submissions.
-			  for ($j = 0; $j < $reviewnum; ++$j) {
-				  // Make review row for student/submission
-				  $index = ($i + $j + 1) % count($submissions);
-				  $reviewerID = $submissions[$index]->getOwner();
-				  if($reviewerID != $submissions[$i]->getOwner()) {
+		if (!$asg->isValid()) return;
+		
+		$submissions = $asg->getSubmissions();
+		$asg = $asg->getRow();
+		
+		//Abort if any existing reviews for assignment
+		
+		$reviewnum = $asg['ReviewsNeeded'];
+		
+		// for each submission
+		for ($i = 0; $i < count($submissions); ++$i) {
+			// the student who made the submission must mark 'reviewnum' submissions.
+			for ($j = 0; $j < $reviewnum; ++$j) {
+				// Make review row for student/submission
+				$index = ($i + $j + 1) % count($submissions);
+				$reviewerID = $submissions[$index]->getOwner();
+				if ($reviewerID != $submissions[$i]->getOwner()) {
 					$exist_review = new Review(array("ReviewerID" => $reviewerID, "SubmissionID" => $submissions[$i]->getID()), false);
-					if(!$exist_review->isValid())
-						  $submissions[$i]->addReview("", $reviewerID, 0, 0, null, "", 0);
-				  }
-			  }
-		  }
+					if (!$exist_review->isValid()) {
+						$submissions[$i]->addReview("", $reviewerID, 0, 0, null, "", 0);
+					}
+				}
+			}
+		}
 	}
+	
 	/**
 	 * Function that is run when save is clicked. It will remove any deleted
 	 * reviews, update any edited ones, insert any new ones and ignore
 	 * unchanged ones
+	 * @param an array of review objects
 	 */
 	public function saveReviews($reviews) {
 		foreach ($reviews as $review) {
@@ -231,6 +240,7 @@ class PCRHandler {
 	 * Function that is run when submit is clicked. It will remove any deleted
 	 * reviews, update any edited ones, insert any new ones and ignore
 	 * unchanged ones
+	 * @param an array of review objects
 	 */
 	public function submitReviews($reviews) {
 		foreach ($reviews as $review) {
@@ -274,7 +284,7 @@ class PCRHandler {
 	public function addReview($review, $submitted) {
 		// Get the submission for the student you are submitting a review for
 		$submission = new Submission(array("SubmissionID" => $review["SubmissionID"]), false);
-		if(!$submission->isValid()) return;
+		if (!$submission->isValid()) return;
 		// Then add the review to the database
 		return $submission->addReview($review["Comments"], $_SESSION['user_id'], 
 						$review["startIndex"], $review["startLine"], 
@@ -305,7 +315,7 @@ class PCRHandler {
 		return $submission->getResults();
 	}
 	
-	/*
+	/**
 	 * TESTING FUNCTION ONLY - FOR TUTORS CONVENIENCE AND DEMO
 	 * Sets the assignment with the provided ID to have the following dates:
 	 * 
@@ -324,7 +334,7 @@ class PCRHandler {
 		$assignment->commit();
 	}
 	
-	/*
+	/**
 	 * TESTING FUNCTION ONLY - FOR TUTORS CONVENIENCE AND DEMO
 	 * Sets the assignment with the provided ID to have the following dates:
 	 * 
@@ -343,7 +353,7 @@ class PCRHandler {
 		$assignment->commit();
 	}
 	
-	/*
+	/**
 	 * TESTING FUNCTION ONLY - FOR TUTORS CONVENIENCE AND DEMO
 	 * Sets the assignment with the provided ID to have the following dates:
 	 * 
@@ -364,6 +374,7 @@ class PCRHandler {
 	
 	/**
 	 * uploadTest uploads tests for an assignment.
+	 * @param assignment ID
 	*/
 	public function uploadTest($assignment_id) {
 		$assignment = new Assignment(array("AssignmentID" => $assignment_id));
@@ -396,17 +407,18 @@ class PCRHandler {
 			
 			//Set executable flag on run.sh.
 			chdir($assignment->getDir() . "/test/");
-			if(!file_exists("run.sh")) {
-				  //Test invalid, no run.sh!
-				  $assignment->cleanTest();
+			if (!file_exists("run.sh")) {
+				//Test invalid, no run.sh!
+				$assignment->cleanTest();
 			} else {
-				  chmod("run.sh", 0750);
+				chmod("run.sh", 0750);
 			}
 		}
 	}
 	
 	/**
 	 * uploadArchive uploads an archive to an assignment
+	 * @param assignment ID
 	 */
 	public function uploadArchive($assignment_id) {
 		$assignment = new Assignment(array("AssignmentID" => $assignment_id));
@@ -510,35 +522,37 @@ class PCRHandler {
 	
 	/**
 	 * Delete an assignment.
+	 * @param assignment ID
 	 */
 	public function deleteAssignment($AssignmentID) {
 		$assignment = new Assignment(array("AssignmentID" => $AssignmentID));
 		$assignment->delete();
 	}
 	
-	/*
+	/**
 	 * Retrieves the file from the server and returns it to the calling page i.e. 
-	 * review_dev.php. 
+	 * review_dev.php
+	 * @param File ID
 	 */
 	public function loadFile($fileID) {
 		$file = new File(array("FileID" => $fileID));
-		if(!$file->isValid()) return "";
+		if (!$file->isValid()) return "";
 		$file_row = $file->getRow();
 
 		$submission = new Submission(array("SubmissionID" => $file_row["SubmissionID"]));
-		if(!$submission->isValid()) return ""; //invalid submission ID?
+		if (!$submission->isValid()) return ""; //invalid submission ID?
 
-		if(!isset($_SESSION['admin'])) {
+		if (!isset($_SESSION['admin'])) {
 			//Check to ensure we have access to the file
 			$submission_row = $submission->getRow();
-			if($_SESSION['user_id'] !== $submission_row['StudentID']) {
+			if ($_SESSION['user_id'] !== $submission_row['StudentID']) {
 				//Check to ensure the student cannot review this submission
 				$review = new Review(array("ReviewerID" => $_SESSION['user_id'], "SubmissionID" => $submission->getID()), false);
-				if(!$review->isValid()) return ""; //user should not be able to access file!
+				if (!$review->isValid()) return ""; //user should not be able to access file!
 			}
 		}
 
-		//$assignment =  __DIR__ . "/../storage/course_$courseID/assign_$assignmentid/submissions/$submissionID/" . $fileName;
+		//$assignment = __DIR__ . "/../storage/course_$courseID/assign_$assignmentid/submissions/$submissionID/" . $fileName;
 		$fileName = $submission->getStorageDir() . $file_row["FileName"];
 		$handle = fopen($fileName, "r");
 		$contents = fread($handle, filesize($fileName));
@@ -550,7 +564,7 @@ class PCRHandler {
 }
 
 /**
- * Needs Comment.
+ * 
  */
 class PCRBackend {
 	private $request;
@@ -564,7 +578,8 @@ class PCRBackend {
 	}
 	
 	/**
-	 * Needs Comment.
+	 * handleRequest deas with requests that specify a particular method to be
+	 * run, with particular parameters.
 	 */
 	public function handleRequest() {
 		try {
@@ -578,7 +593,7 @@ class PCRBackend {
 				if ($fct->getNumberOfRequiredParameters() == count($params))
 					$response = call_user_func_array(array($this->handler, $method), $params);
 			}
-			if ($response) return json_encode(array("r" =>  $response));
+			if ($response) return json_encode(array("r" => $response));
 			else return "{}";
 		} catch(Exception $e) {
 			error_log($e);
