@@ -16,9 +16,9 @@ class PCRTest extends PHPUnit_Framework_TestCase {
 		$question = new Question(array(
 									"StudentID" => $_SESSION['user_id'],
 									"CourseID" =>  $course->getID(),
-									"StudentName" => "testName"
+									"StudentName" => "testName",
 									"Opendate" => $date,
-									"Title" => "testTitle"
+									"Title" => "testTitle",
 									"Content" => "test",
 									"Status" => "0"
 								));
