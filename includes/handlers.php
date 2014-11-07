@@ -58,6 +58,9 @@ class PCRHandler {
 		if ($commentRow["StudentID"] == $_SESSION["user_id"]) {
 			$comment->delete();
 		}
+		else{
+			return null;
+		}
 	}
 	
 	/**
