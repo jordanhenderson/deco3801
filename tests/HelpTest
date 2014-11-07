@@ -97,7 +97,7 @@ class HelpTest extends PHPUnit_Framework_TestCase {
 		$this->assertEquals(true, $comment->isValid());
 		//Change back to original user and delete comment
 		$_SESSION['user_id'] = "0";
-		$deleteComment = $handler->deleteComment($comment->getID());
+		$comment = $handler->deleteComment($comment->getID());
 		$this->assertEquals(false, $comment->isValid());
 		$course->delete();
 	}
