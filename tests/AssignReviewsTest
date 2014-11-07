@@ -1,34 +1,18 @@
 <?php
 session_start();
-$_SESSION['course_id'] = "0";
 $_SESSION['user_id'] = "0";
 
 require_once('config.php');
 require_once('includes/handlers.php');
 
 class AssignReviewsTest extends PHPUnit_Framework_TestCase {
-	/**
-	 * Causes a given student to create a submission for a given course.
-	 * The bogus submission contains no file, and is purely an SQL entity.
-	 */
-	public function makeSubmission($studentid, $assignmentid) {
-		$handler = new PCRHandler();
-		$_SESSION['user_id'] = $studentid;
-		//Fake file upload by populating $_FILES
-		$_FILES["file"]["name"] = "test.zip";
-		$_FILES["file"]["error"] = 0;
-		$_FILES["file"]["tmp_name"] = "tests/test.zip";
-		
-		//Create a submission
-		$sub = $handler->uploadArchive($assignmentid);
-		return $sub;
-	}
 	
 	/**
 	 * 
 	 * 
 	 */
 	public function testAssignReviews() {
+		$_SESSION['course_id'] = "0";
 		$handler = new PCRHandler();
 		
 		// Create a bogus assignment, with ID 0, and deletes the old one.
@@ -73,5 +57,22 @@ class AssignReviewsTest extends PHPUnit_Framework_TestCase {
 		$sub1->delete();
 		$sub2->delete();
 		$sub3->delete();
+	}
+	
+	/**
+	 * Causes a given student to create a submission for a given course.
+	 * The bogus submission contains no file, and is purely an SQL entity.
+	 */
+	public function makeSubmission($studentid, $assignmentid) {
+		$handler = new PCRHandler();
+		$_SESSION['user_id'] = $studentid;
+		//Fake file upload by populating $_FILES
+		$_FILES["file"]["name"] = "test.zip";
+		$_FILES["file"]["error"] = 0;
+		$_FILES["file"]["tmp_name"] = "tests/test.zip";
+		
+		//Create a submission
+		$sub = $handler->uploadArchive($assignmentid);
+		return $sub;
 	}
 }

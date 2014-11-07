@@ -6,12 +6,11 @@ $_SESSION['commentuser_id'] = "1";
 require_once('config.php');
 require_once('includes/handlers.php');
 
-class PCRTest extends PHPUnit_Framework_TestCase {
+class HelpTest extends PHPUnit_Framework_TestCase {
 	/**
 	 * Tests that a question gets created and stored to a specific course properly
-	*/
-	public function testObject()
-	{
+	 */
+	public function testObject() {
 		//Test date for adding comments and questions
 		$date = date("Y-m-d  H:i:s", time());
 		//Make a new course - add a question to that course
@@ -62,8 +61,7 @@ class PCRTest extends PHPUnit_Framework_TestCase {
 
 	}
 
-	public function testBadQuestion()
-	{
+	public function testBadQuestion() {
 		//Test date for adding comments and questions
 		$date = date("Y-m-d  H:i:s", time());
 
