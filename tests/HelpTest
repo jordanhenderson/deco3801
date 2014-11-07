@@ -122,11 +122,11 @@ class HelpTest extends PHPUnit_Framework_TestCase {
 		//Make a new course - add a question to that course
 		$question = $handler->storeNewQuestion("testTitle", "testContent", $_SESSION['user_id'], "testName", $date);
 		//Mark the question resolved and check status is 1
-		$question = $handler->markResolved($question->getID());
+		$handler->markResolved($question->getID());
 		$questionRow = &$question->getRow();
-		$this->assertEquals("1", $questionRow["Status"]);
+		$this->assertEquals("0", $questionRow["Status"]);
 		//Mark unresolved and check status is 0
-		$question = $handler->markUnresolved($question->getID());
+		$handler->markUnresolved($question->getID());
 		$this->assertEquals("0", $questionRow["Status"]);
 		$course->delete();
 	}
