@@ -1,0 +1,68 @@
+<?php
+
+session_start();
+$_SESSION['user_id'] = "0";
+$date = date("Y-m-d  H:i:s", time());
+require_once('config.php');
+require_once('includes/handlers.php');
+
+class PCRTest extends PHPUnit_Framework_TestCase {
+	/**
+	 * Tests a basic PCRObject's functionality (ID, deletion etc.)
+	*/
+	public function testObject()
+	{
+		$course = new Course(array("CourseID" => "0"));
+		$question = new Question(array(
+									"StudentID" => $_SESSION['user_id'],
+									"CourseID" =>  $course->getID(),
+									"StudentName" => "testName"
+									"Opendate" => $date,
+									"Title" => "testTitle"
+									"Content" => "test",
+									"Status" => "0"
+								));
+
+		//Check PCRObject ID
+		$this->assertEquals("0", $course->getID());
+		$this->assertEquals("testTitle", $question["Title"]);
+		$this->assertEquals("0", $question["StudentID"]);
+		
+		$course->delete();
+		$question->delete();
+		
+		$this->assertEquals(false, $course->isValid());
+		$this->assertEquals(false, $question->isValid());
+
+	}
+
+	/*public function testCourse()
+	{
+		$handler = new PCRHandler();
+		$_SESSION['course_id'] = "0";
+		$course = $handler->getCourse();
+		
+		//Ensure course is not null
+		$this->assertNotNull($course);
+		
+		//Get course row, toggle help enabled.
+		$courseRow = &$course->getRow();
+		$courseRow["HelpEnabled"] = "1";
+		$course->commit();
+		
+		//Get course row again, validate help enabled set.
+		$course = $handler->getCourse();
+		$courseRow = &$course->getRow();
+		$this->assertEquals("1", $courseRow["HelpEnabled"]);
+		
+		//Toggle help enabled.
+		$courseRow = &$course->getRow();
+		$courseRow["HelpEnabled"] = "0";
+		$course->commit();
+
+		//Get course row again, validate help enabled set.
+		$course = $handler->getCourse();
+		$courseRow = &$course->getRow();
+		$this->assertEquals("0", $courseRow["HelpEnabled"]);
+	}*/
+}
