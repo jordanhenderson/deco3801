@@ -32,10 +32,9 @@ class AssignReviewsTest extends PHPUnit_Framework_TestCase {
 		// Create submission for student 1
 		$handler = new PCRHandler();
 		$_SESSION['user_id'] = 1;
-		//Fake file upload by populating $_FILES
 		$_FILES["file"]["name"] = "test.zip";
 		$_FILES["file"]["error"] = 0;
-		$_FILES["file"]["tmp_name"] = "tests/test.zip";
+		$_FILES["file"]["tmp_name"] = "../tests/test.zip";
 		$sub1 = $handler->uploadArchive(0);
 		
 		$handler->assignReviews(0);
@@ -45,19 +44,17 @@ class AssignReviewsTest extends PHPUnit_Framework_TestCase {
 		// Create submission for student 2
 		$handler = new PCRHandler();
 		$_SESSION['user_id'] = 2;
-		//Fake file upload by populating $_FILES
 		$_FILES["file"]["name"] = "test.zip";
 		$_FILES["file"]["error"] = 0;
-		$_FILES["file"]["tmp_name"] = "tests/test.zip";
+		$_FILES["file"]["tmp_name"] = "../tests/test.zip";
 		$sub1 = $handler->uploadArchive(0);
 		
 		// Create submission for student 3
 		$handler = new PCRHandler();
 		$_SESSION['user_id'] = 3;
-		//Fake file upload by populating $_FILES
 		$_FILES["file"]["name"] = "test.zip";
 		$_FILES["file"]["error"] = 0;
-		$_FILES["file"]["tmp_name"] = "tests/test.zip";
+		$_FILES["file"]["tmp_name"] = "../tests/test.zip";
 		$sub1 = $handler->uploadArchive(0);
 		
 		$handler->assignReviews(0);
