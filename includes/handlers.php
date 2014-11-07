@@ -116,8 +116,8 @@ class PCRHandler {
 									"Content" => $content,
 									"Status" => "0"
 								));
-		$trimmedContent = $content.trim();
-		$trimmedTitle = $title.trim();
+		$trimmedContent = trim($content);
+		$trimmedTitle = trim($Title);
 		if($trimmedContent  = "" || $trimmedTitle = ""){
 			exit();
 		}
