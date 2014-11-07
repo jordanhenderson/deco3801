@@ -33,7 +33,10 @@ class bashTesting {
 	public function execute() {
 		// Execute student assignment
 		chdir($this->test_dir);
-		$scriptOutput = shell_exec($this->test_file_location . "run.sh");
+		$testfile = $this->test_file_location . "run.sh";
+		if(!file_exists($testfile)) return null;
+		
+		$scriptOutput = shell_exec($testfile);
 		// Check for newline at the end, remove if present
 		if (substr($scriptOutput, -1) == "\n") {
 			$scriptOutput = substr($scriptOutput, 0, -1);
@@ -43,12 +46,18 @@ class bashTesting {
 		if (substr($scriptOutput, -1) == ";") {
 			$scriptOutput = substr($scriptOutput, 0, -1);
 		}
+		
+		if($scriptOutput == "") {
+			return null;
+		}
 
 		$testResults = explode(";", $scriptOutput);
 
 		if ($testResults == "" || $testResults == null) {
 			return null;
 		}
+		
+		
 
 		$counter = 0;
 
