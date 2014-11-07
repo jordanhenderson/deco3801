@@ -184,7 +184,15 @@ class PCRHandler {
 	 */
 	public function addComment($question_id, $studentid, $fullname, $content, $date) {
 		$question = PCRHandler::getQuestion($question_id);
-		return $question->addComment($studentid, $fullname, $content, $date);
+		if (!trim($content)) {
+			return null;
+		}
+		else if($studentid != $_SESSION["user_id"]){
+			return null;
+		}
+		else{
+				return $question->addComment($studentid, $fullname, $content, $date);
+		}
 	}
 	
 	/**

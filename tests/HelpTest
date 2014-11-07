@@ -139,4 +139,24 @@ class HelpTest extends PHPUnit_Framework_TestCase {
 		$question->delete();
 		$course->delete();
 	}
+	public function testBadComment(){
+		$date = date("Y-m-d  H:i:s", time());
+
+		$handler = new PCRHandler();
+		$_SESSION['course_id'] = "0";
+		$course = new Course(array("CourseID" => "0"));
+
+		//Make a new course - add a question to that course
+		$question = $handler->storeNewQuestion("testTitle", "testContent", $_SESSION['user_id'], "testName", $date);
+		$comment = $handler->addComment($question->getID(), $_SESSION['user_id'], "testName", "", $date);
+		$this->assertNull($comment, true);
+		//Set the user to a differnet person
+		$_SESSION['user_id'] = "1";
+		$comment = $handler->addComment($question->getID(), "0", "testName", "testContent", $date);
+		$this->assertNull($comment, true);
+		//Should be null if the comment was NOT deleted and thus is valid
+		$question->delete();
+		$course->delete();
+		$comment->delete();
+	}
 }
