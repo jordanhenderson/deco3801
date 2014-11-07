@@ -91,5 +91,6 @@ class HelpTest extends PHPUnit_Framework_TestCase {
 		$_SESSION['user_id'] = "1";
 		$comment = $handler->deleteComment($comment->getID());
 		$this->assertNull($comment, true);
+		$course->delete();
 	}
 }
