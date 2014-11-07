@@ -46,6 +46,9 @@ class PCRHandler {
 		if (isset($_SESSION['admin'])) {
 			$question->delete();
 		}
+		else{
+			return null;
+		}
 	}
 
 	/**

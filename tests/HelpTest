@@ -97,4 +97,19 @@ class HelpTest extends PHPUnit_Framework_TestCase {
 		$this->assertEquals(true, $comment->isValid());
 		$course->delete();
 	}
+	public function testDeleteingQuestion(){
+		$date = date("Y-m-d  H:i:s", time());
+
+		$handler = new PCRHandler();
+		$_SESSION['course_id'] = "0";
+		$course = new Course(array("CourseID" => "0"));
+
+		//Make a new course - add a question to that course
+		$question = $handler->storeNewQuestion("testTitle", "testContent", $_SESSION['user_id'], "testName", $date);
+		$_SESSION['admin'] = false;
+		$question = $handler->removeQuestion($question->getID());
+		//Test it hasn't been deleted because an admin didn't send the request
+		$this->assertNull($question, true);
+
+	}
 }
