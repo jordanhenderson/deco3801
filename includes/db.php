@@ -720,7 +720,6 @@ class Submission extends PCRObject {
 		// get the id of the review associated with $comment and the submission id
 		// Create a new review out of it
 		// Delete that review
-		$arr = array();
 		$sth = $this->db->prepare("SELECT ReviewID FROM Review WHERE SubmissionID = ? AND ReviewID = " . $reviewID . ";");
 		$sth->execute(array($this->getID()));
 		$file_row = $sth->fetch(PDO::FETCH_ASSOC);
@@ -763,6 +762,18 @@ class Submission extends PCRObject {
 		
 		$review->commit();
 		return $review;
+	}
+	
+	/**
+	 * Delete the NULL value in review that allows a user to access the
+	 * submission when the user has clicked submit.
+	 */
+	public function removeAccess() {
+		$sth = $this->db->prepare("SELECT ReviewID FROM Review WHERE SubmissionID = ? AND ReviewerID = ? AND FileID = NULL;");
+		$sth->execute(array($this->getID(), $_SESSION['user_id']));
+		$file_row = $sth->fetch(PDO::FETCH_ASSOC);
+		$review = new Review($file_row);
+		$review->delete();
 	}
 
 	public function testSubmission($test_file_location) {

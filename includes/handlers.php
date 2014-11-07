@@ -217,7 +217,8 @@ class PCRHandler {
 	/**
 	 * Function that is run when submit is clicked. It will remove any deleted
 	 * reviews, update any edited ones, insert any new ones and ignore
-	 * unchanged ones
+	 * unchanged ones. It will then remove that users access to reviewing the 
+	 * submission
 	 */
 	public function submitReviews($reviews) {
 		foreach ($reviews as $review) {
@@ -231,6 +232,8 @@ class PCRHandler {
 				$this->editReview($review["startLine"], $review["startIndex"], $review["ReviewID"], $review["Comments"], $review["SubmissionID"], 1);
 			}
 		}
+		$submission = new Submission(array("SubmissionID"=>$id), false);
+		return $submission->removeAccess();
 	}
 	
 	/**
