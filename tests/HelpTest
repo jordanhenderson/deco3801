@@ -112,7 +112,7 @@ class HelpTest extends PHPUnit_Framework_TestCase {
 		$question = $handler->removeQuestion($question->getID());
 		//Test it hasn't been deleted because an admin didn't send the request
 		$this->assertNull($question, true);
-		$question->delete();
+		$handler->removeQuestion($question->getID());
 		$course->delete();
 
 	}
