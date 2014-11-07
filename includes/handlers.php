@@ -107,7 +107,10 @@ class PCRHandler {
 	 * @param fullname full name of the student
 	 */
 	public function storeNewQuestion($title, $content, $stnid, $fullname, $postdate) {
-
+		if(!trim($content) || !trim($title)){
+			return null;
+		}
+		else{
 		$question = new Question(array(
 									"StudentID" => $stnid,
 									"CourseID" => $_SESSION["course_id"],
@@ -117,10 +120,8 @@ class PCRHandler {
 									"Content" => $content,
 									"Status" => "0"
 								));
-		if(!trim($content) || !trim($title)){
-			return $question;
-		}
-		else{
+		
+		
 		$question->commit();
 		return $question;
 	}
