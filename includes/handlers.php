@@ -107,6 +107,7 @@ class PCRHandler {
 	 * @param fullname full name of the student
 	 */
 	public function storeNewQuestion($title, $content, $stnid, $fullname, $postdate) {
+
 		$question = new Question(array(
 									"StudentID" => $stnid,
 									"CourseID" => $_SESSION["course_id"],
@@ -119,10 +120,12 @@ class PCRHandler {
 		$trimmedContent = trim($content);
 		$trimmedTitle = trim($title);
 		if($trimmedContent  = "" || $trimmedTitle = ""){
-			exit();
+			header('Location: ../help.php');
 		}
+		else{
 		$question->commit();
 		return $question;
+	}
 	}
 	
 	/**
