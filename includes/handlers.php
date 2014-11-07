@@ -293,17 +293,18 @@ class PCRHandler {
 	}
 	
 	/*
+	 * TESTING FUNCTION ONLY - FOR TUTORS CONVENIENCE AND DEMO
 	 * Sets the assignment with the provided ID to have the following dates:
 	 * 
-	 * OPEN:		23 October 2014, 11am
-	 * DUE:			30 October 2014, 11am
-	 * REVIEWSDUE:	31 October 2014, 11am
+	 * OPEN:		5 November 2014, 11am
+	 * DUE:			30 November 2014, 11am
+	 * REVIEWSDUE:	31 November 2014, 11am
 	 */
 	public function makeopen($assignment_id) {
 		$assignment = new Assignment(array("AssignmentID"=>$assignment_id,
-										   "OpenTime"=>"2014-10-23 11:00:00",
-										   "DueTime"=>"2014-10-30 11:00:00",
-										   "ReviewsDue"=>"2014-10-31 11:00:00"));
+										   "OpenTime"=>"2014-11-5 11:00:00",
+										   "DueTime"=>"2014-11-30 11:00:00",
+										   "ReviewsDue"=>"2014-11-31 11:00:00"));
 		if (!$assignment->isValid()) {
 			return;
 		}
@@ -311,17 +312,18 @@ class PCRHandler {
 	}
 	
 	/*
+	 * TESTING FUNCTION ONLY - FOR TUTORS CONVENIENCE AND DEMO
 	 * Sets the assignment with the provided ID to have the following dates:
 	 * 
-	 * OPEN:		23 October 2014, 11am
-	 * DUE:			24 October 2014, 11am
-	 * REVIEWSDUE:	31 October 2014, 11am
+	 * OPEN:		5 November 2014, 11am
+	 * DUE:			6 November 2014, 11am
+	 * REVIEWSDUE:	31 November 2014, 11am
 	 */
 	public function makedue($assignment_id) {
 		$assignment = new Assignment(array("AssignmentID"=>$assignment_id,
-										   "OpenTime"=>"2014-10-23 11:00:00",
-										   "DueTime"=>"2014-10-24 11:00:00",
-										   "ReviewsDue"=>"2014-10-31 11:00:00"));
+										   "OpenTime"=>"2014-11-5 11:00:00",
+										   "DueTime"=>"2014-11-6 11:00:00",
+										   "ReviewsDue"=>"2014-11-31 11:00:00"));
 		if (!$assignment->isValid()) {
 			return;
 		}
@@ -329,17 +331,18 @@ class PCRHandler {
 	}
 	
 	/*
+	 * TESTING FUNCTION ONLY - FOR TUTORS CONVENIENCE AND DEMO
 	 * Sets the assignment with the provided ID to have the following dates:
 	 * 
-	 * OPEN:		23 October 2014, 11am
-	 * DUE:			24 October 2014, 11am
-	 * REVIEWSDUE:	25 October 2014, 11am
+	 * OPEN:		5 November 2014, 11am
+	 * DUE:			6 November 2014, 11am
+	 * REVIEWSDUE:	7 November 2014, 11am
 	 */
 	public function makereviewsdue($assignment_id) {
 		$assignment = new Assignment(array("AssignmentID"=>$assignment_id,
-										   "OpenTime"=>"2014-10-23 11:00:00",
-										   "DueTime"=>"2014-10-24 11:00:00",
-										   "ReviewsDue"=>"2014-10-25 11:00:00"));
+										   "OpenTime"=>"2014-11-5 11:00:00",
+										   "DueTime"=>"2014-11-6 11:00:00",
+										   "ReviewsDue"=>"2014-11-7 11:00:00"));
 		if (!$assignment->isValid()) {
 			return;
 		}

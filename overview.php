@@ -39,11 +39,11 @@ function printResults($results) {
 	
 	global $assignment;
 	$percentage = $passed = $numTests = 0;
-	if($assignment->isValid()) {
+	if ($assignment->isValid()) {
 	    $numTests = $asg["NumberTests"];
-	    if((int)$numTests > 0) {
+	    if ((int)$numTests > 0) {
 		$passed = 0;
-		if($results) {
+		if ($results) {
 			foreach($results as $val) {
 			    if($val == 'pass') $passed++;
 			}
@@ -158,9 +158,6 @@ function printResults($results) {
 						echo '<a class="btn btn-danger impatient" name="makeopen" role="button">Make Assignment Open</a><br>';
 						echo '<a class="btn btn-danger impatient" name="makedue" role="button">Make Assignment Due</a><br>';
 						echo '<a class="btn btn-danger impatient" name="makereviewsdue" role="button">Make Assignment Reviews Due</a><br>';
-
-						
-
 					}
 					
 				?>
