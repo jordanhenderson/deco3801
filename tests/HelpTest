@@ -2,7 +2,7 @@
 
 session_start();
 $_SESSION['user_id'] = "0";
-$date = date("Y-m-d  H:i:s", time());
+
 require_once('config.php');
 require_once('includes/handlers.php');
 
@@ -12,6 +12,7 @@ class PCRTest extends PHPUnit_Framework_TestCase {
 	*/
 	public function testObject()
 	{
+		$date = date("Y-m-d  H:i:s", time());
 		$course = new Course(array("CourseID" => "0"));
 		$question = new Question(array(
 									"StudentID" => $_SESSION['user_id'],
