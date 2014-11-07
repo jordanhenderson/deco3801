@@ -23,41 +23,38 @@ class AssignReviewsTest extends PHPUnit_Framework_TestCase {
 		
 		// No submissions, 1 review per student (tests 0 students)
 		$assignment = $handler->changeAssignment("0", "Test Assignment", "1", "0", "0", "0", "0", "1", "0");
-		$handler->assignReviews(0);
+		$handler->assignReviews("0");
 		$this->assertEquals($assignment->getReviews(), array()); // empty
 		
 		// 1 submission, 1 review per student (tests self reviewing)
 		$assignment = $handler->changeAssignment("0", "Test Assignment", "1", "0", "0", "0", "0", "1", "0");
 		
 		// Create submission for student 1
-		$handler = new PCRHandler();
 		$_SESSION['user_id'] = 1;
 		$_FILES["file"]["name"] = "test.zip";
 		$_FILES["file"]["error"] = 0;
 		$_FILES["file"]["tmp_name"] = "test.zip";
-		$sub1 = $handler->uploadArchive(0);
+		$sub1 = $handler->uploadArchive($assignment->getID());
 		
-		$handler->assignReviews(0);
+		$handler->assignReviews("0");
 		$this->assertEquals($assignment->getReviews(), array()); // empty
 		
 		// 3 submissions, 1 review per student (tests standard case)
 		// Create submission for student 2
-		$handler = new PCRHandler();
 		$_SESSION['user_id'] = 2;
 		$_FILES["file"]["name"] = "test.zip";
 		$_FILES["file"]["error"] = 0;
 		$_FILES["file"]["tmp_name"] = "test.zip";
-		$sub1 = $handler->uploadArchive(0);
+		$sub1 = $handler->uploadArchive($assignment->getID());
 		
 		// Create submission for student 3
-		$handler = new PCRHandler();
 		$_SESSION['user_id'] = 3;
 		$_FILES["file"]["name"] = "test.zip";
 		$_FILES["file"]["error"] = 0;
 		$_FILES["file"]["tmp_name"] = "test.zip";
-		$sub1 = $handler->uploadArchive(0);
+		$sub1 = $handler->uploadArchive($assignment->getID());
 		
-		$handler->assignReviews(0);
+		$handler->assignReviews("0");
 		
 		$student1reviews = $assignment->getUnmarkedSubmissions(1);
 		$student2reviews = $assignment->getUnmarkedSubmissions(2);
@@ -69,24 +66,15 @@ class AssignReviewsTest extends PHPUnit_Framework_TestCase {
 		return;
 		// 3 submissions, 5 reviews per student (tests reviews >= submissions)
 		$assignment = $handler->changeAssignment("0", "Test Assignment", "5", "0", "0", "0", "0", "1", "0");
-		$handler->assignReviews(0);
+		$handler->assignReviews("0");
 		
 		// 3 submissions, 0 reviews per student (tests 0 reviews)
 		$assignment = $handler->changeAssignment("0", "Test Assignment", "0", "0", "0", "0", "0", "1", "0");
-		$handler->assignReviews(0);
+		$handler->assignReviews("0");
 		
 		// Delete submissions
 		$sub1->delete();
 		$sub2->delete();
 		$sub3->delete();
-	}
-	
-	/**
-	 * Causes a given student to create a submission for a given course.
-	 * The bogus submission contains no file, and is purely an SQL entity.
-	 */
-	public function makeSubmission($studentid, $assignmentid) {
-		
-		return $sub;
 	}
 }
