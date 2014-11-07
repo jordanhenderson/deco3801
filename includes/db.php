@@ -377,7 +377,7 @@ class Assignment extends PCRObject {
 	public function getReviews() {
 		$arr = array();
 		$sth = $this->db->prepare("SELECT * FROM Review WHERE SubmissionID IN
-			(SELECT Assignments.SubmissionID FROM Assignments WHERE AssignmentID = ?);");
+			(SELECT Submission.SubmissionID FROM Submission WHERE AssignmentID = ?);");
 		$sth->execute(array($this->getID()));
 		while ($file_row = $sth->fetch(PDO::FETCH_ASSOC)) {
 			array_push($arr, new Review($file_row));
