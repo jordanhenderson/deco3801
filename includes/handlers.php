@@ -423,13 +423,18 @@ class PCRHandler {
 			unlink($file);
 			
 			//Set executable flag on run.sh.
+			$oldcwd = getcwd();
 			chdir($assignment->getDir() . "/test/");
 			if (!file_exists("run.sh")) {
 				//Test invalid, no run.sh!
 				$assignment->cleanTest();
+				chdir($oldcwd);
+				return false;
 			} else {
 				chmod("run.sh", 0750);
-			}
+				chdir($oldcwd);
+				return true;
+			}	
 		}
 	}
 	
@@ -499,7 +504,6 @@ class PCRHandler {
 		if (!$assignment->canResubmit() && $oldsubmission->isValid()) return;
 		
 		$oldsubmission->delete();
-		print_r($oldsubmission);
 		
 		$submission = new Submission(array("AssignmentID" => $assignment_id, "StudentID" => $_SESSION['user_id']));
 		if ($submission->isValid()) {
@@ -523,6 +527,7 @@ class PCRHandler {
 	 * Create a new assignment.
 	 */
 	public function changeAssignment($AssignmentID, $AssignmentName, $ReviewsNeeded, $ReviewsDue, $weight, $OpenTime, $DueTime, $ResubmitAllowed, $NumberTests) {
+		if(!isset($_SESSION['admin'])) return;
 		$assignment = new Assignment(array("AssignmentID" => $AssignmentID,
 										   "AssignmentName" => $AssignmentName,
 										   "CourseID" => $_SESSION['course_id'],

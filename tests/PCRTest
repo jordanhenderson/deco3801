@@ -21,6 +21,9 @@ class PCRTest extends PHPUnit_Framework_TestCase {
 		$this->assertEquals(false, $course->isValid());
 	}
 
+	/* 
+	Test basic course functionality, setting help center enabled/disabled.
+	*/
 	public function testCourse() {
 		$handler = new PCRHandler();
 		$_SESSION['course_id'] = "0";
@@ -48,5 +51,103 @@ class PCRTest extends PHPUnit_Framework_TestCase {
 		$course = $handler->getCourse();
 		$courseRow = &$course->getRow();
 		$this->assertEquals("0", $courseRow["HelpEnabled"]);
+	}
+	
+	/**
+	 * Test the Peer Code Review system.
+	*/
+	public function testReview() {
+		$handler = new PCRHandler();
+		$_SESSION['course_id'] = "0";
+		$_SESSION['admin'] = true;
+		$course = $handler->getCourse();
+		
+		$curDate = new DateTime();
+		$reviewsDue = new DateTime();
+		$dueTime = new DateTime();
+		
+		$reviewsDue->add(new DateInterval('P2D'));
+		$dueTime->add(new DateInterval('P1D'));
+		//Create an assignment
+		$assignment = $handler->changeAssignment("", 
+					"Test Assignment", 
+					"3", 
+					$reviewsDue->format('Y-m-d H:i:s'),
+					"100",
+					$curDate->format('Y-m-d H:i:s'),
+					$dueTime->format('Y-m-d H:i:s'),
+					"1",
+					"1");
+		$this->assertNotNull($assignment);
+		$this->assertEquals($assignment->isValid(), true);
+		
+		//Test not providing a test file.
+		$this->assertEquals($handler->uploadTest($assignment->getID()), false);
+		
+		//Fake file upload by populating $_FILES
+		$_FILES["file"]["name"] = "test_files.zip";
+		$_FILES["file"]["error"] = 0;
+		$_FILES["file"]["tmp_name"] = "tests/test_files.zip";
+		
+		//Test uploading a valid file
+		$this->assertEquals($handler->uploadTest($assignment->getID()), true);
+		
+		//Login as a student with id = 0
+		unset($_SESSION['admin']);
+		$_SESSION['user_id'] = "0";
+		
+		//Submit bad zip
+		$_FILES["file"]["name"] = "bad_submission.zip";
+		$_FILES["file"]["error"] = 0;
+		$_FILES["file"]["tmp_name"] = "tests/bad_submission.zip";
+		
+		$subm_one = $handler->uploadArchive($assignment->getID());
+		$this->assertNotNull($subm_one);
+		$this->assertEquals($subm_one->isValid(), true);
+		
+		//Ensure the test failed.
+		$test_results = json_decode($subm_one->getRow()["Results"], true);
+		$this->assertEquals(count($test_results), 1);
+		$this->assertEquals($test_results[1], "fail");
+		
+		//Login as the second user.
+		$_SESSION['user_id'] = "1";
+		
+		//Submit good zip
+		$_FILES["file"]["name"] = "good_submission.zip";
+		$_FILES["file"]["error"] = 0;
+		$_FILES["file"]["tmp_name"] = "tests/good_submission.zip";
+		
+		$subm_two = $handler->uploadArchive($assignment->getID());
+		$this->assertNotNull($subm_two);
+		$this->assertEquals($subm_two->isValid(), true);
+		
+		//Ensure the test passed.
+		$test_results = json_decode($subm_two->getRow()["Results"], true);
+		$this->assertEquals(count($test_results), 1);
+		$this->assertEquals($test_results[1], "pass");
+		
+		//Set the assignment as closed.
+		$assignment_row = &$assignment->getRow();
+		
+		$dueTime = new DateTime();
+		$dueTime->sub(new DateInterval("P1M"));
+		
+		$assignment_row["DueTime"] = $dueTime->format("Y-m-d H:i:s");
+		$assignment->commit();
+		
+		//Login as adminstrator, assign reviews.
+		$_SESSION['admin'] = true;
+		$handler->assignReviews($assignment->getID());
+		
+		//Ensure their are review entries for both students.
+		$review_one = new Review(array("ReviewerID"=>"0", "SubmissionID"=>$subm_two->getID()), false);
+		$this->assertEquals($review_one->isValid(), true);
+		
+		$review_two = new Review(array("ReviewerID"=>"1", "SubmissionID"=>$subm_one->getID()), false);
+		$this->assertEquals($review_two->isValid(), true);
+		
+		//This should clean up everything created above.
+		$assignment->delete();
 	}
 }

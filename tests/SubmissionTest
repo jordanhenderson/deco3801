@@ -8,6 +8,7 @@ require_once('includes/handlers.php');
 class SubmissionTest extends PHPUnit_Framework_TestCase {
 	public function testSubmission() {
 		$_SESSION['course_id'] = "0";
+		$_SESSION['admin'] = true;
 		$handler = new PCRHandler();
 		$course = $handler->getCourse();
 		//Create an assignment (delete the old one first)
@@ -20,9 +21,9 @@ class SubmissionTest extends PHPUnit_Framework_TestCase {
 		$this->assertEquals($assignment->isValid(), true);
 		
 		//Fake file upload by populating $_FILES
-		$_FILES["file"]["name"] = "test.zip";
+		$_FILES["file"]["name"] = "good_submission.zip";
 		$_FILES["file"]["error"] = 0;
-		$_FILES["file"]["tmp_name"] = "tests/test.zip";
+		$_FILES["file"]["tmp_name"] = "tests/good_submission.zip";
 		//Create a submission
 		$subm = $handler->uploadArchive($assignment->getID());
 		$this->assertNotNull($subm);

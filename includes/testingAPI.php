@@ -32,11 +32,16 @@ class bashTesting {
 	*/
 	public function execute() {
 		// Execute student assignment
+		$oldwd = getcwd();
 		chdir($this->test_dir);
 		$testfile = $this->test_file_location . "run.sh";
-		if(!file_exists($testfile)) return null;
+		if(!file_exists($testfile)) {
+			chdir($oldwd);
+			return null;
+		}
 		
 		$scriptOutput = shell_exec($testfile);
+		chdir($oldwd);
 		// Check for newline at the end, remove if present
 		if (substr($scriptOutput, -1) == "\n") {
 			$scriptOutput = substr($scriptOutput, 0, -1);
@@ -70,7 +75,7 @@ class bashTesting {
 			$counter++;
 			$testOutput[$counter] = $endResult[1];
 		}
-
+		
 		return $testOutput;
 	}
 }

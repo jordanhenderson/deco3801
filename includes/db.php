@@ -361,9 +361,9 @@ class Assignment extends PCRObject {
 		$dir = $this->ass_dir . "/test/";
 		if (file_exists($dir)) {
 				if (PHP_OS === 'Windows') {
-					exec("rd /s /q {$dir}/*");
+					exec("rd /s /q {$dir}");
 				} else {
-					exec("rm -rf {$dir}/*");
+					exec("rm -rf {$dir}");
 				}
 			mkdir($dir, 0755, true);
 		}
@@ -608,20 +608,13 @@ class Submission extends PCRObject {
 	public function Cleanup() {
 		if (!$this->isValid()) return;
 		$dir = $this->storage_dir;
-		$it = new RecursiveDirectoryIterator($dir, RecursiveDirectoryIterator::SKIP_DOTS);
-		$files = new RecursiveIteratorIterator($it,
-			RecursiveIteratorIterator::CHILD_FIRST);
-		foreach($files as $file) {
-			if ($file->getFilename() === '.' || $file->getFilename() === '..') {
-				continue;
-			}
-			if ($file->isDir()) {
-				rmdir($file->getRealPath());
+		if (file_exists($dir)) {
+			if (PHP_OS === 'Windows') {
+				exec("rd /s /q {$dir}");
 			} else {
-				unlink($file->getRealPath());
+				exec("rm -rf {$dir}");
 			}
 		}
-		rmdir($dir);
 	}
 	
 	public function getStorageDir() {
