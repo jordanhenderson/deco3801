@@ -101,11 +101,12 @@ foreach ($reviews as $review) {
 		var count = 0;
 
 		/**
-		 *
-		 *
+		 * Creates the container for a new review
 		 */
 		function createReview() {
+			// HTML for the review container
 			$('#reviews').append('<div id="review' + count + '" class="reviewContainer"><div id="reviewControls' + count + '" style="display:none"><a class="delete_btn" href="#" onclick="clearReview(' + count + ')" role="button" id="delete' + count + '"></a><a class="edit_btn" href="#" onclick="editAnnotation(' + count + ')" role="button" id="edit' + count + '"></a></div><br><textarea class="reviewContent" rows="2" cols="32" id="textarea' + count + '"></textarea></br><a class="cancel_btn" href="#" onclick="clearReview(' + count + ')" role="button" id="cancel' + count + '">Cancel</a><a class="save_btn" href="#" onclick="getContents(' + count + ')" role="button" id="save' + count + '">Save</a></div>');
+			// Disable text highlighting while the user makes a new comment
 			$('#assignment_code').getHighlighter().destroy();
 		}
 		
@@ -152,19 +153,19 @@ foreach ($reviews as $review) {
 		}
 		
 		/**
-		 *
-		 *
+		 * Cancels the edit of a given review
+		 * @params id - the id of the review being cancelled
 		 */
 		function cancelEdit(id) {
 			$('#textarea' + id).val(prevReview[id]);
-			// show/hide things
+			// show/hide certain parts of the reviews
 			reviewContainerOriginalDisplay(id);
 			edit = -1;
 		}
 		
 		/**
-		 *
-		 *
+		 * Setup function for the owner/administrator to
+		 * filter the reviews by reviewer
 		 */
 		function ownerSetup() {
 			$('#student_heading').show();
@@ -172,9 +173,11 @@ foreach ($reviews as $review) {
 			$('#submitButton').hide();
 			var counts = {};
 			var first = 0;
+			// Count the number of reviews made by each of the reviewers
 			for (var i = 0; i < annotations.length; i++) {
 				counts[annotations[i].ReviewerID] = 1 + (counts[annotations[i].ReviewerID] || 0);
 			}
+			// add the reviewers ids to the review page
 			for (var key in counts) {
 				if (first == 0) {
 					first = 1;
@@ -185,93 +188,101 @@ foreach ($reviews as $review) {
 		}
 		
 		/**
-		 *
-		 *
+		 * Filter the reviews shown to the new reviewer id
+		 * @params id - the id of the new reviewer
 		 */
 		function changeReviewer(id) {
 			$('#student_heading_span').html(id);
-			/*setupHighlighter();
-			$('#assignment_code').getHighlighter().removeHighlights();
-			$('#assignment_code').getHighlighter().destroy();*/
+			// Unwrap each of the highlights
 			$(".highlighted").each(function() {
 				$(this).contents().unwrap();
 			});
 			count = 0;
 			$('#reviews').html('');
-			// Load the comments for the next review in
+			// Turn the Syntax Highlighting off then on again
 			toggleSyntaxHighlightingOff();
+			// Load the comments for the next review in
 			getComments();
 			toggleSyntaxHighlightingOn();
 			setupHover();
 		}
 
 		/**
-		 *
-		 *
+		 * Gets the comments from the array and highlights the corresponding
+		 * code in the pre
 		 */
 		function getComments() {
 			var innerContents = $('#assignment_code').html();
 			var wordArray = innerContents.split('\n');
-			
+			// Loop through each review
 			for (var i=0; i < annotations.length; i++) {
-				// add status to mark as already in database
-				//annotations[i].status = 'o';
-				
+				// for the reviewer, check if the file id matches
 				if (isOwner == 0) {
-					if (annotations[i].FileID == $( "#file_heading" ).data("fid") ) {
+					if (annotations[i].FileID == $( "#file_heading" ).data("fid")) {
 						wordArray = reviewPopulate(wordArray, i);
 					}
 				} else {
+					// For the owner, only load the reviews for the file and selected user
 					if (annotations[i].FileID == $("#file_heading").data("fid") && annotations[i].ReviewerID == $("#student_heading_span").html()) {
 						wordArray = reviewPopulate(wordArray, i);
+						// Hide the controls so the review can't be edited/deleted
 						$("#reviewControls" + (count-1)).hide();
 					}
 				}
 			}
+			// rejoin the array with the updated highlight spans
 			$('#assignment_code').html(wordArray.join('\n'));
 		}
 		
 		/**
-		 *
-		 *
+		 * Calculates and adds the spans to the code in the necessary positions.
+		 * @params 	wordArray - array of each line in the file
+		 *			i - the current index in the annotations array
 		 */
 		function reviewPopulate(wordArray, i) {
 			var index = parseInt(annotations[i].startIndex);
 			var line = parseInt(annotations[i].startLine);
 			var text = annotations[i].text;
+			// check the number of lines in the highlighted text
 			var numLines = (text.match(/\n/g) || []).length;
 			var endLine = line + numLines;
+			// the default spanString to wrap the text in
 			var spanString = '<span id="span' + count + '" style="background-color:#20afcd" class="highlighted">';
 			var endIndex = index + text.length + spanString.length;
+			// Calculate the endIndex based off the last highlighted line
 			if (numLines > 0) {
 				var textArr = text.split('\n');
 				endIndex = textArr[textArr.length-1].length;
 			}
+			// Modify the line(s) in the array that the highlight effects
 			wordArray[line] = wordArray[line].slice(0,index) + spanString + wordArray[line].slice(index,wordArray[line].length);
-			wordArray[endLine] = wordArray[endLine].slice(0,endIndex) + "</span>" + wordArray[endLine].slice(endIndex, wordArray[endLine].length); 
+			wordArray[endLine] = wordArray[endLine].slice(0,endIndex) + "</span>" + wordArray[endLine].slice(endIndex, wordArray[endLine].length);
+			// add the review from the database to the review div on the side
 			$('#reviews').append('<div id="review' + count + '" class="reviewContainer"><div id="reviewControls' + count + '"><a class="delete_btn" href="#" onclick="clearReview(' + count + ')" role="button" id="delete' + count + '"></a><a class="edit_btn" href="#" onclick="editAnnotation(' + count + ')" role="button" id="edit' + count + '"></a></div><br><textarea class="reviewContent" rows="2" cols="32" id="textarea' + count + '" readonly="true">'+ annotations[i].Comments + '</textarea></br><a class="cancel_btn" href="#" onclick="cancelEdit(' + count + ')" role="button" id="cancel' + count + '" style="display:none;">Cancel</a><a class="save_btn" href="#" onclick="getContents(' + count + ')" role="button" id="save' + count + '" style="display:none">Save</a></div>');
 			count = count + 1;
 			return wordArray;
 		}
 		
 		/**
-		 *
-		 *
+		 * Turn the Syntax Highlighting off in order to preserve Text
+		 * Highlighting positions
 		 */
 		function toggleSyntaxHighlightingOff() {
 			$('#assignment_code').removeClass();
 			$('#assignment_code').toggleClass('nohighlight');
+			// only unwrap the spans that are created by the Syntax Highlighter
 			$('#assignment_code').find("span").each( function() {
 				if (! $(this).is('.highlighted')) {
 					$(this).contents().unwrap();
 				}
 			});
+			// apply the nohighlight class
 			hljs.highlightBlock(document.getElementById("assignment_code"));
 		}
 
 		/**
-		 *
-		 *
+		 * Turn the Syntax Highlighting back on to make the page
+		 * pretty again
 		 */
 		function toggleSyntaxHighlightingOn() {
 			$('#assignment_code').removeClass('nohighlight');
@@ -292,6 +303,7 @@ foreach ($reviews as $review) {
 			}
 			$('#cancel' + id).attr('onclick', 'cancelEdit(' + id + ')');
 			reviewContainerOriginalDisplay(id);
+			// Get the index of the edited comment
 			if (edit >= 0) {
 				if (annotations[edit].prevComment === undefined) {
 					annotations[edit].prevComment = annotations[edit].Comments;
@@ -313,15 +325,17 @@ foreach ($reviews as $review) {
 		}
 		
 		/**
-		 *
-		 *
+		 * Update the positions of the highlighted text.
+		 * This is necessary in case comments are made on the same line.
 		 */
 		function updatePositions() {
 			toggleSyntaxHighlightingOff();
+			// get the content of the file
 			var innerContents = $('#assignment_code').html();
 			var wordArray = innerContents.split('\n');
 			var numInOtherFile = 0;
 			for (var j = 0; j < annotations.length; j++) {
+				// want to ignore any reviews that have been marked for deletion or are in another file
 				if (annotations[j].status == 'd' || annotations[j].FileID != $( "#file_heading" ).data("fid")) {
 					numInOtherFile++;
 					continue;
@@ -330,6 +344,7 @@ foreach ($reviews as $review) {
 				var startLine;
 				for (var i = 0; i < wordArray.length; i++) {
 					// Find the line the comment starts on and allow for the 6 characters ('<span  ')
+					// Also need to change the rgb value that may be added instead of the hex
 					var filtered = wordArray[i].replace(/ rgb\(32, 175, 205\);/g, "#20afcd");
 					startIndex = filtered.indexOf('id="span' + (j-numInOtherFile) + '"') - 6;
 					if (startIndex >= 0) {
@@ -337,6 +352,7 @@ foreach ($reviews as $review) {
 						break;
 					}
 				}
+				// Update the values in the array
 				annotations[j].startLine = startLine;
 				annotations[j].startIndex = startIndex;
 			}
@@ -344,8 +360,8 @@ foreach ($reviews as $review) {
 		}
 		
 		/**
-		 *
-		 *
+		 * Original display for the review container
+		 * is edit and delete showing
 		 */
 		function reviewContainerOriginalDisplay(id) {
 			$('#textarea'+id).attr('readonly', true);
@@ -385,6 +401,7 @@ foreach ($reviews as $review) {
 		 * Though only a single row needs it to be set to 1, I'm doing them all.
 		 */
 		function submitReviews() {
+			// confirm with the user due to the code denying access after submission
 			if (!confirm("Are you sure you want to submit?\nYou will no longer have access to this page if you submit.")) {
 				return;
 			}
@@ -533,6 +550,10 @@ foreach ($reviews as $review) {
 	
 	<!-- JQuery text highlighter library setup code -->
 	<script type="text/javascript" id="snippet-source">
+		/**
+		 * function to setup the text highlighter and consequently
+		 * update the span count
+		 */
 		function setupHighlighter() {
 			$('#assignment_code').textHighlighter({
 				onAfterHighlight: function(highlights, range) {
@@ -544,6 +565,11 @@ foreach ($reviews as $review) {
 			});
 		}
 		
+		/**
+		 * Sets up the hovering functionality to change the
+		 * highlighted colour for a review when the corresponding
+		 * review container is hovered over
+		 */
 		function setupHover() {
 			// change highlighting colour for text related to hovered comment
 			$(".reviewContainer").hover(
@@ -567,7 +593,11 @@ foreach ($reviews as $review) {
 			);
 		}
 		
+		/**
+		 * Setup for first page load
+		 */
 		$(document).ready(function() {
+			// Setup the breadcrumbs
 			$("#breadcrumbs").rcrumbs();
 			$(".file-tree-container").on("click", ".file-link", handleSwap);
 			$(".file-link").first().trigger("click");
@@ -584,7 +614,7 @@ foreach ($reviews as $review) {
 			});
 			// Hide all sub directories
 			$('ul ul').hide();
-			
+			// setup for the owner of the file
 			if (isOwner == 1) {
 				ownerSetup();
 			}
@@ -594,6 +624,7 @@ foreach ($reviews as $review) {
 				setupHighlighter();
 			}
 			setupHover();
+			// apply syntax highlighting
 			hljs.highlightBlock(document.getElementById("assignment_code"));
 		});
 	</script>
