@@ -22,5 +22,3 @@ $config['blti_psk'] = 'oF0jxF1IGjzxYUl9w8B';
 
 $GLOBALS['config'] = $config;
 ?>
-
-
