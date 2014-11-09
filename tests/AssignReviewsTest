@@ -1,6 +1,7 @@
 <?php
 session_start();
 
+$_SESSION['user_id'] = "0";
 $_SESSION['course_id'] = "0";
 $_SESSION['admin'] = true;
 
@@ -206,7 +207,6 @@ class AssignReviewsTest extends PHPUnit_Framework_TestCase {
 		$sub3->delete();
 		$assignment->delete();
 	}
-	
 	
 	/**
 	 * Tests review distribution for more reviews (5) than submissions (3)
