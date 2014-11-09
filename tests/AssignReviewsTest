@@ -23,18 +23,6 @@ class AssignReviewsTest extends PHPUnit_Framework_TestCase {
 		$this->assertNotNull($assignment);
 		$this->assertEquals($assignment->isValid(), true);
 		
-		//Fake file upload by populating $_FILES
-		$_FILES["file"]["name"] = "good_submission.zip";
-		$_FILES["file"]["error"] = 0;
-		$_FILES["file"]["tmp_name"] = "tests/good_submission.zip";
-		//Create a submission
-		$subm = $handler->uploadArchive($assignment->getID());
-		$this->assertNotNull($subm);
-		$this->assertEquals($subm->isValid(), true);
-		
-		//Try uploading a repo submission with no host (should return null)
-		$this->assertNull($handler->uploadRepo($assignment->getID(), "", "", ""));
-		
 		//Clean up the assignment 
 		$assignment->delete();
 	}
