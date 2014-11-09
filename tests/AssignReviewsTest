@@ -18,13 +18,6 @@ class AssignReviewsTest extends PHPUnit_Framework_TestCase {
 		$assignment = new Assignment(array("AssignmentID"=>"0"));
 		$assignment->delete();
 		
-		$assignment = $handler->changeAssignment("0", "Test Assignment", "0", "0", "0", "0", "0", "0", "0");
-		
-		$this->assertNotNull($assignment);
-		$this->assertEquals($assignment->isValid(), true);
-		
-		//Clean up the assignment 
-		$assignment->delete();
 	}
 	
 	/**
