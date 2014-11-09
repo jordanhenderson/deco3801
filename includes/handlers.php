@@ -10,12 +10,7 @@ if (!isset($_SESSION['user_id'])) {
 
 require_once("db.php");
 
-/**
- * Needs Comment.
- */
 class PCRHandler {
-	/* Add additional API functions here.*/
-	
 	/**
 	 * getFiles retrieves all files within a submission
 	 * @param id the submission ID
@@ -32,8 +27,9 @@ class PCRHandler {
 	 */
 	public function getCourse() {
 		$crs = new Course(array("CourseID" => $_SESSION['course_id']));
-		if (!$crs->isValid()) 
+		if (!$crs->isValid()) {
 			$crs->commit();
+		}
 		return $crs;
 	}
 	
@@ -45,8 +41,7 @@ class PCRHandler {
 		$question = new Question(array("QuestionID" => $id));
 		if (isset($_SESSION['admin'])) {
 			$question->delete();
-		}
-		else{
+		} else {
 			return null;
 		}
 	}
@@ -60,8 +55,7 @@ class PCRHandler {
 		$commentRow = &$comment->getRow();
 		if ($commentRow["StudentID"] == $_SESSION["user_id"]) {
 			$comment->delete();
-		}
-		else{
+		} else {
 			return null;
 		}
 	}
@@ -69,6 +63,7 @@ class PCRHandler {
 	/**
 	 * Marks the question specified by id as resolved.
 	 * @param id of the question to mark as resolved
+	 * @return the question object
 	 */
 	public function markResolved($id) {
 		$question = new Question(array("QuestionID" => $id));
@@ -81,6 +76,7 @@ class PCRHandler {
 	/**
 	 * Marks the question specified by id as unresolved.
 	 * @param id of the question to mark as unresolved
+	 * @return the question object
 	 */
 	public function markUnresolved($id) {
 		$question = new Question(array("QuestionID" => $id));
@@ -98,14 +94,14 @@ class PCRHandler {
 		$crs = new Course(array("CourseID" => $_SESSION['course_id']));
 		$help = &$crs->getRow();
 		if (isset($_SESSION['admin'])) {
-		if ($status == 0) {
-			$help['HelpEnabled'] = "1";
-			$crs->commit();
-		} else {
-			$help['HelpEnabled'] = "0";
-			$crs->commit();
+			if ($status == 0) {
+				$help['HelpEnabled'] = "1";
+				$crs->commit();
+			} else {
+				$help['HelpEnabled'] = "0";
+				$crs->commit();
+			}
 		}
-	}
 	}
 	
 	/**
@@ -114,6 +110,7 @@ class PCRHandler {
 	 * @param content the question body content
 	 * @param stnid the student ID
 	 * @param fullname full name of the student
+	 * @return the newly created question object
 	 */
 	public function storeNewQuestion($title, $content, $stnid, $fullname, $postdate) {
 		if (!trim($content) || !trim($title)) {
@@ -186,12 +183,10 @@ class PCRHandler {
 		$question = PCRHandler::getQuestion($question_id);
 		if (!trim($content)) {
 			return null;
-		}
-		else if($studentid != $_SESSION["user_id"]){
+		} else if($studentid != $_SESSION["user_id"]){
 			return null;
-		}
-		else{
-				return $question->addComment($studentid, $fullname, $content, $date);
+		} else {
+			return $question->addComment($studentid, $fullname, $content, $date);
 		}
 	}
 	
@@ -204,12 +199,14 @@ class PCRHandler {
 	public function assignReviews($assign_id) {
 		$asg = new Assignment(array("AssignmentID" => $assign_id));
 		
-		if (!$asg->isValid()) return;
+		if (!$asg->isValid()) {
+			return;
+		}
 		
 		$submissions = $asg->getSubmissions();
 		$asg = $asg->getRow();
 		
-		//Abort if any existing reviews for assignment
+		// Abort if any existing reviews for assignment
 		
 		$reviewnum = $asg['ReviewsNeeded'];
 		
@@ -277,18 +274,19 @@ class PCRHandler {
 	
 	/**
 	 * Removes a review with the given id from the database.
-	 * @param submission id and comment of the review to remove
+	 * @param SubmissionID and reviewID of comment to remove
 	 */
-	public function removeReview($reviewID, $id) {
+	public function removeReview($reviewID, $submissionID) {
 		// get submission
-		$submission = new Submission(array("SubmissionID" => $id), false);
+		$submission = new Submission(array("SubmissionID" => $submissionID), false);
 		// call delete review for that submission
-		return $submission->removeReview($reviewID);
+		$submission->removeReview($reviewID);
 	}
 	
 	/**
 	 * Edits a review with the given id from the database
 	 * @param submission id, comment and previous comment of the review to edit
+	 * @return review object
 	 */
 	public function editReview($startLine, $startIndex, $reviewID, $annotationText, $id, $submitted) {
 		$submission = new Submission(array("SubmissionID" => $id), false);
@@ -303,7 +301,9 @@ class PCRHandler {
 	public function addReview($review, $submitted) {
 		// Get the submission for the student you are submitting a review for
 		$submission = new Submission(array("SubmissionID" => $review["SubmissionID"]), false);
-		if (!$submission->isValid()) return;
+		if (!$submission->isValid()) {
+			return;
+		}
 		// Then add the review to the database
 		return $submission->addReview($review["Comments"], $_SESSION['user_id'], 
 						$review["startIndex"], $review["startLine"], 
@@ -394,41 +394,47 @@ class PCRHandler {
 	/**
 	 * uploadTest uploads tests for an assignment.
 	 * @param assignment ID
+	 * @return true if successful, false if not
 	*/
 	public function uploadTest($assignment_id) {
 		$assignment = new Assignment(array("AssignmentID" => $assignment_id));
-		if (!$assignment->isValid()) return;
-		if (!isset($_FILES["file"]) || $_FILES["file"]["error"] != 0) {
-			return;
+		
+		if (!$assignment->isValid()) {
+			return false;
 		}
 		
-		//Clear existing test files
+		if (!isset($_FILES["file"]) || $_FILES["file"]["error"] != 0) {
+			return false;
+		}
+		
+		// Clear existing test files
 		$assignment->cleanTest();
 		
 		$file = $assignment->getDir() . "/test/" . $_FILES["file"]["name"];
 		
-		if (is_uploaded_file($_FILES["file"]["tmp_name"]))
+		if (is_uploaded_file($_FILES["file"]["tmp_name"])) {
 			move_uploaded_file($_FILES["file"]["tmp_name"], $file);
-		else
+		} else {
 			copy($_FILES["file"]["tmp_name"], $file);
+		}
 
 		$zip = new ZipArchive;
 		
-		//Get the current path of the zip archive, open it.
+		// Get the current path of the zip archive, open it.
 		$path = pathinfo(realpath($file), PATHINFO_DIRNAME);
 		$r = $zip->open($file);
 		
-		//Extract the zip archive to the assignment directory.
-		if ($r === TRUE) {
+		// Extract the zip archive to the assignment directory.
+		if ($r === true) {
 			$zip->extractTo($path);
 			$zip->close();
 			unlink($file);
 			
-			//Set executable flag on run.sh.
+			// Set executable flag on run.sh.
 			$oldcwd = getcwd();
 			chdir($assignment->getDir() . "/test/");
 			if (!file_exists("run.sh")) {
-				//Test invalid, no run.sh!
+				// Test invalid, no run.sh!
 				$assignment->cleanTest();
 				chdir($oldcwd);
 				return false;
@@ -442,15 +448,19 @@ class PCRHandler {
 	
 	/**
 	 * uploadArchive uploads an archive to an assignment
-	 * @param assignment ID
+	 * @param assignmentID
 	 */
 	public function uploadArchive($assignment_id) {
 		$assignment = new Assignment(array("AssignmentID" => $assignment_id));
-		if (!$assignment->isValid()) return;
+		if (!$assignment->isValid()) {
+			return;
+		}
 		
-		//Look for an existing submission - return if resubmission not allowed.
+		// Look for an existing submission - return if resubmission not allowed.
 		$oldsubmission = $assignment->getSubmission($_SESSION['user_id']);
-		if (!$assignment->canResubmit() && $oldsubmission->isValid()) return;
+		if (!$assignment->canResubmit() && $oldsubmission->isValid()) {
+			return;
+		}
 		$oldsubmission->delete();
 		
 		$submission = new Submission(array("AssignmentID" => $assignment_id, "StudentID" => $_SESSION['user_id'], "Results" => ""));
@@ -463,19 +473,20 @@ class PCRHandler {
 			
 			$file = $submission->getStorageDir() . $_FILES["file"]["name"];
 			
-			if (is_uploaded_file($_FILES["file"]["tmp_name"]))
+			if (is_uploaded_file($_FILES["file"]["tmp_name"])) {
 				move_uploaded_file($_FILES["file"]["tmp_name"], $file);
-			else
+			} else {
 				copy($_FILES["file"]["tmp_name"], $file);
-
+			}
+			
 			$zip = new ZipArchive;
 			
-			//Get the current path of the zip archive, open it.
+			// Get the current path of the zip archive, open it.
 			$path = pathinfo(realpath($file), PATHINFO_DIRNAME);
 			$r = $zip->open($file);
 			
-			//Extract the zip archive to the assignment directory.
-			if ($r === TRUE) {
+			// Extract the zip archive to the assignment directory.
+			if ($r === true) {
 				$zip->extractTo($path);
 				$zip->close();
 				unlink($file);
@@ -485,7 +496,7 @@ class PCRHandler {
 				$submission->delete();
 				return;
 			}
-
+			
 			$assign = &$assignment->getRow();
 			$test_file_location = $assignment->getDir() . "test/";
 			$submission->testSubmission($test_file_location);
@@ -495,15 +506,26 @@ class PCRHandler {
 	}
 	
 	/**
-	 * uploadRepo uploads a repository to an assignment
+	 * uploadRepo uploads a repository as a submission. The submission is for
+	 * the currently logged in student.
+	 * 
+	 * @param AssignmentID - the assignment the submission is being made for
+	 * @param repo_url - the URL of the repo to clone
+	 * @param username - the username to log in to git with
+	 * @param password - the corresponding password
+	 * @return
 	 */
 	public function uploadRepo($assignment_id, $repo_url, $username, $password) {
 		$assignment = new Assignment(array("AssignmentID" => $assignment_id));
-		if (!$assignment->isValid()) return;
+		if (!$assignment->isValid()) {
+			return;
+		}
 		
-		//Look for an existing submission - return if resubmission not allowed.
+		// Look for an existing submission - return if resubmission not allowed.
 		$oldsubmission = $assignment->getSubmission($_SESSION['user_id']);
-		if (!$assignment->canResubmit() && $oldsubmission->isValid()) return;
+		if (!$assignment->canResubmit() && $oldsubmission->isValid()) {
+			return;
+		}
 		
 		$oldsubmission->delete();
 		
@@ -511,10 +533,10 @@ class PCRHandler {
 		if ($submission->isValid()) {
 		
 			$dir = $submission->getStorageDir();
-			exec("cd $dir && git clone https://$username:$password@$repo_url .");
+			exec("cd $dir && git clone https:// $username:$password@$repo_url .");
 			
 			if ($submission->addFiles() == 0) {
-				//No files, failed?
+				// No files, failed?
 				$submission->delete();
 				return;
 			}
@@ -526,10 +548,15 @@ class PCRHandler {
 	}
 	
 	/**
-	 * Create a new assignment.
+	 * Create or edit an assignment.
+	 * @param all of the assignment fields
+	 * @return an assignment object
 	 */
 	public function changeAssignment($AssignmentID, $AssignmentName, $ReviewsNeeded, $ReviewsDue, $weight, $OpenTime, $DueTime, $ResubmitAllowed, $NumberTests) {
-		if(!isset($_SESSION['admin'])) return;
+		// Can't change assignment unless admin
+		if (!isset($_SESSION['admin'])) {
+			return;
+		}
 		$assignment = new Assignment(array("AssignmentID" => $AssignmentID,
 										   "AssignmentName" => $AssignmentName,
 										   "CourseID" => $_SESSION['course_id'],
@@ -545,10 +572,14 @@ class PCRHandler {
 	}
 	
 	/**
-	 * Delete an assignment.
+	 * Deletes an assignment.
 	 * @param assignment ID
 	 */
 	public function deleteAssignment($AssignmentID) {
+		// Can't change assignment unless admin
+		if (!isset($_SESSION['admin'])) {
+			return;
+		}
 		$assignment = new Assignment(array("AssignmentID" => $AssignmentID));
 		$assignment->delete();
 	}
@@ -557,26 +588,33 @@ class PCRHandler {
 	 * Retrieves the file from the server and returns it to the calling page i.e. 
 	 * review_dev.php
 	 * @param File ID
+	 * @return the requested file's contents, or empty string if error/invalid
 	 */
 	public function loadFile($fileID) {
 		$file = new File(array("FileID" => $fileID));
-		if (!$file->isValid()) return "";
+		if (!$file->isValid()) {
+			return "";
+		}
 		$file_row = $file->getRow();
 
 		$submission = new Submission(array("SubmissionID" => $file_row["SubmissionID"]));
-		if (!$submission->isValid()) return ""; //invalid submission ID?
+		if (!$submission->isValid()) {
+			return ""; // invalid submission ID?
+		}
 
 		if (!isset($_SESSION['admin'])) {
-			//Check to ensure we have access to the file
+			// Check to ensure we have access to the file
 			$submission_row = $submission->getRow();
 			if ($_SESSION['user_id'] !== $submission_row['StudentID']) {
-				//Check to ensure the student cannot review this submission
+				// Check to ensure the student cannot review this submission
 				$review = new Review(array("ReviewerID" => $_SESSION['user_id'], "SubmissionID" => $submission->getID()), false);
-				if (!$review->isValid()) return ""; //user should not be able to access file!
+				if (!$review->isValid()) {
+					return ""; // user should not be able to access file!
+				}
 			}
 		}
 
-		//$assignment = __DIR__ . "/../storage/course_$courseID/assign_$assignmentid/submissions/$submissionID/" . $fileName;
+		// $assignment = __DIR__ . "/../storage/course_$courseID/assign_$assignmentid/submissions/$submissionID/" . $fileName;
 		$fileName = $submission->getStorageDir() . $file_row["FileName"];
 		$handle = fopen($fileName, "r");
 		$contents = fread($handle, filesize($fileName));
@@ -588,15 +626,16 @@ class PCRHandler {
 }
 
 /**
- * 
+ * Used for AJAX queries, that may request variable methods, with variable
+ * parameters.
  */
 class PCRBackend {
 	private $request;
 	private $handler;
 	public function __construct() {
-		//Grab POST data
-		$postData = file_get_contents('php://input');
-		//Deserialize JSON request
+		// Grab POST data
+		$postData = file_get_contents('php:// input');
+		// Deserialize JSON request
 		$this->request = json_decode($postData, true);
 		$this->handler = new PCRHandler();
 	}
@@ -604,6 +643,7 @@ class PCRBackend {
 	/**
 	 * handleRequest deas with requests that specify a particular method to be
 	 * run, with particular parameters.
+	 * @return JSON Object
 	 */
 	public function handleRequest() {
 		try {
@@ -614,11 +654,15 @@ class PCRBackend {
 				$fct = new ReflectionMethod($this->handler, $method);
 				
 				$params = isset($this->request["params"]) ? $this->request["params"] : array();
-				if ($fct->getNumberOfRequiredParameters() == count($params))
+				if ($fct->getNumberOfRequiredParameters() == count($params)) {
 					$response = call_user_func_array(array($this->handler, $method), $params);
+				}
 			}
-			if ($response) return json_encode(array("r" => $response));
-			else return "{}";
+			if ($response) {
+				return json_encode(array("r" => $response));
+			} else {
+				return "{}";
+			}
 		} catch(Exception $e) {
 			error_log($e);
 			return "{}";

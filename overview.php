@@ -26,15 +26,25 @@ if (isset($_REQUEST['assid'])) {
 	exit("No Assignment Specified For Overview.");
 }
 
+/**
+ * Converts the database time into a more easily human readable format
+ * @param time from MySQL database in string format
+ * @return easily human readable time in string format
+ */
 function formatDBtime($dbtime) {
 	$date = date_create_from_format('Y-m-d G:i:s', $dbtime);
 	return date_format($date, 'j M \'y, g:ia'); // e.g: 6 Feb '14, 8:30pm
 }
 
+/**
+ * Prints the results in a fancy bar, which fills with more green the more
+ * tests that pass.
+ * 
+ * @param json encoded results
+ */
 function printResults($results) {
 	global $asg;
 	
-
 	$results = json_decode($results);
 	
 	global $assignment;
@@ -45,18 +55,17 @@ function printResults($results) {
 		$passed = 0;
 		if ($results) {
 			foreach($results as $val) {
-			    if($val == 'pass') $passed++;
+			    if ($val == 'pass') $passed++;
 			}
 		}
 		
-		$percentage = ($passed/$numTests)*100;
+		$percentage = ($passed / $numTests) * 100;
 	    }
 	}
-
-	echo "$passed/$numTests tests passed";
-	echo "
+	
+	echo "$passed/$numTests tests passed
     <div style='width:100%; background-color:white; height:auto; border:1px solid #000;'>
-    	<div style='width:".$percentage."%; background-color:green; height:10px;'></div>
+    	<div style='width:$percentage%; background-color:green; height:10px;'></div>
 	</div>";
 }
 
@@ -134,7 +143,7 @@ function printResults($results) {
 								echo '<td>';
 								$sub = $crs->getSubmission($assid);
 								$results = "";
-								if($sub->isValid()) {
+								if ($sub->isValid()) {
 								    $results = $sub->getRow()["Results"];
 								}
 								printResults($results);
@@ -151,7 +160,7 @@ function printResults($results) {
 						
 						$currentTime = new DateTime();
 						$date = date_create_from_format('Y-m-d G:i:s', $asg['DueTime']);
-						if($date <= $currentTime) {
+						if ($date <= $currentTime) {
 							echo '<a class="btn btn-warning" href="assignReviews.php?assid='.$assid.'" role="button">Assign Reviews</a><br>';
 						}
 						echo '<h3>Quick Actions</h3>';
@@ -232,6 +241,7 @@ function printResults($results) {
 					$date = date_create_from_format('Y-m-d G:i:s', $asg['DueTime']);
 					$DueTime = (int) date_format($date, 'U');
 					
+					// Print submission info
 					$submission = $assignment->getSubmission($_SESSION['user_id']);
 					if ($submission->isValid()) {
 						$srow = $submission->getRow();
