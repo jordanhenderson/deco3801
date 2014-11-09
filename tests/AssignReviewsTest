@@ -209,9 +209,9 @@ class AssignReviewsTest extends PHPUnit_Framework_TestCase {
 	
 	
 	/**
-	 * Tests review distribution for more reviews than students
+	 * Tests review distribution for more reviews (5) than submissions (3)
 	 */
-	public function testAssignNoReviews() {
+	public function testAssignExcessiveReviews() {
 		$_SESSION['user_id'] = "0";
 		$handler = new PCRHandler();
 		
