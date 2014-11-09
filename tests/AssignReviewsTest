@@ -1,6 +1,9 @@
 <?php
 session_start();
 
+$_SESSION['user_id'] = "0";
+$_SESSION['course_id'] = "0";
+
 require_once('config.php');
 require_once('includes/handlers.php');
 
