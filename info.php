@@ -34,7 +34,7 @@
 
 <body>
 <nav class="navbar navbar-inverse navbar-fixed-top" role="navigation">
-		<div class="container" style="background-image: URL(http://i.imgur.com/GMfLyA8.png); background-repeat: no-repeat; background-position: center;">
+		<div class="container">
 			<div class="navbar-header">
 				<button type="button" class="navbar-toggle" data-toggle="collapse" data-target="#bs-example-navbar-collapse-1">
 					<span class="sr-only">Toggle navigation</span>
@@ -51,7 +51,7 @@
 			</div>
 		</div>
 	</nav>
-	<div class="container">
+	<div class="container" style="background-image: URL(http://i.imgur.com/GMfLyA8.png); background-repeat: no-repeat; background-position: center;">
 		<div style="position:relative; left:25%; width: 50%;">
 			<h2><i>"For lecturers wanting to better support students, Peer Code Review is essential!"</i></h2>
 		</div>
