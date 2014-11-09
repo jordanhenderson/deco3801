@@ -363,6 +363,7 @@ foreach ($reviews as $review) {
 			var request = {f: 'saveReviews', params: [JSON.stringify(annotations)]};
 			$.post("api.php", JSON.stringify(request), function(retval) {
 				alert("Your comments have been saved!");
+				alert(retval);
 				for (var i=0; i < annotations.length; i++) {
 					if (annotations[i].status == 'd') {
 						annotations.splice(i, 1);
