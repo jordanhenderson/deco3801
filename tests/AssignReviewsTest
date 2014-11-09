@@ -1,31 +1,18 @@
 <?php
 session_start();
 
-$_SESSION['user_id'] = "0";
 $_SESSION['course_id'] = "0";
+$_SESSION['admin'] = true;
 
 require_once('config.php');
 require_once('includes/handlers.php');
 
 class AssignReviewsTest extends PHPUnit_Framework_TestCase {
-	
-	public function testSubmission() {
-		$_SESSION['course_id'] = "0";
-		$_SESSION['admin'] = true;
-		$handler = new PCRHandler();
-		
-		//Create an assignment (delete the old one first)
-		$assignment = new Assignment(array("AssignmentID"=>"0"));
-		$assignment->delete();
-		
-	}
-	
 	/**
 	 * Tests assignment review distribution when there were no submissions.
 	 */
 	public function testAssignReviewsNoSubmissions() {
 		$_SESSION['user_id'] = "0";
-		$_SESSION['course_id'] = "0";
 		$handler = new PCRHandler();
 		
 		// Create a bogus assignment, with ID 0, and deletes the old one.
@@ -55,7 +42,6 @@ class AssignReviewsTest extends PHPUnit_Framework_TestCase {
 	 */
 	public function testAssignReviewsSingleSubmission() {
 		$_SESSION['user_id'] = "0";
-		$_SESSION['course_id'] = "0";
 		$handler = new PCRHandler();
 		
 		// Create a bogus assignment, with ID 0, and deletes the old one.
@@ -96,7 +82,6 @@ class AssignReviewsTest extends PHPUnit_Framework_TestCase {
 	 */
 	public function testAssignReviewsStandard() {
 		$_SESSION['user_id'] = "0";
-		$_SESSION['course_id'] = "0";
 		$handler = new PCRHandler();
 		
 		// Create a bogus assignment, with ID 0, and deletes the old one.
@@ -163,7 +148,6 @@ class AssignReviewsTest extends PHPUnit_Framework_TestCase {
 	 */
 	public function testAssignNoReviews() {
 		$_SESSION['user_id'] = "0";
-		$_SESSION['course_id'] = "0";
 		$handler = new PCRHandler();
 		
 		// Create a bogus assignment, with ID 0, and deletes the old one.
@@ -221,13 +205,66 @@ class AssignReviewsTest extends PHPUnit_Framework_TestCase {
 		$sub2->delete();
 		$sub3->delete();
 		$assignment->delete();
+	}
+	
+	
+	/**
+	 * Tests review distribution for more reviews than students
+	 */
+	public function testAssignNoReviews() {
+		$_SESSION['user_id'] = "0";
+		$handler = new PCRHandler();
 		
-		/*
-			// 3 submissions, 5 reviews per student (tests reviews >= submissions)
-			$assignment = $handler->changeAssignment("0", "Test Assignment", "5", "0", "0", "0", "0", "1", "0");
-			$this->assertNotNull($assignment);
-			$this->assertEquals($assignment->isValid(), true);
-			$handler->assignReviews("0");
-		*/
+		// Create a bogus assignment, with ID 0, and deletes the old one.
+		$assignment = new Assignment(array("AssignmentID" => "0"));
+		$assignment->delete();
+		
+		// 5 reviews per student
+		$assignment = $handler->changeAssignment("0", "Test Assignment", "5", "0", "0", "0", "0", "1", "0");
+		
+		// Make sure assignment was created
+		$this->assertNotNull($assignment);
+		$this->assertEquals($assignment->isValid(), true);
+		
+		// Create and upload submission for student 1
+		$_SESSION['user_id'] = "1";
+		$_FILES["file"]["name"] = "good_submission.zip";
+		$_FILES["file"]["error"] = 0;
+		$_FILES["file"]["tmp_name"] = "tests/good_submission.zip";
+		$sub1 = $handler->uploadArchive($assignment->getID());
+		
+		// Create and upload submission for student 2
+		$_SESSION['user_id'] = "2";
+		$_FILES["file"]["name"] = "good_submission.zip";
+		$_FILES["file"]["error"] = 0;
+		$_FILES["file"]["tmp_name"] = "tests/good_submission.zip";
+		$sub2 = $handler->uploadArchive($assignment->getID()); // Doesn't work second time.
+		
+		// Create and upload submission for student 3
+		$_SESSION['user_id'] = "3";
+		$_FILES["file"]["name"] = "good_submission.zip";
+		$_FILES["file"]["error"] = 0;
+		$_FILES["file"]["tmp_name"] = "tests/good_submission.zip";
+		$sub3 = $handler->uploadArchive($assignment->getID());
+		
+		// Make sure submissions were created
+		$this->assertNotNull($sub1);
+		$this->assertNotNull($sub2);
+		$this->assertNotNull($sub3);
+		$this->assertEquals($sub1->isValid(), true);
+		$this->assertEquals($sub2->isValid(), true);
+		$this->assertEquals($sub3->isValid(), true);
+		
+		// Assign the reviews
+		$handler->assignReviews("0");
+		
+		$student1reviews = $assignment->getUnmarkedSubmissions(1);
+		$student2reviews = $assignment->getUnmarkedSubmissions(2);
+		$student3reviews = $assignment->getUnmarkedSubmissions(3);
+		
+		// Make sure each student has 2 reviews
+		$this->assertEquals(count($student1reviews), 2);
+		$this->assertEquals(count($student2reviews), 2);
+		$this->assertEquals(count($student3reviews), 2);
 	}
 }
