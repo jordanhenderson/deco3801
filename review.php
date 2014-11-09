@@ -18,6 +18,11 @@ while (strlen($assignid) < 5) {
 	$assignid = '0'.$assignid;
 }
 
+// Check to see if the user has already submitted their reviews
+if (!$submission->checkAccess()) {
+	header("Location: reviewhub.php");
+}
+
 // Get the owner of the submission
 $owner = $submission->getOwner();
 $isOwner = 0;

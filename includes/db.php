@@ -784,6 +784,20 @@ class Submission extends PCRObject {
 		$review = new Review($file_row);
 		$review->delete();
 	}
+	
+	/**
+	 * Check that a user has submitted their reviews for a given submission
+	 * and return false if they have.
+	 */
+	public function checkAccess() {
+		$sth = $this->db->prepare("SELECT ReviewID FROM Review WHERE SubmissionID = ? AND ReviewerID = ? AND FileID is NULL;");
+		$sth->execute(array($this->getID(), $_SESSION['user_id']));
+		$file_row = $sth->fetch(PDO::FETCH_ASSOC);
+		if (empty($file_row)) {
+			return false;
+		}
+		return true;
+	}
 
 	public function testSubmission($test_file_location) {
 		// Run appropriate tests 
