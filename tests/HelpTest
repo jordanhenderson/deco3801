@@ -36,31 +36,37 @@ class HelpTest extends PHPUnit_Framework_TestCase {
 		$this->assertEquals(true, $course->isValid());
 		$this->assertEquals(true, $question->isValid());
 		$this->assertEquals(true, $comment->isValid());
+		
 		//Check PCRObject ID
 		$questionRow = &$question->getRow();
 		$this->assertEquals("0", $course->getID());
 
-		//Question assertions
+		//Question assertions test the data is the same as in the DB
 		$this->assertEquals("0", $questionRow["CourseID"]);
 		$this->assertEquals("testTitle", $questionRow["Title"]);
 		$this->assertEquals("0", $questionRow["StudentID"]);
 
 		$commentRow = &$comment->getRow();
-		//Comment assertions
+
+		//Comment assertions  test the data is the same as in the DB
 		$this->assertEquals($questionRow["QuestionID"], $question->getID());
 		$this->assertEquals("testComment", $commentRow["Content"]);
 		$this->assertEquals("1", $commentRow["StudentID"]);
 		
+		//Delete the objects as they are test objects
 		$course->delete();
 		$question->delete();
 		$comment->delete();
 
+		//Check they've been deleted
 		$this->assertEquals(false, $course->isValid());
 		$this->assertEquals(false, $question->isValid());
 		$this->assertEquals(false, $comment->isValid());
 
 	}
-
+	/**
+	 * Tests that a question that has bad inputs that somehow gets past from end validation
+	 */
 	public function testBadQuestion() {
 		//Test date for adding comments and questions
 		$date = date("Y-m-d  H:i:s", time());
@@ -78,6 +84,9 @@ class HelpTest extends PHPUnit_Framework_TestCase {
 		$course->delete();
 	}
 
+	/**
+	 * Tests that a user cannot delete a comment if it isn't theirs
+	 */
 	public function testDeleteingComment(){
 		$date = date("Y-m-d  H:i:s", time());
 
@@ -99,6 +108,10 @@ class HelpTest extends PHPUnit_Framework_TestCase {
 		$course->delete();
 		$comment->delete();
 	}
+
+	/**
+	 * Test that the serverside validation for deleteing a question ensures the user is an admin
+	 */
 	public function testDeleteingQuestion(){
 		$date = date("Y-m-d  H:i:s", time());
 
@@ -117,6 +130,10 @@ class HelpTest extends PHPUnit_Framework_TestCase {
 		$course->delete();
 
 	}
+
+	/**
+	 * Tests making questions resolved and unresolved works correctly
+	 */
 	public function testMarkingStatus(){
 		$date = date("Y-m-d  H:i:s", time());
 
@@ -139,6 +156,10 @@ class HelpTest extends PHPUnit_Framework_TestCase {
 		$question->delete();
 		$course->delete();
 	}
+
+	/**
+	 * Test that makes sure a comment is validated serverside or a comment is added with conflicting user IDs
+	 */
 	public function testBadComment(){
 		$date = date("Y-m-d  H:i:s", time());
 
