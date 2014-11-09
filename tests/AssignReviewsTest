@@ -11,7 +11,7 @@ class AssignReviewsTest extends PHPUnit_Framework_TestCase {
 	/**
 	 * Tests assignment review distribution when there were no submissions.
 	 */
-	public function assignReviewsNoSubmissions() {
+	public function testAssignReviewsNoSubmissions() {
 		$handler = new PCRHandler();
 		
 		// Create a bogus assignment, with ID 0, and deletes the old one.
@@ -39,7 +39,7 @@ class AssignReviewsTest extends PHPUnit_Framework_TestCase {
 	 * Tests assignment review distribution when there was only 1 submission.
 	 * The student can't review themself, so should be no reviews.
 	 */
-	public function assignReviewsSingleSubmission() {
+	public function testAssignReviewsSingleSubmission() {
 		$handler = new PCRHandler();
 		
 		// Create a bogus assignment, with ID 0, and deletes the old one.
@@ -78,7 +78,7 @@ class AssignReviewsTest extends PHPUnit_Framework_TestCase {
 	 * 
 	 * Should each have to review the next student.
 	 */
-	public function assignReviewsStandard() {
+	public function testAssignReviewsStandard() {
 		$handler = new PCRHandler();
 		
 		// Create a bogus assignment, with ID 0, and deletes the old one.
@@ -143,7 +143,7 @@ class AssignReviewsTest extends PHPUnit_Framework_TestCase {
 	/**
 	 * Tests review distribution when the assignment was made to have no reviews
 	 */
-	public function assignNoReviews() {
+	public function testAssignNoReviews() {
 		$handler = new PCRHandler();
 		
 		// Create a bogus assignment, with ID 0, and deletes the old one.
@@ -201,13 +201,13 @@ class AssignReviewsTest extends PHPUnit_Framework_TestCase {
 		$sub2->delete();
 		$sub3->delete();
 		$assignment->delete();
+		
+		/*
+			// 3 submissions, 5 reviews per student (tests reviews >= submissions)
+			$assignment = $handler->changeAssignment("0", "Test Assignment", "5", "0", "0", "0", "0", "1", "0");
+			$this->assertNotNull($assignment);
+			$this->assertEquals($assignment->isValid(), true);
+			$handler->assignReviews("0");
+		*/
 	}
-	
-	/*
-		// 3 submissions, 5 reviews per student (tests reviews >= submissions)
-		$assignment = $handler->changeAssignment("0", "Test Assignment", "5", "0", "0", "0", "0", "1", "0");
-		$this->assertNotNull($assignment);
-		$this->assertEquals($assignment->isValid(), true);
-		$handler->assignReviews("0");
-	*/
 }
