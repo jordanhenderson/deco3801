@@ -1,7 +1,5 @@
 <?php
 session_start();
-$_SESSION['user_id'] = "0";
-$_SESSION['course_id'] = "0";
 
 require_once('config.php');
 require_once('includes/handlers.php');
@@ -12,6 +10,8 @@ class AssignReviewsTest extends PHPUnit_Framework_TestCase {
 	 * Tests assignment review distribution when there were no submissions.
 	 */
 	public function testAssignReviewsNoSubmissions() {
+		$_SESSION['user_id'] = "0";
+		$_SESSION['course_id'] = "0";
 		$handler = new PCRHandler();
 		
 		// Create a bogus assignment, with ID 0, and deletes the old one.
@@ -40,6 +40,8 @@ class AssignReviewsTest extends PHPUnit_Framework_TestCase {
 	 * The student can't review themself, so should be no reviews.
 	 */
 	public function testAssignReviewsSingleSubmission() {
+		$_SESSION['user_id'] = "0";
+		$_SESSION['course_id'] = "0";
 		$handler = new PCRHandler();
 		
 		// Create a bogus assignment, with ID 0, and deletes the old one.
@@ -79,6 +81,8 @@ class AssignReviewsTest extends PHPUnit_Framework_TestCase {
 	 * Should each have to review the next student.
 	 */
 	public function testAssignReviewsStandard() {
+		$_SESSION['user_id'] = "0";
+		$_SESSION['course_id'] = "0";
 		$handler = new PCRHandler();
 		
 		// Create a bogus assignment, with ID 0, and deletes the old one.
@@ -144,6 +148,8 @@ class AssignReviewsTest extends PHPUnit_Framework_TestCase {
 	 * Tests review distribution when the assignment was made to have no reviews
 	 */
 	public function testAssignNoReviews() {
+		$_SESSION['user_id'] = "0";
+		$_SESSION['course_id'] = "0";
 		$handler = new PCRHandler();
 		
 		// Create a bogus assignment, with ID 0, and deletes the old one.
