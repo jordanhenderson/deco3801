@@ -750,7 +750,6 @@ class Submission extends PCRObject {
 							"text" => $text,
 							"Submitted" => $submitted));
 		$review->commit();
-		echo "HERERERERERERHERHREHRESHTRDKTFLV IUYLOIUBIUYVCUYTXDR8675DC876T";
 		return $review;
 	}
 	
