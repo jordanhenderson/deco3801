@@ -10,7 +10,7 @@ class SubmissionTest extends PHPUnit_Framework_TestCase {
 		$_SESSION['course_id'] = "0";
 		$_SESSION['admin'] = true;
 		$handler = new PCRHandler();
-		$course = $handler->getCourse();
+		
 		//Create an assignment (delete the old one first)
 		$assignment = new Assignment(array("AssignmentID"=>"0"));
 		$assignment->delete();
