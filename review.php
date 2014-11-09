@@ -18,11 +18,6 @@ while (strlen($assignid) < 5) {
 	$assignid = '0'.$assignid;
 }
 
-// Check to see if the user has already submitted their reviews
-if (!$submission->checkAccess()) {
-	header("Location: reviewhub.php");
-}
-
 // Get the owner of the submission
 $owner = $submission->getOwner();
 $isOwner = 0;
@@ -38,6 +33,11 @@ if (intval($_SESSION['user_id']) == intval($owner)) {
 	//Redirect the user to overview.php if access is denied.
 	$review = new Review(array("SubmissionID"=>$submission->getID(), "ReviewerID"=>$_SESSION['user_id']), false);
 	if(!$review->isValid()) {
+		header("Location: reviewhub.php");
+		die();
+	}
+	// Check to see if the user has already submitted their reviews
+	if (!$submission->checkAccess()) {
 		header("Location: reviewhub.php");
 		die();
 	}
