@@ -34,7 +34,7 @@
 
 <body>
 <nav class="navbar navbar-inverse navbar-fixed-top" role="navigation">
-		<div class="container">
+		<div class="container" style="background-image: URL(http://i.imgur.com/GMfLyA8.png); background-repeat: no-repeat; background-position: center;">
 			<div class="navbar-header">
 				<button type="button" class="navbar-toggle" data-toggle="collapse" data-target="#bs-example-navbar-collapse-1">
 					<span class="sr-only">Toggle navigation</span>
@@ -52,33 +52,35 @@
 		</div>
 	</nav>
 	<div class="container">
-		<div style="position:relative; left:25%; width: 50%;"><h2><i>"For lecturers wanting to better support students, the Peer Code Review system is a must have learning tool!"</i></h2></div>
+		<div style="position:relative; left:25%; width: 50%;">
+			<h2><i>"For lecturers wanting to better support students, Peer Code Review is essential!"</i></h2>
+		</div>
 		<h2>What is PCR?</h2>
-		<div>
-The Peer Code Review system facilitates a collaborative learning environment to which students can give and receive feedback about assignments. PCR easily integrates with Online Learning Tools, providing a secure environment compatible with any existing learning infrastructure, to make managing any amount of students easy. The system also better facilitates assignment submission and marking, making the system an absolute must for any programming course. 
-
-Using Peer Code Review, teachers are able to define assignments and upload unit tests in any language to be conveniently run as students make submissions. Consequently, students are able to see their results as soon as a submission has been run against the unit tests provided by the administrator.
-
-Peer Code Review has been designed with collaboration in mind, extending the learning process to more than just a student teacher interaction. Our intuitive assignment feedback approach makes it possible for students to mark their peers work, giving teachers a truly effective method to encourage participation and learning within programming.
-
-In addition, collaboration between students and lecturers are also facilitated via our inbuilt help centre. The help centre is reminiscent of stack overflow, providing additional support to students.
+		<div align="justify">
+			<p>The Peer Code Review system facilitates a collaborative learning environment to which students can give and receive feedback about assignments. PCR easily integrates with Online Learning Tools, providing a secure environment compatible with any existing learning infrastructure, to make managing any amount of students easy. The system also better facilitates assignment submission and marking, making the system an absolute must for any programming course.</p>
+			
+			<p>Using Peer Code Review, teachers are able to define assignments and upload unit tests in any language to be conveniently run as students make submissions. Consequently, students are able to see their results as soon as a submission has been run against the unit tests provided by the administrator.</p>
+			
+			<p>Peer Code Review has been designed with collaboration in mind, extending the learning process to more than just a student teacher interaction. Our intuitive assignment feedback approach makes it possible for students to mark their peers work, giving teachers a truly effective method to encourage participation and learning within programming.</p>
+			
+			<p>In addition, collaboration between students and lecturers are also facilitated via our inbuilt help centre. The help centre is reminiscent of stack overflow, providing additional support to students.</p>
 		</div>
 		<div>
-		<h2>The Team</h2>
-		<ul type="circle">
-		<li>&#8226 Addison Gourluck - addison@gourluck.com</li>
-		<li>&#8226 Kieran Shannon - kieran.shannon@uqconnect.edu.au</li>
-		<li>&#8226 Jordan Henderson - jordan.henderson@uqconnect.edu.au</li>
-		<li>&#8226 Carlie Smits - carlie.smits@uqconnect.edu.au</li>
-		<li>&#8226 Sean Winters - seanwinters13@hotmail.com</li>
-		<li>&#8226 Morgan Haig - morgan.haig@uqconnect.edu.au</li>
-		</ul>
+			<h2>The Team</h2>
+			<ul type="circle">
+				<li>&#8226; Addison Gourluck - addison.gourluck@uqconnect.edu.au</li>
+				<li>&#8226; Kieran Shannon - kieran.shannon@uqconnect.edu.au</li>
+				<li>&#8226; Jordan Henderson - jordan.henderson@uqconnect.edu.au</li>
+				<li>&#8226; Carlie Smits - carlie.smits@uqconnect.edu.au</li>
+				<li>&#8226; Sean Winters - sean.winters@uqconnect.edu.au</li>
+				<li>&#8226; Morgan Haig - morgan.haig@uqconnect.edu.au</li>
+			</ul>
 		</div>
+	</div>
 	<!-- jQuery Version 1.11.0 -->
 	<script src="js/jquery-1.11.0.js"></script>
 
 	<!-- Bootstrap Core JavaScript -->
 	<script src="js/bootstrap.min.js"></script>
-
 </body>
 </html>
