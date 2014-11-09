@@ -360,7 +360,7 @@ foreach ($reviews as $review) {
 			// Update the startIndex and startLine of the comments (Might be effected by the deleted value)
 			updatePositions();
 			//AJAX call to store the review in the database
-			var request = {f: 'saveReviews', params: [JSON.stringify(annotations)]};
+			var request = {f: 'saveReviews', params: [annotations]};
 			$.post("api.php", JSON.stringify(request), function(retval) {
 				alert("Your comments have been saved!");
 				alert(retval);
@@ -383,7 +383,7 @@ foreach ($reviews as $review) {
 		function submitReviews() {
 			// Update the startIndex and startLine of the comments (Might be effected by the deleted value)
 			updatePositions();
-			var request = {f: 'submitReviews', params: [JSON.stringify(annotations)]};
+			var request = {f: 'submitReviews', params: [annotations]};
 			$.post("api.php", JSON.stringify(request), function(retval) {
 				alert("Your comments have been submitted!");
 				for (var i=0; i < annotations.length; i++) {
