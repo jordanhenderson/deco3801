@@ -258,15 +258,17 @@ class PCRHandler {
 	 * @param an array of review objects
 	 */
 	public function submitReviews($reviews) {
+		$id = '';
 		foreach ($reviews as $review) {
+			$id = $review["SubmissionID"];
 			if ($review["status"] == 'd') {
-				$this->removeReview($review["ReviewID"], $review["SubmissionID"]);
+				$this->removeReview($review["ReviewID"], $id);
 			} elseif ($review["status"] == 'e') {
-				$this->editReview($review["startLine"], $review["startIndex"], $review["ReviewID"], $review["Comments"], $review["SubmissionID"], 1);
+				$this->editReview($review["startLine"], $review["startIndex"], $review["ReviewID"], $review["Comments"], $id, 1);
 			} elseif ($review["status"] == 'n') {
 				$this->addReview($review, 1);
 			} elseif ($review["status"] == 'o') {
-				$this->editReview($review["startLine"], $review["startIndex"], $review["ReviewID"], $review["Comments"], $review["SubmissionID"], 1);
+				$this->editReview($review["startLine"], $review["startIndex"], $review["ReviewID"], $review["Comments"], $id, 1);
 			}
 		}
 		$submission = new Submission(array("SubmissionID"=>$id), false);

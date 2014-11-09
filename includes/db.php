@@ -778,7 +778,7 @@ class Submission extends PCRObject {
 	 * submission when the user has clicked submit.
 	 */
 	public function removeAccess() {
-		$sth = $this->db->prepare("SELECT ReviewID FROM Review WHERE SubmissionID = ? AND ReviewerID = ? AND FileID = NULL;");
+		$sth = $this->db->prepare("SELECT ReviewID FROM Review WHERE SubmissionID = ? AND ReviewerID = ? AND FileID is NULL;");
 		$sth->execute(array($this->getID(), $_SESSION['user_id']));
 		$file_row = $sth->fetch(PDO::FETCH_ASSOC);
 		$review = new Review($file_row);
