@@ -363,7 +363,6 @@ foreach ($reviews as $review) {
 			var request = {f: 'saveReviews', params: [annotations]};
 			$.post("api.php", JSON.stringify(request), function(retval) {
 				alert("Your comments have been saved!");
-				alert(retval);
 				for (var i=0; i < annotations.length; i++) {
 					if (annotations[i].status == 'd') {
 						annotations.splice(i, 1);
@@ -381,6 +380,9 @@ foreach ($reviews as $review) {
 		 * Though only a single row needs it to be set to 1, I'm doing them all.
 		 */
 		function submitReviews() {
+			if (!confirm("Are you sure you want to submit?\nYou will no longer have access to this page if you submit.")) {
+				return;
+			}
 			// Update the startIndex and startLine of the comments (Might be effected by the deleted value)
 			updatePositions();
 			var request = {f: 'submitReviews', params: [annotations]};
@@ -395,6 +397,7 @@ foreach ($reviews as $review) {
 					}
 				}
 				count = annotations.length;
+				window.location="reviewhub.php";
 			});
 		}
 		

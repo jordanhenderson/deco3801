@@ -741,7 +741,6 @@ class Submission extends PCRObject {
 	 * @return the review that was added
 	 */
 	public function addReview($annotationText, $stnid, $startIndex, $startLine, $FileID, $text, $submitted) {
-		echo $this->getID() . "::" . $annotationText . "::" . $stnid . "::" . $startIndex . "::" . $startLine . "::" . $FileID . "::" . $text . "::" . $submitted . "--";
 		$review = new Review(array("SubmissionID" => $this->getID(),
 							"Comments" => $annotationText,
 							"ReviewerID" => $stnid,
