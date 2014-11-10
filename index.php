@@ -15,7 +15,7 @@ if ($config['DEBUG'] == false) {
 	$_SESSION['course_code'] = "Debug Course";
 	$_SESSION['course_title'] = "Debug Course";
 	$_SESSION['helpenabled'] = "1";
-	if ($config['isadmin']) $_SESSION['admin'] = true;
+	if($config['isadmin']) $_SESSION['admin'] = true;
 }
 
 /* LTI Handling */
@@ -54,12 +54,6 @@ if (isset($_SESSION['admin']) && $_SESSION['admin']) {
 	$admin = false;
 }
 
-/**
- * Converts seconds to easily human readable format
- * 
- * @param seconds as an integer (duration)
- * @return string of duration in human readable format
- */
 function seconds2human($s) {
 	$m = floor(($s%3600)/60);
 	$h = floor(($s%86400)/3600);
@@ -74,11 +68,6 @@ function seconds2human($s) {
 	return "$str$m mins";
 }
 
-/**
- * Converts the database time into a more easily human readable format
- * @param time from MySQL database in string format
- * @return easily human readable time in string format
- */
 function formatDBtime($dbtime) {
 	$date = date_create_from_format('Y-m-d G:i:s', $dbtime);
 	return date_format($date, 'j M Y, g:ia'); // e.g: 6 Feb 2014, 8:30pm

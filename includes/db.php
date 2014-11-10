@@ -54,12 +54,12 @@ $db = new Database();
  * All derived classes must implement jsonSerialize() in order to serialize the object to JSON.
  */
 abstract class PCRObject implements JsonSerializable {
-	protected $db; // Database object reference
-	private $id; // ID of the database object (within the objects' table)
-	protected $id_field; // the field (column name) of the object's ID column (in which $id is stored)
-	protected $table; // table is the name of the table which stores the object
-	protected $row; // row holds the object
-	protected $autocreate; // create the row if it doesn't exist
+	protected $db; //Database object reference
+	private $id; //ID of the database object (within the objects' table)
+	protected $id_field; //the field (column name) of the object's ID column (in which $id is stored)
+	protected $table; //table is the name of the table which stores the object
+	protected $row; //row holds the object
+	protected $autocreate; //create the row if it doesn't exist
 	/**
 	 * uptodate determines if the object has been populated by a row.
 	 * This allows set operations to occur without first retrieving data.
@@ -88,12 +88,12 @@ abstract class PCRObject implements JsonSerializable {
 	}
 	
 	/**
-	 * updateRow commits the object into the database, synchronising any changes.
-	 * @param row an array containing the individual key/value field pairs representing the object.
-	 */
+	* updateRow commits the object into the database, synchronising any changes.
+	* @param row an array containing the individual key/value field pairs representing the object.
+	*/
 	private function updateRow($row) {
 		$this->id = $row[$this->id_field];
-		// Update the row to match the latest set of data.
+		/* Update the row to match the latest set of data. */
 		$update = "UPDATE $this->table SET ";
 		foreach ($row as $key => $value) {
 			$update .= "$key = :$key,";
@@ -110,11 +110,11 @@ abstract class PCRObject implements JsonSerializable {
 	}
 	
 	/**
-	 * insertRow inserts a new entry into the database.
-	 * After calling this function, the object is considered synchronised
-	 */
+	* insertRow inserts a new entry into the database.
+	* After calling this function, the object is considered synchronised
+	*/
 	private function insertRow() {
-		// Generate a prepared insert statement.
+		//Generate a prepared insert statement.
 		$cols = "";
 		$vals = "";
 		foreach ($this->row as $key => $value) {
@@ -122,17 +122,17 @@ abstract class PCRObject implements JsonSerializable {
 			$vals = $vals . ":$key,";
 		}
 		
-		// Trim commas
+		//Trim commas
 		$cols = rtrim($cols, ",");
 		$vals = rtrim($vals, ",");
-		// Execute the statement
+		//Execute the statement
 		try {
 			$sth = $this->db->prepare("INSERT INTO $this->table ($cols) VALUES ($vals);");
 			$sth->execute($this->row);
 
 			$id = $this->db->lastInsertId();
 			$reqid = isset($this->row[$this->id_field]) ? $this->row[$this->id_field] : null;
-			// Update the item's ID
+			//Update the item's ID
 			if ($reqid != null && $id != $reqid) {
 				$sth = $this->db->prepare("UPDATE $this->table SET $this->id_field = ? WHERE $this->id_field = ?;");
 				$sth->execute(array($reqid, $id));
@@ -141,14 +141,14 @@ abstract class PCRObject implements JsonSerializable {
 				$this->id = $id;
 			}
 		} catch (PDOException $e) {
-			// An error occured while inserting.
+			//An error occured while inserting.
 			return;
 		}
 	}
 
 	/**
 	 * Searches for a matching object given known fields.
-	 */
+	*/
 	private function searchRow() {
 		$search = "SELECT * FROM $this->table WHERE ";
 		
@@ -184,10 +184,10 @@ abstract class PCRObject implements JsonSerializable {
 	 */
 	public function Update($recursed = false) {
 		if (!$this->uptodate) {
-			// Populate the PCRObject.
+			//Populate the PCRObject.
 			$sth = $this->db->prepare("SELECT * FROM $this->table WHERE $this->id_field = ?;");
 			
-			// Guarantee the id field has been provided.
+			//Guarantee the id field has been provided.
 			$row = null;
 			
 			$id = null;
@@ -202,16 +202,16 @@ abstract class PCRObject implements JsonSerializable {
 			}
 
 			if ($this->autocreate && $id == null) {
-				// Insert a new row.
+				//Insert a new row.
 				$this->insertRow();
-				// Repopulate the row with default values.
+				//Repopulate the row with default values.
 				if (!$recursed) $this->Update(true);
 				$this->uptodate = 1;
 			} else if ( $this->autocreate == false ) {
-				// Autocreate not enabled, search for an existing row using what values we have.
+				//Autocreate not enabled, search for an existing row using what values we have.
 				$this->searchRow();
 			} else {
-				// Select an existing row matching the ID - this may succeed or fail.
+				//Select an existing row matching the ID - this may succeed or fail.
 				$sth->execute(array($id));
 				
 				$row = $sth->fetch(PDO::FETCH_ASSOC);
@@ -226,7 +226,7 @@ abstract class PCRObject implements JsonSerializable {
 					}
 					if ($changed) $this->updateRow($row);
 					else $this->row = $row;
-					$this->row[$this->id_field] = $id; // fix erronous ids
+					$this->row[$this->id_field] = $id; //fix erronous ids
 				}
 				else {
 					$this->insertRow();
@@ -267,7 +267,7 @@ abstract class PCRObject implements JsonSerializable {
 	}
 
 	protected function Cleanup() {
-		// override this function to provide custom cleanup logic.
+		//override this function to provide custom cleanup logic.
 	}
 	
 	/**
@@ -386,7 +386,7 @@ class Assignment extends PCRObject {
 	}
 	
 	public function delete() {
-		// Clean up all assignment files
+		//Clean up all assignment files
 		$assignmentid = ''.$this->getID();
 		while (strlen($assignmentid) < 5) {
 			$assignmentid = '0'.$assignmentid;
@@ -521,31 +521,24 @@ class File extends PCRObject {
 	public function __construct($data, $autocreate = true) {
 		parent::__construct("FileID", "Files", $data, $autocreate);
 	}
-	
-	/**
-	 * @return the filename of this object
-	 */
 	public function getFileName() {
 		parent::Update();
 		$filename = $this->row["FileName"];
 		$lastsep = strrpos($filename, "/");
 		if ($lastsep !== FALSE) {
-			// Need to substr.
+			//Need to substr.
 			return substr($filename, $lastsep + 1);
 		} else {
 			return $filename;
 		}
 	}
 	
-	/**
-	 * @return the path of this object
-	 */
 	public function getPath() {
 		parent::Update();
 		$filename = $this->row["FileName"];
 		$lastsep = strrpos($filename, "/");
 		if ($lastsep !== FALSE) {
-			// Need to substr.
+			//Need to substr.
 			return substr($filename, 0, $lastsep + 1);
 		} else {
 			return "";
@@ -560,7 +553,7 @@ class File extends PCRObject {
 		if ($lastsep !== FALSE) {
 			$nextsep = strrpos($filename, "/", -(strlen($filename) - $lastsep + 1) );
 			if ($nextsep === FALSE) {
-				// Need to substr.
+				//Need to substr.
 				$nextsep = 0;
 			}
 			return substr($filename, $nextsep, $lastsep);
@@ -592,6 +585,7 @@ class Submission extends PCRObject {
 	private $storage_dir;
 	public function __construct($data, $autocreate = true) {
 		parent::__construct("SubmissionID", "Submission", $data, $autocreate);
+		
 		
 		if ($this->isValid()) {
 			$id = ''.$this->getID();
@@ -685,6 +679,9 @@ class Submission extends PCRObject {
 	}
 	
 	/**
+	 * NOTE
+	 * Please don't change where this is. It will break the review page.
+	 *
 	 * getReviews returns an array of reviews for a submission.
 	 * @return an array of reviews
 	 */ 
@@ -801,7 +798,7 @@ class Submission extends PCRObject {
 		}
 		return true;
 	}
-	
+
 	public function testSubmission($test_file_location) {
 		// Run appropriate tests 
 		$tester = new bashTesting($test_file_location, $this->storage_dir);
@@ -815,8 +812,6 @@ class Submission extends PCRObject {
 	
 	/**
 	 * Returns the assignmentID of the submission.
-	 * 
-	 * @return the assignment ID this submission was made for
 	 */
 	public function getAssignmentID() {
 		// This returns empty :(
