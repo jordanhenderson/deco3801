@@ -45,7 +45,7 @@ if (!$admin && (!isset($_SESSION['helpenabled']) || !$_SESSION['helpenabled'])) 
 <?php include 'header.php'; 
 
 	function seconds2human($s) {
-		$str = " ";
+	$str = " ";
 	$m = floor(($s%3600)/60);
 	$h = floor(($s%86400)/3600);
 	$d = floor($s/86400);

@@ -34,7 +34,7 @@ $crs = new PCRHandler();
 	$count = 0;
 
 	function seconds2human($s) {
-		$str = " ";
+	$str = " ";
 	$m = floor(($s%3600)/60);
 	//$m = round(($ss%3600)/60, 0.1);
 	$h = floor(($s%86400)/3600);
@@ -220,30 +220,6 @@ $crs = new PCRHandler();
 echo "<script type='text/javascript'>alert('$message');</script>";
 		}
 	?>
-		<script type="text/javascript">
-		/*$(function() {
-			$('#cF').submit(function() {
-				var form = $(this);
-				var date = '<?php echo date("Y-m-d  H:i:s", time()); ?>';
-				//Use the action= property for ajax submission
-				var fullname = '<?php echo $_SESSION['userfullname'];?>'
-				var stnid = '<?php echo $_SESSION['user_id'];?>'
-				var url = form.attr('action');
-				//I changed this and now it works, before it was GETTING some other question ID for some reason
-				var Qid = '<?php echo $_GET['id'];?>'
-				var func = form.data('function');
-				var request = {f: func, params: [Qid, stnid, fullname, $("#content").val(), date]};
-				//Post the serialized form.
-				$.post(url, JSON.stringify(request), function(data) {
-					//Handle submission.
-					document.location.href = "displayQuestion.php?id=<?php echo $id; ?>";
-				});
-				
-				
-				return false;
-			});
-		});*/
-	</script>
 	<script type="text/javascript">
 		window.onload = function () {
 			$('.selectpicker').selectpicker();
