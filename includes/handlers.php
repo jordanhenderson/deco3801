@@ -11,11 +11,23 @@ if (!isset($_SESSION['user_id'])) {
 require_once("db.php");
 
 /**
- * Needs Comment.
+ * PCRHandler represents the main application controller for PCR.
+ * All high level logic should be performed here and should utilise lower level
+ * PCRObject components.
+ * 
+ * Security should also be performed at this level (validating input, user security).
+ * 
+ * Handler functions can be called by the PHP frontend or the public API layer.
+ * Functions can be called using a JSON-encoded request containing the following
+ * RPC structure:
+ * 
+ * {"f":"FunctionName", "params":[Parameters]}
+ * 
+ * Where:
+ * 	FunctionName is the name of a function defined below.
+ * 	Parameters are the ordered parameters required to call the function.
  */
 class PCRHandler {
-	/* Add additional API functions here.*/
-	
 	/**
 	 * getFiles retrieves all files within a submission
 	 * @param id the submission ID
